@@ -105,7 +105,6 @@ class Packet:
     def pack(self, comp_thresh: int = -1) -> bytes:
         """Packs the final packet to bytes, readies the data to be sent,
          handles compression and length prefixing."""
-
         if comp_thresh >= 0:
             if len(self.buf) >= comp_thresh:
                 data = self.pack_varint(len(self.buf)) + \

@@ -3,7 +3,7 @@ class Buffer:
     """
     Base class for a buffer, contains methods
     for handling most basic types and for
-    converting from/to a Buffer object itself
+    converting from/to a Buffer object itself.
     """
 
     def __init__(self, buf: bytes = None):

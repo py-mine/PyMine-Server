@@ -41,7 +41,7 @@ class Buffer:
 
     @classmethod
     def pack_array(cls, f: str, array: list) -> bytes:
-        """Pack an array/list to bytes."""
+        """Pack an array/list into bytes."""
 
         return struct.pack(f'>{f*len(array)}', *array)
 
@@ -131,7 +131,7 @@ class Buffer:
 
     def to_bytes(self, comp_thresh: int = -1) -> bytes:
         """
-        Packs the final Buffer to bytes, readies the data to be sent,
+        Packs the final Buffer into bytes, readies the data to be sent,
         handles compression and length prefixing.
         """
 

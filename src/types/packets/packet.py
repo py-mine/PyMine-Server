@@ -1,12 +1,12 @@
 import struct
 import json
+import zlib
 
 
 class Packet:
-    def __init__(self, format, ):
+    def __init__(self):
         self.buf = b''
         self.pos = 0
-        self.format = None
 
     def add(self, data: bytes):
         self.buf += data
@@ -20,20 +20,23 @@ class Packet:
     def reset(self) -> None:
         self.pos = 0
 
-    def pack_array(f, array: list) -> None:
-        self.buf += struct.pack(f'>{f*len(array)}', *array)
+    @classmethod
+    def pack_array(cls, f, array: list) -> bytes:
+        return struct.pack(f'>{f*len(array)}', *array)
 
     def unpack_array(f, length: int) -> list:
         data = self.read(struct.calcsize(f'>{f}') * length)
         return list(struct.unpack(f'>{f*length}', data))
 
-    def pack_bool(self, boolean) -> None:
-        self.buf += struct.pack(f'>?', boolean)
+    @classmethod
+    def pack_bool(cls, boolean) -> bytes:
+        return struct.pack(f'>?', boolean)
 
     def unpack_bool(self) -> bool:
         return struct.unpack(f'>?', self.read(1))
 
-    def pack_varint(self, num: int, max_bits: int = 32) -> None:
+    @classmethod
+    def pack_varint(cls, num: int, max_bits: int = 32) -> bytes:
         num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
 
         if not (num_min <= num < num_max):
@@ -42,14 +45,18 @@ class Packet:
         if num < 0:
             num += 1 + 1 << 32
 
+        out = b''
+
         for i in range(10):
             b = num & 0x7F
             num >>= 7
 
-            self.buf += struct.pack('>B', (b | (0x80 if number > 0 else 0)))
+            out += struct.pack('>B', (b | (0x80 if number > 0 else 0)))
 
             if num == 0:
                 break
+
+        return out
 
     def unpack_varint(self, max_bits: int = 32) -> int:
         num = 0
@@ -71,16 +78,29 @@ class Packet:
 
         return num
 
-    def pack_string(self, text: str) -> None:
+    def pack(self, comp_thresh: int = -1) -> bytes:
+        if comp_thresh >= 0:
+            if len(self.buf) >= comp_thresh:
+                data = self.pack_varint(len(self.buf)) + zlib.compress(self.buf)
+            else:
+                data = self.pack_varint(0) + self.buf
+        else:
+            data = self.buf
+
+        return self.pack_varint(len(data), max_bits=32) + data
+
+    @classmethod
+    def pack_string(cls, text: str) -> bytes:
         text = text.encode('utf-8')
-        self.buf += self.pack_varint(len(text), max_bits=16) + text
+        return self.pack_varint(len(text), max_bits=16) + text
 
     def unpack_string(self) -> str:
         length = self.unpack_varint(max_bits=16)
         return self.read(length).decode('utf-8')
 
-    def pack_json(self, obj: object) -> None:
-        self.pack_string(json.dumps(obj))
+    @classmethod
+    def pack_json(cls, obj: object) -> bytes:
+        return self.pack_string(json.dumps(obj))
 
     def unpack_json(self) -> object:
         return json.loads(self.unpack_string())

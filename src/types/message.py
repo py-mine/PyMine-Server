@@ -54,9 +54,7 @@ code_by_name, code_by_prop = _load_styles()
 
 @functools.total_ordering
 class Message:
-    """
-    A Minecraft chat message
-    """
+    """A Minecraft chat message."""
 
     def __init__(self, message):
         self.message = message
@@ -113,7 +111,8 @@ class Message:
         Return the actual content of the message, optionally keep the styles.
         """
 
-        text = Message.parse(self.strip_styles(self.message) if strip_styles else self.message)
+        text = Message.parse(self.strip_styles(self.message)
+                             if strip_styles else self.message)
         return text
 
     def __eq__(self, other: Any) -> bool:

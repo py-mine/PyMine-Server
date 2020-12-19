@@ -4,6 +4,7 @@ import json
 import uuid
 import zlib
 
+
 class Buffer:
     """
     Base class for a buffer, contains methods

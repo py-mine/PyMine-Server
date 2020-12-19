@@ -5,6 +5,7 @@ import zlib
 
 from src.types.buffer import Buffer
 
+
 class Packet(Buffer):
     """
     The base class for a packet, contains most

@@ -106,12 +106,29 @@ class Packet:
         num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
 
         if not (num_min <= num < num_max):
-            raise ValueError(
-                f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
+            raise ValueError(f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
 
         return num
 
-    def pack(self, comp_thresh: int = -1) -> bytes:
+    @classmethod
+    def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Packet:
+        """
+        Converts bytes into a Packet, handles compression and
+        length prefixing
+        """
+
+        p = cls(data)
+        p = cls(p.read(p.unpack_varint()))
+
+        if comp_thresh >= 0:
+            uncomp_len = p.unpack_varint()
+
+            if uncomp_len > 0:
+                p = cls(zlib.decompress(p.read()))
+
+        return p
+
+    def to_bytes(self, comp_thresh: int = -1) -> bytes:
         """
         Packs the final packet to bytes, readies the data to be sent,
         handles compression and length prefixing.
@@ -126,19 +143,6 @@ class Packet:
             data = self.buf
 
         return self.pack_varint(len(data), max_bits=32) + data
-
-    def unpack(self, comp_thresh: int = -1) -> Packet:
-        """Unpack packet from the buffer, handles compression, length prefixing."""
-
-        p = Packet(self.read(self.unpack_varint()))
-
-        if comp_thresh >= 0:
-            uncomp_len = p.unpack_varint()
-
-            if uncomp_len > 0:
-                p = Packet(zlib.decompress(p.read()))
-
-        return p
 
     @classmethod
     def pack_string(cls, text: str) -> bytes:

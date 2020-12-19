@@ -7,8 +7,8 @@ cdef class Packet:
         self.buf = b''
         self.pos = 0
 
-    cdef def add(self, bytes data):
+    cdef add(self, bytes data):
         self.buf += data
 
-    def read(self, int data):
+    cdef read(self, int data):
         pass

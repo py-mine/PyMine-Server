@@ -1,6 +1,7 @@
 from __future__ import annotations
 import struct
 import json
+import uuid
 import zlib
 
 class Buffer:
@@ -15,13 +16,13 @@ class Buffer:
         self.pos = 0
 
     def add(self, data: bytes):
-        """Add data to the buffer."""
+        """Adds data to the buffer."""
 
         self.buf += data
 
     def read(self, length: int = None) -> bytes:
         """
-        Read data from the buffer, if the length is None
+        Reads n bytes from the buffer, if the length is None
         then all remaining data from the buffer is sent.
         """
 
@@ -35,36 +36,36 @@ class Buffer:
             self.pos += length
 
     def reset(self) -> None:
-        """Reset the position in the buffer."""
+        """Resets the position in the buffer."""
 
         self.pos = 0
 
     @classmethod
-    def pack_array(cls, f, array: list) -> bytes:
-        """Pack an array/list to bytes."""
+    def pack_array(cls, f: str, array: list) -> bytes:
+        """Packs an array/list into bytes."""
 
         return struct.pack(f'>{f*len(array)}', *array)
 
-    def unpack_array(self, f, length: int) -> list:
-        """Unpack an array/list from the buffer."""
+    def unpack_array(self, f: str, length: int) -> list:
+        """Unpacks an array/list from the buffer."""
 
         data = self.read(struct.calcsize(f'>{f}') * length)
         return list(struct.unpack(f'>{f*length}', data))
 
     @classmethod
     def pack_bool(cls, boolean) -> bytes:
-        """Pack a boolean into bytes."""
+        """Packs a boolean into bytes."""
 
         return struct.pack(f'>?', boolean)
 
     def unpack_bool(self) -> bool:
-        """Unpack a boolean from the buffer."""
+        """Unpacks a boolean from the buffer."""
 
         return struct.unpack(f'>?', self.read(1))
 
     @classmethod
     def pack_varint(cls, num: int, max_bits: int = 32) -> bytes:
-        """Pack a varint (Varying Integer) into bytes."""
+        """Packs a varint (Varying Integer) into bytes."""
 
         num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
 
@@ -89,7 +90,7 @@ class Buffer:
         return out
 
     def unpack_varint(self, max_bits: int = 32) -> int:
-        """Unpack a varint from the buffer."""
+        """Unpacks a varint from the buffer."""
 
         num = 0
 
@@ -113,7 +114,7 @@ class Buffer:
     @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
         """
-        Converts bytes into a Buffer object, handles compression
+        Creates a Buffer object from bytes, handles compression
         and length prefixing
         """
 
@@ -131,7 +132,7 @@ class Buffer:
 
     def to_bytes(self, comp_thresh: int = -1) -> bytes:
         """
-        Packs the final Buffer to bytes, readies the data to be sent,
+        Packs the final Buffer into bytes, readies the data to be sent,
         handles compression and length prefixing.
         """
 
@@ -168,3 +169,14 @@ class Buffer:
         """Unpacks serialized json data from the buffer."""
 
         return json.loads(self.unpack_string())
+
+    @classmethod
+    def pack_uuid(cls, uuid: uuid.UUID) -> bytes:
+        """Packs a UUID into bytes."""
+
+        return uuid.to_bytes()
+
+    def unpack_uuid(self):
+        """Unpacks a UUID from the buffer."""
+
+        return uuid.UUID(bytes=self.read(16))

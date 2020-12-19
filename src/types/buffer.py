@@ -1,4 +1,5 @@
 
+
 class Buffer:
     """
     Base class for a buffer, contains methods
@@ -35,7 +36,7 @@ class Buffer:
 
         self.pos = 0
 
-    @classmethod  # Packet.pack_array() not an instance of a packet.pack_array() (Packet().pack_array())
+    @classmethod
     def pack_array(cls, f, array: list) -> bytes:
         """Pack an array/list to bytes."""
 
@@ -107,27 +108,27 @@ class Buffer:
         return num
 
     @classmethod
-    def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Packet:
+    def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
         """
-        Converts bytes into a Packet object, handles compression
+        Converts bytes into a Buffer object, handles compression
         and length prefixing
         """
 
-        p = cls(data)  # Create a packet we use just as a buffer
-        p = cls(p.read(p.unpack_varint()))  # Handle length prefixing
+        buf = cls(data)
+        buf = cls(buf.read(buf.unpack_varint()))  # Handle length prefixing
 
         # Handle if the data was compressed
         if comp_thresh >= 0:
-            uncomp_len = p.unpack_varint()  # Handle decompressed length prefixing
+            uncomp_len = buf.unpack_varint()  # Handle decompressed length prefixing
 
             if uncomp_len > 0:
-                p = cls(zlib.decompress(p.read()))  # Create new Packet from decompressed data
+                buf = cls(zlib.decompress(buf.read()))  # Create new Buffer from decompressed data
 
-        return p
+        return buf
 
     def to_bytes(self, comp_thresh: int = -1) -> bytes:
         """
-        Packs the final packet to bytes, readies the data to be sent,
+        Packs the final Buffer to bytes, readies the data to be sent,
         handles compression and length prefixing.
         """
 

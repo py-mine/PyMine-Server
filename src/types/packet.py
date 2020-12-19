@@ -16,4 +16,9 @@ class Packet(Buffer):
     def pack_msg(cls, msg):
         """Pack a Minecraft chat message into bytes."""
 
-        cls.pack_string(json.dumps)
+        pass
+
+    def unpack_msg(self):
+        """Unpack a Minecraft chat message from bytes."""
+
+        pass

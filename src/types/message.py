@@ -4,9 +4,7 @@ from src.types.buffer import Buffer
 
 
 class Message:
-    """
-    A Minecraft chat message
-    """
+    """A Minecraft chat message."""
 
     def __init__(self, msg):
         self.msg = msg

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from src.types. import Packet
+from src.types.packet import Packet
 
 class Message:
     """

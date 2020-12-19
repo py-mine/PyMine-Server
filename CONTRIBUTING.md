@@ -16,3 +16,8 @@
 * Unless there's a good reason, lines shouldn't be longer than 100 characters
 * Use `snake_case` for variables
 * Constants should either be loaded from a config file or be in `UPPER_SNAKE_CASE`
+* Docstrings should be present for classes and functions with a newline after them
+* Docstrings that are too long should not start on the same line as `"""`
+* Docstrings that are small enough should look like `"""Information"""`
+* Imports should be sorted by size descending
+* Imports from `src/*` should be seperated from the rest of the imports by a newline

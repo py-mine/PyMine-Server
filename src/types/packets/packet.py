@@ -34,8 +34,10 @@ class Packet:
 
     # Shamelessly copied from quarry https://github.com/barneygale/quarry/blob/313f9fdfc624f2eddcb3826adb0d871819f47ce2/quarry/types/buffer/v1_7.py#L182
     def pack_varint(self, num, max_bits=32):
-        if not (-1 << (max_bits - 1)) <= num < (+1 << (max_bits - 1)):
-            raise ValueError(f'num doesn\'t fit in given range')
+        num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
+
+        if not (num_min <= num < num_max):
+            raise ValueError(f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
 
         if num < 0:
             num += 1 + 1 << 32
@@ -52,3 +54,23 @@ class Packet:
                 break
 
         return out
+
+    def unpack_varint(self, max_bits=32):
+        num = 0
+
+        for i in range(10):
+            b = struct.unpack(f'>B', self.read(1))
+            num |= (b & 0x7F) << (7 * i)
+
+            if not b & 0x80:
+                break
+
+        if num & (1 << 31):
+            num -= 1 << 32
+
+        num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
+
+        if not (num_min <= num < num_max):
+            raise ValueError(f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
+
+        return num

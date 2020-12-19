@@ -94,7 +94,7 @@ class Packet:
             b = num & 0x7F
             num >>= 7
 
-            out += struct.pack('>B', (b | (0x80 if number > 0 else 0)))
+            out += struct.pack('>B', (b | (0x80 if num > 0 else 0)))
 
             if num == 0:
                 break
@@ -141,7 +141,7 @@ class Packet:
 
         return self.pack_varint(len(data), max_bits=32) + data
 
-    def unpack(self, comp_thresh: int = -1) -> Packet:
+    def unpack(self, comp_thresh: int = -1):
         """
         Unpack a packet from the buffer, handles
         compression and length prefixing
@@ -164,7 +164,7 @@ class Packet:
         """
 
         text = text.encode('utf-8')
-        return self.pack_varint(len(text), max_bits=16) + text
+        return cls.pack_varint(len(text), max_bits=16) + text
 
     def unpack_string(self) -> str:
         """
@@ -180,7 +180,7 @@ class Packet:
         Packs json serializable data into bytes
         """
 
-        return self.pack_string(json.dumps(obj))
+        return cls.pack_string(json.dumps(obj))
 
     def unpack_json(self) -> object:
         """

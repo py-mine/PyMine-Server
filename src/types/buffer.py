@@ -1,4 +1,7 @@
-
+from __future__ import annotations
+import struct
+import json
+import zlib
 
 class Buffer:
     """

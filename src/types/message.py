@@ -63,6 +63,8 @@ class Message:
 
     @classmethod
     def from_packet(cls, packet: Packet) -> object:
+        """Initialize a :class:`Message` from a :class:`Packet`"""
+
         return cls(packet.unpack_json())
 
     @classmethod
@@ -77,7 +79,33 @@ class Message:
 
         return re.sub(u'\u00A7.', '', text)
 
+    @staticmethod
+    def parse(obj: Any):
+        if isinstance(obj, str):
+            return obj
+        if isinstance(obj, list):
+            return "".join((Message.parse(e) for e in obj))
+        if isinstance(obj, dict):
+            text = ""
+            for prop, code in code_by_prop.items():
+                if obj.get(prop):
+                    text += u"\u00a7" + code
+            if "color" in obj:
+                text += u"\u00a7" + code_by_name[obj["color"]]
+            if "translate" in obj:
+                text += obj["translate"]
+                if "with" in obj:
+                    args = u", ".join((Message.parse(e) for e in obj["with"]))
+                    text += u"{0}".format(args)
+            if "text" in obj:
+                text += obj["text"]
+            if "extra" in obj:
+                text += Message.parse(obj["extra"])
+            return text
+
     def to_bytes(self):
+        """Return the :class:`Message` in the form of bytes."""
+
         return Packet.pack_json(self.message)
 
     def to_string(self, strip_styles=True) -> str:
@@ -85,32 +113,7 @@ class Message:
         Return the actual content of the message, optionally keep the styles.
         """
 
-        def parse(obj: Any):
-            if isinstance(obj, str):
-                return obj
-            if isinstance(obj, list):
-                return "".join((parse(e) for e in obj))
-            if isinstance(obj, dict):
-                text = ""
-                for prop, code in code_by_prop.items():
-                    if obj.get(prop):
-                        text += u"\u00a7" + code
-                if "color" in obj:
-                    text += u"\u00a7" + code_by_name[obj["color"]]
-                if "translate" in obj:
-                    text += obj["translate"]
-                    if "with" in obj:
-                        args = u", ".join((parse(e) for e in obj["with"]))
-                        text += u"{0}".format(args)
-                if "text" in obj:
-                    text += obj["text"]
-                if "extra" in obj:
-                    text += parse(obj["extra"])
-                return text
-
-        text = parse(self.message)
-        if strip_styles:
-            text = self.strip_styles(text)
+        text = Message.parse(self.strip_styles(self.message) if strip_styles else self.message)
         return text
 
     def __eq__(self, other: Any) -> bool:

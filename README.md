@@ -1,4 +1,4 @@
-# <img src="https://i.imgur.com/DX9K2he.png" height=60> PyMine
+# <img src="https://i.imgur.com/LHDnix6.png" height=60>PyMine
 *PyMine - The fastest, easiest to use, Python-based Minecraft Server!*
 
 <br>

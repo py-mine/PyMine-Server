@@ -83,7 +83,8 @@ class Packet:
         num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
 
         if not (num_min <= num < num_max):
-            raise ValueError(f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
+            raise ValueError(
+                f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
 
         if num < 0:
             num += 1 + 1 << 32
@@ -121,7 +122,8 @@ class Packet:
         num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
 
         if not (num_min <= num < num_max):
-            raise ValueError(f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
+            raise ValueError(
+                f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
 
         return num
 
@@ -133,7 +135,8 @@ class Packet:
 
         if comp_thresh >= 0:
             if len(self.buf) >= comp_thresh:
-                data = self.pack_varint(len(self.buf)) + zlib.compress(self.buf)
+                data = self.pack_varint(len(self.buf)) + \
+                    zlib.compress(self.buf)
             else:
                 data = self.pack_varint(0) + self.buf
         else:

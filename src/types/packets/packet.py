@@ -43,7 +43,7 @@ class Packet:
 
         self.pos = 0
 
-    @classmethod # Packet.pack_array() not an instance of a packet.pack_array() (Packet().pack_array())
+    @classmethod  # Packet.pack_array() not an instance of a packet.pack_array() (Packet().pack_array())
     def pack_array(cls, f, array: list) -> bytes:
         """
         Pack an array/list to bytes

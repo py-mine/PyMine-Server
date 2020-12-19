@@ -4,16 +4,20 @@ import zlib
 
 
 class Packet:
-    def __init__(self):
-        self.buf = b''
+    def __init__(self, buf=None):
+        self.buf = b'' if buf is None else buf
         self.pos = 0
 
     def add(self, data: bytes):
         self.buf += data
 
-    def read(self, length: int = 1) -> bytes:
+    def read(self, length: int = None) -> bytes:
         try:
-            return self.buf[self.pos:self.pos+length]
+            if length is None:
+                length = len(self.buf)
+                return self.buf[self.pos:]
+            else:
+                return self.buf[self.pos:self.pos+length]
         finally:
             self.pos += length
 
@@ -88,6 +92,17 @@ class Packet:
             data = self.buf
 
         return self.pack_varint(len(data), max_bits=32) + data
+
+    def unpack(self, comp_thresh: int = -1) -> Packet:
+        p = Packet(self.read(self.unpack_varint()))
+
+        if comp_thresh >= 0:
+            uncomp_len = p.unpack_varint()
+
+            if uncomp_len > 0:
+                p = Packet(zlib.decompress(p.read()))
+
+        return p
 
     @classmethod
     def pack_string(cls, text: str) -> bytes:

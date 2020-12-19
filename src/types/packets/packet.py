@@ -113,18 +113,19 @@ class Packet:
     @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Packet:
         """
-        Converts bytes into a Packet, handles compression and
-        length prefixing
+        Converts bytes into a Packet object, handles compression
+        and length prefixing
         """
 
-        p = cls(data)
-        p = cls(p.read(p.unpack_varint()))
+        p = cls(data)  # Create a packet we use just as a buffer
+        p = cls(p.read(p.unpack_varint()))  # Handle length prefixing
 
+        # Handle if the data was compressed
         if comp_thresh >= 0:
-            uncomp_len = p.unpack_varint()
+            uncomp_len = p.unpack_varint()  # Handle decompressed length prefixing
 
             if uncomp_len > 0:
-                p = cls(zlib.decompress(p.read()))
+                p = cls(zlib.decompress(p.read()))  # Create new Packet from decompressed data
 
         return p
 

@@ -40,12 +40,12 @@ class Buffer:
         self.pos = 0
 
     @classmethod
-    def pack_array(cls, f, array: list) -> bytes:
+    def pack_array(cls, f: str, array: list) -> bytes:
         """Pack an array/list to bytes."""
 
         return struct.pack(f'>{f*len(array)}', *array)
 
-    def unpack_array(self, f, length: int) -> list:
+    def unpack_array(self, f: str, length: int) -> list:
         """Unpack an array/list from the buffer."""
 
         data = self.read(struct.calcsize(f'>{f}') * length)

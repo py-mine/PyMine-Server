@@ -10,30 +10,30 @@ class Packet:
     def add(self, data: bytes):
         self.buf += data
 
-    def read(self, length: int = 1):
+    def read(self, length: int = 1) -> bytes:
         try:
             return self.buf[self.pos:self.pos+length]
         finally:
             self.pos += length
 
-    def reset(self):
+    def reset(self) -> None:
         self.pos = 0
 
-    def pack_array(f, array):
+    def pack_array(f, array: list) -> None:
         self.buf += struct.pack(f'>{f*len(array)}', *array)
 
-    def unpack_array(f, length):
+    def unpack_array(f, length: int) -> list:
         data = self.read(struct.calcsize(f'>{f}') * length)
         return list(struct.unpack(f'>{f*length}', data))
 
-    def pack_bool(self, boolean):
+    def pack_bool(self, boolean) -> None:
         self.buf += struct.pack(f'>?', boolean)
 
-    def unpack_bool(self):
+    def unpack_bool(self) -> bool:
         return struct.unpack(f'>?', self.read(1))
 
     # Shamelessly copied from quarry https://github.com/barneygale/quarry/blob/313f9fdfc624f2eddcb3826adb0d871819f47ce2/quarry/types/buffer/v1_7.py#L182
-    def pack_varint(self, num, max_bits=32):
+    def pack_varint(self, num: int, max_bits: int = 32) -> None:
         num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
 
         if not (num_min <= num < num_max):
@@ -42,20 +42,16 @@ class Packet:
         if num < 0:
             num += 1 + 1 << 32
 
-        out = b''
-
         for i in range(10):
             b = num & 0x7F
             num >>= 7
 
-            out += struct.pack('>B', (b | (0x80 if number > 0 else 0)))
+            self.buf += struct.pack('>B', (b | (0x80 if number > 0 else 0)))
 
             if num == 0:
                 break
 
-        return out
-
-    def unpack_varint(self, max_bits=32):
+    def unpack_varint(self, max_bits: int = 32) -> int:
         num = 0
 
         for i in range(10):

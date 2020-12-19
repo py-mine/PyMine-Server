@@ -1,4 +1,5 @@
 import struct
+import json
 
 
 class Packet:
@@ -69,3 +70,11 @@ class Packet:
             raise ValueError(f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
 
         return num
+
+    def pack_string(self, text: str) -> None:
+        text = text.encode('utf-8')
+        self.buf += self.pack_varint(len(text), max_bits=16) + text
+
+    def unpack_string(self) -> str:
+        length = self.unpack_varint(max_bits=16)
+        return self.read(length).decode('utf-8')

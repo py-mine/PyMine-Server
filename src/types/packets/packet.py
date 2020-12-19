@@ -118,8 +118,7 @@ class Packet:
 
         if comp_thresh >= 0:
             if len(self.buf) >= comp_thresh:
-                data = self.pack_varint(len(self.buf)) + \
-                    zlib.compress(self.buf)
+                data = self.pack_varint(len(self.buf)) + zlib.compress(self.buf)
             else:
                 data = self.pack_varint(0) + self.buf
         else:
@@ -161,5 +160,5 @@ class Packet:
 
     def unpack_json(self) -> object:
         """Unpacks serialized json data from the buffer."""
-        
+
         return json.loads(self.unpack_string())

@@ -78,3 +78,9 @@ class Packet:
     def unpack_string(self) -> str:
         length = self.unpack_varint(max_bits=16)
         return self.read(length).decode('utf-8')
+
+    def pack_json(self, obj: object) -> None:
+        self.pack_string(json.dumps(obj))
+
+    def unpack_json(self) -> object:
+        return json.loads(self.unpack_string())

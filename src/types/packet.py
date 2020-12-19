@@ -9,7 +9,7 @@ class Packet(Buffer):
     """
     The base class for a packet, contains most
     necessary functions for dealing with the data
-    in a packet.
+    in a packet that isn't covered by a Buffer
     """
 
     

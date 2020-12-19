@@ -1,3 +1,4 @@
+from __future__ import annotations
 import struct
 import json
 import zlib
@@ -126,7 +127,7 @@ class Packet:
 
         return self.pack_varint(len(data), max_bits=32) + data
 
-    def unpack(self, comp_thresh: int = -1):
+    def unpack(self, comp_thresh: int = -1) -> Packet:
         """Unpack packet from the buffer, handles compression, length prefixing."""
 
         p = Packet(self.read(self.unpack_varint()))

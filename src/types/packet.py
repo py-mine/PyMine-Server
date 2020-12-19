@@ -22,3 +22,14 @@ class Packet(Buffer):
         """Unpacks a Minecraft chat message from the buffer."""
 
         pass
+
+    @classmethod
+    def pack_pos(cls, x, y, z) -> bytes:
+        """Packs a Minecraft position (x, y, z) into bytes."""
+
+        pass
+
+    def unpack_pos(self) -> tuple:
+        """Unpacks a Minecraft position (x, y, z) from the buffer."""
+
+        pass

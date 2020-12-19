@@ -32,7 +32,6 @@ class Packet:
     def unpack_bool(self) -> bool:
         return struct.unpack(f'>?', self.read(1))
 
-    # Shamelessly copied from quarry https://github.com/barneygale/quarry/blob/313f9fdfc624f2eddcb3826adb0d871819f47ce2/quarry/types/buffer/v1_7.py#L182
     def pack_varint(self, num: int, max_bits: int = 32) -> None:
         num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
 

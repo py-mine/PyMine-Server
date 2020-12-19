@@ -10,9 +10,9 @@
 
 ## Style Guide
 * Use `'string'` not `"string"`
-* Use f-strings (`f'{thing}'`) instead of .format() where possible
+* Use f-strings (`f'{thing}'`) instead of `.format()` where possible
 * After indentation changes there should be a new line
 * There should be two new lines before a class or function header unless it's indented
 * Unless there's a good reason, lines shouldn't be longer than 100 characters
-* snake_case should be used for variables
-* Constants should either be loaded from a config file or be in UPPER_SNAKE_CASE
+* Use `snake_case` for variables
+* Constants should either be loaded from a config file or be in `UPPER_SNAKE_CASE`

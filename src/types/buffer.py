@@ -172,11 +172,11 @@ class Buffer:
 
     @classmethod
     def pack_uuid(cls, uuid: uuid.UUID) -> bytes:
-        """Packs a UUID into bytes"""
+        """Packs a UUID into bytes."""
 
         return uuid.to_bytes()
 
     def unpack_uuid(self):
-        """Unpacks a UUID from the buffer"""
+        """Unpacks a UUID from the buffer."""
 
         return uuid.UUID(bytes=self.read(16))

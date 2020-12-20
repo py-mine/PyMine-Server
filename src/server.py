@@ -1,5 +1,4 @@
 import asyncio
-import quarry
 
 async def handle_con(reader, writer):
     pass

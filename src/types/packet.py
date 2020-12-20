@@ -1,7 +1,5 @@
 from __future__ import annotations
 import struct
-import json
-import zlib
 
 from src.types.buffer import Buffer
 

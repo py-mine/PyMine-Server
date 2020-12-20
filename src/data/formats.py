@@ -28,8 +28,6 @@ FORMAT_BY_CODE = {
 
 FORMAT_BY_NAME = {v, k for k, v in FORMAT_BY_CODE.items()}
 
-FORMATS_COMBINED = {f'§{code}' for code in list(FORMAT_BY_CODE)}
-
 TERMINAL_CODES = {
     '0': '\x1b[30m',
     '1': '\x1b[34m',

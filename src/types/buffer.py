@@ -65,7 +65,7 @@ class Buffer:
     def unpack_bool(self) -> bool:
         """Unpacks a boolean from the buffer."""
 
-        return struct.unpack(f'>?', self.read(1))
+        return self.unpack('>?')
 
     @classmethod
     def pack_varint(cls, num: int, max_bits: int = 32) -> bytes:
@@ -98,7 +98,7 @@ class Buffer:
         num = 0
 
         for i in range(10):
-            b = struct.unpack(f'>B', self.read(1))
+            b = self.unpack('>B')
             num |= (b & 0x7F) << (7 * i)
 
             if not b & 0x80:

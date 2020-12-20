@@ -1,4 +1,6 @@
 
+__all__ = ('FORMAT_BY_CODE', 'FORMAT_BY_NAME', 'TERMINAL_CODES')
+
 FORMAT_BY_CODE = {
     '0': 'black',
     '1': 'dark_blue',
@@ -50,5 +52,3 @@ TERMINAL_CODES = {
     'o': '\x1b[3m',
     'r': '\x1b[0m'
 }
-
-__all__ = (FORMAT_BY_CODE, FORMAT_BY_NAME, TERMINAL_CODES)

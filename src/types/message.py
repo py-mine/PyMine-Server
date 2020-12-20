@@ -1,7 +1,6 @@
 from __future__ import annotations
 import re
 
-from src.types.buffer import Buffer
 from src.data.formats import *
 
 
@@ -12,7 +11,7 @@ class Message:
         self.msg = msg
 
     @classmethod
-    def from_buf(cls, buf: Buffer) -> Message:
+    def from_buf(cls, buf: 'Buffer') -> Message:
         """Creates a Minecraft chat message from a buffer"""
 
         return cls(buf.unpack_json())
@@ -70,4 +69,4 @@ class Message:
             else:
                 raise Exception(f'Unsupported type to convert to string {type(msg)}')
 
-        return parse(msg)
+        return parse(self.msg)

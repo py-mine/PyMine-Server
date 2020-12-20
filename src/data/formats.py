@@ -1,5 +1,5 @@
 
-__all__ = (FORMAT_BY_CODE, FORMAT_BY_NAME, FORMATS_COMBINED)
+__all__ = ('FORMAT_BY_CODE', 'FORMAT_BY_NAME', 'TERMINAL_CODES',)
 
 FORMAT_BY_CODE = {
     '0': 'black',
@@ -26,7 +26,7 @@ FORMAT_BY_CODE = {
     'r': 'reset'
 }
 
-FORMAT_BY_NAME = {v, k for k, v in FORMAT_BY_CODE.items()}
+FORMAT_BY_NAME = {v: k for k, v in FORMAT_BY_CODE.items()}
 
 TERMINAL_CODES = {
     '0': '\x1b[30m',

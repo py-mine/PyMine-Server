@@ -70,4 +70,4 @@ class Message:
             else:
                 raise Exception(f'Unsupported type to convert to string {type(msg)}')
 
-        return parse(msg)
+        return parse(self.msg)

@@ -1,6 +1,7 @@
 from __future__ import annotations
 import struct
 
+from src.data.directions import DIRECTIONS
 from src.types.message import Message
 from src.types.buffer import Buffer
 
@@ -87,10 +88,10 @@ class Packet(Buffer):
         pass
 
     @classmethod
-    def pack_direction(cls):
+    def pack_direction(cls, direction: str) -> bytes:
         """Packs a direction into bytes."""
 
-        pass
+        return cls.pack_varint(DIRECTIONS.index(direction))
 
     def unpack_direction(self):
         """Unpacks a direction from the buffer."""

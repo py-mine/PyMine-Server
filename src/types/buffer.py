@@ -42,7 +42,12 @@ class Buffer:
         self.pos = 0
 
     def unpack(self, f: str) -> object:
-        return struct.unpack(f, self.read(struct.calcsize(f)))
+        unpacked = struct.unpack(f, self.read(struct.calcsize(f)))
+
+        if len(unpacked) == 1:
+            return unpacked[0]
+
+        return unpacked
 
     @classmethod
     def pack_array(cls, f: str, array: list) -> bytes:

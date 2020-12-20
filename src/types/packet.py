@@ -99,10 +99,10 @@ class Packet(Buffer):
         return DIRECTIONS[self.unpack_varint()]
 
     @classmethod
-    def pack_rotation(cls):
+    def pack_rotation(cls, x: float, y: float, z: float) -> bytes:
         """Packs a rotation (of an entity) into bytes."""
 
-        pass
+        return cls.pack('fff', x, y, z)
 
     def unpack_rotation(self):
         """Unpacks a rotation (of an entity) from the buffer."""

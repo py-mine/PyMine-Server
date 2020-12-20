@@ -93,10 +93,10 @@ class Packet(Buffer):
 
         return cls.pack_varint(DIRECTIONS.index(direction))
 
-    def unpack_direction(self):
+    def unpack_direction(self) -> str:
         """Unpacks a direction from the buffer."""
 
-        pass
+        return DIRECTIONS[self.unpack_varint()]
 
     @classmethod
     def pack_rotation(cls):

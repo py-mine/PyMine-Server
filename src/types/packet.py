@@ -13,15 +13,15 @@ class Packet(Buffer):
     """
 
     @classmethod
-    def pack_msg(cls, msg) -> bytes:
+    def pack_msg(cls, msg: Message) -> bytes:
         """Packs a Minecraft chat message into bytes."""
 
-        pass
+        return msg.to_bytes()
 
-    def unpack_msg(self) -> object:
+    def unpack_msg(self) -> Message:
         """Unpacks a Minecraft chat message from the buffer."""
 
-        pass
+        return Message.from_buf(self)
 
     @classmethod
     def pack_pos(cls, x, y, z) -> bytes:

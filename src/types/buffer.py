@@ -289,4 +289,4 @@ class Buffer:
     def unpack_rotation(self):
         """Unpacks a rotation (of an entity) from the buffer."""
 
-        pass
+        return self.unpack('fff')

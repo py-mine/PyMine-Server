@@ -41,7 +41,7 @@ class Buffer:
 
         self.pos = 0
 
-    def unpack(f: str) -> object:
+    def unpack(self, f: str) -> object:
         return struct.unpack(f, self.read(struct.calcsize(f)))
 
     @classmethod

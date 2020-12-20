@@ -66,7 +66,7 @@ class Packet(Buffer):
 
     @classmethod
     def pack_nbt(cls):
-        """Packs NBT data into bytes"""
+        """Packs NBT data into bytes."""
 
         pass
 
@@ -82,6 +82,19 @@ class Packet(Buffer):
         pass
 
     def unpack_entity_metadata(self):
-        """Unpacks entity metadata from the buffer"""
+        """Unpacks entity metadata from the buffer."""
 
         pass
+
+    @classmethod
+    def pack_rotation(cls):
+        """Packs a rotation (of an entity) into bytes."""
+
+        pass
+
+    def unpack_rotation(self):
+        """Unpacks a rotation (of an entity) from the buffer."""
+
+        pass
+
+    

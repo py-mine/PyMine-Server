@@ -1,6 +1,7 @@
 from __future__ import annotations
 import struct
 
+from src.types.message import Message
 from src.types.buffer import Buffer
 
 
@@ -26,7 +27,14 @@ class Packet(Buffer):
     def pack_pos(cls, x, y, z) -> bytes:
         """Packs a Minecraft position (x, y, z) into bytes."""
 
-        pass
+        def to_twos_complement(num, bits):
+            return number + (1 << bits) if number < 0 else number
+
+        return struct.pack('Q', sum((
+            to_twos_complement(x, 26) << 38,
+            to_twos_complement(y, 12) << 26,
+            to_twos_complement(z, 26)
+        )))
 
     def unpack_pos(self) -> tuple:
         """Unpacks a Minecraft position (x, y, z) from the buffer."""

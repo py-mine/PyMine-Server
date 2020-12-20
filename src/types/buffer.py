@@ -12,6 +12,9 @@ class Buffer:
     converting from/to a Buffer object itself.
     """
 
+    # Used to reduce memory usage, corresponds to keys self.__dict__ / variables under self.*
+    __slots__ = ('buf', 'pos',)
+
     def __init__(self, buf: bytes = None):
         self.buf = b'' if buf is None else buf
         self.pos = 0

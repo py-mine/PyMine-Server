@@ -8,9 +8,6 @@ from src.data.formats import *
 class Message:
     """A Minecraft chat message."""
 
-    # Used to reduce memory usage, corresponds to keys self.__dict__ / variables under self.*
-    __slots__ = ('msg',)
-
     def __init__(self, msg):
         self.msg = msg
 

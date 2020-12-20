@@ -1,5 +1,5 @@
 
-__all__ = ('FORMAT_BY_CODE', 'FORMAT_BY_NAME', 'TERMINAL_CODES')
+__all__ = ('FORMAT_BY_CODE', 'FORMAT_BY_NAME', 'TERMINAL_CODES',)
 
 FORMAT_BY_CODE = {
     '0': 'black',

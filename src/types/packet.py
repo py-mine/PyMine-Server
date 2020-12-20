@@ -87,6 +87,17 @@ class Packet(Buffer):
         pass
 
     @classmethod
+    def pack_direction(cls):
+        """Packs a direction into bytes."""
+
+        pass
+
+    def unpack_direction(self):
+        """Unpacks a direction from the buffer."""
+
+        pass
+
+    @classmethod
     def pack_rotation(cls):
         """Packs a rotation (of an entity) into bytes."""
 
@@ -96,5 +107,3 @@ class Packet(Buffer):
         """Unpacks a rotation (of an entity) from the buffer."""
 
         pass
-
-    

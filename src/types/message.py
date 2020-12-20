@@ -68,6 +68,6 @@ class Message:
             elif msg is None:
                 return ''
             else:
-                raise Exception(f'Unsupported type to convert to string {type(msg)}')
+                return str(self.msg)
 
         return parse(msg)

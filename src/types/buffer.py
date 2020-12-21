@@ -153,6 +153,20 @@ class Buffer:
         return num
 
     @classmethod
+    def pack_optional_varint(cls, num):
+        """Packs an optional varint into bytes."""
+
+        return cls.pack_varint(0 if num is None else num + 1)
+
+    def unpack_optional_varint(cls):
+        num = self.unpack_varint()
+
+        if num == 0:
+            return None
+
+        return num - 1
+
+    @classmethod
     def pack_array(cls, f: str, array: list) -> bytes:
         """Packs an array/list into bytes."""
 

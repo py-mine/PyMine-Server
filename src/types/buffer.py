@@ -70,9 +70,7 @@ class Buffer:
         return super(Buffer, cls).pack_particle(id, data)
 
     def unpack_particle(self):
-        """
-        Unpacks a particle. Returns an ``(kind, data)`` pair.
-        """
+        """Unpacks a particle. Returns an ``(kind, data)`` pair."""
 
         id, data = super(Buffer, self).unpack_particle()
         kind = self.registry.decode('minecraft:particle_type', id)
@@ -88,6 +86,16 @@ class Buffer:
         return cls.pack_varint(kind) + \
             cls.pack_varint(profession) + \
             cls.pack_varint(level)
+
+    def unpack_villager(self):
+        """Unpacks villager data."""
+
+        kind = self.registry.decode(
+            'minecraft:villager_type', self.unpack_varint())
+        profession = self.registry.decode(
+            'minecraft:villager_profession', self.unpack_varint())
+        level = self.unpack_varint()
+        return kind, profession, level
 
     @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:

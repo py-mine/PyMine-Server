@@ -1,5 +1,4 @@
 from __future__ import annotations
-from nbt import nbt
 import struct
 import json
 import uuid

@@ -71,6 +71,15 @@ class Buffer:
         id = cls.registry.encode('minecraft:particle_type', kind)
         return super(Buffer, cls).pack_particle(id, data)
 
+    def unpack_particle(self):
+        """
+        Unpacks a particle. Returns an ``(kind, data)`` pair.
+        """
+
+        id, data = super(Buffer, self).unpack_particle()
+        kind = self.registry.decode('minecraft:particle_type', id)
+        return kind, data
+
     @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
         """

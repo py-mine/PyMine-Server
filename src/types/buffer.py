@@ -5,6 +5,9 @@ import json
 import uuid
 import zlib
 
+from src.data.directions import DIRECTIONS
+from src.data.poses import POSES
+
 
 class Buffer:
     """
@@ -100,7 +103,7 @@ class Buffer:
     def unpack_bool(self) -> bool:
         """Unpacks a boolean from the buffer."""
 
-        return self.unpack('>?')
+        return self.unpack('?')
 
     @classmethod
     def pack_varint(cls, num: int, max_bits: int = 32) -> bytes:
@@ -120,7 +123,7 @@ class Buffer:
             b = num & 0x7F
             num >>= 7
 
-            out += struct.pack('>B', (b | (0x80 if num > 0 else 0)))
+            out += cls.pack('B', (b | (0x80 if num > 0 else 0)))
 
             if num == 0:
                 break
@@ -133,7 +136,7 @@ class Buffer:
         num = 0
 
         for i in range(10):
-            b = self.unpack('>B')
+            b = self.unpack('B')
             num |= (b & 0x7F) << (7 * i)
 
             if not b & 0x80:
@@ -148,6 +151,20 @@ class Buffer:
             raise ValueError(f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
 
         return num
+
+    @classmethod
+    def pack_optional_varint(cls, num):
+        """Packs an optional varint into bytes."""
+
+        return cls.pack_varint(0 if num is None else num + 1)
+
+    def unpack_optional_varint(cls):
+        num = self.unpack_varint()
+
+        if num == 0:
+            return None
+
+        return num - 1
 
     @classmethod
     def pack_array(cls, f: str, array: list) -> bytes:
@@ -231,8 +248,8 @@ class Buffer:
 
         return struct.pack('>Q', sum((
             to_twos_complement(x, 26) << 38,
-            to_twos_complement(y, 12) << 26,
-            to_twos_complement(z, 26)
+            to_twos_complement(z, 26) << 12,
+            to_twos_complement(y, 12)
         )))
 
     def unpack_pos(self) -> tuple:
@@ -244,30 +261,34 @@ class Buffer:
 
             return num
 
-        data = self.unpack('>Q')
+        data = self.unpack('Q')
 
         x = from_twos_complement(data >> 38, 26)
-        y = from_twos_complement(data >> 26 & 0xFFF, 12)
-        z = from_twos_complement(data & 0x3FFFFFF, 26)
+        z = from_twos_complement(data >> 12 & 0x3FFFFFF, 26)
+        y = from_twos_complement(data & 0xFFF, 12)
 
         return x, y, z
 
     @classmethod
-    def pack_slot(cls, item_id: int = None, count: int = 1, damage: int = 1, tag: nbt.TAG = None):
+    def pack_slot(cls, item_id: int = None, count: int = 1, tag: nbt.TAG = None):
         """Packs an inventory/container slot into bytes."""
 
         if item_id is None:
-            return cls.pack('h', -1)
+            return cls.pack('?', False)
 
-        return cls.pack('hbh', item_id, count, damage) + cls.pack_nbt(tag)
+        return cls.pack('?', True) + cls.pack_varint(item_id) + cls.pack('b', count) + cls.pack_nbt(tag)
 
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""
 
+        has_item_id = self.unpack_optional()
+
+        if not has_item_id:
+            return {'item_id': None}
+
         slot = {
-            'item_id': self.unpack('h'),
+            'item_id': self.unpack_varint(),
             'count': self.unpack('b'),
-            'damage': self.unpack('h'),
             'tag': self.unpack_nbt()
         }
 
@@ -294,3 +315,14 @@ class Buffer:
         """Unpacks a direction from the buffer."""
 
         return DIRECTIONS[self.unpack_varint()]
+
+    @classmethod
+    def pack_pose(cls, pose: str) -> bytes:
+        """Packs a pose into bytes."""
+
+        return cls.pack_varint(POSES.index(pose))
+
+    def unpack_pose(self) -> str:
+        """Unpacks a pose from the buffer."""
+
+        return POSES[self.unpack_varint()]

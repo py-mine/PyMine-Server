@@ -5,6 +5,7 @@ import json
 import uuid
 import zlib
 
+from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
 from src.types.message import Message
 from src.data.recipes import *
 from src.data.misc import *
@@ -290,7 +291,7 @@ class Buffer:
     def pack_slot(cls, item: str = None, count: int = 1, tag: nbt.TAG = None):
         """Packs an inventory/container slot into bytes."""
 
-        item_id = BLOCKS[]
+        item_id = ITEMS_BY_NAME[item]  # needed to support recipes
 
         if item_id is None:
             return cls.pack('?', False)
@@ -303,10 +304,10 @@ class Buffer:
         has_item_id = self.unpack_optional()
 
         if not has_item_id:
-            return {'item_id': None}
+            return {'item': None}
 
         return {
-            'item_id': self.unpack_varint(),
+            'item': ITEMS_BY_ID[self.unpack_varint()],
             'count': self.unpack('b'),
             'tag': self.unpack_nbt()
         }

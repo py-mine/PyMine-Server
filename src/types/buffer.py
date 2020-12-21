@@ -41,6 +41,43 @@ class Buffer:
 
         self.pos = 0
 
+    @classmethod
+    def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
+        """
+        Creates a Buffer object from bytes, handles compression
+        and length prefixing
+        """
+
+        buf = cls(data)
+        buf = cls(buf.read(buf.unpack_varint()))  # Handle length prefixing
+
+        # Handle if the data was compressed
+        if comp_thresh >= 0:
+            uncomp_len = buf.unpack_varint()  # Handle decompressed length prefixing
+
+            if uncomp_len > 0:
+                # Create new Buffer from decompressed data
+                buf = cls(zlib.decompress(buf.read()))
+
+        return buf
+
+    def to_bytes(self, comp_thresh: int = -1) -> bytes:
+        """
+        Packs the final Buffer into bytes, readies the data to be sent,
+        handles compression and length prefixing.
+        """
+
+        if comp_thresh >= 0:
+            if len(self.buf) >= comp_thresh:
+                data = self.pack_varint(len(self.buf)) + \
+                    zlib.compress(self.buf)
+            else:
+                data = self.pack_varint(0) + self.buf
+        else:
+            data = self.buf
+
+        return self.pack_varint(len(data), max_bits=32) + data
+
     def unpack(self, f: str) -> object:
         unpacked = struct.unpack('>'+f, self.read(struct.calcsize(f)))
 
@@ -52,18 +89,6 @@ class Buffer:
     @classmethod
     def pack(self, f: str, *data: object) -> bytes:
         return struct.pack('>'+f, *data)
-
-    @classmethod
-    def pack_array(cls, f: str, array: list) -> bytes:
-        """Packs an array/list into bytes."""
-
-        return struct.pack(f'>{f*len(array)}', *array)
-
-    def unpack_array(self, f: str, length: int) -> list:
-        """Unpacks an array/list from the buffer."""
-
-        data = self.read(struct.calcsize(f'>{f}') * length)
-        return list(struct.unpack(f'>{f*length}', data))
 
     @classmethod
     def pack_bool(cls, boolean) -> bytes:
@@ -124,41 +149,10 @@ class Buffer:
         return num
 
     @classmethod
-    def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
-        """
-        Creates a Buffer object from bytes, handles compression
-        and length prefixing
-        """
+    def pack_array(cls, f: str, array: list) -> bytes:
+        """Packs an array/list into bytes."""
 
-        buf = cls(data)
-        buf = cls(buf.read(buf.unpack_varint()))  # Handle length prefixing
-
-        # Handle if the data was compressed
-        if comp_thresh >= 0:
-            uncomp_len = buf.unpack_varint()  # Handle decompressed length prefixing
-
-            if uncomp_len > 0:
-                # Create new Buffer from decompressed data
-                buf = cls(zlib.decompress(buf.read()))
-
-        return buf
-
-    def to_bytes(self, comp_thresh: int = -1) -> bytes:
-        """
-        Packs the final Buffer into bytes, readies the data to be sent,
-        handles compression and length prefixing.
-        """
-
-        if comp_thresh >= 0:
-            if len(self.buf) >= comp_thresh:
-                data = self.pack_varint(len(self.buf)) + \
-                    zlib.compress(self.buf)
-            else:
-                data = self.pack_varint(0) + self.buf
-        else:
-            data = self.buf
-
-        return self.pack_varint(len(data), max_bits=32) + data
+        return struct.pack(f'>{f*len(array)}', *array)
 
     @classmethod
     def pack_string(cls, text: str) -> bytes:
@@ -172,6 +166,12 @@ class Buffer:
 
         length = self.unpack_varint(max_bits=16)
         return self.read(length).decode('utf-8')
+
+    def unpack_array(self, f: str, length: int) -> list:
+        """Unpacks an array/list from the buffer."""
+
+        data = self.read(struct.calcsize(f'>{f}') * length)
+        return list(struct.unpack(f'>{f*length}', data))
 
     @classmethod
     def pack_json(cls, obj: object) -> bytes:
@@ -248,17 +248,6 @@ class Buffer:
         pass
 
     @classmethod
-    def pack_direction(cls, direction: str) -> bytes:
-        """Packs a direction into bytes."""
-
-        return cls.pack_varint(DIRECTIONS.index(direction))
-
-    def unpack_direction(self) -> str:
-        """Unpacks a direction from the buffer."""
-
-        return DIRECTIONS[self.unpack_varint()]
-
-    @classmethod
     def pack_rotation(cls, x: float, y: float, z: float) -> bytes:
         """Packs a rotation (of an entity) into bytes."""
 
@@ -268,3 +257,14 @@ class Buffer:
         """Unpacks a rotation (of an entity) from the buffer."""
 
         return self.unpack('fff')
+
+    @classmethod
+    def pack_direction(cls, direction: str) -> bytes:
+        """Packs a direction into bytes."""
+
+        return cls.pack_varint(DIRECTIONS.index(direction))
+
+    def unpack_direction(self) -> str:
+        """Unpacks a direction from the buffer."""
+
+        return DIRECTIONS[self.unpack_varint()]

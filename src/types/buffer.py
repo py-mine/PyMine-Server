@@ -7,6 +7,7 @@ import zlib
 
 from src.data.directions import DIRECTIONS
 from src.data.poses import POSES
+from .message import Message
 
 
 class Buffer:
@@ -169,7 +170,7 @@ class Buffer:
         return cls.pack_varint(0 if num is None else num + 1)
 
     def unpack_optional_varint(cls):
-        num = self.unpack_varint()
+        num = cls.unpack_varint()
 
         if num == 0:
             return None

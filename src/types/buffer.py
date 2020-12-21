@@ -98,6 +98,58 @@ class Buffer:
         return kind, profession, level
 
     @classmethod
+    def pack_entity_metadata(cls, metadata):
+        """Packs entity metadata."""
+
+        def pack_position(pos): return cls.pack_position(*pos)
+        out = b""
+        for ty_key, val in metadata.items():
+            ty, key = ty_key
+            out += cls.pack('BB', key, ty)
+            if ty == 0:
+                out += cls.pack('b', val)
+            elif ty == 1:
+                out += cls.pack_varint(val)
+            elif ty == 2:
+                out += cls.pack('f', val)
+            elif ty == 3:
+                out += cls.pack_string(val)
+            elif ty == 4:
+                out += cls.pack_chat(val)
+            elif ty == 5:
+                out += cls.pack_optional(cls.pack_chat, val)
+            elif ty == 6:
+                out += cls.pack_slot(**val)
+            elif ty == 7:
+                out += cls.pack('?', val)
+            elif ty == 8:
+                out += cls.pack_rotation(*val)
+            elif ty == 9:
+                out += cls.pack_position(*val)
+            elif ty == 10:
+                out += cls.pack_optional(pack_position, val)
+            elif ty == 11:
+                out += cls.pack_direction(val)
+            elif ty == 12:
+                out += cls.pack_optional(cls.pack_uuid, val)
+            elif ty == 13:
+                out += cls.pack_block(val)
+            elif ty == 14:
+                out += cls.pack_nbt(val)
+            elif ty == 15:
+                out += cls.pack_particle(*val)
+            elif ty == 16:
+                out += cls.pack_villager(*val)
+            elif ty == 17:
+                out += cls.pack_optional_varint(val)
+            elif ty == 18:
+                out += cls.pack_pose(val)
+            else:
+                raise ValueError("Unknown entity metadata type: %d" % ty)
+        out += cls.pack('B', 255)
+        return out
+
+    @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
         """
         Creates a Buffer object from bytes, handles compression

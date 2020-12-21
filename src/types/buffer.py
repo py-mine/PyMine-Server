@@ -302,4 +302,9 @@ class Buffer:
     def pack_pose(cls, pose: str) -> bytes:
         """Packs a pose into bytes."""
 
-        return
+        return cls.pack_varint(POSES.index(pose))
+
+    def unpack_pose(self) -> str:
+        """Unpacks a pose from the buffer."""
+
+        return POSES[self.unpack_varint()]

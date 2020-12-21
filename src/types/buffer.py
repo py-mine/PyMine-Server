@@ -47,15 +47,10 @@ class Buffer:
         self.pos = 0
 
     @classmethod
-    def pack_villager(cls, kind, profession, level):
-        """Packs villager data into """
+    def pack_villager(cls, kind: int, profession: int, level: int) -> bytes:
+        """Packs villager data into bytes"""
 
-        kind = cls.registry.encode('minecraft:villager_type', kind)
-        profession = cls.registry.encode(
-            'minecraft:villager_profession', profession)
-        return cls.pack_varint(kind) + \
-            cls.pack_varint(profession) + \
-            cls.pack_varint(level)
+        return cls.pack_varint(kind) + cls.pack_varint(profession) + cls.pack_varint(level)
 
     def unpack_villager(self):
         """Unpacks villager data."""

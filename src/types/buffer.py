@@ -259,17 +259,6 @@ class Buffer:
         pass
 
     @classmethod
-    def pack_entity_metadata(cls):
-        """Packs entity metadata into bytes."""
-
-        pass
-
-    def unpack_entity_metadata(self):
-        """Unpacks entity metadata from the buffer."""
-
-        pass
-
-    @classmethod
     def pack_direction(cls, direction: str) -> bytes:
         """Packs a direction into bytes."""
 

@@ -5,9 +5,8 @@ import json
 import uuid
 import zlib
 
-from src.data.directions import DIRECTIONS
 from src.types.message import Message
-from src.data.poses import POSES
+from src.data.misc import *
 
 
 class Buffer:

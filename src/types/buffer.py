@@ -48,19 +48,20 @@ class Buffer:
 
     @classmethod
     def pack_villager(cls, kind: int, profession: int, level: int) -> bytes:
-        """Packs villager data into bytes"""
+        """Packs villager data into bytes."""
 
         return cls.pack_varint(kind) + cls.pack_varint(profession) + cls.pack_varint(level)
 
     def unpack_villager(self):
-        """Unpacks villager data."""
+        """Unpacks villager data from the buffer."""
 
-        kind = self.registry.decode(
-            'minecraft:villager_type', self.unpack_varint())
-        profession = self.registry.decode(
-            'minecraft:villager_profession', self.unpack_varint())
-        level = self.unpack_varint()
-        return kind, profession, level
+        villager = {
+            'kind': self.unpack_varint(),
+            'profession': self.unpack_varint(),
+            'level': self.unpack_varint()
+        }
+
+        return villager
 
     @classmethod
     def pack_entity_metadata(cls, metadata):

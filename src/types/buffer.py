@@ -270,13 +270,13 @@ class Buffer:
         return x, y, z
 
     @classmethod
-    def pack_slot(cls, item_id: int = None, count: int = 1, damage: int = 1, tag: nbt.TAG = None):
+    def pack_slot(cls, item_id: int = None, count: int = 1, tag: nbt.TAG = None):
         """Packs an inventory/container slot into bytes."""
 
         if item_id is None:
-            return cls.pack('h', -1)
+            return cls.pack('?', False)
 
-        return cls.pack('hbh', item_id, count, damage) + cls.pack_nbt(tag)
+        return cls.pack('?', True) + cls.pack_varint(item_id) + cls.pack('b', count) + cls.pack_nbt(tag)
 
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""
@@ -284,7 +284,6 @@ class Buffer:
         slot = {
             'item_id': self.unpack('h'),
             'count': self.unpack('b'),
-            'damage': self.unpack('h'),
             'tag': self.unpack_nbt()
         }
 

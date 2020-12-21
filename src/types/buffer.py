@@ -123,7 +123,7 @@ class Buffer:
             b = num & 0x7F
             num >>= 7
 
-            out += struct.pack('>B', (b | (0x80 if num > 0 else 0)))
+            out += cls.pack('B', (b | (0x80 if num > 0 else 0)))
 
             if num == 0:
                 break

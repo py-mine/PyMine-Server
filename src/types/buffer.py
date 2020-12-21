@@ -100,7 +100,7 @@ class Buffer:
     def unpack_bool(self) -> bool:
         """Unpacks a boolean from the buffer."""
 
-        return self.unpack('>?')
+        return self.unpack('?')
 
     @classmethod
     def pack_varint(cls, num: int, max_bits: int = 32) -> bytes:
@@ -133,7 +133,7 @@ class Buffer:
         num = 0
 
         for i in range(10):
-            b = self.unpack('>B')
+            b = self.unpack('B')
             num |= (b & 0x7F) << (7 * i)
 
             if not b & 0x80:
@@ -231,8 +231,8 @@ class Buffer:
 
         return struct.pack('>Q', sum((
             to_twos_complement(x, 26) << 38,
-            to_twos_complement(y, 12) << 26,
-            to_twos_complement(z, 26)
+            to_twos_complement(z, 26) << 12,
+            to_twos_complement(y, 12)
         )))
 
     def unpack_pos(self) -> tuple:
@@ -244,7 +244,7 @@ class Buffer:
 
             return num
 
-        data = self.unpack('>Q')
+        data = self.unpack('Q')
 
         x = from_twos_complement(data >> 38, 26)
         y = from_twos_complement(data >> 26 & 0xFFF, 12)

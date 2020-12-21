@@ -62,7 +62,7 @@ class Buffer:
         }
 
     @classmethod
-    def pack_entity_metadata(cls, metadata):
+    def pack_entity_metadata(cls, metadata: dict):
         """Packs entity metadata into bytes."""
 
         def pack_position(pos): return cls.pack_position(*pos)

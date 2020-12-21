@@ -149,6 +149,57 @@ class Buffer:
         out += cls.pack('B', 255)
         return out
 
+    def unpack_entity_metadata(self):
+        """Unpacks entity metadata."""
+
+        metadata = {}
+        while True:
+            key = self.unpack('B')
+            if key == 255:
+                return metadata
+            ty = self.unpack('B')
+            if ty == 0:
+                val = self.unpack('b')
+            elif ty == 1:
+                val = self.unpack_varint()
+            elif ty == 2:
+                val = self.unpack('f')
+            elif ty == 3:
+                val = self.unpack_string()
+            elif ty == 4:
+                val = self.unpack_chat()
+            elif ty == 5:
+                val = self.unpack_optional(self.unpack_chat)
+            elif ty == 6:
+                val = self.unpack_slot()
+            elif ty == 7:
+                val = self.unpack('?')
+            elif ty == 8:
+                val = self.unpack_rotation()
+            elif ty == 9:
+                val = self.unpack_position()
+            elif ty == 10:
+                val = self.unpack_optional(self.unpack_position)
+            elif ty == 11:
+                val = self.unpack_direction()
+            elif ty == 12:
+                val = self.unpack_optional(self.unpack_uuid)
+            elif ty == 13:
+                val = self.unpack_block()
+            elif ty == 14:
+                val = self.unpack_nbt()
+            elif ty == 15:
+                val = self.unpack_particle()
+            elif ty == 16:
+                val = self.unpack_villager()
+            elif ty == 17:
+                val = self.unpack_optional_varint()
+            elif ty == 18:
+                val = self.unpack_pose()
+            else:
+                raise ValueError(f"Unknown entity metadata type: {ty}")
+            metadata[ty, key] = val
+
     @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
         """

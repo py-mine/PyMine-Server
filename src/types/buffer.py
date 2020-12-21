@@ -407,13 +407,11 @@ class Buffer:
         if not has_item_id:
             return {'item_id': None}
 
-        slot = {
+        return {
             'item_id': self.unpack_varint(),
             'count': self.unpack('b'),
             'tag': self.unpack_nbt()
         }
-
-        return slot
 
     @classmethod
     def pack_rotation(cls, x: float, y: float, z: float) -> bytes:

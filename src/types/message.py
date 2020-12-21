@@ -7,7 +7,7 @@ from src.data.formats import *
 class Message:
     """A Minecraft chat message."""
 
-    def __init__(self, msg):
+    def __init__(self, msg: object) -> None:
         self.msg = msg
 
     @classmethod

@@ -12,12 +12,12 @@ class Buffer:
     converting from/to a Buffer object itself.
     """
 
-    def __init__(self, buf: bytes = None):
+    def __init__(self, buf: bytes = None) -> None:
         self.buf = b'' if buf is None else buf
         self.pos = 0
 
-    def add(self, data: bytes):
-        """Adds data to the buffer."""
+    def write(self, data: bytes) -> None:
+        """Writes data to the buffer."""
 
         self.buf += data
 
@@ -244,28 +244,6 @@ class Buffer:
 
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""
-
-        pass
-
-    @classmethod
-    def pack_nbt(cls):
-        """Packs NBT data into bytes."""
-
-        pass
-
-    def unpack_nbt(self):
-        """Unpacks NBT data from the buffer."""
-
-        pass
-
-    @classmethod
-    def pack_entity_metadata(cls):
-        """Packs entity metadata into bytes."""
-
-        pass
-
-    def unpack_entity_metadata(self):
-        """Unpacks entity metadata from the buffer."""
 
         pass
 

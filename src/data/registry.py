@@ -8,4 +8,5 @@ __all__ = (
 with open('registries.json') as registry:  # generated from server jar
     REGISTRY = json.load(registry)
 
-ITEMS = REGISTRY['minecraft:item']['entries']
+ITEMS_BY_NAME = REGISTRY['minecraft:item']['entries']
+ITEMS_BY_ID = {v: k for k, v in ITEMS_BY_NAME.items()}

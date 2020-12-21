@@ -1,7 +1,7 @@
 import json
 import os
 
-__all__ = ['RECIPES']
+__all__ = ('RECIPES',)
 
 RECIPES = {}
 

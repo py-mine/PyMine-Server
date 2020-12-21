@@ -12,11 +12,11 @@ class Buffer:
     converting from/to a Buffer object itself.
     """
 
-    def __init__(self, buf: bytes = None):
+    def __init__(self, buf: bytes = None) -> None:
         self.buf = b'' if buf is None else buf
         self.pos = 0
 
-    def add(self, data: bytes):
+    def add(self, data: bytes) -> None:
         """Adds data to the buffer."""
 
         self.buf += data

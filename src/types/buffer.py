@@ -47,22 +47,6 @@ class Buffer:
         self.pos = 0
 
     @classmethod
-    def pack_chunk(cls, sections):
-        data = b""
-        for section in sections:
-            if section and not section[0].is_empty():
-                data += cls.pack_chunk_section(*section)
-        return data
-
-    @classmethod
-    def pack_chunk_bitmask(cls, sections):
-        bitmask = 0
-        for i, section in enumerate(sections):
-            if section and not section[0].is_empty():
-                bitmask |= 1 << i
-        return cls.pack_varint(bitmask)
-
-    @classmethod
     def pack_particle(cls, kind, data=None):
         """Packs a particle."""
 

@@ -63,6 +63,15 @@ class Buffer:
         return cls.pack_varint(bitmask)
 
     @classmethod
+    def pack_particle(cls, kind, data=None):
+        """
+        Packs a particle.
+        """
+
+        id = cls.registry.encode('minecraft:particle_type', kind)
+        return super(Buffer1_14, cls).pack_particle(id, data)
+
+    @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
         """
         Creates a Buffer object from bytes, handles compression

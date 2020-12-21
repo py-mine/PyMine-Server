@@ -247,8 +247,8 @@ class Buffer:
         data = self.unpack('Q')
 
         x = from_twos_complement(data >> 38, 26)
-        y = from_twos_complement(data >> 26 & 0xFFF, 12)
-        z = from_twos_complement(data & 0x3FFFFFF, 26)
+        z = from_twos_complement(data >> 12 & 0x3FFFFFF, 26)
+        y = from_twos_complement(data & 0xFFF, 12)
 
         return x, y, z
 

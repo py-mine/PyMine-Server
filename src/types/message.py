@@ -31,7 +31,7 @@ class Message:
     # 'plain' = plain text, no formatting
     # 'normal' = with formatting codes
     # 'color' = formatted with ansi/terminal formatting codes
-    def to_string(self, mode: str):
+    def to_string(self, mode: str) -> str:
         """Converts a Minecraft chat message to text"""
 
         def parse(msg):

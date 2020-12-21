@@ -52,16 +52,14 @@ class Buffer:
 
         return cls.pack_varint(kind) + cls.pack_varint(profession) + cls.pack_varint(level)
 
-    def unpack_villager(self):
+    def unpack_villager(self) -> dict:
         """Unpacks villager data from the buffer."""
 
-        villager = {
+        return {
             'kind': self.unpack_varint(),
             'profession': self.unpack_varint(),
             'level': self.unpack_varint()
         }
-
-        return villager
 
     @classmethod
     def pack_entity_metadata(cls, metadata):

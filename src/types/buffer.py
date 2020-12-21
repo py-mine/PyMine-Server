@@ -1,4 +1,5 @@
 from __future__ import annotations
+from nbt import nbt
 import struct
 import json
 import uuid
@@ -185,6 +186,21 @@ class Buffer:
         return json.loads(self.unpack_string())
 
     @classmethod
+    def pack_nbt(cls, tag: nbt.TAG = None) -> bytes:
+        """Packs an NBT tag into bytes."""
+
+        if tag is None:
+            return b'\x00'
+
+        return tag._render_buffer(self.buf)
+
+    def unpack_nbt(self) -> object:
+        """Unpacks a NBT tag(s) from the buffer"""
+
+        # assumes data is NOT compressed, isn't an issue (hopefully)!
+        return nbt.NBTFile(buffer=self.buf)
+
+    @classmethod
     def pack_uuid(cls, uuid: uuid.UUID) -> bytes:
         """Packs a UUID into bytes."""
 
@@ -237,10 +253,10 @@ class Buffer:
         return x, y, z
 
     @classmethod
-    def pack_slot(cls):
+    def pack_slot(cls, item_id: int = None, count: int = 1, damage: int = 1, tag: nbt.TAG = None):
         """Packs an inventory/container slot into bytes."""
 
-        pass
+
 
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""

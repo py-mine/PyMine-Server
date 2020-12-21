@@ -62,109 +62,6 @@ class Buffer:
         }
 
     @classmethod
-    def pack_entity_metadata(cls, metadata: dict):
-        """Packs entity metadata into bytes."""
-
-        def pack_position(pos): return cls.pack_position(*pos)
-        out = b''
-        for ty_key, val in metadata.items():
-            ty, key = ty_key
-            out += cls.pack('BB', key, ty)
-            if ty == 0:
-                out += cls.pack('b', val)
-            elif ty == 1:
-                out += cls.pack_varint(val)
-            elif ty == 2:
-                out += cls.pack('f', val)
-            elif ty == 3:
-                out += cls.pack_string(val)
-            elif ty == 4:
-                out += cls.pack_chat(val)
-            elif ty == 5:
-                out += cls.pack_optional(cls.pack_chat, val)
-            elif ty == 6:
-                out += cls.pack_slot(**val)
-            elif ty == 7:
-                out += cls.pack('?', val)
-            elif ty == 8:
-                out += cls.pack_rotation(*val)
-            elif ty == 9:
-                out += cls.pack_position(*val)
-            elif ty == 10:
-                out += cls.pack_optional(pack_position, val)
-            elif ty == 11:
-                out += cls.pack_direction(val)
-            elif ty == 12:
-                out += cls.pack_optional(cls.pack_uuid, val)
-            elif ty == 13:
-                out += cls.pack_block(val)
-            elif ty == 14:
-                out += cls.pack_nbt(val)
-            elif ty == 15:
-                out += cls.pack_particle(*val)
-            elif ty == 16:
-                out += cls.pack_villager(*val)
-            elif ty == 17:
-                out += cls.pack_optional_varint(val)
-            elif ty == 18:
-                out += cls.pack_pose(val)
-            else:
-                raise ValueError(f"Unknown entity metadata type: {ty}")
-        out += cls.pack('B', 255)
-        return out
-
-    def unpack_entity_metadata(self):
-        """Unpacks entity metadata."""
-
-        metadata = {}
-        while True:
-            key = self.unpack('B')
-            if key == 255:
-                return metadata
-            ty = self.unpack('B')
-            if ty == 0:
-                val = self.unpack('b')
-            elif ty == 1:
-                val = self.unpack_varint()
-            elif ty == 2:
-                val = self.unpack('f')
-            elif ty == 3:
-                val = self.unpack_string()
-            elif ty == 4:
-                val = self.unpack_chat()
-            elif ty == 5:
-                val = self.unpack_optional(self.unpack_chat)
-            elif ty == 6:
-                val = self.unpack_slot()
-            elif ty == 7:
-                val = self.unpack('?')
-            elif ty == 8:
-                val = self.unpack_rotation()
-            elif ty == 9:
-                val = self.unpack_position()
-            elif ty == 10:
-                val = self.unpack_optional(self.unpack_position)
-            elif ty == 11:
-                val = self.unpack_direction()
-            elif ty == 12:
-                val = self.unpack_optional(self.unpack_uuid)
-            elif ty == 13:
-                val = self.unpack_block()
-            elif ty == 14:
-                val = self.unpack_nbt()
-            elif ty == 15:
-                val = self.unpack_particle()
-            elif ty == 16:
-                val = self.unpack_villager()
-            elif ty == 17:
-                val = self.unpack_optional_varint()
-            elif ty == 18:
-                val = self.unpack_pose()
-            else:
-                raise ValueError(f'Unknown entity metadata type: {ty}')
-            metadata[ty, key] = val
-
-    @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
         """
         Creates a Buffer object from bytes, handles compression
@@ -390,8 +287,10 @@ class Buffer:
         return x, y, z
 
     @classmethod
-    def pack_slot(cls, item_id: int = None, count: int = 1, tag: nbt.TAG = None):
+    def pack_slot(cls, item: str = None, count: int = 1, tag: nbt.TAG = None):
         """Packs an inventory/container slot into bytes."""
+
+        item_id = BLOCKS[]
 
         if item_id is None:
             return cls.pack('?', False)
@@ -446,7 +345,19 @@ class Buffer:
         return POSES[self.unpack_varint()]
 
     @classmethod
-    def pack_recipe(cls, recipe: dict) -> bytes: # https://wiki.vg/Protocol#Declare_Recipes
+    # recipe_id *I think* is the actual name of the recipe i.e. jungle_planks, oak_door, furnace, etc...
+    def pack_recipe(cls, recipe_id: str, recipe: dict) -> bytes: # https://wiki.vg/Protocol#Declare_Recipes
         """Packs a recipe into bytes."""
 
-        out = cls.pack_string()
+        # recipe_type = recipe['type'].strip('minecraft:')  # Will only support BUILT IN recipes for now
+        recipe_type = recipe['type'][10:]
+
+        out = cls.pack_string(recipe_type) + cls.pack_string(recipe_id)
+
+        if recipe_type == 'crafting_shapeless':
+            out += cls.pack_string(recipe['group'])
+            out += cls.pack_varint(len(recipe['ingredients']))
+
+            for ingredient in recipe['ingredients']:
+                for slot in ingredient:
+                    data += cls.pack_slot(**slot)

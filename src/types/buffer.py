@@ -41,6 +41,18 @@ class Buffer:
 
         self.pos = 0
 
+    def unpack(self, f: str) -> object:
+        unpacked = struct.unpack('>'+f, self.read(struct.calcsize(f)))
+
+        if len(unpacked) == 1:
+            return unpacked[0]
+
+        return unpacked
+
+    @classmethod
+    def pack(self, f: str, *data: object) -> bytes:
+        return struct.pack('>'+f, *data)
+
     @classmethod
     def pack_array(cls, f: str, array: list) -> bytes:
         """Packs an array/list into bytes."""
@@ -62,7 +74,7 @@ class Buffer:
     def unpack_bool(self) -> bool:
         """Unpacks a boolean from the buffer."""
 
-        return struct.unpack(f'>?', self.read(1))
+        return self.unpack('>?')
 
     @classmethod
     def pack_varint(cls, num: int, max_bits: int = 32) -> bytes:
@@ -95,7 +107,7 @@ class Buffer:
         num = 0
 
         for i in range(10):
-            b = struct.unpack(f'>B', self.read(1))
+            b = self.unpack('>B')
             num |= (b & 0x7F) << (7 * i)
 
             if not b & 0x80:
@@ -182,3 +194,99 @@ class Buffer:
         """Unpacks a UUID from the buffer."""
 
         return uuid.UUID(bytes=self.read(16))
+
+    @classmethod
+    def pack_msg(cls, msg: Message) -> bytes:
+        """Packs a Minecraft chat message into bytes."""
+
+        return msg.to_bytes()
+
+    def unpack_msg(self) -> Message:
+        """Unpacks a Minecraft chat message from the buffer."""
+
+        return Message.from_buf(self)
+
+    @classmethod
+    def pack_pos(cls, x, y, z) -> bytes:
+        """Packs a Minecraft position (x, y, z) into bytes."""
+
+        def to_twos_complement(num, bits):
+            return num + (1 << bits) if num < 0 else num
+
+        return struct.pack('>Q', sum((
+            to_twos_complement(x, 26) << 38,
+            to_twos_complement(y, 12) << 26,
+            to_twos_complement(z, 26)
+        )))
+
+    def unpack_pos(self) -> tuple:
+        """Unpacks a Minecraft position (x, y, z) from the buffer."""
+
+        def from_twos_complement(num, bits):
+            if num & (1 << (bits - 1)) != 0:
+                num -= (1 << bits)
+
+            return num
+
+        data = self.unpack('>Q')
+
+        x = from_twos_complement(data >> 38, 26)
+        y = from_twos_complement(data >> 26 & 0xFFF, 12)
+        z = from_twos_complement(data & 0x3FFFFFF, 26)
+
+        return x, y, z
+
+    @classmethod
+    def pack_slot(cls):
+        """Packs an inventory/container slot into bytes."""
+
+        pass
+
+    def unpack_slot(self):
+        """Unpacks an inventory/container slot from the buffer."""
+
+        pass
+
+    @classmethod
+    def pack_nbt(cls):
+        """Packs NBT data into bytes."""
+
+        pass
+
+    def unpack_nbt(self):
+        """Unpacks NBT data from the buffer."""
+
+        pass
+
+    @classmethod
+    def pack_entity_metadata(cls):
+        """Packs entity metadata into bytes."""
+
+        pass
+
+    def unpack_entity_metadata(self):
+        """Unpacks entity metadata from the buffer."""
+
+        pass
+
+    @classmethod
+    def pack_direction(cls, direction: str) -> bytes:
+        """Packs a direction into bytes."""
+
+        return cls.pack_varint(DIRECTIONS.index(direction))
+
+    def unpack_direction(self) -> str:
+        """Unpacks a direction from the buffer."""
+
+        return DIRECTIONS[self.unpack_varint()]
+
+    @classmethod
+    def pack_rotation(cls, x: float, y: float, z: float) -> bytes:
+        """Packs a rotation (of an entity) into bytes."""
+
+        return cls.pack('fff', x, y, z)
+
+    def unpack_rotation(self):
+        """Unpacks a rotation (of an entity) from the buffer."""
+
+        return self.unpack('fff')

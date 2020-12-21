@@ -47,22 +47,8 @@ class Buffer:
         self.pos = 0
 
     @classmethod
-    def pack_particle(cls, kind, data=None):
-        """Packs a particle."""
-
-        id = cls.registry.encode('minecraft:particle_type', kind)
-        return super(Buffer, cls).pack_particle(id, data)
-
-    def unpack_particle(self):
-        """Unpacks a particle. Returns an ``(kind, data)`` pair."""
-
-        id, data = super(Buffer, self).unpack_particle()
-        kind = self.registry.decode('minecraft:particle_type', id)
-        return kind, data
-
-    @classmethod
     def pack_villager(cls, kind, profession, level):
-        """Packs villager data."""
+        """Packs villager data into """
 
         kind = cls.registry.encode('minecraft:villager_type', kind)
         profession = cls.registry.encode(

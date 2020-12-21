@@ -17,8 +17,8 @@ class Buffer:
         self.buf = b'' if buf is None else buf
         self.pos = 0
 
-    def add(self, data: bytes) -> None:
-        """Adds data to the buffer."""
+    def write(self, data: bytes) -> None:
+        """Writes data to the buffer."""
 
         self.buf += data
 

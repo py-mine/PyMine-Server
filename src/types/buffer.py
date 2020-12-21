@@ -1,4 +1,5 @@
 from __future__ import annotations
+from nbt import nbt
 import struct
 import json
 import uuid
@@ -244,17 +245,6 @@ class Buffer:
 
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""
-
-        pass
-
-    @classmethod
-    def pack_nbt(cls):
-        """Packs NBT data into bytes."""
-
-        pass
-
-    def unpack_nbt(self):
-        """Unpacks NBT data from the buffer."""
 
         pass
 

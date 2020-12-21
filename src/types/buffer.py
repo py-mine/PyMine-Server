@@ -281,8 +281,13 @@ class Buffer:
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""
 
+        has_item_id = self.unpack_optional()
+
+        if not has_item_id:
+            return {'item_id': None}
+
         slot = {
-            'item_id': self.unpack('h'),
+            'item_id': self.unpack_varint(),
             'count': self.unpack('b'),
             'tag': self.unpack_nbt()
         }

@@ -264,7 +264,14 @@ class Buffer:
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""
 
-        pass
+        slot = {
+            'item_id': self.unpack('h'),
+            'count': self.unpack('b'),
+            'damage': self.unpack('h'),
+            'tag': self.unpack_nbt()
+        }
+
+        return slot
 
     @classmethod
     def pack_rotation(cls, x: float, y: float, z: float) -> bytes:

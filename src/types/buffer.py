@@ -46,6 +46,14 @@ class Buffer:
         self.pos = 0
 
     @classmethod
+    def pack_chunk(cls, sections):
+        data = b""
+        for section in sections:
+            if section and not section[0].is_empty():
+                data += cls.pack_chunk_section(*section)
+        return data
+
+    @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
         """
         Creates a Buffer object from bytes, handles compression
@@ -112,7 +120,8 @@ class Buffer:
         num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
 
         if not (num_min <= num < num_max):
-            raise ValueError(f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
+            raise ValueError(
+                f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
 
         if num < 0:
             num += 1 + 1 << 32
@@ -148,7 +157,8 @@ class Buffer:
         num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
 
         if not (num_min <= num < num_max):
-            raise ValueError(f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
+            raise ValueError(
+                f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
 
         return num
 
@@ -209,7 +219,7 @@ class Buffer:
         if tag is None:
             return b'\x00'
 
-        return tag._render_buffer(self.buf)
+        return tag._render_buffer(cls.buf)
 
     def unpack_nbt(self) -> object:
         """Unpacks a NBT tag(s) from the buffer"""

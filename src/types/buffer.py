@@ -444,3 +444,6 @@ class Buffer:
         """Unpacks a pose from the buffer."""
 
         return POSES[self.unpack_varint()]
+
+    @classmethod
+    def pack_recipe()

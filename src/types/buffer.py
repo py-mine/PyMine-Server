@@ -161,7 +161,7 @@ class Buffer:
             elif ty == 18:
                 val = self.unpack_pose()
             else:
-                raise ValueError(f"Unknown entity metadata type: {ty}")
+                raise ValueError(f'Unknown entity metadata type: {ty}')
             metadata[ty, key] = val
 
     @classmethod

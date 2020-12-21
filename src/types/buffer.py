@@ -6,6 +6,7 @@ import uuid
 import zlib
 
 from src.types.message import Message
+from src.data.recipes import *
 from src.data.misc import *
 
 
@@ -445,4 +446,7 @@ class Buffer:
         return POSES[self.unpack_varint()]
 
     @classmethod
-    def pack_recipe()
+    def pack_recipe(cls, recipe: dict) -> bytes: # https://wiki.vg/Protocol#Declare_Recipes
+        """Packs a recipe into bytes."""
+
+        out = cls.pack_string()

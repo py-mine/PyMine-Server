@@ -55,6 +55,14 @@ class Buffer:
         return data
 
     @classmethod
+    def pack_chunk_bitmask(cls, sections):
+        bitmask = 0
+        for i, section in enumerate(sections):
+            if section and not section[0].is_empty():
+                bitmask |= 1 << i
+        return cls.pack_varint(bitmask)
+
+    @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
         """
         Creates a Buffer object from bytes, handles compression

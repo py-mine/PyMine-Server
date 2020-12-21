@@ -5,6 +5,9 @@ import json
 import uuid
 import zlib
 
+from src.data.directions import DIRECTIONS
+from src.data.poses import POSES
+
 
 class Buffer:
     """
@@ -294,3 +297,9 @@ class Buffer:
         """Unpacks a direction from the buffer."""
 
         return DIRECTIONS[self.unpack_varint()]
+
+    @classmethod
+    def pack_pose(cls, pose: str) -> bytes:
+        """Packs a pose into bytes."""
+
+        return

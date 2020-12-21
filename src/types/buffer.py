@@ -145,7 +145,7 @@ class Buffer:
             elif ty == 18:
                 out += cls.pack_pose(val)
             else:
-                raise ValueError("Unknown entity metadata type: %d" % ty)
+                raise ValueError(f"Unknown entity metadata type: {ty}")
         out += cls.pack('B', 255)
         return out
 

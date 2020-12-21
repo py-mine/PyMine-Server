@@ -69,7 +69,7 @@ class Buffer:
         """
 
         id = cls.registry.encode('minecraft:particle_type', kind)
-        return super(Buffer1_14, cls).pack_particle(id, data)
+        return super(Buffer, cls).pack_particle(id, data)
 
     @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:

@@ -256,7 +256,10 @@ class Buffer:
     def pack_slot(cls, item_id: int = None, count: int = 1, damage: int = 1, tag: nbt.TAG = None):
         """Packs an inventory/container slot into bytes."""
 
+        if item_id is None:
+            return cls.pack('h', -1)
 
+        return cls.pack('hbh', item_id, count, damage) + cls.pack_nbt(tag)
 
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""

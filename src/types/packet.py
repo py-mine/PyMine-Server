@@ -1,5 +1,7 @@
+from __future__ import annotations
 
 from src.types.buffer import Buffer
+
 
 class Packet(Buffer):
     """Base packet class."""

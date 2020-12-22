@@ -556,4 +556,4 @@ class Buffer:
             elif type_ == 18:
                 out += cls.pack_pose(value)
 
-        return out
+        return out + cls.pack('B', 255)

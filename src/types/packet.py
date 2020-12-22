@@ -2,8 +2,7 @@ from __future__ import annotations
 
 
 class Packet:
-    """
-    Base Packet class.
+    """Base Packet class.
 
     :param int id: Packet identifaction number. Defaults to -0x1.
     :param int comp_thresh: Compression threshold. Defaults to -1 (no compression).

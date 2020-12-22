@@ -5,8 +5,7 @@ from src.data.formats import *
 
 
 class Message:
-    """
-    A Minecraft chat message.
+    """A Minecraft chat message.
 
     :param object msg: Buffer or str object representing a chat message.
     :attr msg:

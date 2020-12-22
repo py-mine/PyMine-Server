@@ -7,17 +7,17 @@ class Packet(Buffer):
     """Base packet class."""
 
     def __init__(self, id: int, buf: bytes = None, comp_thresh: int = -1) -> None:
-        Buffer.__init__(self, buf)
+        super().__init__(self, buf)
 
         self.id = -0x1
         self.comp_thresh = comp_thresh
 
     @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Packet:
-        buf = Buffer.from_bytes(data, comp_thresh)
+        buf = super().from_bytes(data, comp_thresh)
 
         return cls(buf.unpack_varint(), buf.read(), comp_thresh)
 
     def to_bytes(self) -> bytes:
         self.buf = self.pack_varint(self.id) + self.buf
-        return Buffer.to_bytes(self, self.comp_thresh)
+        return super().to_bytes(self.comp_thresh)

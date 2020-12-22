@@ -362,10 +362,10 @@ class Buffer:
 
         return out
 
-    def unpack_ingredient(self):
-        """Unpacks a recipe ingredient from the buffer."""
-
-        return [self.unpack_slot() for _ in range(self.unpack_varint())]
+    # def unpack_ingredient(self):
+    #     """Unpacks a recipe ingredient from the buffer."""
+    #
+    #     return [self.unpack_slot() for _ in range(self.unpack_varint())]
 
     @classmethod  # Note, recipes are sent as an array and actually require a varint length of recipe array before recipe array
     # recipe_id is the actual name of the recipe i.e. jungle_planks, oak_door, furnace, etc...

@@ -1,4 +1,6 @@
 
+__all__ = ('POSES', 'DIRECTIONS', 'SMELT_TYPES',)
+
 POSES = (
     'standing',
     'fall_flying',

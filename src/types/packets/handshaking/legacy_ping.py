@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from src.types.buffer import Buffer
 from src.types.packet import Packet
-from src.types.packets.handshaking.handshaking import HandshakeHandshake
+
 __all__ = ('HandshakeLegacyPing_1', 'HandshakeLegacyPing_2',)
 
 
@@ -15,7 +15,7 @@ class HandshakeLegacyPing_1(Packet):  # Client -> Server
         self.port = port
 
     @classmethod
-    def decode(cls, buf: Buffer) -> HandshakeHandshake:
+    def decode(cls, buf: Buffer) -> HandshakeLegacyPing_1:
         buf.read(15)
         return cls(buf.read(1), buf.read(buf.unpack('h')).decode('UTF-16BE'), buf.unpack('i'))
 

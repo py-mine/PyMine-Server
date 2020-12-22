@@ -4,8 +4,6 @@ import struct
 import json
 import uuid
 import zlib
-from src.types.packets.message import Message
-from src.data.directions import DIRECTIONS
 
 from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
 from src.types.message import Message

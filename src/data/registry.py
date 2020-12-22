@@ -2,7 +2,8 @@ import json
 
 __all__ = (
     'REGISTRY',
-    'ITEMS'
+    'ITEMS_BY_NAME',
+    'ITEMS_BY_ID',
 )
 
 with open('registries.json') as registry:  # generated from server jar

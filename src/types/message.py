@@ -9,7 +9,6 @@ class Message:
 
     :param object msg: Buffer or str object representing a chat message.
     :attr msg:
-
     """
 
     def __init__(self, msg: object) -> None:

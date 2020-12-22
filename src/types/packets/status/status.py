@@ -3,12 +3,10 @@ from __future__ import annotations
 from src.types.buffer import Buffer
 from src.types.packet import Packet
 
-__all__ = ('StatusStatus_1', 'StatusStatus_2', 'StatusStatusPingPong')
-
-# This is just an empty packet
+__all__ = ('StatusStatus_1', 'StatusStatus_2', 'StatusStatusPingPong',)
 
 
-class StatusStatus_1(Packet):  # Client -> Servers
+class StatusStatus_1(Packet):  # Client -> Server
     def __init__(self) -> None:
         super().__init__(0x00)
 

@@ -18,6 +18,8 @@ class LoginStart(Packet):  # Client -> Server
 
 class LoginEncryptionRequest(Packet):  # Server -> Client
     def __init__(self, public_key: bytes) -> None:  # https://wiki.vg/Protocol#Encryption_Request
+        super().__init__(0x01)
+
         self.public_key = public_key
         self.verify_token = secrets.token_bytes(16)
 

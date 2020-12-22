@@ -7,8 +7,8 @@ class Packet(Buffer):
     """Base packet class."""
 
     # id is the packet id (Like 0x00), buf is the bytes/data of the packet,
-    # direction is either 'toclient', 'toserver', comp_thresh is compression threshold (-1 for no compression)
-    def __init__(self, id: int, direction: str, buf: bytes = None, comp_thresh: int = -1) -> None:
+    # to is either 'client' or 'server', comp_thresh is compression threshold (-1 for no compression)
+    def __init__(self, id: int, to: str, buf: bytes = None, comp_thresh: int = -1) -> None:
         super().__init__(buf)
 
         self.id = -0x1

@@ -3,7 +3,7 @@ from __future__ import annotations
 from src.types.buffer import Buffer
 from src.types.packet import Packet
 
-__all__ = ('StatusStatus_1', 'StatusStatus_2', 'StatusStatusPingPong')
+__all__ = ('StatusStatus_1', 'StatusStatus_2', 'StatusStatusPingPong',)
 
 
 class StatusStatus_1(Packet):  # Client -> Server

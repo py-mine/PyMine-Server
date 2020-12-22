@@ -7,7 +7,7 @@ __all__ = (,)
 
 # This is just an empty packet
 class StatusStatus_1(Packet):  # Client -> Server
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(0x00)
 
     @classmethod
@@ -16,7 +16,7 @@ class StatusStatus_1(Packet):  # Client -> Server
 
 
 class StatusStatus_2(Packet):  # Server -> Client
-    def __init__(self, response_data: dict):
+    def __init__(self, response_data: dict) -> None:
         # What response_data should be like
         # {
         #     "version": {
@@ -43,3 +43,15 @@ class StatusStatus_2(Packet):  # Server -> Client
 
     def encode(self) ->  bytes:
         return Buffer.pack_json(self.response_data)
+
+
+class StatusStatusPingPong(Packet):  # Client -> Server AND Server -> Client
+    def __init__(self, payload: int) -> None:
+        super().__init__(0x01)
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> StatusStatusPingPong:
+        return cls(buf.unpack('l'))
+
+    def encode(self) -> bytes:
+        return Buffer.pack('l', self.payload)

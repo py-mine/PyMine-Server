@@ -3,7 +3,7 @@ from src.types.packet import Packet
 __all__ = ('HandshakeHandshake',)
 
 class HandshakeHandshake(Packet):  # Serverbound (client -> server) only
-    def __init__(self, buf: bytes, comp_thresh = -1):
+    def __init__(self, buf: bytes, comp_thresh = -1) -> None:
         super().__init__(0x00, buf, comp_thresh)
 
         self.protocol = super().unpack_varint()

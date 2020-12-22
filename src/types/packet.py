@@ -7,7 +7,7 @@ class Packet(Buffer):
     """Base packet class."""
 
     def __init__(self, id: int, buf: bytes = None, comp_thresh: int = -1) -> None:
-        super().__init__(self, buf)
+        super().__init__(buf)
 
         self.id = -0x1
         self.comp_thresh = comp_thresh

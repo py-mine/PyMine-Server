@@ -3,7 +3,7 @@ from __future__ import annotations
 from src.types.buffer import Buffer
 from src.types.packet import Packet
 
-__all__ = ('HandshakeLegacyPing_1', 'HandshakeLegacyPing_2')
+__all__ = ('HandshakeLegacyPing_1', 'HandshakeLegacyPing_2',)
 
 class HandshakeLegacyPing_1(Packet):  # Client -> Server
     def __init__(self, protocol: int, hostname: str, port: int) -> None:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 import secrets
+import uuid
 
 from src.types.buffer import Buffer
 from src.types.packet import Packet
@@ -24,7 +25,7 @@ class LoginEncryptionRequest(Packet):  # Server -> Client
         self.verify_token = secrets.token_bytes(16)
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(20) + (' '*20).encode('UTF-8') + \
+        return Buffer.pack_string(' '*20) + \
          Buffer.pack_varint(len(self.public_key)) + self.public_key + \
          Buffer.pack_varint(len(self.verify_token)) + self.verify_token
 

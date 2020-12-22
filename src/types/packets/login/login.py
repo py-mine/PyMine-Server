@@ -1,11 +1,12 @@
 from __future__ import annotations
+import secrets
 
 from src.types.buffer import Buffer
 from src.types.packet import Packet
 
 
 class LoginStart(Packet):  # Client -> Server
-    def __init__(self, username: str):
+    def __init__(self, username: str) -> None:
         super().__init__(0x00)
 
         self.username = username

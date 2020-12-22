@@ -5,6 +5,7 @@ from src.types.packet import Packet
 
 __all__ = ('HandshakeLegacyPing_1', 'HandshakeLegacyPing_2',)
 
+
 class HandshakeLegacyPing_1(Packet):  # Client -> Server
     def __init__(self, protocol: int, hostname: str, port: int) -> None:
         super.__init__(0xFE)
@@ -17,6 +18,7 @@ class HandshakeLegacyPing_1(Packet):  # Client -> Server
     def decode(cls, buf: Buffer) -> HandshakeHandshake:
         buf.read(15)
         return cls(buf.read(1), buf.read(buf.unpack('h')).decode('UTF-16BE'), buf.unpack('i'))
+        
 
 class HandshakeLegacyPing_2(Packet):  # Server -> CLient
     def __init__(self, protocol: int = 127, version: str, motd: str, player_count: int, max_players: int) -> None:

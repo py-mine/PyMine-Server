@@ -15,10 +15,5 @@ class HandshakeHandshake(Packet):  # Serverbound only (client -> server)
         self.next_state = next_state
 
     @classmethod
-    def decode(self, buf: Buffer) -> HandshakeHandshake:
-        return HandshakeHandshake(
-            protocol=buf.unpack_varint(),
-            address=buf.unpack_string(),
-            port=buf.unpack('H'),
-            next=buf.unpack_varint()
-        )
+    def decode(cls, buf: Buffer) -> HandshakeHandshake:
+        return cls(buf.unpack_varint(), buf.unpack_string(), buf.unpack('H'), buf.unpack_varint())

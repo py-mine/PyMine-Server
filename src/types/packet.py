@@ -17,3 +17,7 @@ class Packet(Buffer):
         buf = Buffer.from_bytes(data, comp_thresh)
 
         return cls(buf.unpack_varint(), buf.read(), comp_thresh)
+
+    def to_bytes(self):
+        self.buf = self.pack_varint(self.id) + self.buf
+        return Buffer.to_bytes(self, self.comp_thresh)

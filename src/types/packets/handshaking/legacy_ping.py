@@ -7,7 +7,7 @@ __all__ = ('HandshakeLegacyPing_1', 'HandshakeLegacyPing_2',)
 
 class HandshakeLegacyPing_1(Packet):  # Client -> Server
     def __init__(self, protocol: int, hostname: str, port: int) -> None:
-        super.__init__(-0x1)
+        super.__init__(0xFE)
 
         self.protocol = protocol
         self.hostname = hostname
@@ -20,7 +20,7 @@ class HandshakeLegacyPing_1(Packet):  # Client -> Server
 
 class HandshakeLegacyPing_2(Packet):  # Server -> CLient
     def __init__(self, protocol: int = 127, version: str, motd: str, player_count: int, max_players: int) -> None:
-        super.__init__(-0x1)
+        super.__init__(0xFF)
 
         self.protocol = protocol
         self.version = version

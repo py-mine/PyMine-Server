@@ -27,3 +27,15 @@ class LoginEncryptionRequest(Packet):  # Server -> Client
         return Buffer.pack_varint(20) + (' '*20).encode('UTF-8') + \
          Buffer.pack_varint(len(self.public_key)) + self.public_key + \
          Buffer.pack_varint(len(self.verify_token)) + self.verify_token
+
+
+class LoginEncryptionResponse(Packet):  # Client -> Server
+    def __init__(self, shared_key: bytes, verify_token: bytes):
+        super().__init__(0x01)
+
+        self.shared_key = shared_key
+        self.verify_token = verify_token
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> LoginEncryptionResponse:
+        return LoginEncryptionResponse(buf.read(buf.unpack_varint()), buf.read(buf.unpack_varint()))

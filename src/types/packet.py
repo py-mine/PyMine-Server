@@ -12,7 +12,7 @@ class Packet(Buffer):
         super().__init__(buf)
 
         self.id = -0x1
-        self.direction = direction
+        self.to = to
         self.comp_thresh = comp_thresh
 
     @classmethod

@@ -458,3 +458,30 @@ class Buffer:
             out += cls.pack_slot(**recipe['result'])
 
         return out
+
+    @classmethod
+    def pack_chat(cls, msg: Message) -> bytes:
+        return msg.to_bytes()
+
+    def unpack_chat(self):
+        return Message.from_buf(self)
+
+    @classmethod
+    def pack_entity_metadata(cls, metadata: dict) -> bytes:  # https://wiki.vg/Entity_metadata#Entity_Metadata_Format
+        out = b''
+
+        for index_and_type, value in metadata.items():
+            index, type_ = index_and_type
+
+            out += cls.pack('B', index) + cls.pack_varint(type_)
+
+            if type_ == 0:
+                out += cls.pack('b', value)
+            elif type_ == 1:
+                out += cls.pack_varint(value)
+            elif type_ == 2:
+                out += cls.pack('f', value)
+            elif type_ == 3:
+                out += cls.pack_string(value)
+            elif type_ == 4:
+                out += cls.pack_message()

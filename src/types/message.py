@@ -5,25 +5,30 @@ from src.data.formats import *
 
 
 class Message:
-    """A Minecraft chat message."""
+    """A Minecraft chat message.
+
+    :param object msg: Buffer or str object representing a chat message.
+    :attr msg:
+
+    """
 
     def __init__(self, msg: object) -> None:
         self.msg = msg
 
     @classmethod
     def from_buf(cls, buf: 'Buffer') -> Message:
-        """Creates a Minecraft chat message from a buffer"""
+        """Creates a Minecraft chat message from a buffer."""
 
         return cls(buf.unpack_json())
 
     @classmethod
     def from_string(cls, text: str) -> Message:
-        """Creates a Minecraft chat message from json"""
+        """Creates a Minecraft chat message from json."""
 
         return cls({'text': text})
 
     def to_bytes(self) -> bytes:
-        """Converts a Minecraft chat message to bytes"""
+        """Converts a Minecraft chat message to bytes."""
 
         return Buffer.pack_json(self.msg)
 
@@ -32,7 +37,7 @@ class Message:
     # 'normal' = with formatting codes
     # 'color' = formatted with ansi/terminal formatting codes
     def to_string(self, mode: str):
-        """Converts a Minecraft chat message to text"""
+        """Converts a Minecraft chat message to text."""
 
         def parse(msg):
             if isinstance(msg, str):

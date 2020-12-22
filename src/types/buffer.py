@@ -110,7 +110,7 @@ class Buffer:
         return struct.pack('>' + f, *data)
 
     @classmethod
-    def pack_bool(cls, boolean) -> bytes:
+    def pack_bool(cls, boolean: bool) -> bytes:
         """Packs a boolean into bytes."""
 
         return struct.pack(f'>?', boolean)
@@ -484,4 +484,6 @@ class Buffer:
             elif type_ == 3:
                 out += cls.pack_string(value)
             elif type_ == 4:
-                out += cls.pack_message()
+                out += cls.pack_chat(value)
+            elif type_ == 5:
+                opt += cls.pack_bool

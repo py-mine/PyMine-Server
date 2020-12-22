@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from src.types.buffer import Buffer
 from src.types.packet import Packet
-from src.types.packets.handshaking.handshaking import HandshakeHandshake
+
 __all__ = ('HandshakeLegacyPing_1', 'HandshakeLegacyPing_2',)
 
 

@@ -486,4 +486,36 @@ class Buffer:
             elif type_ == 4:
                 out += cls.pack_chat(value)
             elif type_ == 5:
-                opt += cls.pack_bool
+                opt += cls.pack_bool((value is not None))
+
+                if value is not None:
+                    opt += cls.pack_chat(value)
+            elif type_ == 6:
+                out += cls.pack_slot(**value)
+            elif type_ == 7:
+                out += cls.pack_bool(value)
+            elif type_ == 8:
+                out += cls.pack_rotation(*value)
+            elif type_ == 9:
+                out += cls.pack_pos(*value)
+            elif type_ == 10:
+                out += cls.pack_bool((value is not None))
+
+                if value is not None:
+                    out += cls.pack_pos(*value)
+            elif type_ == 11:
+                out += cls.pack_direction(value)
+            elif type_ == 12:
+                out += cls.pack_bool((value is not None))
+
+                if value is not None:
+                    out += cls.pack_uuid(value)
+            elif type_ == 13:
+                out += cls.pack_bool((value is not None))
+
+                if value is not None:
+                    out += cls.pack_varint(value)
+            elif type_ == 14:
+                out += cls.pack_nbt(value)
+            elif type_ == 15:
+                out += cls.pack_particle()

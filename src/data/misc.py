@@ -17,5 +17,3 @@ SMELT_TYPES = (
     'minecraft:smoking',
     'minecraft:campfire_cooking',
 )
-
-RECIPE_KEYS = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',)

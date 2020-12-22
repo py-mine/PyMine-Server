@@ -37,7 +37,7 @@ class Buffer:
                 length = len(self.buf)
                 return self.buf[self.pos:]
             else:
-                return self.buf[self.pos:self.pos+length]
+                return self.buf[self.pos:self.pos + length]
         finally:
             self.pos += length
 
@@ -98,7 +98,7 @@ class Buffer:
         return self.pack_varint(len(data), max_bits=32) + data
 
     def unpack(self, f: str) -> object:
-        unpacked = struct.unpack('>'+f, self.read(struct.calcsize(f)))
+        unpacked = struct.unpack('>' + f, self.read(struct.calcsize(f)))
 
         if len(unpacked) == 1:
             return unpacked[0]
@@ -107,7 +107,7 @@ class Buffer:
 
     @classmethod
     def pack(self, f: str, *data: object) -> bytes:
-        return struct.pack('>'+f, *data)
+        return struct.pack('>' + f, *data)
 
     @classmethod
     def pack_bool(cls, boolean) -> bytes:
@@ -358,7 +358,8 @@ class Buffer:
             out += cls.pack_varint(1)
             out += cls.pack_slot(**ingredient)
         else:
-            raise TypeError(f'Ingredient should be of type list or dict but was instead of type {type(ingredient)}')
+            raise TypeError(
+                f'Ingredient should be of type list or dict but was instead of type {type(ingredient)}')
 
         return out
 
@@ -369,7 +370,7 @@ class Buffer:
 
     @classmethod  # Note, recipes are sent as an array and actually require a varint length of recipe array before recipe array
     # recipe_id is the actual name of the recipe i.e. jungle_planks, oak_door, furnace, etc...
-    def pack_recipe(cls, recipe_id: str, recipe: dict) -> bytes: # https://wiki.vg/Protocol#Declare_Recipes
+    def pack_recipe(cls, recipe_id: str, recipe: dict) -> bytes:  # https://wiki.vg/Protocol#Declare_Recipes
         """Packs a recipe into bytes."""
 
         # ------------------------------- shapeless recipe -------------------------------
@@ -431,7 +432,7 @@ class Buffer:
             out += cls.pack_varint(height)
             out += cls.pack_string(recipe['group'])
 
-            out += cls.pack_varint(width*height)  # pack length of ingredients array
+            out += cls.pack_varint(width * height)  # pack length of ingredients array
 
             for row in recipe['pattern']:
                 for key in row:
@@ -446,9 +447,11 @@ class Buffer:
             out += cls.pack('f', recipe['experience'])
             out += cls.pack_varint(recipe['cookingtime'])
         elif recipe_type == 'minecraft:stonecutting':  # Stone cutter recipes are fucky wucky, so we have to do some jank here
-            out += cls.pack_string(recipe.get('group', ''))  # For some reason some recipes don't include the group?
+            # For some reason some recipes don't include the group?
+            out += cls.pack_string(recipe.get('group', ''))
             out += cls.pack_ingredient(recipe['ingredient'])
-            out += cls.pack_slot(item=recipe['result'], count=recipe['count'])  # again, stone cutter recipes are fucky wucky
+            # again, stone cutter recipes are fucky wucky
+            out += cls.pack_slot(item=recipe['result'], count=recipe['count'])
         elif recipe_type == 'minecraft:smithing':
             out += cls.pack_ingredient(recipe['base'])
             out += cls.pack_ingredient(recipe['addition'])

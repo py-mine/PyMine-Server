@@ -3,10 +3,12 @@ from __future__ import annotations
 from src.types.buffer import Buffer
 from src.types.packet import Packet
 
-__all__ = (,)
+__all__ = ('StatusStatus_1', 'StatusStatus_2', 'StatusStatusPingPong')
 
 # This is just an empty packet
-class StatusStatus_1(Packet):  # Client -> Server
+
+
+class StatusStatus_1(Packet):  # Client -> Servers
     def __init__(self) -> None:
         super().__init__(0x00)
 
@@ -41,7 +43,7 @@ class StatusStatus_2(Packet):  # Server -> Client
 
         self.response_data = response_data
 
-    def encode(self) ->  bytes:
+    def encode(self) -> bytes:
         return Buffer.pack_json(self.response_data)
 
 

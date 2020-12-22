@@ -7,6 +7,10 @@ import zlib
 from src.types.packets.message import Message
 from src.data.directions import DIRECTIONS
 
+from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
+from src.types.message import Message
+from src.data.misc import *
+
 
 class Buffer:
     """
@@ -43,6 +47,21 @@ class Buffer:
         """Resets the position in the buffer."""
 
         self.pos = 0
+
+    @classmethod
+    def pack_villager(cls, kind: int, profession: int, level: int) -> bytes:
+        """Packs villager data into bytes."""
+
+        return cls.pack_varint(kind) + cls.pack_varint(profession) + cls.pack_varint(level)
+
+    def unpack_villager(self) -> dict:
+        """Unpacks villager data from the buffer."""
+
+        return {
+            'kind': self.unpack_varint(),
+            'profession': self.unpack_varint(),
+            'level': self.unpack_varint()
+        }
 
     @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
@@ -101,7 +120,7 @@ class Buffer:
     def unpack_bool(self) -> bool:
         """Unpacks a boolean from the buffer."""
 
-        return self.unpack('>?')
+        return self.unpack('?')
 
     @classmethod
     def pack_varint(cls, num: int, max_bits: int = 32) -> bytes:
@@ -122,7 +141,7 @@ class Buffer:
             b = num & 0x7F
             num >>= 7
 
-            out += struct.pack('>B', (b | (0x80 if num > 0 else 0)))
+            out += cls.pack('B', (b | (0x80 if num > 0 else 0)))
 
             if num == 0:
                 break
@@ -135,7 +154,7 @@ class Buffer:
         num = 0
 
         for i in range(10):
-            b = self.unpack('>B')
+            b = self.unpack('B')
             num |= (b & 0x7F) << (7 * i)
 
             if not b & 0x80:
@@ -151,6 +170,20 @@ class Buffer:
                 f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
 
         return num
+
+    @classmethod
+    def pack_optional_varint(cls, num):
+        """Packs an optional varint into bytes."""
+
+        return cls.pack_varint(0 if num is None else num + 1)
+
+    def unpack_optional_varint(cls):
+        num = cls.unpack_varint()
+
+        if num == 0:
+            return None
+
+        return num - 1
 
     @classmethod
     def pack_array(cls, f: str, array: list) -> bytes:
@@ -234,8 +267,8 @@ class Buffer:
 
         return struct.pack('>Q', sum((
             to_twos_complement(x, 26) << 38,
-            to_twos_complement(y, 12) << 26,
-            to_twos_complement(z, 26)
+            to_twos_complement(z, 26) << 12,
+            to_twos_complement(y, 12)
         )))
 
     def unpack_pos(self) -> tuple:
@@ -247,34 +280,38 @@ class Buffer:
 
             return num
 
-        data = self.unpack('>Q')
+        data = self.unpack('Q')
 
         x = from_twos_complement(data >> 38, 26)
-        y = from_twos_complement(data >> 26 & 0xFFF, 12)
-        z = from_twos_complement(data & 0x3FFFFFF, 26)
+        z = from_twos_complement(data >> 12 & 0x3FFFFFF, 26)
+        y = from_twos_complement(data & 0xFFF, 12)
 
         return x, y, z
 
     @classmethod
-    def pack_slot(cls, item_id: int = None, count: int = 1, damage: int = 1, tag: nbt.TAG = None):
+    def pack_slot(cls, item: str = None, count: int = 1, tag: nbt.TAG = None):
         """Packs an inventory/container slot into bytes."""
 
-        if item_id is None:
-            return cls.pack('h', -1)
+        item_id = ITEMS_BY_NAME[item]  # needed to support recipes
 
-        return cls.pack('hbh', item_id, count, damage) + cls.pack_nbt(tag)
+        if item_id is None:
+            return cls.pack('?', False)
+
+        return cls.pack('?', True) + cls.pack_varint(item_id) + cls.pack('b', count) + cls.pack_nbt(tag)
 
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""
 
-        slot = {
-            'item_id': self.unpack('h'),
+        has_item_id = self.unpack_optional()
+
+        if not has_item_id:
+            return {'item': None}
+
+        return {
+            'item': ITEMS_BY_ID[self.unpack_varint()],
             'count': self.unpack('b'),
-            'damage': self.unpack('h'),
             'tag': self.unpack_nbt()
         }
-
-        return slot
 
     @classmethod
     def pack_rotation(cls, x: float, y: float, z: float) -> bytes:
@@ -297,3 +334,126 @@ class Buffer:
         """Unpacks a direction from the buffer."""
 
         return DIRECTIONS[self.unpack_varint()]
+
+    @classmethod
+    def pack_pose(cls, pose: str) -> bytes:
+        """Packs a pose into bytes."""
+
+        return cls.pack_varint(POSES.index(pose))
+
+    def unpack_pose(self) -> str:
+        """Unpacks a pose from the buffer."""
+
+        return POSES[self.unpack_varint()]
+
+    @classmethod
+    def pack_ingredient(cls, ingredient: object) -> bytes:
+        """Packs a recipe ingredient into bytes."""
+
+        out = b''
+
+        if isinstance(ingredient, list):
+            out += cls.pack_varint(len(ingredient))
+            for slot in ingredient:
+                out += cls.pack_slot(**slot)
+        elif isinstance(ingredient, dict):
+            out += cls.pack_varint(1)
+            out += cls.pack_slot(**ingredient)
+        else:
+            raise TypeError(f'Ingredient should be of type list or dict but was instead of type {type(ingredient)}')
+
+        return out
+
+    # def unpack_ingredient(self):
+    #     """Unpacks a recipe ingredient from the buffer."""
+    #
+    #     return [self.unpack_slot() for _ in range(self.unpack_varint())]
+
+    @classmethod  # Note, recipes are sent as an array and actually require a varint length of recipe array before recipe array
+    # recipe_id is the actual name of the recipe i.e. jungle_planks, oak_door, furnace, etc...
+    def pack_recipe(cls, recipe_id: str, recipe: dict) -> bytes: # https://wiki.vg/Protocol#Declare_Recipes
+        """Packs a recipe into bytes."""
+
+        # ------------------------------- shapeless recipe -------------------------------
+        # {
+        #   "type": "minecraft:crafting_shapeless",  # Type of crafting recipe, see here: https://wiki.vg/Protocol#Declare_Recipes
+        #   "group": "dyed_bed",  # Crafting group, used for recipe unlocks among other things
+        #   "ingredients": [  # Each of these are "slots"
+        #     {
+        #       "item": "minecraft:white_bed"
+        #     },
+        #     {
+        #       "item": "minecraft:black_dye"
+        #     }
+        #   ],
+        #   "result": {  # Result item of recipe, should be packed as a slot
+        #     "item": "minecraft:black_bed"
+        #   }
+        # }
+        # ------------------------------- shaped recipe -------------------------------
+        # {
+        #   "type": "minecraft:crafting_shaped",
+        #   "group": "sign",  # Crafting group
+        #   "pattern": [  # Pattern layed out for recipe
+        #     "###",
+        #     "###",
+        #     " X "
+        #   ],
+        #   "key": {  # Which character in the pattern corresponds to what item, each of these should be slots
+        #     "#": {
+        #       "item": "minecraft:acacia_planks"
+        #     },
+        #     "X": {
+        #       "item": "minecraft:stick"
+        #     }
+        #   },
+        #   "result": {  # Result of the recipe, should be packed as a slot
+        #     "item": "minecraft:acacia_sign",
+        #     "count": 3
+        #   }
+        # }
+
+        recipe_type = recipe['type']
+
+        out = cls.pack_string(recipe_type) + cls.pack_string(recipe_id)
+
+        if recipe_type == 'minecraft:crafting_shapeless':
+            out += cls.pack_string(recipe['group'])
+            out += cls.pack_varint(len(recipe['ingredients']))  # Length of ingredient array
+
+            for ingredient in recipe['ingredients']:
+                out += self.pack_ingredient(ingredient)
+
+            out += cls.pack_slot(**recipe['result'])
+        elif recipe_type == 'minecraft:crafting_shaped':
+            width = len(recipe['pattern'][0])  # Width of pattern
+            height = len(recipe['pattern'])  # Height of pattern
+
+            out += cls.pack_varint(width)
+            out += cls.pack_varint(height)
+            out += cls.pack_string(recipe['group'])
+
+            out += cls.pack_varint(width*height)  # pack length of ingredients array
+
+            for row in recipe['pattern']:
+                for key in row:
+                    if recipe['key'][key].get('item'):
+                        out += cls.pack_ingredient(recipe['key'][key])
+
+            out += cls.pack_slot(**recipe['result'])
+        elif recipe_type in SMELT_TYPES:  # SMELT_TYPES imported from misc.py
+            out += cls.pack_string(recipe['group'])
+            out += cls.pack_ingredient(recipe['ingredient'])
+            out += cls.pack_slot(**recipe['result'])
+            out += cls.pack('f', recipe['experience'])
+            out += cls.pack_varint(recipe['cookingtime'])
+        elif recipe_type == 'minecraft:stonecutting':  # Stone cutter recipes are fucky wucky, so we have to do some jank here
+            out += cls.pack_string(recipe.get('group', ''))  # For some reason some recipes don't include the group?
+            out += cls.pack_ingredient(recipe['ingredient'])
+            out += cls.pack_slot(item=recipe['result'], count=recipe['count'])  # again, stone cutter recipes are fucky wucky
+        elif recipe_type == 'minecraft:smithing':
+            out += cls.pack_ingredient(recipe['base'])
+            out += cls.pack_ingredient(recipe['addition'])
+            out += cls.pack_slot(**recipe['result'])
+
+        return out

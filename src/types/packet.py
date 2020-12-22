@@ -18,6 +18,6 @@ class Packet(Buffer):
 
         return cls(buf.unpack_varint(), buf.read(), comp_thresh)
 
-    def to_bytes(self):
+    def to_bytes(self) -> bytes:
         self.buf = self.pack_varint(self.id) + self.buf
         return Buffer.to_bytes(self, self.comp_thresh)

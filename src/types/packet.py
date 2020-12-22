@@ -6,7 +6,7 @@ class Packet:
     Base Packet class.
 
     :param int id: Packet identifaction number. Defaults to -0x1.
-    :param int comp_thresh: Compression threshold. Defaults to -1(no compression).
+    :param int comp_thresh: Compression threshold. Defaults to -1 (no compression).
     :attr id:
     :attr comp_thresh:
     """

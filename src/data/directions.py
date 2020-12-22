@@ -1,4 +1,4 @@
 
-__all__ = ('DIRECTIONS',)
+__all__ = ('DIRECTIONS')
 
 DIRECTIONS = ('DOWN', 'UP', 'NORTH', 'SOUTH', 'WEST', 'EAST')

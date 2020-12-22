@@ -367,7 +367,7 @@ class Buffer:
 
         return [self.unpack_slot() for _ in range(self.unpack_varint())]
 
-    @classmethod
+    @classmethod  # Note, recipes are sent as an array and actually require a varint length of recipe array before recipe array
     # recipe_id is the actual name of the recipe i.e. jungle_planks, oak_door, furnace, etc...
     def pack_recipe(cls, recipe_id: str, recipe: dict) -> bytes: # https://wiki.vg/Protocol#Declare_Recipes
         """Packs a recipe into bytes."""

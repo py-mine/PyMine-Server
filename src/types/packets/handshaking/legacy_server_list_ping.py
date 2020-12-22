@@ -4,7 +4,7 @@ __all__ = ('HandshakeLegacyPing',)
 
 class HandshakeLegacyPingToServer(Packet):
     def __init__(self, buf: bytes):
-        super.__init__(buf)
+        super.__init__(-0x1, buf)
 
         assert self.buf.read(1) == b'\xFE'  # required for legacy slp to be valid
 
@@ -13,3 +13,6 @@ class HandshakeLegacyPingToServer(Packet):
         self.protocol = self.buf.read(1)
         self.hostname = self.read(self.unpack('h'))  # Encoded in UTF-16BE
         self.port = self.unpack('i')
+
+class HandshakeLegacyPingToClient(Packet):
+    def __init__(self, )

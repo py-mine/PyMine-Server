@@ -14,7 +14,6 @@ class Packet(Buffer):
 
     @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Packet:
-        out = Buffer.from_bytes(data, comp_thresh)
+        buf = Buffer.from_bytes(data, comp_thresh)
 
-        self.id = self.unpack_varint()
-        self.compression_threshold = comp_thresh
+        return cls(buf.unpack_varint(), buf.read(), comp_thresh)

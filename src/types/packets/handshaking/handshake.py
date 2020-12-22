@@ -5,6 +5,7 @@ from src.types.packet import Packet
 
 __all__ = ('HandshakeHandshake',)
 
+
 class HandshakeHandshake(Packet):  # Serverbound only (client -> server)
     def __init__(self, protocol: int, address: str, port: int, next_state: int, comp_thresh: int = -1) -> None:
         super().__init__(0x00, comp_thresh)

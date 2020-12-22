@@ -587,4 +587,22 @@ class Buffer:
             elif type_ == 5:
                 if self.unpack_bool():
                     metadata[index_and_type] = self.unpack_chat()
-            elif type_ ==
+            elif type_ == 6:
+                metadata[index_and_type] = self.unpack_slot()
+            elif type_ == 7:
+                metadata[index_and_type] = self.unpack_bool()
+            elif type_ == 8:
+                metadata[index_and_type] = self.unpack_rotation()
+            elif type_ == 9:
+                metadata[index_and_type] = self.unpack_pos()
+            elif type_ == 10:
+                if self.unpack_bool():
+                    metadata[index_and_type] = self.unpack_pos()
+            elif type_ == 11:
+                metadata[index_and_type] = self.unpack_direction()
+            elif type_ == 12:
+                if self.unpack_bool():
+                    metadata[index_and_type] = self.unpack_uuid()
+            elif type_ == 13:
+                if self.unpack_bool():
+                    metadata[index_and_type] = self.unpack_varint()

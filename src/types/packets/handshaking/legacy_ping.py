@@ -3,10 +3,10 @@ from __future__ import annotations
 from src.types.buffer import Buffer
 from src.types.packet import Packet
 
-__all__ = ('HandshakeLegacyPing',)
+__all__ = ('HandshakeLegacyPing_1', 'HandshakeLegacyPing_2')
 
 class HandshakeLegacyPing_1(Packet):  # Client -> Server
-    def __init__(self, protocol: int, hostname: str, port: int):
+    def __init__(self, protocol: int, hostname: str, port: int) -> None:
         super.__init__(-0x1)
 
         self.protocol = protocol
@@ -19,7 +19,7 @@ class HandshakeLegacyPing_1(Packet):  # Client -> Server
         return cls(buf.read(1), buf.read(buf.unpack('h')).decode('UTF-16BE'), buf.unpack('i'))
 
 class HandshakeLegacyPing_2(Packet):  # Server -> CLient
-    def __init__(self, protocol: int = 127, version: str, motd: str, player_count: int, max_players: int):
+    def __init__(self, protocol: int = 127, version: str, motd: str, player_count: int, max_players: int) -> None:
         super.__init__(-0x1)
 
         self.protocol = protocol
@@ -28,6 +28,6 @@ class HandshakeLegacyPing_2(Packet):  # Server -> CLient
         self.player_count = player_count
         self.max_players = max_players
 
-    def encode(self):
+    def encode(self) -> bytes:
         out_string = f'§1\x00{self.protocol}\x00{self.motd}\x00{self.player_count}\x00{self.max_players}'
         return b'\xff' + Buffer.pack('h', len(out_string)) + out_string.encode('UTF-16BE')

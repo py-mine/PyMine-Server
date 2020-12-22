@@ -45,7 +45,9 @@ TERMINAL_CODES = {
     'd': '\x1b[95m',
     'e': '\x1b[93m',
     'f': '\x1b[97m',
-    'k': '\x1b[5m',  # Code for "slow blink" which is close enough to Minecraft's obfuscated style
+    # Code for "slow blink" which is close enough to Minecraft's obfuscated
+    # style
+    'k': '\x1b[5m',
     'l': '\x1b[1m',
     'm': '\x1b[9m',
     'n': '\x1b[4m',

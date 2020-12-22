@@ -50,7 +50,8 @@ class Buffer:
     def pack_villager(cls, kind: int, profession: int, level: int) -> bytes:
         """Packs villager data into bytes."""
 
-        return cls.pack_varint(kind) + cls.pack_varint(profession) + cls.pack_varint(level)
+        return cls.pack_varint(
+            kind) + cls.pack_varint(profession) + cls.pack_varint(level)
 
     def unpack_villager(self) -> dict:
         """Unpacks villager data from the buffer."""
@@ -89,7 +90,8 @@ class Buffer:
 
         if comp_thresh >= 0:
             if len(self.buf) >= comp_thresh:
-                data = self.pack_varint(len(self.buf)) + zlib.compress(self.buf)
+                data = self.pack_varint(len(self.buf)) + \
+                    zlib.compress(self.buf)
             else:
                 data = self.pack_varint(0) + self.buf
         else:
@@ -295,7 +297,8 @@ class Buffer:
         if item_id is None:
             return cls.pack('?', False)
 
-        return cls.pack('?', True) + cls.pack_varint(item_id) + cls.pack('b', count) + cls.pack_nbt(tag)
+        return cls.pack('?', True) + cls.pack_varint(item_id) + \
+            cls.pack('b', count) + cls.pack_nbt(tag)
 
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""
@@ -369,11 +372,13 @@ class Buffer:
     #     return [self.unpack_slot() for _ in range(self.unpack_varint())]
 
     @classmethod  # Note, recipes are sent as an array and actually require a varint length of recipe array before recipe array
-    # recipe_id is the actual name of the recipe i.e. jungle_planks, oak_door, furnace, etc...
-    def pack_recipe(cls, recipe_id: str, recipe: dict) -> bytes:  # https://wiki.vg/Protocol#Declare_Recipes
+    # recipe_id is the actual name of the recipe i.e. jungle_planks, oak_door,
+    # furnace, etc...
+    # https://wiki.vg/Protocol#Declare_Recipes
+    def pack_recipe(cls, recipe_id: str, recipe: dict) -> bytes:
         """Packs a recipe into bytes."""
 
-        # ------------------------------- shapeless recipe -------------------------------
+        # ------------------------------- shapeless recipe --------------------
         # {
         #   "type": "minecraft:crafting_shapeless",  # Type of crafting recipe, see here: https://wiki.vg/Protocol#Declare_Recipes
         #   "group": "dyed_bed",  # Crafting group, used for recipe unlocks among other things
@@ -389,7 +394,7 @@ class Buffer:
         #     "item": "minecraft:black_bed"
         #   }
         # }
-        # ------------------------------- shaped recipe -------------------------------
+        # ------------------------------- shaped recipe -----------------------
         # {
         #   "type": "minecraft:crafting_shaped",
         #   "group": "sign",  # Crafting group
@@ -418,7 +423,8 @@ class Buffer:
 
         if recipe_type == 'minecraft:crafting_shapeless':
             out += cls.pack_string(recipe['group'])
-            out += cls.pack_varint(len(recipe['ingredients']))  # Length of ingredient array
+            # Length of ingredient array
+            out += cls.pack_varint(len(recipe['ingredients']))
 
             for ingredient in recipe['ingredients']:
                 out += self.pack_ingredient(ingredient)
@@ -432,7 +438,8 @@ class Buffer:
             out += cls.pack_varint(height)
             out += cls.pack_string(recipe['group'])
 
-            out += cls.pack_varint(width * height)  # pack length of ingredients array
+            # pack length of ingredients array
+            out += cls.pack_varint(width * height)
 
             for row in recipe['pattern']:
                 for key in row:
@@ -446,7 +453,8 @@ class Buffer:
             out += cls.pack_slot(**recipe['result'])
             out += cls.pack('f', recipe['experience'])
             out += cls.pack_varint(recipe['cookingtime'])
-        elif recipe_type == 'minecraft:stonecutting':  # Stone cutter recipes are fucky wucky, so we have to do some jank here
+        # Stone cutter recipes are fucky wucky, so we have to do some jank here
+        elif recipe_type == 'minecraft:stonecutting':
             # For some reason some recipes don't include the group?
             out += cls.pack_string(recipe.get('group', ''))
             out += cls.pack_ingredient(recipe['ingredient'])

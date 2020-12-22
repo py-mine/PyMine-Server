@@ -295,7 +295,8 @@ class Buffer:
         if item_id is None:
             return cls.pack('?', False)
 
-        return cls.pack('?', True) + cls.pack_varint(item_id) + cls.pack('b', count) + cls.pack_nbt(tag)
+        return cls.pack('?', True) + cls.pack_varint(item_id) + \
+            cls.pack('b', count) + cls.pack_nbt(tag)
 
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""

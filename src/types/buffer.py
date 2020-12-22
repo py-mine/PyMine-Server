@@ -110,7 +110,7 @@ class Buffer:
         return struct.pack('>' + f, *data)
 
     @classmethod
-    def pack_bool(cls, boolean) -> bytes:
+    def pack_bool(cls, boolean: bool) -> bytes:
         """Packs a boolean into bytes."""
 
         return struct.pack(f'>?', boolean)
@@ -459,3 +459,166 @@ class Buffer:
             out += cls.pack_slot(**recipe['result'])
 
         return out
+
+    @classmethod
+    def pack_chat(cls, msg: Message) -> bytes:
+        return msg.to_bytes()
+
+    def unpack_chat(self):
+        return Message.from_buf(self)
+
+    @classmethod
+    def pack_particle(cls, **particle):
+        particle_id = particle['id']
+        out = cls.pack_varint(particle_id)
+
+        if particle_id in (3, 23,):
+            out += cls.pack_varint(particle['BlockState'])
+        elif particle_id == 14:
+            out += cls.pack('ffff',
+                            particle['Red'],
+                            particle['Green'],
+                            particle['Blue'],
+                            particle['Scale'])
+        elif particle_id == 32:
+            out += cls.pack_slot(**particle['Item'])
+
+        return out
+
+    def unpack_particle(self):
+        particle = {}
+        particle_id = particle['id'] = self.unpack_varint()
+
+        if particle_id in (3, 23,):
+            particle['BlockState'] = cls.unpack_varint()
+        elif particle_id == 14:
+            particle['Red'] = cls.unpack('f')
+            particle['Green'] = cls.unpack('f')
+            particle['Blue'] = cls.unpack('f')
+            particle['Scale'] = cls.unpack('f')
+        elif particle_id == 32:
+            particle['Item'] = cls.unpack_slot()
+
+        return particle
+
+    @classmethod
+    # https://wiki.vg/Entity_metadata#Entity_Metadata_Format
+    def pack_entity_metadata(cls, metadata: dict) -> bytes:
+        """Packs entity metadata into bytes."""
+
+        out = b''
+
+        for index_and_type, value in metadata.items():
+            index, type_ = index_and_type
+
+            out += cls.pack('B', index) + cls.pack_varint(type_)
+
+            if type_ == 0:
+                out += cls.pack('b', value)
+            elif type_ == 1:
+                out += cls.pack_varint(value)
+            elif type_ == 2:
+                out += cls.pack('f', value)
+            elif type_ == 3:
+                out += cls.pack_string(value)
+            elif type_ == 4:
+                out += cls.pack_chat(value)
+            elif type_ == 5:
+                opt += cls.pack_bool((value is not None))
+
+                if value is not None:
+                    opt += cls.pack_chat(value)
+            elif type_ == 6:
+                out += cls.pack_slot(**value)
+            elif type_ == 7:
+                out += cls.pack_bool(value)
+            elif type_ == 8:
+                out += cls.pack_rotation(*value)
+            elif type_ == 9:
+                out += cls.pack_pos(*value)
+            elif type_ == 10:
+                out += cls.pack_bool((value is not None))
+
+                if value is not None:
+                    out += cls.pack_pos(*value)
+            elif type_ == 11:
+                out += cls.pack_direction(value)
+            elif type_ == 12:
+                out += cls.pack_bool((value is not None))
+
+                if value is not None:
+                    out += cls.pack_uuid(value)
+            elif type_ == 13:
+                out += cls.pack_bool((value is not None))
+
+                if value is not None:
+                    out += cls.pack_varint(value)
+            elif type_ == 14:
+                out += cls.pack_nbt(value)
+            elif type_ == 15:
+                out += cls.pack_particle(**value)
+            elif type_ == 16:
+                out += cls.pack_villager(*value)
+            elif type_ == 17:
+                out += cls.pack_optional_varint(value)
+            elif type_ == 18:
+                out += cls.pack_pose(value)
+
+        return out + cls.pack('B', 255)
+
+    def unpack_entity_metadata(self) -> dict:
+        """Unpacks entity metadata from the buffer."""
+
+        metadata = {}
+
+        while True:
+            index = self.unpack('B')
+
+            if index == 255:
+                return metadata
+
+            type_ = self.unpack_varint()
+            index_and_type = (index, type_,)
+
+            if type_ == 0:
+                metadata[index_and_type] = self.unpack('b')
+            elif type_ == 1:
+                metadata[index_and_type] = self.unpack_varint()
+            elif type_ == 2:
+                metadata[index_and_type] = self.unpack('f')
+            elif type_ == 3:
+                metadata[index_and_type] = self.unpack_string()
+            elif type_ == 4:
+                metadata[index_and_type] = self.unpack_chat()
+            elif type_ == 5:
+                if self.unpack_bool():
+                    metadata[index_and_type] = self.unpack_chat()
+            elif type_ == 6:
+                metadata[index_and_type] = self.unpack_slot()
+            elif type_ == 7:
+                metadata[index_and_type] = self.unpack_bool()
+            elif type_ == 8:
+                metadata[index_and_type] = self.unpack_rotation()
+            elif type_ == 9:
+                metadata[index_and_type] = self.unpack_pos()
+            elif type_ == 10:
+                if self.unpack_bool():
+                    metadata[index_and_type] = self.unpack_pos()
+            elif type_ == 11:
+                metadata[index_and_type] = self.unpack_direction()
+            elif type_ == 12:
+                if self.unpack_bool():
+                    metadata[index_and_type] = self.unpack_uuid()
+            elif type_ == 13:
+                if self.unpack_bool():
+                    metadata[index_and_type] = self.unpack_varint()
+            elif type_ == 14:
+                metadata[index_and_type] = self.unpack_nbt()
+            elif type_ == 15:
+                metadata[index_and_type] = self.unpack_particle()
+            elif type_ == 16:
+                metadata[index_and_type] = self.unpack_villager()
+            elif type_ == 17:
+                metadata[index_and_type] = self.unpack_optional_varint()
+            elif type_ == 18:
+                metadata[index_and_type] = self.unpack_pose()

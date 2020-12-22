@@ -18,18 +18,18 @@ class HandshakeLegacyPing_1(Packet):  # Client -> Server
     def decode(cls, buf: Buffer) -> HandshakeHandshake:
         buf.read(15)
         return cls(buf.read(1), buf.read(buf.unpack('h')).decode('UTF-16BE'), buf.unpack('i'))
-        
+
 
 class HandshakeLegacyPing_2(Packet):  # Server -> CLient
-    def __init__(self, protocol: int = 127, version: str, motd: str, player_count: int, max_players: int) -> None:
+    def __init__(self, protocol: int = 127, version: str, motd: str, players_online: int, players_max: int) -> None:
         super.__init__(0xFF)
 
         self.protocol = protocol
         self.version = version
         self.motd = motd
-        self.player_count = player_count
-        self.max_players = max_players
+        self.players_online = players_online
+        self.players_max = max_players
 
     def encode(self) -> bytes:
-        out_string = f'§1\x00{self.protocol}\x00{self.motd}\x00{self.player_count}\x00{self.max_players}'
+        out_string = f'§1\x00{self.protocol}\x00{self.motd}\x00{self.players_online}\x00{self.players_max}'
         return b'\xff' + Buffer.pack('h', len(out_string)) + out_string.encode('UTF-16BE')

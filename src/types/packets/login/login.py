@@ -40,3 +40,14 @@ class LoginEncryptionResponse(Packet):  # Client -> Server
     @classmethod
     def decode(cls, buf: Buffer) -> LoginEncryptionResponse:
         return LoginEncryptionResponse(buf.read(buf.unpack_varint()), buf.read(buf.unpack_varint()))
+
+
+class LoginSuccess(Packet):  # Server -> Client
+    def __init__(self, uuid: uuid.UUID, username: str) -> None:
+        super().__init__(0x02)
+
+        self.uuid = uuid
+        self.username = username
+
+    def encode(self):
+        return Buffer.pack_uuid(self.uuid) + Buffer.pack_string(username)

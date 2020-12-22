@@ -30,7 +30,7 @@ class LoginEncryptionRequest(Packet):  # Server -> Client
 
 
 class LoginEncryptionResponse(Packet):  # Client -> Server
-    def __init__(self, shared_key: bytes, verify_token: bytes):
+    def __init__(self, shared_key: bytes, verify_token: bytes) -> None:
         super().__init__(0x01)
 
         self.shared_key = shared_key

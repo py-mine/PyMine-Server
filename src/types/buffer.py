@@ -47,21 +47,6 @@ class Buffer:
         self.pos = 0
 
     @classmethod
-    def pack_villager(cls, kind: int, profession: int, level: int) -> bytes:
-        """Packs villager data into bytes."""
-
-        return cls.pack_varint(kind) + cls.pack_varint(profession) + cls.pack_varint(level)
-
-    def unpack_villager(self) -> dict:
-        """Unpacks villager data from the buffer."""
-
-        return {
-            'kind': self.unpack_varint(),
-            'profession': self.unpack_varint(),
-            'level': self.unpack_varint()
-        }
-
-    @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
         """
         Creates a Buffer object from bytes, handles compression
@@ -458,3 +443,18 @@ class Buffer:
             out += cls.pack_slot(**recipe['result'])
 
         return out
+
+    @classmethod
+    def pack_villager(cls, kind: int, profession: int, level: int) -> bytes:
+        """Packs villager data into bytes."""
+
+        return cls.pack_varint(kind) + cls.pack_varint(profession) + cls.pack_varint(level)
+
+    def unpack_villager(self) -> dict:
+        """Unpacks villager data from the buffer."""
+
+        return {
+            'kind': self.unpack_varint(),
+            'profession': self.unpack_varint(),
+            'level': self.unpack_varint()
+        }

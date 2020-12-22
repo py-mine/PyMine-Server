@@ -571,8 +571,8 @@ class Buffer:
             if index == 255:
                 return metadata
 
-            type_ self.unpack_varint()
-            index_and_type = (index, type,)
+            type_ = self.unpack_varint()
+            index_and_type = (index, type_,)
 
             if type_ == 0:
                 metadata[index_and_type] = self.unpack('b')

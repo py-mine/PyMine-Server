@@ -498,6 +498,8 @@ class Buffer:
 
     @classmethod
     def pack_entity_metadata(cls, metadata: dict) -> bytes:  # https://wiki.vg/Entity_metadata#Entity_Metadata_Format
+        """Packs entity metadata into bytes."""
+
         out = b''
 
         for index_and_type, value in metadata.items():
@@ -557,3 +559,32 @@ class Buffer:
                 out += cls.pack_pose(value)
 
         return out + cls.pack('B', 255)
+
+    def unpack_entity_metadata(self) -> dict:
+        """Unpacks entity metadata from the buffer."""
+
+        metadata = {}
+
+        while True:
+            index = self.unpack('B')
+
+            if index == 255:
+                return metadata
+
+            type_ self.unpack_varint()
+            index_and_type = (index, type,)
+
+            if type_ == 0:
+                metadata[index_and_type] = self.unpack('b')
+            elif type_ == 1:
+                metadata[index_and_type] = self.unpack_varint()
+            elif type_ == 2:
+                metadata[index_and_type] = self.unpack('f')
+            elif type_ == 3:
+                metadata[index_and_type] = self.unpack_string()
+            elif type_ == 4:
+                metadata[index_and_type] = self.unpack_chat()
+            elif type_ == 5:
+                if self.unpack_bool():
+                    metadata[index_and_type] = self.unpack_chat()
+            elif type_ ==

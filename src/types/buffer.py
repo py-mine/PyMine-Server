@@ -548,4 +548,12 @@ class Buffer:
             elif type_ == 14:
                 out += cls.pack_nbt(value)
             elif type_ == 15:
-                out += cls.pack_particle()
+                out += cls.pack_particle(**value)
+            elif type_ == 16:
+                out += cls.pack_villager(*value)
+            elif type_ == 17:
+                out += cls.pack_optional_varint(value)
+            elif type_ == 18:
+                out += cls.pack_pose(value)
+
+        return out

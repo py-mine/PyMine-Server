@@ -606,3 +606,13 @@ class Buffer:
             elif type_ == 13:
                 if self.unpack_bool():
                     metadata[index_and_type] = self.unpack_varint()
+            elif type_ == 14:
+                metadata[index_and_type] = self.unpack_nbt()
+            elif type_ == 15:
+                metadata[index_and_type] = self.unpack_particle()
+            elif type_ == 16:
+                metadata[index_and_type] = self.unpack_villager()
+            elif type_ == 17:
+                metadata[index_and_type] = self.unpack_optional_varint()
+            elif type_ == 18:
+                metadata[index_and_type] = self.unpack_pose()

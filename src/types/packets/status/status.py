@@ -5,8 +5,6 @@ from src.types.packet import Packet
 
 __all__ = ('StatusStatus_1', 'StatusStatus_2', 'StatusStatusPingPong')
 
-# This is just an empty packet
-
 
 class StatusStatus_1(Packet):  # Client -> Server
     def __init__(self) -> None:

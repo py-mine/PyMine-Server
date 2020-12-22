@@ -36,7 +36,7 @@ class Message:
     # 'plain' = plain text, no formatting
     # 'normal' = with formatting codes
     # 'color' = formatted with ansi/terminal formatting codes
-    def to_string(self, mode: str):
+    def to_string(self, mode: str) -> str:
         """Converts a Minecraft chat message to text."""
 
         def parse(msg):
@@ -50,7 +50,7 @@ class Message:
 
                     for i, c in enumerate(msg):
                         if c == '§':
-                            colored += TERMINAL_CODES[msg[i+1]]
+                            colored += TERMINAL_CODES[msg[i + 1]]
                             continue
 
                     return colored

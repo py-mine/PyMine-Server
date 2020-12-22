@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from src.types.buffer import Buffer
 from src.types.packet import Packet
-
+from src.types.packets.handshaking.handshaking import HandshakeHandshake
 __all__ = ('HandshakeLegacyPing_1', 'HandshakeLegacyPing_2',)
 
 
@@ -21,14 +21,14 @@ class HandshakeLegacyPing_1(Packet):  # Client -> Server
 
 
 class HandshakeLegacyPing_2(Packet):  # Server -> CLient
-    def __init__(self, protocol: int = 127, version: str, motd: str, players_online: int, players_max: int) -> None:
+    def __init__(self, version: str, motd: str, players_online: int, players_max: int, protocol: int = 127) -> None:
         super.__init__(0xFF)
 
         self.protocol = protocol
         self.version = version
         self.motd = motd
         self.players_online = players_online
-        self.players_max = max_players
+        self.players_max = players_max
 
     def encode(self) -> bytes:
         out_string = f'§1\x00{self.protocol}\x00{self.motd}\x00{self.players_online}\x00{self.players_max}'

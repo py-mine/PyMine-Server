@@ -295,7 +295,8 @@ class Buffer:
         if item_id is None:
             return cls.pack('?', False)
 
-        return cls.pack('?', True) + cls.pack_varint(item_id) + cls.pack('b', count) + cls.pack_nbt(tag)
+        return cls.pack('?', True) + cls.pack_varint(item_id) + \
+            cls.pack('b', count) + cls.pack_nbt(tag)
 
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""
@@ -474,7 +475,11 @@ class Buffer:
         if particle_id in (3, 23,):
             out += cls.pack_varint(particle['BlockState'])
         elif particle_id == 14:
-            out += cls.pack('ffff', particle['Red'], particle['Green'], particle['Blue'], particle['Scale'])
+            out += cls.pack('ffff',
+                            particle['Red'],
+                            particle['Green'],
+                            particle['Blue'],
+                            particle['Scale'])
         elif particle_id == 32:
             out += cls.pack_slot(**particle['Item'])
 
@@ -497,7 +502,8 @@ class Buffer:
         return particle
 
     @classmethod
-    def pack_entity_metadata(cls, metadata: dict) -> bytes:  # https://wiki.vg/Entity_metadata#Entity_Metadata_Format
+    # https://wiki.vg/Entity_metadata#Entity_Metadata_Format
+    def pack_entity_metadata(cls, metadata: dict) -> bytes:
         """Packs entity metadata into bytes."""
 
         out = b''

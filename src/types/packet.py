@@ -1,4 +1,5 @@
-from buffer import Buffer
+
+from src.types.buffer import Buffer
 
 class Packet(Buffer):
     """Base packet class."""

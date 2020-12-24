@@ -15,8 +15,13 @@ __all__ = (
 )
 
 
-class LoginStart(Packet):  # Client -> Server
-    """Packet from client asking to start login process"""
+class LoginStart(Packet):
+    """Packet from client asking to start login process. (Client -> Server)
+
+    :param str username: Username of the client who sent the request.
+    :attr type id_: Unique packet ID.
+    :attr username:
+    """
 
     id_ = 0x00
 

@@ -40,6 +40,8 @@ class HandshakeLegacyPingRequest(Packet):
 class HandshakeLegacyPingResponse(Packet):
     """Legacy response from the server to the client.
 
+    Server -> Client
+
     :param str version: Version that the Minecraft server is running (i.e. 1.16.4).
     :param str motd: The server MOTD.
     :param int players_online: Amount of players currently on the server.

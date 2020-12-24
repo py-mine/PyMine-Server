@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from src.types.packet import PacketClientboundJSON
+from src.types.packet import Packet
 
 __all__ = ('PlayEntityAnimation',)
 
 
-class PlayEntityAnimation(PacketClientboundJSON):
+class PlayEntityAnimation(Packet):
     """Sent whenever an entity should change animation. Client bound(Client -> Server)."""
 
     id_ = 0x05
@@ -16,7 +16,7 @@ class PlayEntityAnimation(PacketClientboundJSON):
         super().__init__()
 
 
-class PlayBlockBreakAnimation(PacketClientboundJSON):
+class PlayBlockBreakAnimation(Packet):
     """0–9 are the displayable destroy stages and each other number means that there is no animation on this coordinate.
      Client bound(Client -> Server)."""
     # Block break animations can still be applied on air; the animation will remain visible although there is no block being broken.

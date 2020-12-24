@@ -37,20 +37,30 @@ class HandshakeLegacyPingRequest(Packet):
         return cls(buf.read(1), buf.read(buf.unpack('h')).decode('UTF-16BE'), buf.unpack('i'))
 
 
-class HandshakeLegacyPingResponse(Packet):  # Server -> CLient
-    """Response from the server acknowledging and accepting the connection"""
+class HandshakeLegacyPingResponse(Packet):
+    """Legacy response from the server to the client.
+
+    :param str version: Version that the Minecraft server is running (i.e. 1.16.4).
+    :param str motd: The server MOTD.
+    :param int players_online: Amount of players currently on the server.
+    :param int players_max: Maximum players allowed on the server.
+    :attr type id_: Unique packet ID.
+    :attr version:
+    :attr motd:
+    :attr players_online:
+    :attr players_max:
+    """
 
     id_ = 0xFF
 
-    def __init__(self, version: str, motd: str, players_online: int, players_max: int, protocol: int = 127) -> None:
+    def __init__(self, version: str, motd: str, players_online: int, players_max: int) -> None:
         super().__init__()
 
-        self.protocol = protocol
         self.version = version
         self.motd = motd
         self.players_online = players_online
         self.players_max = players_max
 
     def encode(self) -> bytes:
-        out_string = f'§1\x00{self.protocol}\x00{self.motd}\x00{self.players_online}\x00{self.players_max}'
+        out_string = f'§1\x0074\x00{self.motd}\x00{self.players_online}\x00{self.players_max}'
         return b'\xff' + Buffer.pack('h', len(out_string)) + out_string.encode('UTF-16BE')

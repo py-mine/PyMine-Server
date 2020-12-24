@@ -4,7 +4,8 @@ from src.types.buffer import Buffer
 from src.types.packet import Packet
 """Contains spawns packets"""
 
-__all__ = ('PlayEntitySpawn',)
+__all__ = ('PlayEntitySpawn', 'PlayLivingEntitySpawn',
+           'PlayPaintingSpawn', 'PlaySpawnExperienceOrb')
 
 
 class PlayEntitySpawn(Packet):

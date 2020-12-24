@@ -1,3 +1,5 @@
+"""Contains packets that support the legacy server list ping protocol"""
+
 from __future__ import annotations
 
 from src.types.buffer import Buffer
@@ -6,7 +8,9 @@ from src.types.packet import Packet
 __all__ = ('HandshakeLegacyPing_1', 'HandshakeLegacyPing_2',)
 
 
-class HandshakeLegacyPing_1(Packet):  # Client -> Server
+class HandshakeLegacyPingRequest(Packet):  # Client -> Server
+    """Initial request from the client asking to start a connection"""
+
     id_ = 0xFE
 
     def __init__(self, protocol: int, hostname: str, port: int) -> None:
@@ -22,7 +26,9 @@ class HandshakeLegacyPing_1(Packet):  # Client -> Server
         return cls(buf.read(1), buf.read(buf.unpack('h')).decode('UTF-16BE'), buf.unpack('i'))
 
 
-class HandshakeLegacyPing_2(Packet):  # Server -> CLient
+class HandshakeLegacyPingResponse(Packet):  # Server -> CLient
+    """Response from the server acknowledging and accepting the connection"""
+
     id_ = 0xFF
 
     def __init__(self, version: str, motd: str, players_online: int, players_max: int, protocol: int = 127) -> None:

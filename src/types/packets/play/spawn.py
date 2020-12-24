@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from src.types.buffer import Buffer
 from src.types.packet import Packet
-"""Contains packets concerning entitys"""
+"""Contains spawns packets"""
 
 __all__ = ('PlayEntitySpawn',)
 

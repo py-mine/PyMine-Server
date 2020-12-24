@@ -1,9 +1,8 @@
-from __future__ import annotations
+"""Contains spawn packets."""
 
+from __future__ import annotations
 from src.types.base import PacketClientboundJSON
-from src.types.buffer import Buffer
-from src.types.packet import Packet
-"""Contains spawn packets"""
+
 
 __all__ = ('PlayEntitySpawn', 'PlayLivingEntitySpawn',
            'PlayPaintingSpawn', 'PlaySpawnExperienceOrb')

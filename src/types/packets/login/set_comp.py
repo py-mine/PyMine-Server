@@ -11,6 +11,8 @@ __all__ = ('LoginSetCompression',)
 class LoginSetCompression(Packet):
     """While not directly related to logging in, this packet is sent by the server during the login process.
 
+    Server -> Client
+
     :param int comp_thresh: Compression level of future packets, -1 to disable compression.
     :attr int id_: Unique packet ID.
     :attr comp_thresh:

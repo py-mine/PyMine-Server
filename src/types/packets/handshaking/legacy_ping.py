@@ -9,9 +9,7 @@ __all__ = ('HandshakeLegacyPing_1', 'HandshakeLegacyPing_2',)
 
 
 class HandshakeLegacyPingRequest(Packet):
-    """Request from the client asking for legacy ping response.
-
-    Client -> Server
+    """Request from the client asking for legacy ping response. Client -> Server
 
     :param int protocol: Protocol version being used, should now always be 74/4a.
     :param str hostname: The host/address the client is connecting to.
@@ -38,9 +36,7 @@ class HandshakeLegacyPingRequest(Packet):
 
 
 class HandshakeLegacyPingResponse(Packet):
-    """Legacy response from the server to the client.
-
-    Server -> Client
+    """Legacy response from the server to the client. Server -> Client
 
     :param str version: Version that the Minecraft server is running (i.e. 1.16.4).
     :param str motd: The server MOTD.

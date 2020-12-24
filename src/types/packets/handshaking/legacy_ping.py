@@ -5,7 +5,7 @@ from __future__ import annotations
 from src.types.buffer import Buffer
 from src.types.packet import Packet
 
-__all__ = ('HandshakeLegacyPing_1', 'HandshakeLegacyPing_2',)
+__all__ = ('HandshakeLegacyPingRequest', 'HandshakeLegacyPingResponse',)
 
 
 class HandshakeLegacyPingRequest(Packet):

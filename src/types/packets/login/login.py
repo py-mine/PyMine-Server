@@ -93,4 +93,4 @@ class LoginSuccess(Packet):  # Server -> Client
         self.username = username
 
     def encode(self):
-        return Buffer.pack_uuid(self.uuid) + Buffer.pack_string(username)
+        return Buffer.pack_uuid(self.uuid) + Buffer.pack_string(self.username)

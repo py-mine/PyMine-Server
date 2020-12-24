@@ -1,4 +1,4 @@
-"""Contains LoginSetCompression which is technically part of the login process"""
+"""Contains LoginSetCompression which is technically part of the login process."""
 
 from __future__ import annotations
 
@@ -9,7 +9,19 @@ __all__ = ('LoginSetCompression',)
 
 
 class LoginSetCompression(Packet):
-    """While not directly related to logging in, this packet is sent by the server during the login process"""
+    """While not directly related to logging in, this packet is sent by the server during the login process.
+
+    Parameters
+    ----------
+    comp_thresh : int
+        Compression threshold to be sent to the server, -1 to disable.
+
+    Attributes
+    ----------
+    id_ : int
+        Unique packet ID
+    comp_thresh
+    """
 
     id_ = 0x03
 

@@ -13,12 +13,16 @@ class PlayBlockAction(PacketClientboundJSON):
     Client bound(Client -> Server).
     """
 
+    id_ = 0x0A
+
     def __init__(self, response_data: dict) -> None:
-        super().__init__(0x0A)
+        super().__init__()
 
 
 class PlayBlockChange(PacketClientboundJSON):
     """Fired when a block is changed within the render distance. Client bound(Client -> Server)."""
 
+    id_ = 0x0B
+
     def __init__(self, response_data: dict) -> None:
-        super().__init__(0x0B)
+        super().__init__()

@@ -3,8 +3,12 @@
 from __future__ import annotations
 from src.types.packet import PacketClientboundJSON
 
-__all__ = ('PlayEntitySpawn', 'PlayLivingEntitySpawn',
-           'PlayPaintingSpawn', 'PlaySpawnExperienceOrb')
+__all__ = (
+    'PlayEntitySpawn',
+    'PlayLivingEntitySpawn',
+    'PlayPaintingSpawn',
+    'PlaySpawnExperienceOrb',
+)
 
 
 class PlayEntitySpawn(PacketClientboundJSON):

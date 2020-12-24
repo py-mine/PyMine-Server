@@ -35,8 +35,14 @@ class LoginStart(Packet):
         return LoginStart(buf.read(buf.unpack_varint()).decode('UTF-8'))
 
 
-class LoginEncryptionRequest(Packet):  # Server -> Client
-    """Used by the server to ask the client to encrypt the login process"""
+class LoginEncryptionRequest(Packet):
+    """Used by the server to ask the client to encrypt the login process. (Server -> Client)
+
+    :param bytes public_key: Public key.
+    :attr type verify_token: Verify token, randomly generated.
+    :attr type id_: Unique packet ID.
+    :attr public_key:
+    """
 
     id_ = 0x01
 

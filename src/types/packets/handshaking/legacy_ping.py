@@ -10,7 +10,7 @@ class HandshakeLegacyPing_1(Packet):  # Client -> Server
     id_ = 0xFE
 
     def __init__(self, protocol: int, hostname: str, port: int) -> None:
-        super.__init__()
+        super().__init__()
 
         self.protocol = protocol
         self.hostname = hostname
@@ -26,7 +26,7 @@ class HandshakeLegacyPing_2(Packet):  # Server -> CLient
     id_ = 0xFF
 
     def __init__(self, version: str, motd: str, players_online: int, players_max: int, protocol: int = 127) -> None:
-        super.__init__()
+        super().__init__()
 
         self.protocol = protocol
         self.version = version

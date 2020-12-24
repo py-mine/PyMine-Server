@@ -7,8 +7,10 @@ from src.types.packet import Packet
 
 
 class LoginStart(Packet):  # Client -> Server
+    id_ = 0x00
+
     def __init__(self, username: str) -> None:
-        super().__init__(0x00)
+        super().__init__()
 
         self.username = username
 
@@ -18,8 +20,10 @@ class LoginStart(Packet):  # Client -> Server
 
 
 class LoginEncryptionRequest(Packet):  # Server -> Client
+    id_ = 0x01
+
     def __init__(self, public_key: bytes) -> None:  # https://wiki.vg/Protocol#Encryption_Request
-        super().__init__(0x01)
+        super().__init__()
 
         self.public_key = public_key
         self.verify_token = secrets.token_bytes(16)
@@ -31,8 +35,10 @@ class LoginEncryptionRequest(Packet):  # Server -> Client
 
 
 class LoginEncryptionResponse(Packet):  # Client -> Server
+    id_ = 0x01
+
     def __init__(self, shared_key: bytes, verify_token: bytes) -> None:
-        super().__init__(0x01)
+        super().__init__()
 
         self.shared_key = shared_key
         self.verify_token = verify_token
@@ -43,8 +49,10 @@ class LoginEncryptionResponse(Packet):  # Client -> Server
 
 
 class LoginSuccess(Packet):  # Server -> Client
+    id_ = 0x02
+
     def __init__(self, uuid: uuid.UUID, username: str) -> None:
-        super().__init__(0x02)
+        super().__init__()
 
         self.uuid = uuid
         self.username = username

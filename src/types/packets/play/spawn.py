@@ -1,7 +1,7 @@
 """Contains spawn packets."""
 
 from __future__ import annotations
-from src.types.packet import PacketClientboundJSON
+from src.types.packet import Packet
 
 __all__ = (
     'PlayEntitySpawn',
@@ -11,7 +11,7 @@ __all__ = (
 )
 
 
-class PlayEntitySpawn(PacketClientboundJSON):
+class PlayEntitySpawn(Packet):
     """Sent by the server when a vehicle or other non-living entity is created. Client bound(Client -> Server)."""
 
     id_ = 0x00
@@ -20,7 +20,7 @@ class PlayEntitySpawn(PacketClientboundJSON):
         super().__init__()
 
 
-class PlayLivingEntitySpawn(PacketClientboundJSON):
+class PlayLivingEntitySpawn(Packet):
     """Sent by the server when a living entity is spawned.  Client bound(Client -> Server)."""
 
     id_ = 0x02
@@ -29,7 +29,7 @@ class PlayLivingEntitySpawn(PacketClientboundJSON):
         super().__init__()
 
 
-class PlayPaintingSpawn(PacketClientboundJSON):
+class PlayPaintingSpawn(Packet):
     """This packet shows location, name, and type of painting.  Client bound(Client -> Server)."""
 
     id_ = 0x03
@@ -38,7 +38,7 @@ class PlayPaintingSpawn(PacketClientboundJSON):
         super().__init__()
 
 
-class PlaySpawnExperienceOrb(PacketClientboundJSON):
+class PlaySpawnExperienceOrb(Packet):
     """Spawns one or more experience orbs. Client bound(Client -> Server)."""
 
     id_ = 0x01

@@ -9,7 +9,7 @@ __all__ = ('HandshakeLegacyPing_1', 'HandshakeLegacyPing_2',)
 
 
 class HandshakeLegacyPingRequest(Packet):
-    """Request from the client asking for legacy ping response. Client -> Server
+    """Request from the client asking for legacy ping response. (Client -> Server)
 
     :param int protocol: Protocol version being used, should now always be 74/4a.
     :param str hostname: The host/address the client is connecting to.

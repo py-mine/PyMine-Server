@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from src.types.packet import PacketClientboundJSON
+from src.types.packet import Packet
 
 __all__ = ('PlayBlockAction', "PlayBlockChange")
 
 
-class PlayBlockAction(PacketClientboundJSON):
+class PlayBlockAction(Packet):
     """This packet is used for a number of actions and animations performed by blocks, usually non-persistent.
     Client bound(Client -> Server).
     """
@@ -18,7 +18,7 @@ class PlayBlockAction(PacketClientboundJSON):
         super().__init__()
 
 
-class PlayBlockChange(PacketClientboundJSON):
+class PlayBlockChange(Packet):
     """Fired when a block is changed within the render distance. Client bound(Client -> Server)."""
 
     id_ = 0x0B

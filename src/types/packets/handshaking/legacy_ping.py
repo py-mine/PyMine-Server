@@ -8,8 +8,19 @@ from src.types.packet import Packet
 __all__ = ('HandshakeLegacyPing_1', 'HandshakeLegacyPing_2',)
 
 
-class HandshakeLegacyPingRequest(Packet):  # Client -> Server
-    """Initial request from the client asking to start a connection"""
+class HandshakeLegacyPingRequest(Packet):
+    """Initial request from the client asking to start a connection.
+
+    Client -> Server
+
+    :param int protocol: Protocol version being used, should now always be 74/4a.
+    :param str hostname: The host/address the client is connecting to.
+    :param int port: The port the client is connection on.
+    :attr type id_: Unique packet ID.
+    :attr protocol:
+    :attr hostname:
+    :attr port:
+    """
 
     id_ = 0xFE
 

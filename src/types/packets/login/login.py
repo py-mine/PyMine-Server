@@ -58,8 +58,15 @@ class LoginEncryptionRequest(Packet):
          Buffer.pack_varint(len(self.verify_token)) + self.verify_token
 
 
-class LoginEncryptionResponse(Packet):  # Client -> Server
-    """Response from the client to a LoginEncryptionRequest"""
+class LoginEncryptionResponse(Packet):
+    """Response from the client to a LoginEncryptionRequest.
+
+    :param bytes shared_key: The shared key used in the login process.
+    :param bytes verify_token: The verify token used in the login process.
+    :attr type id_: Unique packet ID.
+    :attr shared_key:
+    :attr verify_token:
+    """
 
     id_ = 0x01
 

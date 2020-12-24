@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from src.types.packet import PacketClientboundJSON
 
-
 __all__ = ('PlayAcknowledgePlayerDigging',)
 
 

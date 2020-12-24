@@ -18,6 +18,8 @@ class StatusStatus_1(Packet):  # Client -> Server
 
 
 class StatusStatus_2(Packet):  # Server -> Client
+    id_ = 0x00
+
     def __init__(self, response_data: dict) -> None:
         # What response_data should be like
         # {
@@ -40,6 +42,8 @@ class StatusStatus_2(Packet):  # Server -> Client
         #     },
         #     "favicon": "data:image/png;base64,<data>"
         # }
+
+        super().__init__()
 
         self.response_data = response_data
 

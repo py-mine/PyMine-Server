@@ -9,7 +9,7 @@ __all__ = ('PlayBlockEntityData',)
 
 
 class PlayBlockEntityData(PacketClientboundJSON):
-    """Sets the block entity associated with the block at the given location. Client bound(Client -> Server)."""
+    """Sets the block entity associated with the block at the given location. Clientbound(Client -> Server)."""
 
     def __init__(self, response_data: dict) -> None:
         super.__init__(0x09)

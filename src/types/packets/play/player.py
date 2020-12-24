@@ -12,4 +12,4 @@ class PlayAcknowledgePlayerDigging(PacketClientboundJSON):
     """Acknowledges player digging. Client bound(Client -> Server)."""
 
     def __init__(self, response_data: dict) -> None:
-        super.__init__(0x05)
+        super.__init__(0x07)

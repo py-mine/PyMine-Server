@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from src.types.packet import PacketClientboundJSON
+from src.types.packet import Packet
 
 __all__ = ('PlayAcknowledgePlayerDigging',)
 
 
-class PlayAcknowledgePlayerDigging(PacketClientboundJSON):
+class PlayAcknowledgePlayerDigging(Packet):
     """Acknowledges player digging. Client bound(Client -> Server)."""
 
     id_ = 0x07

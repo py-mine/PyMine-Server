@@ -30,11 +30,8 @@ class PlayPaintingSpawn(PacketClientboundJSON):
         super.__init__(0x03)
 
 
-class PlaySpawnExperienceOrb(Packet):
+class PlaySpawnExperienceOrb(PacketClientboundJSON):
     """Spawns one or more experience orbs. Client bound(Client -> Server)."""
 
     def __init__(self, response_data: dict) -> None:
         super.__init__(0x01)
-
-    def encode(self):
-        return Buffer.pack_json(self.response_data)

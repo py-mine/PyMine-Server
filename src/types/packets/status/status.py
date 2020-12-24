@@ -52,8 +52,10 @@ class StatusStatus_2(Packet):  # Server -> Client
 
 
 class StatusStatusPingPong(Packet):  # Client -> Server AND Server -> Client
+    id_ = 0x01
+
     def __init__(self, payload: int) -> None:
-        super().__init__(0x01)
+        super().__init__()
 
     @classmethod
     def decode(cls, buf: Buffer) -> StatusStatusPingPong:

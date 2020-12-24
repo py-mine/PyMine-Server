@@ -6,7 +6,7 @@ __all__ = ('PACKET_MAP',)
 PACKET_MAP = {}  # {state: (packet, packet,..),..}
 
 def load_packets():
-    for state in os.listdir('src.types.packets'):
+    for state in os.listdir('src/types/packets'):
         PACKET_MAP[state] = []
 
         for file in os.listdir(f'{path}/{state}'):

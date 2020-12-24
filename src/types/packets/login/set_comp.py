@@ -1,3 +1,5 @@
+"""Contains LoginSetCompression which is technically part of the login process"""
+
 from __future__ import annotations
 
 from src.types.buffer import Buffer
@@ -7,6 +9,8 @@ __all__ = ('LoginSetCompression',)
 
 
 class LoginSetCompression(Packet):
+    """While not directly related to logging in, this packet is sent by the server during the login process"""
+
     id_ = 0x03
 
     def __init__(self, comp_thresh: int = -1) -> None:

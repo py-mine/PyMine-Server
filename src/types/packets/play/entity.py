@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from src.types.packet import PacketClientboundJSON
+from src.types.packet import Packet
 
 __all__ = ('PlayBlockEntityData',)
 
 
-class PlayBlockEntityData(PacketClientboundJSON):
+class PlayBlockEntityData(Packet):
     """Sets the block entity associated with the block at the given location. Clientbound(Client -> Server)."""
 
     id_ = 0x09

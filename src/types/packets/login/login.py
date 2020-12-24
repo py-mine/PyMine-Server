@@ -53,9 +53,9 @@ class LoginEncryptionRequest(Packet):
         self.verify_token = secrets.token_bytes(16)
 
     def encode(self) -> bytes:
-        return Buffer.pack_string(' '*20) + \
-         Buffer.pack_varint(len(self.public_key)) + self.public_key + \
-         Buffer.pack_varint(len(self.verify_token)) + self.verify_token
+        return Buffer.pack_string(' ' * 20) + \
+            Buffer.pack_varint(len(self.public_key)) + self.public_key + \
+            Buffer.pack_varint(len(self.verify_token)) + self.verify_token
 
 
 class LoginEncryptionResponse(Packet):  # Client -> Server

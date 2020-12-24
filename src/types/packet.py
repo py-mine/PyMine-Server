@@ -4,6 +4,7 @@ from src.types.buffer import Buffer
 
 __all__ = ('Packet', 'PacketClientboundJSON',)
 
+
 class Packet:
     """Base Packet class.
 

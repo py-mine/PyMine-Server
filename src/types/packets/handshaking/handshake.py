@@ -8,8 +8,21 @@ from src.types.packet import Packet
 __all__ = ('HandshakeHandshake',)
 
 
-class HandshakeHandshake(Packet):  # Serverbound only (client -> server)
-    """Initiates the connection between the server and client"""
+class HandshakeHandshake(Packet):
+    """Initiates the connection between the server and client.
+
+    Client -> Server
+
+    :param int protocol: Protocol version to be used.
+    :param str address: The host/address the client is connecting to.
+    :param int port: The port the client is connection on.
+    :param int next_state: The next state which the server should transfer to. 1 for status, 2 for login.
+    :attr int id_: Unique packet ID.
+    :attr protocol:
+    :attr address:
+    :attr port:
+    :attr next_state:
+    """
 
     id_ = 0x00
 

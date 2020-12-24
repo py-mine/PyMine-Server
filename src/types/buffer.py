@@ -86,7 +86,7 @@ class Buffer:
     @classmethod
     def pack_packet(cls, packet: Packet):
         """
-        Creates a Buffer object from a packet class.
+        Packs a packet into bytes.
         """
 
         return cls(cls.pack_varint(packet.id) + packet.encode()).to_bytes()

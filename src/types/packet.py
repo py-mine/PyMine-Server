@@ -14,12 +14,8 @@ class Packet:
 
     id_ = None
 
-    def __init__(self, id_: int = None) -> None:
-        if id_ is None:
-            self.id_ = self.__class__.id_
-        else:
-            self.id_ = id_
-            self.__class__.id_ = id_
+    def __init__(self) -> None:
+        self.id_ = self.__class__.id_
 
 
 class PacketClientboundJSON(Packet):
@@ -27,7 +23,7 @@ class PacketClientboundJSON(Packet):
 
     id_ = None
 
-    def __init__(self, id_: int):
+    def __init__(self):
         super().__init__()
 
     def encode(self):

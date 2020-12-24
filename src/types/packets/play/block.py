@@ -5,7 +5,7 @@ from __future__ import annotations
 from src.types.base import PacketClientboundJSON
 
 
-__all__ = ('PlayBlockAction',)
+__all__ = ('PlayBlockAction', "PlayBlockChange")
 
 
 class PlayBlockAction(PacketClientboundJSON):

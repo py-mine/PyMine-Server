@@ -11,5 +11,7 @@ __all__ = ('PlayAcknowledgePlayerDigging',)
 class PlayAcknowledgePlayerDigging(PacketClientboundJSON):
     """Acknowledges player digging. Client bound(Client -> Server)."""
 
+    id_ = 0x07
+
     def __init__(self, response_data: dict) -> None:
-        super().__init__(0x07)
+        super().__init__()

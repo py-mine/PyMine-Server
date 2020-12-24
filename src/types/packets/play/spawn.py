@@ -16,14 +16,11 @@ class PlayEntitySpawn(PacketClientboundJSON):
         super.__init__(0x00)
 
 
-class PlayLivingEntitySpawn(Packet):
+class PlayLivingEntitySpawn(PacketClientboundJSON):
     """Sent by the server when a living entity is spawned.  Client bound(Client -> Server)."""
 
     def __init__(self, response_data: dict) -> None:
         super.__init__(0x02)
-
-    def encode(self):
-        return Buffer.pack_json(self.response_data)
 
 
 class PlayPaintingSpawn(Packet):

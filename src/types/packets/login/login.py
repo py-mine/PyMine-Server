@@ -59,7 +59,7 @@ class LoginEncryptionRequest(Packet):
 
 
 class LoginEncryptionResponse(Packet):
-    """Response from the client to a LoginEncryptionRequest.
+    """Response from the client to a LoginEncryptionRequest. (Client -> Server)
 
     :param bytes shared_key: The shared key used in the login process.
     :param bytes verify_token: The verify token used in the login process.

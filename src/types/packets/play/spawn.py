@@ -23,14 +23,11 @@ class PlayLivingEntitySpawn(PacketClientboundJSON):
         super.__init__(0x02)
 
 
-class PlayPaintingSpawn(Packet):
+class PlayPaintingSpawn(PacketClientboundJSON):
     """This packet shows location, name, and type of painting.  Client bound(Client -> Server)."""
 
     def __init__(self, response_data: dict) -> None:
         super.__init__(0x03)
-
-    def encode(self):
-        return Buffer.pack_json(self.response_data)
 
 
 class PlaySpawnExperienceOrb(Packet):

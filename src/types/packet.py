@@ -14,8 +14,8 @@ class Packet:
 
     id_ = None
 
-    def __init__(self, id_: int = -0x1) -> None:
-        self.id_ = id_
+    def __init__(self) -> None:
+        self.id_ = self.__class__.id_
 
 
 class PacketClientboundJSON(Packet):
@@ -24,7 +24,7 @@ class PacketClientboundJSON(Packet):
     id_ = None
 
     def __init__(self, id_: int):
-        super().__init__(id_)
+        super().__init__()
 
     def encode(self):
         return Buffer.pack_json(self.response_data)  # assumes response_data is present

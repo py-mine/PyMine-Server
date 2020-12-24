@@ -6,7 +6,7 @@ __all__ = (
     'ITEMS_BY_ID',
 )
 
-with open('registries.json') as registry:  # generated from server jar
+with open('src/data/registries.json') as registry:  # generated from server jar
     REGISTRY = json.load(registry)
 
 ITEMS_BY_NAME = REGISTRY['minecraft:item']['entries']

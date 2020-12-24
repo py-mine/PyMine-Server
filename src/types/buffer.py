@@ -7,6 +7,7 @@ import zlib
 
 from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
 from src.types.message import Message
+from src.types.packet import Packet
 from src.data.misc import *
 
 
@@ -81,6 +82,17 @@ class Buffer:
             data = self.buf
 
         return self.pack_varint(len(data), max_bits=32) + data
+
+    @classmethod
+    def pack_packet(cls, packet: Packet):
+        """
+        Packs a packet into bytes.
+        """
+
+        return cls(cls.pack_varint(packet.id) + packet.encode()).to_bytes()
+
+    def unpack_packet(self):
+        raise NotImplemented
 
     def unpack(self, f: str) -> object:
         unpacked = struct.unpack('>' + f, self.read(struct.calcsize(f)))

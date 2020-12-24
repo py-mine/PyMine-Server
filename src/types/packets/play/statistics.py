@@ -1,10 +1,8 @@
-"""Contains statistic packet"""
+"""Contains statistic packet."""
 
 from __future__ import annotations
 
 from src.types.base import PacketClientboundJSON
-from src.types.buffer import Buffer
-from src.types.packet import Packet
 
 
 __all__ = ('PlayStatistics',)

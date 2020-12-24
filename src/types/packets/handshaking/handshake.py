@@ -1,3 +1,5 @@
+"""Contains HandshakeHandshake, a packet for starting the connection between the server and client"""
+
 from __future__ import annotations
 
 from src.types.buffer import Buffer
@@ -7,6 +9,8 @@ __all__ = ('HandshakeHandshake',)
 
 
 class HandshakeHandshake(Packet):  # Serverbound only (client -> server)
+    """Initiates the connection between the server and client"""
+
     id_ = 0x00
 
     def __init__(self, protocol: int, address: str, port: int, next_state: int) -> None:

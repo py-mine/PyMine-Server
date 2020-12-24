@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from src.types.buffer import Buffer
 
-__all__ = ('Packet', '')
+__all__ = ('Packet', 'PacketClientboundJSON',)
 
 class Packet:
     """Base Packet class.

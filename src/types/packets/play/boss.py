@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from src.types.packet import PacketClientboundJSON
+from src.types.packet import Packet
 
 __all__ = ('PlayBossBar',)
 
 
-class PlayBossBar(PacketClientboundJSON):
+class PlayBossBar(Packet):
     """Has boss bar stuff in it. Client bound(Client -> Server)."""
 
     id_ = 0x0C

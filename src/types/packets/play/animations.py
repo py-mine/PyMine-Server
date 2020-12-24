@@ -10,8 +10,10 @@ __all__ = ('PlayEntityAnimation',)
 class PlayEntityAnimation(PacketClientboundJSON):
     """Sent whenever an entity should change animation. Client bound(Client -> Server)."""
 
+    id_ = 0x05
+
     def __init__(self, response_data: dict) -> None:
-        super().__init__(0x05)
+        super().__init__()
 
 
 class PlayBlockBreakAnimation(PacketClientboundJSON):
@@ -23,5 +25,7 @@ class PlayBlockBreakAnimation(PacketClientboundJSON):
     # If you need to display several break animations at the same time you have to give each of them a unique Entity ID.
     # The entity ID does not need to correspond to an actual entity on the client. It is valid to use a randomly generated number.
 
+    id_ = 0x08
+
     def __init__(self, response_data: dict) -> None:
-        super().__init__(0x08)
+        super().__init__()

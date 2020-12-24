@@ -11,7 +11,7 @@ class PlayEntityAnimation(PacketClientboundJSON):
     """Sent whenever an entity should change animation. Client bound(Client -> Server)."""
 
     def __init__(self, response_data: dict) -> None:
-        super.__init__(0x05)
+        super().__init__(0x05)
 
 
 class PlayBlockBreakAnimation(PacketClientboundJSON):
@@ -24,4 +24,4 @@ class PlayBlockBreakAnimation(PacketClientboundJSON):
     # The entity ID does not need to correspond to an actual entity on the client. It is valid to use a randomly generated number.
 
     def __init__(self, response_data: dict) -> None:
-        super.__init__(0x08)
+        super().__init__(0x08)

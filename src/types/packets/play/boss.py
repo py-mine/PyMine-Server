@@ -12,4 +12,4 @@ class PlayBossBar(PacketClientboundJSON):
     """Has boss bar stuff in it. Client bound(Client -> Server)."""
 
     def __init__(self, response_data: dict) -> None:
-        super.__init__(0x0C)
+        super().__init__(0x0C)

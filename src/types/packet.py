@@ -8,5 +8,5 @@ class Packet:
     :attr id:
     """
 
-    def __init__(self, id: int = -0x1) -> None:
-        self.id = id
+    def __init__(self, id_: int = -0x1) -> None:
+        self.id_ = id_

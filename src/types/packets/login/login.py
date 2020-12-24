@@ -81,8 +81,15 @@ class LoginEncryptionResponse(Packet):
         return LoginEncryptionResponse(buf.read(buf.unpack_varint()), buf.read(buf.unpack_varint()))
 
 
-class LoginSuccess(Packet):  # Server -> Client
-    """Sent by the server to denote a successfull login"""
+class LoginSuccess(Packet):
+    """Sent by the server to denote a successfull login.
+
+    :param uuid.UUID uuid: The UUID of the connecting player/client.
+    :param str username: The username of the connecting player/client.
+    :attr type id_: Unique packet ID.
+    :attr uuid:
+    :attr username:
+    """
 
     id_ = 0x02
 

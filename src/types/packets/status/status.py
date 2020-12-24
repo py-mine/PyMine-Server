@@ -7,8 +7,10 @@ __all__ = ('StatusStatus_1', 'StatusStatus_2', 'StatusStatusPingPong',)
 
 
 class StatusStatus_1(Packet):  # Client -> Server
+    id_ = 0x00
+
     def __init__(self) -> None:
-        super().__init__(0x00)
+        super().__init__()
 
     @classmethod
     def decode(cls, buf: Buffer) -> StatusStatus_1:

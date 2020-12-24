@@ -9,7 +9,7 @@ def load_packets():
     for state in os.listdir('src/types/packets'):
         PACKET_MAP[state] = []
 
-        for file in os.listdir(f'{path}/{state}'):
+        for file in os.listdir(f'src/types/packets/{state}'):
             module = importlib.import_module(file)
 
             for name in module.__all__:

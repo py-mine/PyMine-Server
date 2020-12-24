@@ -15,8 +15,13 @@ __all__ = (
 )
 
 
-class LoginStart(Packet):  # Client -> Server
-    """Packet from client asking to start login process"""
+class LoginStart(Packet):
+    """Packet from client asking to start login process. (Client -> Server)
+
+    :param str username: Username of the client who sent the request.
+    :attr type id_: Unique packet ID.
+    :attr username:
+    """
 
     id_ = 0x00
 
@@ -30,8 +35,14 @@ class LoginStart(Packet):  # Client -> Server
         return LoginStart(buf.read(buf.unpack_varint()).decode('UTF-8'))
 
 
-class LoginEncryptionRequest(Packet):  # Server -> Client
-    """Used by the server to ask the client to encrypt the login process"""
+class LoginEncryptionRequest(Packet):
+    """Used by the server to ask the client to encrypt the login process. (Server -> Client)
+
+    :param bytes public_key: Public key.
+    :attr type verify_token: Verify token, randomly generated.
+    :attr type id_: Unique packet ID.
+    :attr public_key:
+    """
 
     id_ = 0x01
 

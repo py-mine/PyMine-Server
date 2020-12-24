@@ -7,8 +7,10 @@ __all__ = ('HandshakeHandshake',)
 
 
 class HandshakeHandshake(Packet):  # Serverbound only (client -> server)
-    def __init__(self, protocol: int, address: str, port: int, next_state: int, comp_thresh: int = -1) -> None:
-        super().__init__(0x00, comp_thresh)
+    id_ = 0x00
+
+    def __init__(self, protocol: int, address: str, port: int, next_state: int) -> None:
+        super().__init__()
 
         self.protocol = protocol
         self.address = address

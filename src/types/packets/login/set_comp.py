@@ -3,6 +3,8 @@ from __future__ import annotations
 from src.types.buffer import Buffer
 from src.types.packet import Packet
 
+__all__ = ('LoginSetCompression',)
+
 
 class LoginSetCompression(Packet):
     id_ = 0x03

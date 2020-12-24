@@ -107,7 +107,7 @@ class Buffer:
         return struct.pack('>' + f, *data)
 
     @classmethod
-    def pack_bool(cls, boolean) -> bytes:
+    def pack_bool(cls, boolean: bool) -> bytes:
         """Packs a boolean into bytes."""
 
         return struct.pack(f'>?', boolean)
@@ -292,7 +292,8 @@ class Buffer:
         if item_id is None:
             return cls.pack('?', False)
 
-        return cls.pack('?', True) + cls.pack_varint(item_id) + cls.pack('b', count) + cls.pack_nbt(tag)
+        return cls.pack('?', True) + cls.pack_varint(item_id) + \
+            cls.pack('b', count) + cls.pack_nbt(tag)
 
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""

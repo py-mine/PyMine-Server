@@ -3,21 +3,21 @@ from __future__ import annotations
 from src.types.buffer import Buffer
 from src.types.packet import Packet
 
-__all__ = ('StatusStatus_1', 'StatusStatus_2', 'StatusStatusPingPong',)
+__all__ = ('StatusStatusRequest', 'StatusStatusResponse', 'StatusStatusPingPong',)
 
 
-class StatusStatus_1(Packet):  # Client -> Server
+class StatusStatusRequest(Packet):
     id_ = 0x00
 
     def __init__(self) -> None:
         super().__init__()
 
     @classmethod
-    def decode(cls, buf: Buffer) -> StatusStatus_1:
+    def decode(cls, buf: Buffer) -> StatusStatusRequest:
         return cls()
 
 
-class StatusStatus_2(Packet):  # Server -> Client
+class StatusStatusResponse(Packet):
     id_ = 0x00
 
     def __init__(self, response_data: dict) -> None:

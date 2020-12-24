@@ -16,15 +16,3 @@ class Packet:
 
     def __init__(self) -> None:
         self.id_ = self.__class__.id_
-
-
-class PacketClientboundJSON(Packet):
-    """Base class used in most client-bound play packets."""
-
-    id_ = None
-
-    def __init__(self):
-        super().__init__()
-
-    def encode(self):
-        return Buffer.pack_json(self.response_data)  # assumes response_data is present

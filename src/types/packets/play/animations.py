@@ -1,7 +1,8 @@
 """Contains animation packets."""
 
 from __future__ import annotations
-from src.types.base import PacketClientboundJSON
+
+from src.types.packet import PacketClientboundJSON
 
 __all__ = ('PlayEntityAnimation',)
 

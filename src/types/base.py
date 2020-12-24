@@ -14,4 +14,4 @@ class PacketClientboundJSON(Packet):
         super.__init__(id)
 
     def encode(self):
-        return Buffer.pack_json(self.response_data)
+        return Buffer.pack_json(self.response_data)  # assumes response_data is present

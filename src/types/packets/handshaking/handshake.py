@@ -9,9 +9,7 @@ __all__ = ('HandshakeHandshake',)
 
 
 class HandshakeHandshake(Packet):
-    """Initiates the connection between the server and client.
-
-    Client -> Server
+    """Initiates the connection between the server and client. (Client -> Server)
 
     :param int protocol: Protocol version to be used.
     :param str address: The host/address the client is connecting to.

@@ -1,3 +1,5 @@
+"""Contains packets relating to client logins"""
+
 from __future__ import annotations
 import secrets
 import uuid
@@ -14,6 +16,8 @@ __all__ = (
 
 
 class LoginStart(Packet):  # Client -> Server
+    """Packet from client asking to start login process"""
+
     id_ = 0x00
 
     def __init__(self, username: str) -> None:
@@ -27,6 +31,8 @@ class LoginStart(Packet):  # Client -> Server
 
 
 class LoginEncryptionRequest(Packet):  # Server -> Client
+    """Used by the server to ask the client to encrypt the login process"""
+
     id_ = 0x01
 
     def __init__(self, public_key: bytes) -> None:  # https://wiki.vg/Protocol#Encryption_Request
@@ -42,6 +48,8 @@ class LoginEncryptionRequest(Packet):  # Server -> Client
 
 
 class LoginEncryptionResponse(Packet):  # Client -> Server
+    """Response from the client to a LoginEncryptionRequest"""
+
     id_ = 0x01
 
     def __init__(self, shared_key: bytes, verify_token: bytes) -> None:
@@ -56,6 +64,8 @@ class LoginEncryptionResponse(Packet):  # Client -> Server
 
 
 class LoginSuccess(Packet):  # Server -> Client
+    """Sent by the server to denote a successfull login"""
+
     id_ = 0x02
 
     def __init__(self, uuid: uuid.UUID, username: str) -> None:

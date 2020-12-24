@@ -9,7 +9,7 @@ __all__ = ('HandshakeLegacyPing_1', 'HandshakeLegacyPing_2',)
 
 
 class HandshakeLegacyPingRequest(Packet):
-    """Initial request from the client asking to start a connection.
+    """Request from the client asking for legacy ping response.
 
     Client -> Server
 

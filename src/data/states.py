@@ -3,7 +3,7 @@ from immutables import Map
 __all__ = ('STATES_BY_ID', 'STATES_BY_NAME',)
 
 STATES_BY_ID = (
-    'handshake',
+    'handshaking',
     'status',
     'login',
     'play',

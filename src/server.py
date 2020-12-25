@@ -14,9 +14,11 @@ from src.types.buffer import Buffer
 from src.data.states import *
 
 global share
-share = {}
+share = {
+    'version': '1.16.4'
+}
 
-with open('server.properties', '+') as f:  # Load server.properties
+with open('server.properties', 'r+') as f:  # Load server.properties
     lines = f.readlines()
 
     if len(lines) == 0:

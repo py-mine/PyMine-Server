@@ -99,5 +99,5 @@ class LoginSuccess(Packet):
         self.uuid = uuid
         self.username = username
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack_uuid(self.uuid) + Buffer.pack_string(self.username)

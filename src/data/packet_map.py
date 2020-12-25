@@ -5,10 +5,10 @@ from src.util.immutable import make_immutable
 
 __all__ = ('PACKET_MAP',)
 
-PACKET_MAP = {}  # {state: (packet, packet,..),..}
-
 
 def load_packets():
+    PACKET_MAP = {}
+
     for state in os.listdir('src/types/packets'):
         PACKET_MAP[state] = []
 
@@ -21,7 +21,7 @@ def load_packets():
 
         PACKET_MAP[state] = sorted(PACKET_MAP[state], key=(lambda p: p.id_))
 
-    PACKET_MAP = make_immutable(PACKET_MAP)
+    return make_immutable(PACKET_MAP)
 
 
-load_packets()
+PACKET_MAP = load_packets()

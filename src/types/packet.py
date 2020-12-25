@@ -18,5 +18,5 @@ class Packet:
         self.id_ = self.__class__.id_
 
     @classmethod
-    def from_buf(cls, buf: 'Buffer') -> Packet:
+    def from_buf(cls, buf: 'Buffer', state: str) -> Packet:
         return PACKET_MAP[state][buf.unpack_varint()].decode(buf)

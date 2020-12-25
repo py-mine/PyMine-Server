@@ -38,7 +38,7 @@ class PlayAcknowledgePlayerDigging(Packet):
         self.status = status
         self.successful = successful
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack_pos(self.x, self.y, self.z) + \
             Buffer.pack_varint(self.block) + \
             Buffer.pack_varint(self.status) + \

@@ -3,17 +3,24 @@
 from __future__ import annotations
 
 from src.types.packet import Packet
+from src.types.buffer import Buffer
 
 __all__ = ('PlayEntityAnimation',)
 
 
 class PlayEntityAnimation(Packet):
-    """Sent whenever an entity should change animation. (Client -> Server)."""
+    """Sent whenever an entity should change animation. (Server -> Client)."""
 
     id_ = 0x05
 
-    def __init__(self, response_data: dict) -> None:
+    def __init__(self, entity_id: int, animation: int) -> None:
         super().__init__()
+
+        self.entity_id = entity_id
+        self.animation = animation
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack('B', self.animation)
 
 
 class PlayBlockBreakAnimation(Packet):

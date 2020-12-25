@@ -6,7 +6,6 @@ import uuid
 import zlib
 
 from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
-from src.data.packet_map import PACKET_MAP
 from src.types.packet import Packet
 from src.types.chat import Chat
 from src.data.misc import *
@@ -91,9 +90,6 @@ class Buffer:
         """
 
         return cls(cls.pack_varint(packet.id) + packet.encode()).to_bytes()
-
-    def unpack_packet(self, state: str):
-        return PACKET_MAP[state][self.unpack_varint()].decode(self)
 
     def unpack(self, f: str) -> object:
         unpacked = struct.unpack('>' + f, self.read(struct.calcsize(f)))

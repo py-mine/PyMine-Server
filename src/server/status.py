@@ -1,5 +1,6 @@
 
-from src.types.chat import Chat
+from src.types.packets.status.status import *
+from src.types.buffer import Buffer
 
 async def status(r, w, packet):
     global share
@@ -25,4 +26,4 @@ async def status(r, w, packet):
         'favicon': share['favicon']
     }
 
-    
+    w.write(Buffer.pack_packet(StatusStatusResponse(data)))

@@ -49,7 +49,7 @@ class StatusStatusResponse(Packet):
         #             }
         #         ]
         #     },
-        #     "description": {
+        #     "description": {  # a Chat
         #         "text": "Hello world"
         #     },
         #     "favicon": "data:image/png;base64,<data>"

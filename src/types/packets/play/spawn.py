@@ -92,5 +92,15 @@ class PlayPaintingSpawn(Packet):
 
     id_ = 0x03
 
-    def __init__(self, entity_id: int, entity__uuid: uuid.UUID, motive: int, location: int) -> None:
+    def __init__(self, entity_id: int, entity_uuid: uuid.UUID, motive: int, location: int, direction: int) -> None:
         super().__init__()
+        self.entity_id = entity_id
+        self.entity_uuid = entity_uuid
+        self.motive = motive
+        self.location = location
+        self.direction = direction
+
+    def encode(self):
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.entity_uuid) + \
+            Buffer.pack_varint(self.motive) + Buffer.pack_pos(self.location) + \
+            Buffer.pack('i', self.direction)

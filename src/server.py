@@ -6,6 +6,7 @@ import os
 sys.path.append(os.getcwd())
 
 from src.data.packet_map import PACKET_MAP
+from src.types.packet import Packet
 from src.types.buffer import Buffer
 from src.data.states import *
 
@@ -20,7 +21,7 @@ async def handle_con(r, w):
     buf = Buffer(await r.read())
 
     remote_address = w.get_extra_info('peername')
-    packet = buf.unpack_packet(STATES_BY_ID[states.get(remote_address, 0)])
+    packet = Packet.from_buf(buf, STATES_BY_ID[states.get(remote_address, 0)])
 
     print(type(packet))
     print(packet.__dict__)

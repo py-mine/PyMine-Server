@@ -31,7 +31,21 @@ class PlayEntityAnimation(Packet):
 
 
 class PlayBlockBreakAnimation(Packet):
-    """Sent to play a block breaking animation. (Server -> Client)"""
+    """Sent to play a block breaking animation. (Server -> Client)
+
+    :param int entity_id: Entity ID of the entity which broke the block, or random.
+    :param int x: The x coordinate of the location to play the animation.
+    :param int y: The y coordinate of the location to play the animation.
+    :param int z: The z coordinate of the location to play the animation.
+    :param int stage: Stage from 0-9 in the breaking animation.
+    :attr type id_: Unique packet ID.
+    :attr entity_id:
+    :attr x:
+    :attr y:
+    :attr z:
+    :attr stage:
+
+    """
 
     id_ = 0x08
 

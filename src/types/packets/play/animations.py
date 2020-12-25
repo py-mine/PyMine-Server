@@ -44,7 +44,6 @@ class PlayBlockBreakAnimation(Packet):
     :attr y:
     :attr z:
     :attr stage:
-
     """
 
     id_ = 0x08

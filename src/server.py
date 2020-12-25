@@ -28,10 +28,15 @@ async def handle_con(r, w):
 
 
 async def start():
-    server = await asyncio.start_server(handle_con, port=69)
+    port = 69
+    server = await asyncio.start_server(handle_con, port=port)
 
     async with server:
-        await server.serve_forever()
+        try:
+            print(f'Server started on port {port}')
+            await server.serve_forever()
+        except KeyboardInterrupt:
+            pass
 
 # uvloop.install()
 asyncio.run(start())

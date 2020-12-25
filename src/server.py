@@ -25,7 +25,7 @@ async def handle_con(r, w):
     buf.write(await r.read(buf.unpack_varint()))  # Read the rest of the packet
     buf.reset()  # Reset position in buf back to 0
 
-    packet = buf.unpack_packet(STATES_BY_ID[states.get(remote, 0)])
+    packet = buf.unpack_packet(STATES_BY_ID[states.get(remote, 0)], PACKET_MAP)
 
     print(type(packet))
     print(packet.__dict__)

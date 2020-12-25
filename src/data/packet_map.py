@@ -1,6 +1,8 @@
 import importlib
 import os
 
+from src.util.make_immutable import make_immutable
+
 __all__ = ('PACKET_MAP',)
 
 PACKET_MAP = {}  # {state: (packet, packet,..),..}
@@ -17,7 +19,9 @@ def load_packets():
                 for name in module.__all__:
                     PACKET_MAP[state].append(module.__dict__.get(name))
 
-        PACKET_MAP[state] = tuple(sorted(PACKET_MAP[state], key=(lambda p: p.id_)))
+        PACKET_MAP[state] = sorted(PACKET_MAP[state], key=(lambda p: p.id_))
+
+    PACKET_MAP = make_immutable(PACKET_MAP)
 
 
 load_packets()

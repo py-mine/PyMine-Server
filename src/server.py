@@ -23,7 +23,7 @@ async def handle_con(r, w):
 
     read = await r.read(1)  # Read first byte
 
-    if read.startswith(b'\xFE'):  # Legacy ping
+    if read == b'\xFE':  # Legacy ping
         raise NotImplemented
 
     # Varint can be no longer than 5 bytes, so first 5 bytes are pretty much guaranteed
@@ -31,6 +31,8 @@ async def handle_con(r, w):
     buf.write(await r.read(Buffer(read).unpack_varint()))  # Read the rest of the packet
 
     packet = buf.unpack_packet(STATES_BY_ID[states.get(remote, 0)], PACKET_MAP)
+
+
 
 
 async def start():

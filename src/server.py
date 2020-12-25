@@ -21,8 +21,14 @@ async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)
     logger.info(f'Connection received from {remote[0]}:{remote[1]}')
 
-    buf = Buffer(await r.read(5))  # Varint is no longer than 5 bytes, so 1st 5 are always required
-    buf.write(await r.read(buf.unpack_varint()))  # Read the rest of the packet
+    read = await r.read(1)  # Read first byte
+
+    if read.startswith(b'\xFE'):  # Legacy ping
+        raise NotImplemented
+
+    # Varint can be no longer than 5 bytes, so first 5 bytes are pretty much guaranteed
+    read += await r.read(4)
+    buf.write(await r.read(Buffer(read).unpack_varint()))  # Read the rest of the packet
 
     packet = buf.unpack_packet(STATES_BY_ID[states.get(remote, 0)], PACKET_MAP)
 

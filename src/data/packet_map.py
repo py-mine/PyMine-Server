@@ -21,7 +21,7 @@ def load_packets():
 
         packet_map[state] = sorted(packet_map[state], key=(lambda p: p.id_))
 
-    return make_immutable(PACKET_MAP)
+    return make_immutable(packet_map)
 
 
 PACKET_MAP = load_packets()

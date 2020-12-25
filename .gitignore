@@ -1,4 +1,5 @@
 # src/**/*.c
+server.properties
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -14,7 +14,7 @@ from src.types.packet import Packet
 from src.types.buffer import Buffer
 from src.data.states import *
 
-from src.server.status import status as server_func_status
+from src.logic.status import status as server_func_status
 
 global share
 share = {

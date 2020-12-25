@@ -4,7 +4,7 @@ import re
 from src.data.formats import *
 
 
-class Message:
+class Chat:
     """A Minecraft chat message.
 
     :param object msg: dict or list object representing chat message json data.
@@ -15,13 +15,13 @@ class Message:
         self.msg = msg
 
     @classmethod
-    def from_buf(cls, buf: 'Buffer') -> Message:
+    def from_buf(cls, buf: 'Buffer') -> Chat:
         """Creates a Minecraft chat message from a buffer."""
 
         return cls(buf.unpack_json())
 
     @classmethod
-    def from_string(cls, text: str) -> Message:
+    def from_string(cls, text: str) -> Chat:
         """Creates a Minecraft chat message from json."""
 
         return cls({'text': text})

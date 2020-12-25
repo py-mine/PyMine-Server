@@ -5,6 +5,7 @@ __all__ = ('PACKET_MAP',)
 
 PACKET_MAP = {}  # {state: (packet, packet,..),..}
 
+
 def load_packets():
     for state in os.listdir('src/types/packets'):
         PACKET_MAP[state] = []
@@ -17,5 +18,6 @@ def load_packets():
                     PACKET_MAP[state].append(module.__dict__.get(name))
 
         PACKET_MAP[state] = tuple(sorted(PACKET_MAP[state], key=(lambda p: p.id)))
+
 
 load_packets()

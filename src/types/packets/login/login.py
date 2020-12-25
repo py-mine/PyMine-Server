@@ -53,13 +53,20 @@ class LoginEncryptionRequest(Packet):
         self.verify_token = secrets.token_bytes(16)
 
     def encode(self) -> bytes:
-        return Buffer.pack_string(' '*20) + \
-         Buffer.pack_varint(len(self.public_key)) + self.public_key + \
-         Buffer.pack_varint(len(self.verify_token)) + self.verify_token
+        return Buffer.pack_string(' ' * 20) + \
+            Buffer.pack_varint(len(self.public_key)) + self.public_key + \
+            Buffer.pack_varint(len(self.verify_token)) + self.verify_token
 
 
-class LoginEncryptionResponse(Packet):  # Client -> Server
-    """Response from the client to a LoginEncryptionRequest"""
+class LoginEncryptionResponse(Packet):
+    """Response from the client to a LoginEncryptionRequest. (Client -> Server)
+
+    :param bytes shared_key: The shared key used in the login process.
+    :param bytes verify_token: The verify token used in the login process.
+    :attr type id_: Unique packet ID.
+    :attr shared_key:
+    :attr verify_token:
+    """
 
     id_ = 0x01
 
@@ -74,8 +81,15 @@ class LoginEncryptionResponse(Packet):  # Client -> Server
         return LoginEncryptionResponse(buf.read(buf.unpack_varint()), buf.read(buf.unpack_varint()))
 
 
-class LoginSuccess(Packet):  # Server -> Client
-    """Sent by the server to denote a successfull login"""
+class LoginSuccess(Packet):
+    """Sent by the server to denote a successfull login. (Server -> Client)
+
+    :param uuid.UUID uuid: The UUID of the connecting player/client.
+    :param str username: The username of the connecting player/client.
+    :attr type id_: Unique packet ID.
+    :attr uuid:
+    :attr username:
+    """
 
     id_ = 0x02
 
@@ -86,4 +100,4 @@ class LoginSuccess(Packet):  # Server -> Client
         self.username = username
 
     def encode(self):
-        return Buffer.pack_uuid(self.uuid) + Buffer.pack_string(username)
+        return Buffer.pack_uuid(self.uuid) + Buffer.pack_string(self.username)

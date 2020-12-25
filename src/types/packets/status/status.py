@@ -3,21 +3,33 @@ from __future__ import annotations
 from src.types.buffer import Buffer
 from src.types.packet import Packet
 
-__all__ = ('StatusStatus_1', 'StatusStatus_2', 'StatusStatusPingPong',)
+__all__ = ('StatusStatusRequest', 'StatusStatusResponse', 'StatusStatusPingPong',)
 
 
-class StatusStatus_1(Packet):  # Client -> Server
+class StatusStatusRequest(Packet):
+    """Request from the client to get information on the server. (Client -> Server)
+
+    :attr type id_: Unique packet ID.
+    """
+
     id_ = 0x00
 
     def __init__(self) -> None:
         super().__init__()
 
     @classmethod
-    def decode(cls, buf: Buffer) -> StatusStatus_1:
+    def decode(cls, buf: Buffer) -> StatusStatusRequest:
         return cls()
 
 
-class StatusStatus_2(Packet):  # Server -> Client
+class StatusStatusResponse(Packet):
+    """Returns server status data back to the requesting client. (Server -> Client)
+
+    :param dict response_data: JSON response data sent back to the client.
+    :attr type id_: Unique packet ID.
+    :attr response_data:
+    """
+
     id_ = 0x00
 
     def __init__(self, response_data: dict) -> None:
@@ -51,7 +63,13 @@ class StatusStatus_2(Packet):  # Server -> Client
         return Buffer.pack_json(self.response_data)
 
 
-class StatusStatusPingPong(Packet):  # Client -> Server AND Server -> Client
+class StatusStatusPingPong(Packet):
+    """Ping pong? (Server -> Client AND Client -> Server)
+
+    :param int payload: A long number, randomly generated or what the client sent.
+    :attr type id_: Unique packet ID.
+    """
+
     id_ = 0x01
 
     def __init__(self, payload: int) -> None:

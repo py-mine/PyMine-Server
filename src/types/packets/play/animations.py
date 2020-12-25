@@ -60,5 +60,5 @@ class PlayBlockBreakAnimation(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack_varint(self.entity_id) + \
-         Buffer.pack_pos(self.x, self.y, self.z) + \
-         Buffer.pack('b', self.stage)
+            Buffer.pack_pos(self.x, self.y, self.z) + \
+            Buffer.pack('b', self.stage)

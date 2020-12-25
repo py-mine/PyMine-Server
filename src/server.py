@@ -1,4 +1,5 @@
 import asyncio
+import uvloop
 
 
 async def handle_con(reader, writer):
@@ -11,4 +12,5 @@ async def start():
     async with server:
         await server.serve_forever()
 
-asyncio.get_event_loop().run_until_complete(start())
+uvloop.install()
+asyncio.run(start())

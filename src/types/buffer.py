@@ -243,12 +243,12 @@ class Buffer:
         return uuid.UUID(bytes=self.read(16))
 
     @classmethod
-    def pack_msg(cls, msg: Message) -> bytes:
+    def pack_chat(cls, msg: Message) -> bytes:
         """Packs a Minecraft chat message into bytes."""
 
         return msg.to_bytes()
 
-    def unpack_msg(self) -> Message:
+    def unpack_chat(self) -> Message:
         """Unpacks a Minecraft chat message from the buffer."""
 
         return Message.from_buf(self)

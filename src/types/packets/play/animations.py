@@ -9,7 +9,14 @@ __all__ = ('PlayEntityAnimation',)
 
 
 class PlayEntityAnimation(Packet):
-    """Sent whenever an entity should change animation. (Server -> Client)."""
+    """Sent whenever an entity should change animation. (Server -> Client)
+
+    :param int entity_id: Entity ID of the digging entity.
+    :param int animation: Value 0-5 which correspond to a specific animation (https://wiki.vg/Protocol#Entity_Animation_.28clientbound.29).
+    :attr type id_: Unique packet ID.
+    :attr entity_id:
+    :attr animation:
+    """
 
     id_ = 0x05
 

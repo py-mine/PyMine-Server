@@ -8,7 +8,7 @@ __all__ = ('PlayEntityAnimation',)
 
 
 class PlayEntityAnimation(Packet):
-    """Sent whenever an entity should change animation. Client bound(Client -> Server)."""
+    """Sent whenever an entity should change animation. (Client -> Server)."""
 
     id_ = 0x05
 

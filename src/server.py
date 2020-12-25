@@ -13,6 +13,9 @@ from src.types.packet import Packet
 from src.types.buffer import Buffer
 from src.data.states import *
 
+global share
+share = {}
+
 with open('server.properties', '+') as f:  # Load server.properties
     lines = f.readlines()
 
@@ -23,6 +26,8 @@ with open('server.properties', '+') as f:  # Load server.properties
         PROPERTIES = dict(SERVER_PROPERTIES)
         PROPERTIES.update(parse_properties(lines))
         PROPERTIES = immutables.Map(PROPERTIES)
+
+share['PROPERTIES'] = PROPERTIES
 
 states = {}  # {remote_address: state_id}
 

@@ -63,7 +63,13 @@ class StatusStatusResponse(Packet):
         return Buffer.pack_json(self.response_data)
 
 
-class StatusStatusPingPong(Packet):  # Client -> Server AND Server -> Client
+class StatusStatusPingPong(Packet):
+    """Ping pong? (Server -> Client AND Client -> Server)
+
+    :param int payload: A long number, randomly generated or what the client sent.
+    :attr type id_: Unique packet ID.
+    """
+
     id_ = 0x01
 
     def __init__(self, payload: int) -> None:

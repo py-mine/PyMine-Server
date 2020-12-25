@@ -19,4 +19,5 @@ def load_packets():
 
         PACKET_MAP[state] = tuple(sorted(PACKET_MAP[state], key=(lambda p: p.id_)))
 
+
 load_packets()

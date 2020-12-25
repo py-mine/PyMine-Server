@@ -1,7 +1,7 @@
 import json
 import os
 
-from src.util.make_immutable import make_immutable
+from src.util.immutable import make_immutable
 
 __all__ = ('RECIPES',)
 

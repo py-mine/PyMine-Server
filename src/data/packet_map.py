@@ -1,7 +1,7 @@
 import importlib
 import os
 
-from src.util.make_immutable import make_immutable
+from src.util.immutable import make_immutable
 
 __all__ = ('PACKET_MAP',)
 

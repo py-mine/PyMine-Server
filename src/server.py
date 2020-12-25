@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 async def handle_con(r, w):
     remote = w.get_extra_info('peername')
-    logger.info(f'Connection received from {":".join(remote)}')
+    logger.info(f'Connection received from {remote[0]}:{remote[1]}')
 
     buf = Buffer(await r.read(5))  # Varint is no longer than 5 bytes, so 1st 5 are always required
     buf.write(await r.read(buf.unpack_varint()))  # Read the rest of the packet

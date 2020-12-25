@@ -17,7 +17,7 @@ def load_packets():
                 for name in module.__all__:
                     PACKET_MAP[state].append(module.__dict__.get(name))
 
-        PACKET_MAP[state] = tuple(sorted(PACKET_MAP[state], key=(lambda p: p.id)))
+        PACKET_MAP[state] = tuple(sorted(PACKET_MAP[state], key=(lambda p: p.id_)))
 
 
 load_packets()

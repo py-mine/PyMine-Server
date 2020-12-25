@@ -10,8 +10,19 @@ __all__ = ('PlayBlockAction', 'PlayBlockChange',)
 class PlayBlockAction(Packet):
     """This packet is used for a number of actions and animations performed by blocks. (Server -> Client)
 
-    :param dict response_data: Description of parameter `response_data`.
-    :attr type id_: Description of parameter `id_`.
+    :param int x: The x coordinate of the location where this occurs.
+    :param int y: The y coordinate of the location where this occurs.
+    :param int z: The z coordinate of the location where this occurs..
+    :param int action_id: Block action ID, see here: https://wiki.vg/Block_Actions.
+    :param int action_param: Action param of the action, see here: https://wiki.vg/Block_Actions.
+    :param int block_type: The type of block which the action is for.
+    :attr type id_: Unique packet ID.
+    :attr x:
+    :attr y:
+    :attr z:
+    :attr action_id:
+    :attr action_param:
+    :attr block_type:
     """
 
     id_ = 0x0A

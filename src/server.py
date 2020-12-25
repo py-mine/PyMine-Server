@@ -18,16 +18,18 @@ share = {
     'version': '1.16.4'
 }
 
-with open('server.properties', 'r+') as f:  # Load server.properties
-    lines = f.readlines()
+try:
+    with open('server.properties', 'r+') as f:  # Load server.properties
+        lines = f.readlines()
 
-    if len(lines) == 0:
-        f.write(SERVER_PROPERTIES_BLANK)
-        PROPERTIES = SERVER_PROPERTIES
-    else:
         PROPERTIES = dict(SERVER_PROPERTIES)
         PROPERTIES.update(parse_properties(lines))
         PROPERTIES = immutables.Map(PROPERTIES)
+except Exception:
+    with open('server.properties', 'w+') as f:
+        f.write(SERVER_PROPERTIES_BLANK)
+
+    PROPERTIES = SERVER_PROPERTIES
 
 share['PROPERTIES'] = PROPERTIES
 

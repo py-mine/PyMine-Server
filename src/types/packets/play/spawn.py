@@ -13,7 +13,7 @@ __all__ = (
 
 
 class PlayEntitySpawn(Packet):
-    """Sent by the server when a vehicle or other non-living entity is created. Client bound(Client -> Server)."""
+    """Sent by the server when a vehicle or other non-living entity is created. Client bound(Server -> Client)."""
 
     id_ = 0x00
 
@@ -40,7 +40,7 @@ class PlayEntitySpawn(Packet):
 
 
 class PlaySpawnExperienceOrb(Packet):
-    """Spawns one or more experience orbs. Client bound(Client -> Server)."""
+    """Spawns one or more experience orbs. Client bound(Server -> Client)."""
 
     id_ = 0x01
 
@@ -59,7 +59,7 @@ class PlaySpawnExperienceOrb(Packet):
 
 
 class PlayLivingEntitySpawn(Packet):
-    """Sent by the server when a living entity is spawned.  Client bound(Client -> Server)."""
+    """Sent by the server when a living entity is spawned.  Client bound(Server -> Client)."""
 
     id_ = 0x02
 
@@ -86,9 +86,9 @@ class PlayLivingEntitySpawn(Packet):
 
 
 class PlayPaintingSpawn(Packet):
-    """This packet shows location, name, and type of painting.  Client bound(Client -> Server)."""
+    """This packet shows location, name, and type of painting.  Client bound(Server -> Client)."""
 
     id_ = 0x03
 
-    def __init__(self, response_data: dict) -> None:
+    def __init__(self, entity_id: int, entity__uuid: uuid.UUID, motive: int, location: int) -> None:
         super().__init__()

@@ -33,18 +33,7 @@ class PlayEntitySpawn(Packet):
         self.vloc_z = vloc_z
 
     def encode(self):
-        return PlayEntitySpawn(
-            Buffer.pack_varint(self.entity_id),
-            Buffer.pack_uuid(self.object_uuid),
-            Buffer.pack_varint(self.type),
-            Buffer.pack('d', self.x),
-            Buffer.pack('d', self.y),
-            Buffer.pack('d', self.z),
-            Buffer.pack('i', self.pitch),
-            Buffer.pack('i', self.yaw),
-            Buffer.pack('h', self.vloc_x),
-            Buffer.pack('h', self.vloc_x),
-            Buffer.pack('h', self.vloc_z))
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.object_uuid) + Buffer.pack_varint(self.type) + Buffer.pack('d' + self.x) + Buffer.pack('d' + self.y) + Buffer.pack('d' + self.z) + Buffer.pack('i' + self.pitch) + Buffer.pack('i' + self.yaw) + Buffer.pack('h' + self.vloc_x) + Buffer.pack('h' + self.vloc_x) + Buffer.pack('h' + self.vloc_z)
 
 
 class PlayLivingEntitySpawn(Packet):

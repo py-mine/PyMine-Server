@@ -36,6 +36,6 @@ class PlayBlockEntityData(Packet):
         self.action = action
         self.nbt_data = nbt_data
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack_pos(self.x, self.y, self.z) + \
             Buffer.pack('B', self.action) + Buffer.pack_nbt(self.nbt_data)

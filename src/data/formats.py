@@ -1,7 +1,8 @@
+from immutables import Map
 
 __all__ = ('FORMAT_BY_CODE', 'FORMAT_BY_NAME', 'TERMINAL_CODES',)
 
-FORMAT_BY_CODE = {
+FORMAT_BY_CODE = Map({
     '0': 'black',
     '1': 'dark_blue',
     '2': 'dark_green',
@@ -24,11 +25,11 @@ FORMAT_BY_CODE = {
     'n': 'underlined',
     'o': 'italic',
     'r': 'reset'
-}
+})
 
-FORMAT_BY_NAME = {v: k for k, v in FORMAT_BY_CODE.items()}
+FORMAT_BY_NAME = Map({v: k for k, v in FORMAT_BY_CODE.items()})
 
-TERMINAL_CODES = {
+TERMINAL_CODES = Map({
     '0': '\x1b[30m',
     '1': '\x1b[34m',
     '2': '\x1b[32m',
@@ -51,4 +52,4 @@ TERMINAL_CODES = {
     'n': '\x1b[4m',
     'o': '\x1b[3m',
     'r': '\x1b[0m'
-}
+})

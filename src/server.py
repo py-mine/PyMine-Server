@@ -58,7 +58,8 @@ async def handle_con(r, w):
 
     # Varint can be no longer than 5 bytes, so first 5 bytes are pretty much guaranteed
     read += await r.read(4)
-    buf.write(await r.read(Buffer(read).unpack_varint()))  # Read the rest of the packet
+    buf = Buffer(read)
+    buf.write(await r.read(buf.unpack_varint()))  # Read the rest of the packet
 
     state = STATES_BY_ID[states.get(remote, 0)]
     packet = buf.unpack_packet(state, PACKET_MAP)

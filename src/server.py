@@ -1,3 +1,4 @@
+import immutables
 import logging
 import asyncio
 import sys
@@ -7,9 +8,21 @@ import os
 sys.path.append(os.getcwd())
 
 from src.data.packet_map import PACKET_MAP
+from src.data.server_properties import *
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 from src.data.states import *
+
+with open('server.properties', '+') as f:  # Load server.properties
+    lines = f.readlines()
+
+    if len(lines) == 0:
+        f.write(SERVER_PROPERTIES_BLANK)
+        PROPERTIES = SERVER_PROPERTIES
+    else:
+        PROPERTIES = dict(SERVER_PROPERTIES)
+        PROPERTIES.update(parse_properties(lines))
+        PROPERTIES = immutables.Map(PROPERTIES)
 
 states = {}  # {remote_address: state_id}
 
@@ -30,8 +43,11 @@ async def handle_con(r, w):
     read += await r.read(4)
     buf.write(await r.read(Buffer(read).unpack_varint()))  # Read the rest of the packet
 
-    packet = buf.unpack_packet(STATES_BY_ID[states.get(remote, 0)], PACKET_MAP)
+    state = STATES_BY_ID[states.get(remote, 0)]
+    packet = buf.unpack_packet(state, PACKET_MAP)
 
+    if state == 'status':
+        if packet.id_ == 0x00:  # StatusStatusRequest
 
 
 

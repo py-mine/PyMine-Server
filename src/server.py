@@ -1,3 +1,7 @@
+from src.data.states import *
+from src.types.buffer import Buffer
+from src.types.packet import Packet
+from src.data.packet_map import PACKET_MAP
 import asyncio
 import sys
 import os
@@ -5,10 +9,6 @@ import os
 
 sys.path.append(os.getcwd())
 
-from src.data.packet_map import PACKET_MAP
-from src.types.packet import Packet
-from src.types.buffer import Buffer
-from src.data.states import *
 
 states = {}  # {remote_address: state_id}
 

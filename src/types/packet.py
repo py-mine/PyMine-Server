@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from src.data.packet_map import PACKET_MAP
-
 __all__ = ('Packet',)
 
 

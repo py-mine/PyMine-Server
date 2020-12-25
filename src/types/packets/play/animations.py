@@ -24,16 +24,20 @@ class PlayEntityAnimation(Packet):
 
 
 class PlayBlockBreakAnimation(Packet):
-    """0–9 are the displayable destroy stages and each other number means that there is no animation on this coordinate.
-     Client bound(Client -> Server)."""
-    # Block break animations can still be applied on air; the animation will remain visible although there is no block being broken.
-    # However, if this is applied to a transparent block, odd graphical effects may happen, including water losing its transparency.
-    # An effect similar to this can be seen in normal gameplay when breaking ice blocks
-    # If you need to display several break animations at the same time you have to give each of them a unique Entity ID.
-    # The entity ID does not need to correspond to an actual entity on the
-    # client. It is valid to use a randomly generated number.
+    """Sent to play a block breaking animation. (Server -> Client)"""
 
     id_ = 0x08
 
-    def __init__(self, response_data: dict) -> None:
+    def __init__(self, entity_id: int, x: int, y: int, z: int, stage: int) -> None:
         super().__init__()
+
+        self.entity_id = entity_id
+        self.x = x
+        self.y = y
+        self.z = z
+        self.stage = stage
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.entity_id) + \
+         Buffer.pack_pos(self.x, self.y, self.z) + \
+         Buffer.pack('b', self.stage)

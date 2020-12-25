@@ -103,4 +103,4 @@ class PlayPaintingSpawn(Packet):
     def encode(self):
         return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.entity_uuid) + \
             Buffer.pack_varint(self.motive) + Buffer.pack_pos(self.location) + \
-            Buffer.pack('i', self.direction)
+            Buffer.pack('b', self.direction)

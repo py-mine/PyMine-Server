@@ -6,8 +6,8 @@ import uuid
 import zlib
 
 from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
-from src.types.chat import Chat
 from src.types.packet import Packet
+from src.types.chat import Chat
 from src.data.misc import *
 
 

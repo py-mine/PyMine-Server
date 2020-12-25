@@ -1,8 +1,10 @@
 """Contains spawn packets."""
+
 from __future__ import annotations
+import uuid
+
 from src.types.packet import Packet
 from src.types.buffer import Buffer
-import uuid
 
 __all__ = (
     'PlayEntitySpawn',

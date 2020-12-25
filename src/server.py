@@ -21,6 +21,7 @@ async def handle_con(r, w):
     print(type(packet))
     print(packet.__dict__)
 
+
 async def start():
     server = await asyncio.start_server(handle_con, port=69)
 

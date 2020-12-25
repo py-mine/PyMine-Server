@@ -18,8 +18,8 @@ share = {
     'version': '1.16.4'
 }
 
-try:
-    with open('server.properties', 'r+') as f:  # Load server.properties
+try:  # Load server.properties
+    with open('server.properties', 'r+') as f:
         lines = f.readlines()
 
         PROPERTIES = dict(SERVER_PROPERTIES)

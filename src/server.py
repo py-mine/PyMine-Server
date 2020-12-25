@@ -1,5 +1,5 @@
 import asyncio
-import uvloop
+# import uvloop
 
 from src.data.packet_map import PACKET_MAP
 from src.types.buffer import Buffer
@@ -28,5 +28,5 @@ async def start():
     async with server:
         await server.serve_forever()
 
-uvloop.install()
+# uvloop.install()
 asyncio.run(start())

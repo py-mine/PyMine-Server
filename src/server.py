@@ -1,6 +1,8 @@
 import asyncio
 import uvloop
 
+from src.data.packet_map import PACKET_MAP
+
 
 async def handle_con(reader, writer):
     pass

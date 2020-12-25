@@ -6,7 +6,8 @@ import uuid
 import zlib
 
 from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
-from src.types.message import Message
+from src.types.chat import Chat
+from src.types.packet import Packet
 from src.data.misc import *
 
 
@@ -47,21 +48,6 @@ class Buffer:
         self.pos = 0
 
     @classmethod
-    def pack_villager(cls, kind: int, profession: int, level: int) -> bytes:
-        """Packs villager data into bytes."""
-
-        return cls.pack_varint(kind) + cls.pack_varint(profession) + cls.pack_varint(level)
-
-    def unpack_villager(self) -> dict:
-        """Unpacks villager data from the buffer."""
-
-        return {
-            'kind': self.unpack_varint(),
-            'profession': self.unpack_varint(),
-            'level': self.unpack_varint()
-        }
-
-    @classmethod
     def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
         """
         Creates a Buffer object from bytes, handles compression
@@ -96,6 +82,17 @@ class Buffer:
             data = self.buf
 
         return self.pack_varint(len(data), max_bits=32) + data
+
+    @classmethod
+    def pack_packet(cls, packet: Packet):
+        """
+        Packs a packet into bytes.
+        """
+
+        return cls(cls.pack_varint(packet.id) + packet.encode()).to_bytes()
+
+    def unpack_packet(self):
+        raise NotImplemented
 
     def unpack(self, f: str) -> object:
         unpacked = struct.unpack('>' + f, self.read(struct.calcsize(f)))
@@ -246,12 +243,12 @@ class Buffer:
         return uuid.UUID(bytes=self.read(16))
 
     @classmethod
-    def pack_msg(cls, msg: Message) -> bytes:
+    def pack_chat(cls, msg: Message) -> bytes:
         """Packs a Minecraft chat message into bytes."""
 
         return msg.to_bytes()
 
-    def unpack_msg(self) -> Message:
+    def unpack_chat(self) -> Message:
         """Unpacks a Minecraft chat message from the buffer."""
 
         return Message.from_buf(self)
@@ -461,164 +458,16 @@ class Buffer:
         return out
 
     @classmethod
-    def pack_chat(cls, msg: Message) -> bytes:
-        return msg.to_bytes()
+    def pack_villager(cls, kind: int, profession: int, level: int) -> bytes:
+        """Packs villager data into bytes."""
 
-    def unpack_chat(self):
-        return Message.from_buf(self)
+        return cls.pack_varint(kind) + cls.pack_varint(profession) + cls.pack_varint(level)
 
-    @classmethod
-    def pack_particle(cls, **particle):
-        particle_id = particle['id']
-        out = cls.pack_varint(particle_id)
+    def unpack_villager(self) -> dict:
+        """Unpacks villager data from the buffer."""
 
-        if particle_id in (3, 23,):
-            out += cls.pack_varint(particle['BlockState'])
-        elif particle_id == 14:
-            out += cls.pack('ffff',
-                            particle['Red'],
-                            particle['Green'],
-                            particle['Blue'],
-                            particle['Scale'])
-        elif particle_id == 32:
-            out += cls.pack_slot(**particle['Item'])
-
-        return out
-
-    def unpack_particle(self):
-        particle = {}
-        particle_id = particle['id'] = self.unpack_varint()
-
-        if particle_id in (3, 23,):
-            particle['BlockState'] = cls.unpack_varint()
-        elif particle_id == 14:
-            particle['Red'] = cls.unpack('f')
-            particle['Green'] = cls.unpack('f')
-            particle['Blue'] = cls.unpack('f')
-            particle['Scale'] = cls.unpack('f')
-        elif particle_id == 32:
-            particle['Item'] = cls.unpack_slot()
-
-        return particle
-
-    @classmethod
-    # https://wiki.vg/Entity_metadata#Entity_Metadata_Format
-    def pack_entity_metadata(cls, metadata: dict) -> bytes:
-        """Packs entity metadata into bytes."""
-
-        out = b''
-
-        for index_and_type, value in metadata.items():
-            index, type_ = index_and_type
-
-            out += cls.pack('B', index) + cls.pack_varint(type_)
-
-            if type_ == 0:
-                out += cls.pack('b', value)
-            elif type_ == 1:
-                out += cls.pack_varint(value)
-            elif type_ == 2:
-                out += cls.pack('f', value)
-            elif type_ == 3:
-                out += cls.pack_string(value)
-            elif type_ == 4:
-                out += cls.pack_chat(value)
-            elif type_ == 5:
-                opt += cls.pack_bool((value is not None))
-
-                if value is not None:
-                    opt += cls.pack_chat(value)
-            elif type_ == 6:
-                out += cls.pack_slot(**value)
-            elif type_ == 7:
-                out += cls.pack_bool(value)
-            elif type_ == 8:
-                out += cls.pack_rotation(*value)
-            elif type_ == 9:
-                out += cls.pack_pos(*value)
-            elif type_ == 10:
-                out += cls.pack_bool((value is not None))
-
-                if value is not None:
-                    out += cls.pack_pos(*value)
-            elif type_ == 11:
-                out += cls.pack_direction(value)
-            elif type_ == 12:
-                out += cls.pack_bool((value is not None))
-
-                if value is not None:
-                    out += cls.pack_uuid(value)
-            elif type_ == 13:
-                out += cls.pack_bool((value is not None))
-
-                if value is not None:
-                    out += cls.pack_varint(value)
-            elif type_ == 14:
-                out += cls.pack_nbt(value)
-            elif type_ == 15:
-                out += cls.pack_particle(**value)
-            elif type_ == 16:
-                out += cls.pack_villager(*value)
-            elif type_ == 17:
-                out += cls.pack_optional_varint(value)
-            elif type_ == 18:
-                out += cls.pack_pose(value)
-
-        return out + cls.pack('B', 255)
-
-    def unpack_entity_metadata(self) -> dict:
-        """Unpacks entity metadata from the buffer."""
-
-        metadata = {}
-
-        while True:
-            index = self.unpack('B')
-
-            if index == 255:
-                return metadata
-
-            type_ = self.unpack_varint()
-            index_and_type = (index, type_,)
-
-            if type_ == 0:
-                metadata[index_and_type] = self.unpack('b')
-            elif type_ == 1:
-                metadata[index_and_type] = self.unpack_varint()
-            elif type_ == 2:
-                metadata[index_and_type] = self.unpack('f')
-            elif type_ == 3:
-                metadata[index_and_type] = self.unpack_string()
-            elif type_ == 4:
-                metadata[index_and_type] = self.unpack_chat()
-            elif type_ == 5:
-                if self.unpack_bool():
-                    metadata[index_and_type] = self.unpack_chat()
-            elif type_ == 6:
-                metadata[index_and_type] = self.unpack_slot()
-            elif type_ == 7:
-                metadata[index_and_type] = self.unpack_bool()
-            elif type_ == 8:
-                metadata[index_and_type] = self.unpack_rotation()
-            elif type_ == 9:
-                metadata[index_and_type] = self.unpack_pos()
-            elif type_ == 10:
-                if self.unpack_bool():
-                    metadata[index_and_type] = self.unpack_pos()
-            elif type_ == 11:
-                metadata[index_and_type] = self.unpack_direction()
-            elif type_ == 12:
-                if self.unpack_bool():
-                    metadata[index_and_type] = self.unpack_uuid()
-            elif type_ == 13:
-                if self.unpack_bool():
-                    metadata[index_and_type] = self.unpack_varint()
-            elif type_ == 14:
-                metadata[index_and_type] = self.unpack_nbt()
-            elif type_ == 15:
-                metadata[index_and_type] = self.unpack_particle()
-            elif type_ == 16:
-                metadata[index_and_type] = self.unpack_villager()
-            elif type_ == 17:
-                metadata[index_and_type] = self.unpack_optional_varint()
-            elif type_ == 18:
-                metadata[index_and_type] = self.unpack_pose()
+        return {
+            'kind': self.unpack_varint(),
+            'profession': self.unpack_varint(),
+            'level': self.unpack_varint()
+        }

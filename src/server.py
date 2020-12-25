@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 async def handle_con(r, w):
-    remote = w.get_extra_info('peername')
+    remote = w.get_extra_info('peername')  # (host, port)
     logger.info(f'Connection received from {remote[0]}:{remote[1]}')
 
     buf = Buffer(await r.read(5))  # Varint is no longer than 5 bytes, so 1st 5 are always required
@@ -27,7 +27,7 @@ async def handle_con(r, w):
 
 
     buf = Buffer(await r.read())
-    packet = buf.unpack_packet(STATES_BY_ID[states.get(remote_address, 0)])
+    packet = buf.unpack_packet(STATES_BY_ID[states.get(remote, 0)])
 
     print(type(packet))
     print(packet.__dict__)

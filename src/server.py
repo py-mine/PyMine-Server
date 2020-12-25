@@ -48,7 +48,7 @@ async def handle_con(r, w):
 
     if state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
-
+            pass
 
 
 async def start():

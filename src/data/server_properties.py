@@ -85,7 +85,6 @@ use-native-transport=true
 prevent-proxy-connections=false
 enable-jmx-monitoring=false
 enable-rcon=false
-motd=A Minecraft Server
-"""
+motd=A Minecraft Server"""
 
 SERVER_PROPERTIES = Map(parse_properties(SERVER_PROPERTIES_BLANK.split('\n')))

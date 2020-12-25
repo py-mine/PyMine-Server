@@ -1,5 +1,9 @@
 import asyncio
+import sys
+import os
 # import uvloop
+
+sys.path.append(os.getcwd())
 
 from src.data.packet_map import PACKET_MAP
 from src.types.buffer import Buffer

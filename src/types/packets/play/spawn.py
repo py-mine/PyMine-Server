@@ -55,7 +55,13 @@ class PlaySpawnExperienceOrb(Packet):
 
     id_ = 0x01
 
-    def __init__(self, entity_id: int, x: int = 0, y: int = 0, z: int = 0, count: int = 1237) -> None:
+    def __init__(
+            self,
+            entity_id: int,
+            x: int = 0,
+            y: int = 0,
+            z: int = 0,
+            count: int = 1237) -> None:
         super().__init__()
         self.entity_id = entity_id
         self.x = x
@@ -64,7 +70,11 @@ class PlaySpawnExperienceOrb(Packet):
         self.count = count
 
     def encode(self):
-        return Buffer.pack_varint(self.entity_id) + Buffer.pack('d', self.x) + Buffer.pack('d', self.y) + Buffer.pack('d', self.z) + Buffer.pack('h', self.count)
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack('d',
+                                                                self.x) + Buffer.pack('d',
+                                                                                      self.y) + Buffer.pack('d',
+                                                                                                            self.z) + Buffer.pack('h',
+                                                                                                                                  self.count)
 
 
 class PlayLivingEntitySpawn(Packet):

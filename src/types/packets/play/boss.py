@@ -34,7 +34,8 @@ class PlayBossBar(Packet):
         out = Buffer.pack_uuid(self.uuid) + Buffer.pack_varint(self.action)
 
         if self.action == 0:
-            out += Buffer.pack_chat(data['title']) + Buffer.pack('f', data['health']) + Buffer.pack_varint(data['color']) + Buffer.pack_varint(data['division']) + Buffer.pack('B', data['flags'])
+            out += Buffer.pack_chat(data['title']) + Buffer.pack('f', data['health']) + Buffer.pack_varint(
+                data['color']) + Buffer.pack_varint(data['division']) + Buffer.pack('B', data['flags'])
         elif self.action == 2:
             out += Buffer.pack('f', data['health'])
         elif self.action == 3:

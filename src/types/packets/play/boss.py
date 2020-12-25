@@ -1,6 +1,7 @@
 """Contains packets related to bosses."""
 
 from __future__ import annotations
+import uuid
 
 from src.types.packet import Packet
 from src.types.buffer import Buffer

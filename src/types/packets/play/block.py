@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from src.types.packet import Packet
 
-__all__ = ('PlayBlockAction', "PlayBlockChange")
+__all__ = ('PlayBlockAction', 'PlayBlockChange',)
 
 
 class PlayBlockAction(Packet):

@@ -6,6 +6,7 @@ import uuid
 import zlib
 
 from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
+from src.data.packet_map import PACKET_MAP
 from src.types.packet import Packet
 from src.types.chat import Chat
 from src.data.misc import *

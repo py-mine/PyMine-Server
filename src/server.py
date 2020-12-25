@@ -14,6 +14,8 @@ from src.types.packet import Packet
 from src.types.buffer import Buffer
 from src.data.states import *
 
+import src.server.status
+
 global share
 share = {
     'version': '1.16.4'
@@ -63,7 +65,7 @@ async def handle_con(r, w):
 
     if state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
-            pass
+            await src.server.status.status(r, w, packet)
 
 
 async def start():

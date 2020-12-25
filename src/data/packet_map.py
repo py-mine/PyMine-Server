@@ -7,19 +7,19 @@ __all__ = ('PACKET_MAP',)
 
 
 def load_packets():
-    PACKET_MAP = {}
+    packet_map = {}
 
     for state in os.listdir('src/types/packets'):
-        PACKET_MAP[state] = []
+        packet_map[state] = []
 
         for file in os.listdir(f'src/types/packets/{state}'):
             if file.endswith('.py'):
                 module = importlib.import_module(f'src.types.packets.{state}.{file[:-3]}')
 
                 for name in module.__all__:
-                    PACKET_MAP[state].append(module.__dict__.get(name))
+                    packet_map[state].append(module.__dict__.get(name))
 
-        PACKET_MAP[state] = sorted(PACKET_MAP[state], key=(lambda p: p.id_))
+        packet_map[state] = sorted(packet_map[state], key=(lambda p: p.id_))
 
     return make_immutable(PACKET_MAP)
 

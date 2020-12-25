@@ -32,9 +32,6 @@ async def handle_con(r, w):
 
     packet = buf.unpack_packet(STATES_BY_ID[states.get(remote, 0)], PACKET_MAP)
 
-    print(type(packet))
-    print(packet.__dict__)
-
 
 async def start():
     port = 69

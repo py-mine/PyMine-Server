@@ -1,5 +1,6 @@
 from immutables import Map
 
+
 def make_immutable(obj: object) -> object:
     """Recursively converts lists to tuples and dictionaries to maps.
 

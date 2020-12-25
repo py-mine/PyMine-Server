@@ -1,7 +1,8 @@
 """Contains spawn packets."""
-
 from __future__ import annotations
 from src.types.packet import Packet
+from src.types.buffer import Buffer
+import uuid
 
 __all__ = (
     'PlayEntitySpawn',
@@ -16,8 +17,34 @@ class PlayEntitySpawn(Packet):
 
     id_ = 0x00
 
-    def __init__(self, response_data: dict) -> None:
+    def __init__(self, entity_id: int, object_uuid: uuid.UUID, type: int, x: int, y: int, z: int, pitch: int, yaw: int, data: int, vloc_x: int, vloc_y: int, vloc_z: int) -> None:
         super().__init__()
+        self.entity_id = entity_id
+        self.object_uuid = object_uuid
+        self.type = type
+        self.x = x
+        self.y = y
+        self.z = z
+        self.pitch = pitch
+        self.yaw = yaw
+        self.data = data
+        self.vloc_x = vloc_x
+        self.vloc_y = vloc_y
+        self.vloc_z = vloc_z
+
+    def encode(self):
+        return PlayEntitySpawn(
+            Buffer.pack_varint(self.entity_id),
+            Buffer.pack_uuid(self.object_uuid),
+            Buffer.pack_varint(self.type),
+            Buffer.pack('d', self.x),
+            Buffer.pack('d', self.y),
+            Buffer.pack('d', self.z),
+            Buffer.pack('i', self.pitch),
+            Buffer.pack('i', self.yaw),
+            Buffer.pack('h', self.vloc_x),
+            Buffer.pack('h', self.vloc_x),
+            Buffer.pack('h', self.vloc_z))
 
 
 class PlayLivingEntitySpawn(Packet):

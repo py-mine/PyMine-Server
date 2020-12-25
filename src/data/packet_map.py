@@ -12,7 +12,7 @@ def load_packets():
 
         for file in os.listdir(f'src/types/packets/{state}'):
             if file.endswith('.py'):
-                module = importlib.import_module(f'src.types.packets.{state}.{file[:3]}')
+                module = importlib.import_module(f'src.types.packets.{state}.{file[:-3]}')
 
                 for name in module.__all__:
                     PACKET_MAP[state].append(module.__dict__.get(name))

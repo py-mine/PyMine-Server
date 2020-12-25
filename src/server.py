@@ -1,6 +1,7 @@
 import immutables
 import logging
 import asyncio
+import base64
 import sys
 import os
 # import uvloop
@@ -22,16 +23,20 @@ try:  # Load server.properties
     with open('server.properties', 'r+') as f:
         lines = f.readlines()
 
-        PROPERTIES = dict(SERVER_PROPERTIES)
-        PROPERTIES.update(parse_properties(lines))
-        PROPERTIES = immutables.Map(PROPERTIES)
+        share['PROPERTIES'] = dict(SERVER_PROPERTIES)
+        share['PROPERTIES'].update(parse_properties(lines))
+        share['PROPERTIES'] = immutables.Map(PROPERTIES)
 except Exception:
     with open('server.properties', 'w+') as f:
         f.write(SERVER_PROPERTIES_BLANK)
 
-    PROPERTIES = SERVER_PROPERTIES
+    share['PROPERTIES'] = SERVER_PROPERTIES
 
-share['PROPERTIES'] = PROPERTIES
+try:  # Load favicon
+    with open('server-icon.png', 'rb') as favicon:
+        share['favicon'] = 'data:image/png;base64,' + base64.b64encode(favicon.read()).decode('utf-8')
+except Exception:
+    share['favicon'] = None
 
 states = {}  # {remote_address: state_id}
 share['states'] = states

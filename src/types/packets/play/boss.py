@@ -42,7 +42,8 @@ class PlayBossBar(Packet):
         elif self.action == 3:
             out += Buffer.pack_chat(self.data['title'])
         elif self.action == 4:
-            out += Buffer.pack_varint(self.data['color']) + Buffer.pack_varint(self.data['division'])
+            out += Buffer.pack_varint(self.data['color']) + \
+                Buffer.pack_varint(self.data['division'])
         elif self.action == 5:
             out += Buffer.pack('B', self.data['flags'])
 

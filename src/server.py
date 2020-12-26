@@ -67,7 +67,7 @@ async def handle_packet(r, w, remote):
     buf.write(await r.read(buf.unpack_varint()))
 
     state = STATES_BY_ID[states.get(remote, 0)]
-    packet = buf.unpack_packet(state, PACKET_MAP)
+    packet = buf.unpack_packet(state, 0, PACKET_MAP)
 
     logger.debug(f'state:{state} | id_:{packet.id_} | packet:{type(packet)}')
 

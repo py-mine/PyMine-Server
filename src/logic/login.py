@@ -39,9 +39,16 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, username
         }
     )
 
-    return uuid.UUID(resp['id']), resp['name']
+    jj = await resp.json()
+
+    return uuid.UUID(jj['id']), jj['name']
 
 
-async def login_success(r: 'StreamReader', w: 'StreamWriter', uuid: uuid.UUID, username: str):
-    w.write(Buffer.pack_packet(LoginSuccess(uuid, username)))
+async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, uuid_: uuid.UUID = None):
+    if uuid_ is None:
+        resp = await ses.get(f'https://api.mojang.com/users/profiles/minecraft/{player}')
+        jj = await resp.json()
+        uuid_ = uuid.UUID(jj['id'])
+
+    w.write(Buffer.pack_packet(LoginSuccess(uuid_, username)))
     await w.drain()

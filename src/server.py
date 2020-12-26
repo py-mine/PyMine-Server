@@ -62,7 +62,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     try:
         for i in range(4):
             buf.write(await asyncio.wait_for(p.read(1), share['timeout']))
-    except Exception:
+    except asyncio.TimeoutError:
         pass
 
     buf.write(await r.read(buf.unpack_varint()))

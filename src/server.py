@@ -54,7 +54,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     read = await r.read(1)
 
     if read == b'\xFE':
-        return HandshakeLegacyPingRequest.decode(Buffer(await asyncio.wait_for(r.read(200), share['timeout'])))
+        return HandshakeLegacyPingRequest.decode(Buffer(read + await asyncio.wait_for(r.read(200), share['timeout'])))
 
     buf = Buffer(read)
 
@@ -65,6 +65,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         pass
 
     buf.write(await r.read(buf.unpack_varint()))
+    buf.reset()
 
     state = STATES_BY_ID[states.get(remote, 0)]
     packet = buf.unpack_packet(state, 0, PACKET_MAP)

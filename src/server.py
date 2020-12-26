@@ -23,7 +23,10 @@ global share
 share = {
     'version': '1.16.4',
     'protocol': 754,
-    'timeout': .15
+    'timeout': .15,
+    'rsa': {
+        
+    }
 }
 
 try:  # Load server.properties

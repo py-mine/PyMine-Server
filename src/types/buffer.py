@@ -152,7 +152,8 @@ class Buffer:
 
         return num
 
-    async def unpack_varint_stream(self, r: 'asyncio.StreamReader', max_bits: int = 32) -> int:
+    @classmethod
+    async def unpack_varint_stream(cls, r: 'asyncio.StreamReader', max_bits: int = 32) -> int:
         """Unpacks a varint from an asyncio.StreamReader."""
 
         num = 0

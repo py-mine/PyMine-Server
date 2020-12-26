@@ -1,7 +1,6 @@
 import immutables
 import logging
 import asyncio
-import base64
 import sys
 import os
 # import uvloop
@@ -10,10 +9,10 @@ sys.path.append(os.getcwd())
 
 from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRequest  # nopep8
 from src.data.packet_map import PACKET_MAP  # nopep8
-from src.data.server_properties import *  # nopep8
 from src.types.buffer import Buffer  # nopep8
 from src.types.packet import Packet  # nopep8
 from src.data.states import *  # nopep8
+from src.data.config import *  # nopep8
 
 from src.logic.status import status as server_func_status  # nopep8
 from src.logic.status import pong as server_func_pong  # nopep8
@@ -25,28 +24,10 @@ share = {
     'timeout': .15,
     'rsa': {
 
-    }
+    },
+    'properties': SERVER_PROPERTIES,
+    'favicon': FAVICON
 }
-
-try:  # Load server.properties
-    with open('server.properties', 'r+') as f:
-        lines = f.readlines()
-
-        share['PROPERTIES'] = dict(SERVER_PROPERTIES)
-        share['PROPERTIES'].update(parse_properties(lines))
-        share['PROPERTIES'] = immutables.Map(PROPERTIES)
-except Exception:
-    with open('server.properties', 'w+') as f:
-        f.write(SERVER_PROPERTIES_BLANK)
-
-    share['PROPERTIES'] = SERVER_PROPERTIES
-
-try:  # Load favicon
-    with open('server-icon.png', 'rb') as favicon:
-        share['favicon'] = 'data:image/png;base64,' + \
-            base64.b64encode(favicon.read()).decode('utf-8')
-except Exception:
-    share['favicon'] = None
 
 states = {}  # {remote_address: state_id}
 share['states'] = states

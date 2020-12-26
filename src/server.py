@@ -59,7 +59,7 @@ async def close_con(w, remote):
 
     try:
         del states[remote]
-    except:
+    except BaseException:
         pass
 
 

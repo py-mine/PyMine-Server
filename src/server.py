@@ -51,13 +51,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     buf = Buffer(await r.read(1))
 
     if buf.buf == b'\xFE':
-        try:
-            for _ in range(100):
-                buf.write(await asyncio.wait_for(r.read(1), share['timeout']))
-        except asyncio.TimeoutError:
-            pass
-
-        return await server_func_legacy_status(r, w, HandshakeLegacyPingRequest.decode(buf), share)
+        raise NotImplementedError
 
     try:
         for i in range(4):

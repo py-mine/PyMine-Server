@@ -1,16 +1,7 @@
-from src.types.packets.handshaking.legacy_ping import *
+#from src.types.packets.handshaking.legacy_ping import *
 from src.types.packets.status.status import *
 from src.types.buffer import Buffer
 
-
-async def legacy_status(r, 'StreamReader', w: 'StreamWriter', packet: 'HandshakeLegacyPingRequest', share: dict):
-    w.write(Buffer.pack_packet(HandshakeLegacyPingResponse(
-        share['version'],
-        share['properties']['motd'],
-        len(share['states']),
-        share['properties']['max_players']
-    )))
-    await w.drain()
 
 async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest', share: dict):
     data = {

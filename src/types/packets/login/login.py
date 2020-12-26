@@ -97,10 +97,10 @@ class LoginSuccess(Packet):
     id_ = 0x02
     to = 1
 
-    def __init__(self, uuid: uuid.UUID, username: str) -> None:
+    def __init__(self, uuid_: uuid.UUID, username: str) -> None:
         super().__init__()
 
-        self.uuid = uuid
+        self.uuid = uuid_
         self.username = username
 
     def encode(self) -> bytes:

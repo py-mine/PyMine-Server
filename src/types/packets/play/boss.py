@@ -23,6 +23,7 @@ class PlayBossBar(Packet):
     """
 
     id_ = 0x0C
+    to = 1
 
     def __init__(self, uuid: uuid.UUID, action: int, **data: dict) -> None:
         super().__init__()

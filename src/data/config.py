@@ -7,6 +7,7 @@ __all__ = ('SERVER_PROPERTIES_DEFAULT', 'SERVER_PROPERTIES', 'FAVICON',)
 SERVER_PROPERTIES_DEFAULT = Map({
     'debug': True,
     'server_ip': '0.0.0.0',
+    'server_port': 25565,
     'level_name': 'world',
     'gamemode': 'survival',
     'difficulty': 'easy',

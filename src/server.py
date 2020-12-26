@@ -120,15 +120,16 @@ async def handle_con(r, w):
 
 
 async def start():
+    addr = SERVER_PROPERTIES['server_ip']
     port = SERVER_PROPERTIES['server_port']
-    server = await asyncio.start_server(handle_con, host=SERVER_PROPERTIES['server_ip'], port=port)
+    server = await asyncio.start_server(handle_con, host=addr, port=port)
 
     try:
         async with server:
             if random.randint(0, 999) == 1:
-                logger.info(f'PPMine 69 started on port {port}!')
+                logger.info(f'PPMine 69.0 started on port {addr}:{port}!')
             else:
-                logger.info(f'PyMine {share["server_version"]} started on port {port}!')
+                logger.info(f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
 
             await server.serve_forever()
     except KeyboardInterrupt:

@@ -1,6 +1,7 @@
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
 import aiohttp
+import uuid
 
 from src.types.packets.login.login import *
 from src.types.buffer import Buffer
@@ -41,6 +42,6 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, username
     return uuid.UUID(resp['id']), resp['name']
 
 
-async def login_success(r: 'StreamReader', w: 'StreamWriter', uuid: 'uuid.UUID', username: str):
+async def login_success(r: 'StreamReader', w: 'StreamWriter', uuid: uuid.UUID, username: str):
     w.write(Buffer.pack_packet(LoginSuccess(uuid, username)))
     await w.drain()

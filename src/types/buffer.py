@@ -131,7 +131,7 @@ class Buffer:
 
         for i in range(10):
             b = self.unpack('B')
-            num |= (b & 0x7F) << (7 * i)
+            num |= (b & 0x7F) << 7 * i
 
             if not b & 0x80:
                 break

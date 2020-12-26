@@ -21,4 +21,5 @@ class PlayChatMessage(Packet):
         self.sender = sender
 
     def encode(self):
-        return Buffer.pack_chat(self.data) + Buffer.pack('b', self.position) + Buffer.pack_uuid(self.sender)
+        return Buffer.pack_chat(self.data) + Buffer.pack('b',
+     self.position) + Buffer.pack_uuid(self.sender)

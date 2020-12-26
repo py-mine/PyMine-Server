@@ -8,6 +8,7 @@ import os
 
 sys.path.append(os.getcwd())
 
+from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRequest
 from src.data.packet_map import PACKET_MAP
 from src.data.server_properties import *
 from src.types.packet import Packet
@@ -47,29 +48,32 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
-async def handle_con(r, w):
-    remote = w.get_extra_info('peername')  # (host, port)
-    logger.info(f'Connection received from {remote[0]}:{remote[1]}')
+async def handle_packet(r, w, remote):
+    read = await r.read(1)
 
-    read = await r.read(1)  # Read first byte
+    if read == b'\xFE':
+        return HandshakeLegacyPingRequest.decode(Buffer(await asyncio.wait_for(r.read(200), .15)))
 
-    if read == b'\xFE':  # Legacy ping
-        raise NotImplemented
-
-    # Varint can be no longer than 5 bytes, so first 5 bytes are pretty much guaranteed
-    read += await r.read(4)
-    buf = Buffer(read)
-    buf.write(await r.read(buf.unpack_varint()))  # Read the rest of the packet
+    buf = Buffer(read + await r.read(4))
+    buf.write(await r.read(buf.unpack_varint()))
 
     state = STATES_BY_ID[states.get(remote, 0)]
     packet = buf.unpack_packet(state, PACKET_MAP)
 
+    logger.debug(state, packet.id_, type(packet))
+
     if state == 'handshaking':
         states[remote] = packet.next_state
+        asyncio.get_event_loop().create_task(handle_packet(r, w, remote))
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
-            print('status')
             await server_func_status(r, w, packet)
+
+async def handle_con(r, w):
+    remote = w.get_extra_info('peername')  # (host, port)
+    logger.info(f'Connection received from {remote[0]}:{remote[1]}')
+
+    await handle_packet(r, w, remote)
 
 
 async def start():

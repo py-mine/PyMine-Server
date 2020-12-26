@@ -79,6 +79,11 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             await logic_status(r, w, packet, share)
         elif packet.id_ == 0x01:  # StatusStatusPingPong
             await logic_pong(r, w, packet)
+
+        #  Cleanup
+        w.close()
+        await w.wait_close()
+        del states[remote]
     elif state == 'login':
         if packet.id_ == 0x00:  # LoginStart
             if SERVER_PROPERTIES['online_mode']:
@@ -90,15 +95,12 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     asyncio.get_event_loop().create_task(handle_packet(r, w, remote))
 
+
 async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}')
 
     await handle_packet(r, w, remote)
-
-    w.close()
-    await w.wait_closed()
-    del states[remote]
 
 
 async def start():

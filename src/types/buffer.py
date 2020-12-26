@@ -6,7 +6,6 @@ import uuid
 import zlib
 
 from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
-from src.data.packet_map import PACKET_MAP
 from src.types.packet import Packet
 from src.types.chat import Chat
 from src.data.misc import *
@@ -92,7 +91,7 @@ class Buffer:
 
         return cls(cls.pack_varint(packet.id) + packet.encode()).to_bytes()
 
-    def unpack_packet(self, state: str):
+    def unpack_packet(self, state: str, PACKET_MAP: object) -> Packet:
         return PACKET_MAP[state][self.unpack_varint()].decode(self)
 
     def unpack(self, f: str) -> object:
@@ -244,15 +243,15 @@ class Buffer:
         return uuid.UUID(bytes=self.read(16))
 
     @classmethod
-    def pack_chat(cls, msg: Message) -> bytes:
+    def pack_chat(cls, msg: Chat) -> bytes:
         """Packs a Minecraft chat message into bytes."""
 
         return msg.to_bytes()
 
-    def unpack_chat(self) -> Message:
+    def unpack_chat(self) -> Chat:
         """Unpacks a Minecraft chat message from the buffer."""
 
-        return Message.from_buf(self)
+        return Chat.from_buf(self)
 
     @classmethod
     def pack_pos(cls, x, y, z) -> bytes:

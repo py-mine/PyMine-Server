@@ -16,7 +16,6 @@ from src.types.packet import Packet  # nopep8
 from src.data.states import *  # nopep8
 from src.data.config import *  # nopep8
 
-from src.logic.status import legacy_status as server_func_legacy_status  # nopep8
 from src.logic.status import status as server_func_status  # nopep8
 from src.logic.status import pong as server_func_pong  # nopep8
 

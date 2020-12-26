@@ -74,16 +74,14 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     if state == 'handshaking':
         states[remote] = packet.next_state
+        print('handshake')
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
             await logic_status(r, w, packet, share)
+            print('status')
         elif packet.id_ == 0x01:  # StatusStatusPingPong
             await logic_pong(r, w, packet)
-
-        #  Cleanup
-        w.close()
-        await w.wait_closed()
-        del states[remote]
+            print('pong')
     elif state == 'login':
         if packet.id_ == 0x00:  # LoginStart
             if SERVER_PROPERTIES['online_mode']:
@@ -93,14 +91,13 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         elif packet.id_ == 0x01:  # LoginEncryptionResponse
             pass
 
-    await asyncio.get_event_loop().create_task(handle_packet(r, w, remote))
-
 
 async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}')
 
-    await handle_packet(r, w, remote)
+    while True:
+        await handle_packet(r, w, remote)
 
 
 async def start():

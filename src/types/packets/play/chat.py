@@ -39,5 +39,5 @@ class PlayTabComplete(Packet):
 
     def encode(self):
         return Buffer.pack_varint(self.id) + Buffer.pack_varint(self.start) + \
-            Buffer.pack_varint(self.length) + Buffer.pack_varint(count) + \
+            Buffer.pack_varint(self.length) + Buffer.pack_varint(self.count) + \
             Buffer.pack_array(self.matches)

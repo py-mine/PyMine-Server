@@ -16,6 +16,7 @@ from src.types.buffer import Buffer  # nopep8
 from src.types.packet import Packet  # nopep8
 from src.data.states import *  # nopep8
 from src.data.config import *  # nopep8
+from src.util.logs import CustomFormatter  # nopep8
 
 from src.logic.login import request_encryption as logic_request_encryption  # nopep8
 from src.logic.login import login_success as logic_login_success  # nopep8
@@ -46,12 +47,15 @@ share['states'] = states
 secrets = {}  # {remote: secret}
 share['secrets'] = secrets
 
-logging.basicConfig(
-    format='[%(asctime)s %(levelname)s]: %(message)s',
-    level=logging.DEBUG,
-    datefmt='%m/%d %H:%M:%S'
-)
+
 logger = logging.getLogger(__name__)
+# create console handler with a higher log level
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+
+ch.setFormatter(CustomFormatter())
+
+logger.addHandler(ch)
 share['logger'] = logger
 
 
@@ -132,7 +136,8 @@ async def start():
                 if random.randint(0, 999) == 1:
                     logger.info(f'PPMine 69.0 started on port {addr}:{port}!')
                 else:
-                    logger.info(f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
+                    logger.info(
+                        f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
 
                 await server.serve_forever()
     except KeyboardInterrupt:

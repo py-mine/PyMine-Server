@@ -7,7 +7,7 @@ from src.types.packet import Packet
 from src.types.buffer import Buffer
 from src.types.chat import Chat
 
-__all__ = ('PlayChatMessage',)
+__all__ = ('PlayChatMessage', 'PlayTabComplete')
 
 
 class PlayChatMessage(Packet):
@@ -42,8 +42,3 @@ class PlayTabComplete(Packet):
         return Buffer.pack_varint(self.id) + Buffer.pack_varint(self.start) + \
             Buffer.pack_varint(self.length) + Buffer.pack_varint(self.count) + \
             Buffer.pack_array(self.matches)
-
-
-class PlayCloseWindow(Packet):
-    """This packet is sent from the server to the client when a window is forcibly closed, such as when a chest is destroyed while it's open. """
-    id = 0x12

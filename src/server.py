@@ -53,18 +53,28 @@ logger = logging.getLogger(__name__)
 share['logger'] = logger
 
 
+async def close_con(w, remote):
+    w.close()
+    await w.wait_closed()
+
+    try:
+        del states[remote]
+    except:
+        pass
+
+
 async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
     packet_length = 0
 
     for i in range(5):
-        read = await r.read(1)
+        try:
+            read = await asyncio.wait_for(r.read(1), 1)
+        except asyncio.TimeoutError:
+            return await close_con(w, remote)
 
         if i == 0 and read == b'\xFE':
             logger.warning('legacy ping is not supported currently.')
-
-            w.close()
-            await w.wait_closed()
-            return
+            return await close_con(w, remote)
 
         b = struct.unpack('B', read)[0]
         packet_length |= (b & 0x7F) << 7 * i
@@ -87,10 +97,9 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
             await logic_status(r, w, packet, share)
-            print('status')
         elif packet.id_ == 0x01:  # StatusStatusPingPong
             await logic_pong(r, w, packet)
-            print('pong')
+            return await close_con(w, remote)
     elif state == 'login':
         if packet.id_ == 0x00:  # LoginStart
             if SERVER_PROPERTIES['online_mode']:
@@ -100,13 +109,14 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         elif packet.id_ == 0x01:  # LoginEncryptionResponse
             pass
 
+    asyncio.create_task(handle_packet(r, w, remote))
+
 
 async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}')
 
-    while True:
-        await handle_packet(r, w, remote)
+    await handle_packet(r, w, remote)
 
 
 async def start():

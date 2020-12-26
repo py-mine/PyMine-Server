@@ -65,7 +65,6 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         pass
 
     buf.write(await r.read(buf.unpack_varint()))
-    buf.reset()
 
     state = STATES_BY_ID[states.get(remote, 0)]
     packet = buf.unpack_packet(state, 0, PACKET_MAP)

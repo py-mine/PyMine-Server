@@ -68,9 +68,8 @@ class Buffer:
             uncomp_len = self.unpack_varint()
 
             if uncom_len > 0:
-                self.unpack_varint()
                 self.buf = zlib.decompress(self.read())
-                self.reset()
+                buf.reset()
 
         return PACKET_MAP[state][(self.unpack_varint(), to,)].decode(self)
 

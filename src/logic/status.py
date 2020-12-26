@@ -28,3 +28,4 @@ async def status(r: asyncio.StreamReader, w: asyncio.StreamWriter, packet: 'Pack
     }
 
     w.write(Buffer.pack_packet(StatusStatusResponse(data)))
+    await w.drain()

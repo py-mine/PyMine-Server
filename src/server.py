@@ -87,8 +87,7 @@ async def handle_con(r, w):
     logger.info(f'Connection received from {remote[0]}:{remote[1]}')
 
     await handle_packet(r, w, remote)
-
-
+    
 
 async def start():
     port = 69

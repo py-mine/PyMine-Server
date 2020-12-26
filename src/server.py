@@ -16,8 +16,8 @@ from src.types.packet import Packet  # nopep8
 from src.data.states import *  # nopep8
 from src.data.config import *  # nopep8
 
-from src.logic.status import status as server_func_status  # nopep8
-from src.logic.status import pong as server_func_pong  # nopep8
+from src.logic.status import status as logic_status  # nopep8
+from src.logic.status import pong as logic_pong  # nopep8
 
 global share
 share = {
@@ -70,9 +70,9 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         await handle_packet(r, w, remote)
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
-            await server_func_status(r, w, packet, share)
+            await logic_status(r, w, packet, share)
         elif packet.id_ == 0x01:  # StatusStatusPingPong
-            await server_func_pong(r, w, packet)
+            await logic_pong(r, w, packet)
     elif state == 'login':
         pass
 

@@ -15,6 +15,7 @@ from src.types.packet import Packet
 from src.data.states import *
 
 from src.logic.status import status as server_func_status
+from src.logic.status import pong as server_func_pong
 
 global share
 share = {
@@ -77,6 +78,8 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
             await server_func_status(r, w, packet, share)
+        elif packet.id_ == 0x01:  # StatusStatusPingPong
+            await server_func_pong(r, w, packet)
 
 
 async def handle_con(r, w):

@@ -64,14 +64,16 @@ class Buffer:
         return cls.pack_varint(len(data)) + data
 
     def unpack_packet(self, state: str, to: int, PACKET_MAP: object, comp_thresh: int = -1) -> Packet:
+        buf = Buffer(self.buf)
+        buf = Buffer(buf.read(buf.unpack_varint()))
+
         if comp_thresh >= 0:
-            uncomp_len = self.unpack_varint()
+            uncomp_len = buf.unpack_varint()
 
             if uncom_len > 0:
-                self.buf = zlib.decompress(self.read())
-                buf.reset()
+                buf = Buffer(zlib.decompress(self.read()))
 
-        return PACKET_MAP[state][(self.unpack_varint(), to,)].decode(self)
+        return PACKET_MAP[state][(buf.unpack_varint(), to,)].decode(self)
 
     def unpack(self, f: str) -> object:
         unpacked = struct.unpack('>' + f, self.read(struct.calcsize(f)))

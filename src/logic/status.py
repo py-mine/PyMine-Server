@@ -1,9 +1,11 @@
+import asyncio
 
 from src.types.packets.status.status import *
+from src.types.packet import Packet
 from src.types.buffer import Buffer
 
 
-async def status(r, w, packet, share):
+async def status(r: asyncio.StreamReader, w: asyncio.StreamWriter, packet: 'Packet', share: dict):
     data = {
         'version': {
             'name': share['version'],

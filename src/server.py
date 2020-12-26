@@ -53,11 +53,6 @@ logger = logging.getLogger(__name__)
 share['logger'] = logger
 
 
-def print_buf(buf):
-    print(buf.buf)
-    print(' '*buf.pos + '^')
-
-
 async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
     buf = Buffer(await r.read(1))
 
@@ -73,12 +68,9 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     buf.write(await r.read(buf.unpack_varint()))
 
-    print_buf(buf)
-
     state = STATES_BY_ID[states.get(remote, 0)]
     packet = buf.unpack_packet(state, 0, PACKET_MAP)
 
-    print_buf(buf)
     print(packet.__dict__)
 
     logger.debug(f'state:{state:<12} | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}')

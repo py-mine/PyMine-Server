@@ -66,6 +66,9 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             await w.wait_closed()
             return
 
+        if read == b'':
+            break
+
         b = struct.unpack('B', read)[0]
         packet_length |= (b & 0x7F) << 7 * i
 

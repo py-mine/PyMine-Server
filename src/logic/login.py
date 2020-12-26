@@ -38,7 +38,7 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, username
         }
     )
 
-    return uuid.
+    return uuid.UUID(resp['id']), resp['name']
 
 
 async def login_success(r: 'StreamReader', w: 'StreamWriter', uuid: 'uuid.UUID', username: str):

@@ -56,7 +56,7 @@ share['logger'] = logger
 async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
     packet_length = 0
 
-    for i in range(10):
+    for i in range(1):
         read = await r.read(1)
 
         if i == 0 and read == b'\xFE':
@@ -66,7 +66,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             await w.wait_closed()
             return
 
-        b = struct.unpack('B', await r.read(1))[0]
+        b = struct.unpack('B', read)[0]
         packet_length |= (b & 0x7F) << 7 * i
 
         if not b & 0x80:

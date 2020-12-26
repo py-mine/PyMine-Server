@@ -53,14 +53,15 @@ logger = logging.getLogger(__name__)
 share['logger'] = logger
 
 
-async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
-    buf = Buffer(await r.read(1))
+async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple, buf: Buffer):
+    if buf.pos == len(buf.buf):
+        buf.write(await r.read(1))
 
-    if buf.buf == b'\xFE':
+    if buf.buf[buf.pos] == b'\xFE':
         raise NotImplementedError('legacy ping is not currently supported.')
 
     try:
-        for i in range(4):
+        for _ in range(4):
             buf.write(await asyncio.wait_for(r.read(1), share['timeout']))
     except asyncio.TimeoutError:
         pass
@@ -70,18 +71,18 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     state = STATES_BY_ID[states.get(remote, 0)]
     packet = buf.unpack_packet(state, 0, PACKET_MAP)
 
+    print(buf.read())
+
     logger.debug(f'state:{state:<12} | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}')
 
     if state == 'handshaking':
         states[remote] = packet.next_state
-        print('handshake')
+        await handle_packet(r, w, remote, buf)
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
             await logic_status(r, w, packet, share)
-            print('status')
         elif packet.id_ == 0x01:  # StatusStatusPingPong
             await logic_pong(r, w, packet)
-            print('pong')
     elif state == 'login':
         if packet.id_ == 0x00:  # LoginStart
             if SERVER_PROPERTIES['online_mode']:
@@ -96,8 +97,7 @@ async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}')
 
-    while True:
-        await handle_packet(r, w, remote)
+    await handle_packet(r, w, remote, Buffer())
 
 
 async def start():

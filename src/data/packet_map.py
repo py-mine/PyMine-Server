@@ -18,7 +18,11 @@ def load_packets():
 
                 for name in module.__all__:
                     packet = module.__dict__.get(name)
-                    packet_map[state][(packet.id_, packet.to,)] = packet
+                    if packet.to == 2:
+                        packet_map[state][(packet.id_, 0,)] = packet
+                        packet_map[state][(packet.id_, 1,)] = packet
+                    else:
+                        packet_map[state][(packet.id_, packet.to,)] = packet
 
     return make_immutable(packet_map)
 

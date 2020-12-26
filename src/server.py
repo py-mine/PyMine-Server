@@ -4,18 +4,18 @@ import logging
 import asyncio
 import base64
 import sys
-import os; sys.path.append(os.getcwd())
+import os; sys.path.append(os.getcwd())  # nopep8
 # import uvloop
 
-from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRequest
-from src.data.packet_map import PACKET_MAP
-from src.data.server_properties import *
-from src.types.buffer import Buffer
-from src.types.packet import Packet
-from src.data.states import *
+from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRequest  # nopep8
+from src.data.packet_map import PACKET_MAP  # nopep8
+from src.data.server_properties import *  # nopep8
+from src.types.buffer import Buffer  # nopep8
+from src.types.packet import Packet  # nopep8
+from src.data.states import *  # nopep8
 
-from src.logic.status import status as server_func_status
-from src.logic.status import pong as server_func_pong
+from src.logic.status import status as server_func_status  # nopep8
+from src.logic.status import pong as server_func_pong  # nopep8
 
 global share
 share = {
@@ -87,7 +87,7 @@ async def handle_con(r, w):
     logger.info(f'Connection received from {remote[0]}:{remote[1]}')
 
     await handle_packet(r, w, remote)
-    
+
 
 async def start():
     port = 69

@@ -159,7 +159,7 @@ class Buffer:
         num = 0
 
         for i in range(10):
-            b = struct.unpack('>B', await r.read(1))
+            b = struct.unpack('>B', await r.read(1))[0]
             num |= (b & 0x7F) << (7 * i)
 
             if not b & 0x80:

@@ -26,7 +26,7 @@ class CustomFormatter(logging.Formatter):
 
 
 if __name__ == '__main__':
-    logger = logging.getLogger("My_app")
+    logger = logging.getLogger("testing")
     logger.setLevel(logging.DEBUG)
 
     # create console handler with a higher log level

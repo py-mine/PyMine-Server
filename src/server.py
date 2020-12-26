@@ -35,7 +35,7 @@ share = {
     },
     'properties': SERVER_PROPERTIES,
     'favicon': FAVICON,
-    'ses': aiohttp.ClientSession()
+    'ses': None
 }
 
 share['rsa']['public'] = share['rsa']['private'].public_key()
@@ -127,17 +127,17 @@ async def start():
     server = await asyncio.start_server(handle_con, host=addr, port=port)
 
     try:
-        async with server:
-            if random.randint(0, 999) == 1:
-                logger.info(f'PPMine 69.0 started on port {addr}:{port}!')
-            else:
-                logger.info(f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
+        async with aiohttp.ClientSession() as share['ses']:
+            async with server:
+                if random.randint(0, 999) == 1:
+                    logger.info(f'PPMine 69.0 started on port {addr}:{port}!')
+                else:
+                    logger.info(f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
 
-            await server.serve_forever()
+                await server.serve_forever()
     except KeyboardInterrupt:
         server.close
         await server.wait_closed()
-        await share['ses'].close()
 
 # uvloop.install()
 asyncio.run(start())

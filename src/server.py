@@ -1,3 +1,9 @@
+from src.logic.status import status as server_func_status
+from src.data.states import *
+from src.types.buffer import Buffer
+from src.types.packet import Packet
+from src.data.server_properties import *
+from src.data.packet_map import PACKET_MAP
 import immutables
 import logging
 import asyncio
@@ -8,13 +14,6 @@ import os
 
 sys.path.append(os.getcwd())
 
-from src.data.packet_map import PACKET_MAP
-from src.data.server_properties import *
-from src.types.packet import Packet
-from src.types.buffer import Buffer
-from src.data.states import *
-
-from src.logic.status import status as server_func_status
 
 global share
 share = {
@@ -36,7 +35,8 @@ except Exception:
 
 try:  # Load favicon
     with open('server-icon.png', 'rb') as favicon:
-        share['favicon'] = 'data:image/png;base64,' + base64.b64encode(favicon.read()).decode('utf-8')
+        share['favicon'] = 'data:image/png;base64,' + \
+            base64.b64encode(favicon.read()).decode('utf-8')
 except Exception:
     share['favicon'] = None
 

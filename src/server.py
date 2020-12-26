@@ -47,7 +47,7 @@ share['secrets'] = secrets
 logging.basicConfig(
     format='[%(asctime)s %(levelname)s]: %(message)s',
     level=logging.DEBUG,
-    datefmt='%H:%M:%S'
+    datefmt='%m/%d %H:%M:%S'
 )
 logger = logging.getLogger(__name__)
 share['logger'] = logger

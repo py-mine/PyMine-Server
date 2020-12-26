@@ -23,6 +23,7 @@ SERVER_PROPERTIES_DEFAULT = Map({
     'generate_structures': True,
 })
 
+
 def load_properties():
     try:
         with open('server.yml', 'r') as f:
@@ -31,5 +32,6 @@ def load_properties():
             return properties
     except FileNotFoundError:
         return SERVER_PROPERTIES_DEFAULT
+
 
 SERVER_PROPERTIES = load_properties()

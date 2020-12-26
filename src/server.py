@@ -3,13 +3,13 @@ import immutables
 import logging
 import asyncio
 import random
+import struct
 import sys
 import os
 # import uvloop
 
 sys.path.append(os.getcwd())
 
-from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRequest  # nopep8
 from src.data.packet_map import PACKET_MAP  # nopep8
 from src.types.buffer import Buffer  # nopep8
 from src.types.packet import Packet  # nopep8
@@ -53,23 +53,29 @@ logger = logging.getLogger(__name__)
 share['logger'] = logger
 
 
-async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple, left: bytes = None):  # nopep8
-    if not left:
-        buf = Buffer(await r.read(1))
-    else:
-        buf = Buffer(left)
+async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
+    packet_length = 0
 
-    if buf.buf == b'\xFE':
-        logger.warn('legacy ping is not supported yet.')
-        return
+    for i in range(10):
+        read = await r.read(1)
 
-    try:
-        for _ in range(2):
-            buf.write(await asyncio.wait_for(r.read(1), share['timeout']))
-    except asyncio.TimeoutError:
-        pass
+        if i == 0 and read == b'\xFE':
+            logger.warning('legacy ping is not supported currently.')
 
-    buf.write(await r.read(buf.unpack_varint()))
+            w.close()
+            await w.wait_closed()
+            return
+
+        b = struct.unpack('B', await r.read(1))[0]
+        packet_length |= (b & 0x7F) << 7 * i
+
+        if not b & 0x80:
+            break
+
+    if packet_length & (1 << 31):
+        packet_length -= 1 << 32
+
+    buf.write(Buffer.pack_varint(packet_length) + await r.read(packet_length))
 
     state = STATES_BY_ID[states.get(remote, 0)]
     packet = buf.unpack_packet(state, 0, PACKET_MAP)
@@ -94,17 +100,13 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         elif packet.id_ == 0x01:  # LoginEncryptionResponse
             pass
 
-    return buf.read()
-
 
 async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}')
 
-    left = None
-
     while True:
-        left = await handle_packet(r, w, remote, left)
+        await handle_packet(r, w, remote)
 
 
 async def start():

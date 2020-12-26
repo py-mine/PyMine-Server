@@ -93,7 +93,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         elif packet.id_ == 0x01:  # LoginEncryptionResponse
             pass
 
-    asyncio.get_event_loop().create_task(handle_packet(r, w, remote))
+    await asyncio.get_event_loop().create_task(handle_packet(r, w, remote))
 
 
 async def handle_con(r, w):

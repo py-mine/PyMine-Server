@@ -2,4 +2,5 @@ aiohttp
 cryptography
 immutables
 nbt
+PyYAML
 uvloop

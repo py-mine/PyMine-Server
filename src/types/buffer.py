@@ -62,6 +62,8 @@ class Buffer:
             else:
                 data = cls.pack_varint(0) + data
 
+        return cls.pack_varint(len(data)) + data
+
     def unpack_packet(self, state: str, to: int, PACKET_MAP: object, comp_thresh: int = -1) -> Packet:
         buf = Buffer(self.read(self.unpack_varint(max_bits=32)))
 

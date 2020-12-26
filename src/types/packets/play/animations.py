@@ -19,6 +19,7 @@ class PlayEntityAnimation(Packet):
     """
 
     id_ = 0x05
+    to = 1
 
     def __init__(self, entity_id: int, animation: int) -> None:
         super().__init__()
@@ -47,6 +48,7 @@ class PlayBlockBreakAnimation(Packet):
     """
 
     id_ = 0x08
+    to = 1
 
     def __init__(self, entity_id: int, x: int, y: int, z: int, stage: int) -> None:
         super().__init__()

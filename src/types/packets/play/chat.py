@@ -14,6 +14,7 @@ class PlayChatMessage(Packet):
     """TODO: make good docstring. (Server -> Client)"""
 
     id_ = 0x0E
+    to = 1
 
     def __init__(self, data: Chat, position: int, sender: uuid.UUID) -> None:
         super().__init__()
@@ -28,7 +29,9 @@ class PlayChatMessage(Packet):
 
 class PlayTabComplete(Packet):
     """"TODO: make good docstring. (Server -> Client)"""
+
     id_ = 0x11
+    to = 1
 
     def __init__(self, id: int, start: int, length: int, count: int, matches: list) -> None:
         super().__init__()

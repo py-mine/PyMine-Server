@@ -17,6 +17,7 @@ class PlayStatistics(Packet):
     """
 
     id_ = 0x06
+    to = 1
 
     def __init__(self, stats: list) -> None:
         super().__init__()

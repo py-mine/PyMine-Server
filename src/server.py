@@ -133,7 +133,8 @@ async def start():
 
             await server.serve_forever()
     except KeyboardInterrupt:
-        pass
+        server.close
+        await server.wait_closed()
 
 # uvloop.install()
 asyncio.run(start())

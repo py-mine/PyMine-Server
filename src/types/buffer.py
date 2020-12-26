@@ -147,29 +147,6 @@ class Buffer:
         return num
 
     @classmethod
-    async def unpack_varint_stream(cls, r: 'asyncio.StreamReader', max_bits: int = 32) -> int:
-        """Unpacks a varint from an asyncio.StreamReader."""
-
-        num = 0
-
-        for i in range(10):
-            b = struct.unpack('>B', await r.read(1))[0]
-            num |= (b & 0x7F) << (7 * i)
-
-            if not b & 0x80:
-                break
-
-        if num & (1 << 31):
-            num -= 1 << 32
-
-        num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
-
-        if not (num_min <= num < num_max):
-            raise ValueError(f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
-
-        return num
-
-    @classmethod
     def pack_optional_varint(cls, num):
         """Packs an optional varint into bytes."""
 

@@ -5,8 +5,9 @@ import asyncio
 import base64
 import sys
 import os
-sys.path.append(os.getcwd())
 # import uvloop
+
+sys.path.append(os.getcwd())
 
 from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRequest  # nopep8
 from src.data.packet_map import PACKET_MAP  # nopep8

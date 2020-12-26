@@ -10,8 +10,6 @@ from src.util.encryption import *
 
 # https://github.com/ammaraskar/pyCraft/blob/master/minecraft/networking/encryption.py
 
-ses = aiohttp.ClientSession()
-
 
 async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'LoginStart', share: dict):
     w.write(Buffer.pack_packet(LoginEncryptionRequest(
@@ -25,7 +23,7 @@ async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'Logi
 
 
 async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, username: str, share: dict):
-    resp = await ses.get(
+    resp = await share['ses'].get(
         'https://sessionserver.mojang.com/session/minecraft/hasJoined?username=username&serverId=hash',
         params={
             'username': username,
@@ -44,9 +42,9 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, username
     return uuid.UUID(jj['id']), jj['name']
 
 
-async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, uuid_: uuid.UUID = None):
+async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, uuid_: uuid.UUID = None, share: dict):  # nopep8
     if uuid_ is None:
-        resp = await ses.get(f'https://api.mojang.com/users/profiles/minecraft/{player}')
+        resp = await await share['ses'].get(f'https://api.mojang.com/users/profiles/minecraft/{player}')
         jj = await resp.json()
         uuid_ = uuid.UUID(jj['id'])
 

@@ -2,6 +2,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 import immutables
 import logging
 import asyncio
+import aiohttp
 import random
 import struct
 import sys
@@ -33,7 +34,8 @@ share = {
         'public': None
     },
     'properties': SERVER_PROPERTIES,
-    'favicon': FAVICON
+    'favicon': FAVICON,
+    'ses': aiohttp.ClientSession()
 }
 
 share['rsa']['public'] = share['rsa']['private'].public_key()

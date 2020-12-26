@@ -91,8 +91,8 @@ class Buffer:
 
         return cls(cls.pack_varint(packet.id) + packet.encode()).to_bytes()
 
-    def unpack_packet(self, state: str, PACKET_MAP: object) -> Packet:
-        return PACKET_MAP[state][self.unpack_varint()].decode(self)
+    def unpack_packet(self, state: str, to: int, PACKET_MAP: object) -> Packet:
+        return PACKET_MAP[state][(self.unpack_varint(), to,)].decode(self)
 
     def unpack(self, f: str) -> object:
         unpacked = struct.unpack('>' + f, self.read(struct.calcsize(f)))

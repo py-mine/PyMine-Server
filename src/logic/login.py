@@ -15,7 +15,7 @@ ses = aiohttp.ClientSession()
 
 async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'LoginStart', share: dict):
     w.write(Buffer.pack_packet(LoginEncryptionRequest(
-        share['public_key'].public_bytes(
+        share['rsa']['public'].public_bytes(
             encoding=serialization.Encoding.DER,
             format=serialization.PublicFormat.SubjectPublicKeyInfo
         )
@@ -31,7 +31,7 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, username
             'username': username,
             'serverId': generate_verify_hash(
                 packet.shared_key,
-                share['public_key'].public_bytes(
+                share['rsa']['public'].public_bytes(
                     encoding=serialization.Encoding.DER,
                     format=serialization.PublicFormat.SubjectPublicKeyInfo
                 )

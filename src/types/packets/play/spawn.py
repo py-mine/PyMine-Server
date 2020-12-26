@@ -18,6 +18,7 @@ class PlayEntitySpawn(Packet):
     """Sent by the server when a vehicle or other non-living entity is created. Client bound(Server -> Client)."""
 
     id_ = 0x00
+    to = 1
 
     def __init__(self, entity_id: int, object_uuid: uuid.UUID, type: int,
                  x: int, y: int, z: int, pitch: int, yaw: int, data: int,
@@ -67,6 +68,7 @@ class PlayLivingEntitySpawn(Packet):
     """Sent by the server when a living entity is spawned.  Client bound(Server -> Client)."""
 
     id_ = 0x02
+    to = 1
 
     def __init__(self, entity_id: int, object_uuid: uuid.UUID, type: int,
                  x: int, y: int, z: int, pitch: int, head_pitch: int, yaw: int,
@@ -98,6 +100,7 @@ class PlayPaintingSpawn(Packet):
     """This packet shows location, name, and type of painting.  Client bound(Server -> Client)."""
 
     id_ = 0x03
+    to = 1
 
     def __init__(self, entity_id: int, entity_uuid: uuid.UUID, motive: int,
                  location: int, direction: int) -> None:

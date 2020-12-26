@@ -42,7 +42,7 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, username
     return uuid.UUID(jj['id']), jj['name']
 
 
-async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, uuid_: uuid.UUID = None, share: dict):  # nopep8
+async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, share: dict, uuid_: uuid.UUID = None):  # nopep8
     if uuid_ is None:
         resp = await share['ses'].get(f'https://api.mojang.com/users/profiles/minecraft/{player}')
         jj = await resp.json()

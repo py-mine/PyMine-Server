@@ -82,7 +82,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
         #  Cleanup
         w.close()
-        await w.wait_close()
+        await w.wait_closed()
         del states[remote]
     elif state == 'login':
         if packet.id_ == 0x00:  # LoginStart

@@ -7,7 +7,7 @@ from src.types.packet import Packet
 from src.types.buffer import Buffer
 from src.types.chat import Chat
 
-__all__ = ('PlayChatMessage',)
+__all__ = ('PlayChatMessage', 'PlayTabComplete')
 
 
 class PlayChatMessage(Packet):
@@ -30,7 +30,7 @@ class PlayChatMessage(Packet):
 class PlayTabComplete(Packet):
     """"TODO: make good docstring. (Server -> Client)"""
 
-    id_ = 0xF
+    id_ = 0x11
     to = 1
 
     def __init__(self, id: int, start: int, length: int, count: int, matches: list) -> None:

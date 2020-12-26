@@ -25,3 +25,14 @@ class PlayWindowConfirmation(Packet):
     def encode(self) -> bytes:
         return Buffer.pack('b', self.window_id) + Buffer.pack('h', self.action_number) + \
             Buffer.pack_bool(self.accepted)
+
+
+class PlayCloseWindow(Packet):
+    """This packet is sent from the server to the client when a window is forcibly closed, such as when a chest is destroyed while it's open. """
+    id = 0x12
+
+    def __init__(self, window_id: int):
+        self.window_id = window_id
+
+    def encode(self):
+        return Buffer.pack('B', self.window_id)

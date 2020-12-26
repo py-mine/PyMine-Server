@@ -6,7 +6,8 @@ import uuid
 import zlib
 
 from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
-from src.types.message import Message
+from src.types.packet import Packet
+from src.types.chat import Chat
 from src.data.misc import *
 
 
@@ -82,6 +83,17 @@ class Buffer:
 
         return self.pack_varint(len(data), max_bits=32) + data
 
+    @classmethod
+    def pack_packet(cls, packet: Packet):
+        """
+        Packs a packet into bytes.
+        """
+
+        return cls(cls.pack_varint(packet.id) + packet.encode()).to_bytes()
+
+    def unpack_packet(self, state: str, PACKET_MAP: object) -> Packet:
+        return PACKET_MAP[state][self.unpack_varint()].decode(self)
+
     def unpack(self, f: str) -> object:
         unpacked = struct.unpack('>' + f, self.read(struct.calcsize(f)))
 
@@ -95,7 +107,7 @@ class Buffer:
         return struct.pack('>' + f, *data)
 
     @classmethod
-    def pack_bool(cls, boolean) -> bytes:
+    def pack_bool(cls, boolean: bool) -> bytes:
         """Packs a boolean into bytes."""
 
         return struct.pack(f'>?', boolean)
@@ -231,15 +243,15 @@ class Buffer:
         return uuid.UUID(bytes=self.read(16))
 
     @classmethod
-    def pack_msg(cls, msg: Message) -> bytes:
+    def pack_chat(cls, msg: Chat) -> bytes:
         """Packs a Minecraft chat message into bytes."""
 
         return msg.to_bytes()
 
-    def unpack_msg(self) -> Message:
+    def unpack_chat(self) -> Chat:
         """Unpacks a Minecraft chat message from the buffer."""
 
-        return Message.from_buf(self)
+        return Chat.from_buf(self)
 
     @classmethod
     def pack_pos(cls, x, y, z) -> bytes:
@@ -280,7 +292,8 @@ class Buffer:
         if item_id is None:
             return cls.pack('?', False)
 
-        return cls.pack('?', True) + cls.pack_varint(item_id) + cls.pack('b', count) + cls.pack_nbt(tag)
+        return cls.pack('?', True) + cls.pack_varint(item_id) + \
+            cls.pack('b', count) + cls.pack_nbt(tag)
 
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""

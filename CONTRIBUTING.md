@@ -17,6 +17,7 @@
 * Unless there's a good reason, lines shouldn't be longer than 100 characters
 * Use `snake_case` for variables
 * Constants should either be loaded from a config file or be in `UPPER_SNAKE_CASE`
+* Tuples should always be incased in () and have an extra comma at the end. Example: `(val1, val2,)`
 
 ### Classes
 * There should be two new lines before the start of a class unless it's indented

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+__all__ = ('Packet',)
+
 
 class Packet:
     """Base Packet class.
@@ -8,5 +10,9 @@ class Packet:
     :attr id:
     """
 
-    def __init__(self, id: int = -0x1) -> None:
-        self.id = id
+    id_ = None
+    to = None
+
+    def __init__(self) -> None:
+        self.id_ = self.__class__.id_
+        self.to = self.__class__.to

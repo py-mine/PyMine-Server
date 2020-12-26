@@ -63,13 +63,7 @@ class Buffer:
 
         return cls.pack_varint(len(data)) + data
 
-    def unpack_packet(
-            self,
-            state: str,
-            to: int,
-            PACKET_MAP: object,
-            comp_thresh: int = -
-            1) -> Packet:
+    def unpack_packet(self, state: str, to: int, PACKET_MAP: object, comp_thresh: int = -1) -> Packet:  # nopepe8
         data = self.buf
 
         if comp_thresh >= 0:

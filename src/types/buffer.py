@@ -53,7 +53,7 @@ class Buffer:
         Packs a Packet object into bytes.
         """
 
-        data = packet.encode()
+        data = cls.pack_varint(packet.id_) + packet.encode()
 
         if comp_thresh >= 1:
             if len(data) >= comp_thresh:

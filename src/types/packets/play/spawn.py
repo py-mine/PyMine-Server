@@ -20,8 +20,8 @@ class PlayEntitySpawn(Packet):
     id_ = 0x00
 
     def __init__(self, entity_id: int, object_uuid: uuid.UUID, type: int,
-        x: int, y: int, z: int, pitch: int, yaw: int, data: int,
-        vloc_x: int, vloc_y: int, vloc_z: int) -> None:
+                 x: int, y: int, z: int, pitch: int, yaw: int, data: int,
+                 vloc_x: int, vloc_y: int, vloc_z: int) -> None:
         super().__init__()
         self.entity_id = entity_id
         self.object_uuid = object_uuid
@@ -69,8 +69,8 @@ class PlayLivingEntitySpawn(Packet):
     id_ = 0x02
 
     def __init__(self, entity_id: int, object_uuid: uuid.UUID, type: int,
-        x: int, y: int, z: int, pitch: int, head_pitch: int, yaw: int,
-        vloc_x: int, vloc_y: int, vloc_z: int) -> None:
+                 x: int, y: int, z: int, pitch: int, head_pitch: int, yaw: int,
+                 vloc_x: int, vloc_y: int, vloc_z: int) -> None:
         super().__init__()
         self.entity_id = entity_id
         self.object_uuid = object_uuid
@@ -100,7 +100,7 @@ class PlayPaintingSpawn(Packet):
     id_ = 0x03
 
     def __init__(self, entity_id: int, entity_uuid: uuid.UUID, motive: int,
-        location: int, direction: int) -> None:
+                 location: int, direction: int) -> None:
         super().__init__()
         self.entity_id = entity_id
         self.entity_uuid = entity_uuid

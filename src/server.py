@@ -60,7 +60,7 @@ async def handle_packet(r, w, remote):
     state = STATES_BY_ID[states.get(remote, 0)]
     packet = buf.unpack_packet(state, PACKET_MAP)
 
-    logger.debug(state, packet.id_, type(packet))
+    logger.debug(f'state: {state} | id_: {packet.id_} | packet: {type(packet)}')
 
     if state == 'handshaking':
         states[remote] = packet.next_state

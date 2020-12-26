@@ -75,22 +75,18 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     if state == 'handshaking':
         states[remote] = packet.next_state
         asyncio.get_event_loop().create_task(handle_packet(r, w, remote))
-        return True
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
             await server_func_status(r, w, packet, share)
         elif packet.id_ == 0x01:  # StatusStatusPingPong
             await server_func_pong(r, w, packet)
 
-        return True
-
 
 async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)
     logger.info(f'Connection received from {remote[0]}:{remote[1]}')
 
-    if await handle_packet(r, w, remote):
-        del states[remote]
+    await handle_packet(r, w, remote)
 
 
 

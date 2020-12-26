@@ -9,7 +9,7 @@ async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', share: 
             'protocol': share['protocol']
         },
         'players': {
-            'max': share['PROPERTIES']['max-players'],
+            'max': share['properties']['max-players'],
             'online': len(share['states']),
             'sample': [
                 {

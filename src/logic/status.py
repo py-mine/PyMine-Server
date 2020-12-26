@@ -21,9 +21,11 @@ async def status(r: 'StreamReader', w: 'StreamWriter', packet: Packet, share: di
         },
         'description': {  # a Chat
             'text': share['PROPERTIES']['motd']
-        },
-        'favicon': share['favicon']
+        }
     }
+
+    if share['favicon'] is not None:
+        data['favicon'] = share['favicon']
 
     w.write(Buffer.pack_packet(StatusStatusResponse(data)))
     await w.drain()

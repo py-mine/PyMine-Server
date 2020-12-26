@@ -1,10 +1,4 @@
-from src.logic.status import status as server_func_status
-from src.data.states import *
-from src.types.buffer import Buffer
-from src.types.packet import Packet
-from src.data.server_properties import *
-from src.data.packet_map import PACKET_MAP
-from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRequest
+
 import immutables
 import logging
 import asyncio
@@ -14,6 +8,15 @@ import os
 # import uvloop
 
 sys.path.append(os.getcwd())
+
+from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRequest
+from src.data.packet_map import PACKET_MAP
+from src.data.server_properties import *
+from src.types.buffer import Buffer
+from src.types.packet import Packet
+from src.data.states import *
+
+from src.logic.status import status as server_func_status
 
 
 global share

@@ -30,7 +30,7 @@ def load_properties():
     try:
         with open('server.yml', 'r') as f:
             properties = dict(SERVER_PROPERTIES_DEFAULT)
-            properties.update(yaml.load(f.read()))
+            properties.update(yaml.safe_load(f.read()))
             return properties
     except FileNotFoundError:
         with open('server.yml', 'w+') as f:

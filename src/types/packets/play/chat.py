@@ -27,7 +27,7 @@ class PlayChatMessage(Packet):
 
 class PlayTabComplete(Packet):
     """"TODO: make good docstring. (Server -> Client)"""
-    id_ = 0xF
+    id_ = 0x11
 
     def __init__(self, id: int, start: int, length: int, count: int, matches: list) -> None:
         super().__init__()
@@ -41,3 +41,8 @@ class PlayTabComplete(Packet):
         return Buffer.pack_varint(self.id) + Buffer.pack_varint(self.start) + \
             Buffer.pack_varint(self.length) + Buffer.pack_varint(self.count) + \
             Buffer.pack_array(self.matches)
+
+
+class PlayCloseWindow(Packet):
+    """This packet is sent from the server to the client when a window is forcibly closed, such as when a chest is destroyed while it's open. """
+    id = 0x12

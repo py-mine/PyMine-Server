@@ -21,6 +21,7 @@ class HandshakeLegacyPingRequest(Packet):
     """
 
     id_ = 0xFE
+    to = 0
 
     def __init__(self, protocol: int, hostname: str, port: int) -> None:
         super().__init__()
@@ -50,6 +51,7 @@ class HandshakeLegacyPingResponse(Packet):
     """
 
     id_ = 0xFF
+    to = 1
 
     def __init__(self, version: str, motd: str, players_online: int, players_max: int) -> None:
         super().__init__()

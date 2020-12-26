@@ -13,7 +13,7 @@ SERVER_PROPERTIES_DEFAULT = Map({
     'max_players': 20,
     'online_mode': True,
     'white_list': True,
-    'motd': 'A Minecraft Server'
+    'motd': 'A Minecraft Server',
     'view_distance': 10,
     'spawn_protection': 16,
     'pvp': True,
@@ -21,7 +21,7 @@ SERVER_PROPERTIES_DEFAULT = Map({
     'spawn_npcs': True,
     'spawn_animals': True,
     'spawn_monsters': True,
-    'generate_structures': True,
+    'generate_structures': True
 })
 
 

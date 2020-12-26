@@ -36,3 +36,18 @@ class PlayCloseWindow(Packet):
 
     def encode(self):
         return Buffer.pack('B', self.window_id)
+
+
+class PlayWindowProperty(Packet):
+    """This packet is used to inform the client that part of a GUI window should be updated. ClientboundServer -> Client"""
+    to = 1
+    id = 0x14
+
+    def __init__(self, window_id: int, property: int, value: int):
+        self.window_id = window_id
+        self.property = property
+        self.value = value
+
+    def encode(self):
+        return Buffer.pack('B', self.window_id) + Buffer.pack('h', self.property) +\
+            Buffer.pack('h', self.value)

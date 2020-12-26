@@ -3,7 +3,7 @@ from src.types.packet import Packet
 from src.types.buffer import Buffer
 
 
-async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', share: dict):
+async def status(r: 'StreamReader', w: 'StreamWriter', packet: Packet, share: dict):
     data = {
         'version': {
             'name': share['version'],
@@ -29,6 +29,6 @@ async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', share: 
     await w.drain()
 
 
-async def pong(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet'):
-    w.write(Buffer.pack_packet(StatusStatusPingPong(packet.payload)))
+async def pong(r: 'StreamReader', w: 'StreamWriter', packet: Packet):
+    w.write(Buffer.pack_packet(packet))
     await w.drain()

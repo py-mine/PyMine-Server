@@ -34,7 +34,11 @@ share = {
 states = {}  # {remote_address: state_id}
 share['states'] = states
 
-logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
+logging.basicConfig(
+    format='%(asctime)s %(levelname)s: %(message)s',
+    level=logging.DEBUG,
+    datefmt='%m/%d/%Y %I:%M:%S %p'
+)
 logger = logging.getLogger(__name__)
 
 

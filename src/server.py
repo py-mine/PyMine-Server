@@ -1,6 +1,7 @@
 import immutables
 import logging
 import asyncio
+import random
 import sys
 import os
 # import uvloop
@@ -19,6 +20,7 @@ from src.logic.status import pong as server_func_pong  # nopep8
 
 global share
 share = {
+    'server_version': 1
     'version': '1.16.4',
     'protocol': 754,
     'timeout': .15,
@@ -86,7 +88,11 @@ async def start():
 
     try:
         async with server:
-            print(f'Server started on port {port}')
+            if random.randint(0, 999) == 1:
+                logger.info(f'PPMine 69 started on port {port}!')
+            else:
+                logger.info(f'PyMine {share["server_version"]} started on port {port}!')
+                
             await server.serve_forever()
     except KeyboardInterrupt:
         pass

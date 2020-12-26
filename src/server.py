@@ -57,7 +57,9 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     buf = Buffer(await r.read(1))
 
     if buf.buf == b'\xFE':
-        raise NotImplementedError('legacy ping is not currently supported.')
+        #raise NotImplementedError('legacy ping is not currently supported.')
+        logger.warning('legacy ping is currently not supported.')
+        return
 
     try:
         for _ in range(4):

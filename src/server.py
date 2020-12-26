@@ -35,7 +35,7 @@ share = {
     },
     'properties': SERVER_PROPERTIES,
     'favicon': FAVICON,
-    'ses': aiohttp.ClientSession()
+    'ses': None
 }
 
 share['rsa']['public'] = share['rsa']['private'].public_key()
@@ -122,6 +122,8 @@ async def handle_con(r, w):
 
 
 async def start():
+    share['ses'] = aiohttp.ClientSession()
+
     addr = SERVER_PROPERTIES['server_ip']
     port = SERVER_PROPERTIES['server_port']
     server = await asyncio.start_server(handle_con, host=addr, port=port)

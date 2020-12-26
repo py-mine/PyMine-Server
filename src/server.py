@@ -75,7 +75,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         await handle_packet(r, w, remote)
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
-            await server_func_status(r, w, packet)
+            await server_func_status(r, w, packet, share)
 
 
 async def handle_con(r, w):

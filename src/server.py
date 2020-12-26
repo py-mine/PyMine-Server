@@ -60,7 +60,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         raise NotImplementedError('legacy ping is not currently supported.')
 
     try:
-        for i in range(4):
+        for _ in range(4):
             buf.write(await asyncio.wait_for(r.read(1), share['timeout']))
     except asyncio.TimeoutError:
         pass

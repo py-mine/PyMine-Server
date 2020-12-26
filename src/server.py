@@ -137,6 +137,7 @@ async def start():
     except KeyboardInterrupt:
         server.close
         await server.wait_closed()
+        await share['ses'].close()
 
 # uvloop.install()
 asyncio.run(start())

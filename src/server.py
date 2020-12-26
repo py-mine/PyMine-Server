@@ -73,7 +73,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     if state == 'handshaking':
         states[remote] = packet.next_state
-        await handle_packet(r, w, remote)
+        asyncio.get_event_loop().create_task(handle_packet(r, w, remote))
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
             await server_func_status(r, w, packet, share)

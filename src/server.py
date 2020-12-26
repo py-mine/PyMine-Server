@@ -75,7 +75,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     if packet_length & (1 << 31):
         packet_length -= 1 << 32
 
-    buf.write(Buffer.pack_varint(packet_length) + await r.read(packet_length))
+    buf = Buffer(Buffer.pack_varint(packet_length) + await r.read(packet_length))
 
     state = STATES_BY_ID[states.get(remote, 0)]
     packet = buf.unpack_packet(state, 0, PACKET_MAP)

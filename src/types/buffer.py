@@ -62,24 +62,16 @@ class Buffer:
             else:
                 data = cls.pack_varint(0) + data
 
-    def to_bytes(self, comp_thresh: int = -1) -> bytes:
-        """
-        Packs the final Buffer into bytes, readies the data to be sent,
-        handles compression and length prefixing.
-        """
+    def unpack_packet(self, state: str, to: int, PACKET_MAP: object, comp_thresh: int = -1) -> Packet:
+        buf = Buffer(self.read(self.unpack_varint(max_bits=32)))
 
         if comp_thresh >= 0:
-            if len(self.buf) >= comp_thresh:
-                data = self.pack_varint(len(self.buf)) + zlib.compress(self.buf)
-            else:
-                data = self.pack_varint(0) + self.buf
-        else:
-            data = self.buf
+            uncomp_len = buf.unpack_varint()
 
-        return self.pack_varint(len(data), max_bits=32) + data
+            if uncom_len > 0:
+                buf = Buffer(zlib.decompress(self.read()))
 
-    def unpack_packet(self, state: str, to: int, PACKET_MAP: object) -> Packet:
-        return PACKET_MAP[state][(self.unpack_varint(), to,)].decode(self)
+        return PACKET_MAP[state][(buf.unpack_varint(), to,)].decode(buf)
 
     def unpack(self, f: str) -> object:
         unpacked = struct.unpack('>' + f, self.read(struct.calcsize(f)))

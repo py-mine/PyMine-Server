@@ -1,3 +1,4 @@
+from cryptography.hazmat.primitives.asymmetric import rsa
 import immutables
 import logging
 import asyncio
@@ -24,12 +25,15 @@ share = {
     'version': '1.16.4',
     'protocol': 754,
     'timeout': .15,
-    'rsa': {
-
+    'rsa': {  # https://stackoverflow.com/questions/54495255/python-cryptography-export-key-to-der
+        'private': rsa.generate_private_key()
+        'public': None
     },
     'properties': SERVER_PROPERTIES,
     'favicon': FAVICON
 }
+
+share['rsa']['public'] = share['rsa']['private'].public_key()
 
 states = {}  # {remote_address: state_id}
 share['states'] = states

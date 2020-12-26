@@ -27,3 +27,8 @@ async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', share: 
 
     w.write(Buffer.pack_packet(StatusStatusResponse(data)))
     await w.drain()
+
+
+async def pong(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', share: dict):
+    w.write(StatusStatusPingPong(packet.payload).encode())
+    await w.drain()

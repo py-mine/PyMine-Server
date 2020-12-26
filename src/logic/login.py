@@ -5,8 +5,8 @@ import aiohttp
 from src.types.packets.login.login import *
 from src.types.buffer import Buffer
 
-
 ses = aiohttp.ClientSession()
+
 
 async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'LoginStart', share: dict):
     w.write(Buffer.pack_packet(LoginEncryptionRequest(

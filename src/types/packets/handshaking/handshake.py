@@ -23,6 +23,7 @@ class HandshakeHandshake(Packet):
     """
 
     id_ = 0x00
+    dir = 0
 
     def __init__(self, protocol: int, address: str, port: int, next_state: int) -> None:
         super().__init__()

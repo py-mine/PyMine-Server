@@ -11,7 +11,7 @@ __all__ = ('PlayChatMessage',)
 
 
 class PlayChatMessage(Packet):
-    """"TODO: make good docstring. (Server -> Client)""
+    """"TODO: make good docstring. (Server -> Client)"""
     id_ = 0x0E
 
     def __init__(self, data: Chat, position: int, sender: uuid.UUID) -> None:
@@ -22,4 +22,4 @@ class PlayChatMessage(Packet):
 
     def encode(self):
         return Buffer.pack_chat(self.data) + Buffer.pack('b', self.position) + \
-        Buffer.pack_uuid(self.sender)
+            Buffer.pack_uuid(self.sender)

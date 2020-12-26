@@ -9,7 +9,7 @@ async def status(r: asyncio.StreamReader, w: asyncio.StreamWriter, packet: 'Pack
     data = {
         'version': {
             'name': share['version'],
-            'protocol': packet.protocol
+            'protocol': share['protocol']
         },
         'players': {
             'max': share['PROPERTIES']['max-players'],

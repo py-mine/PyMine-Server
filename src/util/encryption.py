@@ -3,7 +3,7 @@ import hashlib
 __all__ = ('generate_verify_hash',)
 
 
-def generate_verify_hash(shared_secret, public_key):
+def generate_verify_hash(shared_secret: bytes, public_key: bytes):
     verify_hash = hashlib.sha1()
 
     verify_hash.update((' '*20).encode('utf-8'))

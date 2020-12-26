@@ -47,12 +47,16 @@ logger = logging.getLogger(__name__)
 
 
 async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
-    read = await r.read(1)
+    buf = Buffer(await r.read(1))
 
-    if read == b'\xFE':
-        return HandshakeLegacyPingRequest.decode(Buffer(read + await asyncio.wait_for(r.read(200), share['timeout'])))
+    if buf.buf == b'\xFE':
+        try:
+            while True:
+                buf.write(await asyncio.wait_for(r.read(1), share['timeout']))
+        except asyncio.TimeoutError:
+            pass
 
-    buf = Buffer(read)
+        return HandshakeLegacyPingRequest.decode(buf)
 
     try:
         for i in range(4):

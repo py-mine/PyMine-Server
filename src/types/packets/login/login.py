@@ -24,6 +24,7 @@ class LoginStart(Packet):
     """
 
     id_ = 0x00
+    to = 0
 
     def __init__(self, username: str) -> None:
         super().__init__()
@@ -45,6 +46,7 @@ class LoginEncryptionRequest(Packet):
     """
 
     id_ = 0x01
+    to = 1
 
     def __init__(self, public_key: bytes) -> None:  # https://wiki.vg/Protocol#Encryption_Request
         super().__init__()
@@ -69,6 +71,7 @@ class LoginEncryptionResponse(Packet):
     """
 
     id_ = 0x01
+    to = 0
 
     def __init__(self, shared_key: bytes, verify_token: bytes) -> None:
         super().__init__()
@@ -92,6 +95,7 @@ class LoginSuccess(Packet):
     """
 
     id_ = 0x02
+    to = 1
 
     def __init__(self, uuid: uuid.UUID, username: str) -> None:
         super().__init__()

@@ -53,8 +53,11 @@ logger = logging.getLogger(__name__)
 share['logger'] = logger
 
 
-async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
-    buf = Buffer(await r.read(1))
+async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple, left: bytes = None):  # nopep8
+    if not left:
+        buf = Buffer(await r.read(1))
+    else:
+        buf = Buffer(left)
 
     if buf.buf == b'\xFE':
         logger.warn('legacy ping is not supported yet.')
@@ -70,8 +73,6 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     state = STATES_BY_ID[states.get(remote, 0)]
     packet = buf.unpack_packet(state, 0, PACKET_MAP)
-
-    print(packet.__dict__)
 
     logger.debug(f'state:{state:<12} | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}')
 
@@ -93,13 +94,17 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         elif packet.id_ == 0x01:  # LoginEncryptionResponse
             pass
 
+    return buf.read()
+
 
 async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}')
 
+    left = None
+
     while True:
-        await handle_packet(r, w, remote)
+        left = await handle_packet(r, w, remote, left)
 
 
 async def start():

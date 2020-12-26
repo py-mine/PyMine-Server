@@ -35,8 +35,6 @@ def load_properties():
         return SERVER_PROPERTIES_DEFAULT
 
 
-SERVER_PROPERTIES = load_properties()
-
 def load_favicon():
     try:
         with open('server-icon.png', 'rb') as favicon:
@@ -44,4 +42,6 @@ def load_favicon():
     except FileNotFoundError:
         return None
 
+
+SERVER_PROPERTIES = load_properties()
 FAVICON = load_favicon()

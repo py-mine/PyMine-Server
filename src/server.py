@@ -5,7 +5,7 @@ import asyncio
 import base64
 import sys
 import os
-sys.path.append(os.getcwd())  # nopep8
+sys.path.append(os.getcwd())
 # import uvloop
 
 from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRequest  # nopep8

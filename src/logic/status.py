@@ -3,9 +3,7 @@ from src.types.packets.status.status import *
 from src.types.buffer import Buffer
 
 
-async def status(r, w, packet):
-    global share
-
+async def status(r, w, packet, share):
     data = {
         'version': {
             'name': share['version'],

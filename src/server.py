@@ -38,7 +38,8 @@ except Exception:
 
 try:  # Load favicon
     with open('server-icon.png', 'rb') as favicon:
-        share['favicon'] = 'data:image/png;base64,' + base64.b64encode(favicon.read()).decode('utf-8')
+        share['favicon'] = 'data:image/png;base64,' + \
+            base64.b64encode(favicon.read()).decode('utf-8')
 except Exception:
     share['favicon'] = None
 

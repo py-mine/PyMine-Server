@@ -1,3 +1,10 @@
+from src.logic.status import status as server_func_status
+from src.data.states import *
+from src.types.buffer import Buffer
+from src.types.packet import Packet
+from src.data.server_properties import *
+from src.data.packet_map import PACKET_MAP
+from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRequest
 import immutables
 import logging
 import asyncio
@@ -8,14 +15,6 @@ import os
 
 sys.path.append(os.getcwd())
 
-from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRequest
-from src.data.packet_map import PACKET_MAP
-from src.data.server_properties import *
-from src.types.packet import Packet
-from src.types.buffer import Buffer
-from src.data.states import *
-
-from src.logic.status import status as server_func_status
 
 global share
 share = {
@@ -77,6 +76,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
             await server_func_status(r, w, packet)
+
 
 async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)

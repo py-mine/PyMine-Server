@@ -13,6 +13,7 @@ class PlayWindowConfirmation(Packet):
     """A packet indicating whether a request from the client was accepted or if there was a problem.
     Server -> Client"""
     id = 0x11
+    to = 1
 
     def __init__(self, window_id: int, action_number: int, accepted: bool) -> None:
         super().__init__()

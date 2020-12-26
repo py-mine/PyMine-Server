@@ -64,8 +64,11 @@ async def handle_con(r, w):
     state = STATES_BY_ID[states.get(remote, 0)]
     packet = buf.unpack_packet(state, PACKET_MAP)
 
-    if state == 'status':
+    if state == 'handshaking':
+        states[remote] = packet.next_state
+    elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
+            print('status')
             await server_func_status(r, w, packet)
 
 

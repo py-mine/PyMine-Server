@@ -61,13 +61,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         logger.warning('legacy ping is currently not supported.')
         return
 
-    try:
-        for _ in range(4):
-            buf.write(await asyncio.wait_for(r.read(1), share['timeout']))
-    except asyncio.TimeoutError:
-        pass
-
-    buf.write(await r.read(buf.unpack_varint()))
+    buf.write(await r.read(Buffer.unpack_varint_stream(r)))
 
     state = STATES_BY_ID[states.get(remote, 0)]
     packet = buf.unpack_packet(state, 0, PACKET_MAP)

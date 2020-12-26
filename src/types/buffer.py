@@ -89,7 +89,7 @@ class Buffer:
         Packs a packet into bytes.
         """
 
-        return cls(cls.pack_varint(packet.id) + packet.encode()).to_bytes()
+        return cls(cls.pack_varint(packet.id_) + packet.encode()).to_bytes()
 
     def unpack_packet(self, state: str, to: int, PACKET_MAP: object) -> Packet:
         return PACKET_MAP[state][(self.unpack_varint(), to,)].decode(self)

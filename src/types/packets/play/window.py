@@ -27,7 +27,11 @@ class PlayWindowConfirmation(Packet):
 
 
 class PlayCloseWindow(Packet):
-    """This packet is sent from the server to the client when a window is forcibly closed, such as when a chest is destroyed while it's open. """
+    """This packet is sent from the server to the client when a window is forcibly closed, such as when a chest is destroyed while it's open.
+    :param int window_id: The ID of the window to be updated.
+    :attr int to: The intended recipient.
+    :attr int id: The unique ID of the packet.
+    """
     id = 0x12
     to = 1
 

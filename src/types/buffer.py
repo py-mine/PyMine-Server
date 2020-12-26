@@ -48,24 +48,19 @@ class Buffer:
         self.pos = 0
 
     @classmethod
-    def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
+    def pack_packet(cls, packet: Packet, comp_thresh: int = -1) -> bytes:
         """
-        Creates a Buffer object from bytes, handles compression
-        and length prefixing
+        Packs a Packet object into bytes.
         """
 
-        buf = cls(data)
-        buf = cls(buf.read(buf.unpack_varint()))  # Handle length prefixing
+        data = packet.encode()
+        data = cls.pack_varint(len(data)) + data
 
-        # Handle if the data was compressed
-        if comp_thresh >= 0:
-            uncomp_len = buf.unpack_varint()  # Handle decompressed length prefixing
-
-            if uncomp_len > 0:
-                # Create new Buffer from decompressed data
-                buf = cls(zlib.decompress(buf.read()))
-
-        return buf
+        if comp_thresh >= 1:
+            if len(data) >= comp_thresh:
+                data = cls.pack_varint(len(data)) + zlib.compress(data)
+            else:
+                data = cls.pack_varint(0) + data
 
     def to_bytes(self, comp_thresh: int = -1) -> bytes:
         """
@@ -82,14 +77,6 @@ class Buffer:
             data = self.buf
 
         return self.pack_varint(len(data), max_bits=32) + data
-
-    @classmethod
-    def pack_packet(cls, packet: Packet):
-        """
-        Packs a packet into bytes.
-        """
-
-        return cls(cls.pack_varint(packet.id_) + packet.encode()).to_bytes()
 
     def unpack_packet(self, state: str, to: int, PACKET_MAP: object) -> Packet:
         return PACKET_MAP[state][(self.unpack_varint(), to,)].decode(self)

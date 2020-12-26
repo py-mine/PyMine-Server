@@ -16,6 +16,9 @@ from src.types.packet import Packet  # nopep8
 from src.data.states import *  # nopep8
 from src.data.config import *  # nopep8
 
+from src.logic.login import request_encryption as logic_request_encryption  # nopep8
+from src.logic.login import login_success as logic_login_success  # nopep8
+from src.logic.login import server_auth as logic_server_auth  # nopep8
 from src.logic.status import status as logic_status  # nopep8
 from src.logic.status import pong as logic_pong  # nopep8
 
@@ -35,8 +38,11 @@ share = {
 
 share['rsa']['public'] = share['rsa']['private'].public_key()
 
-states = {}  # {remote_address: state_id}
+states = {}  # {remote: state_id}
 share['states'] = states
+
+secrets = {}  # {remote: secret}
+share['secrets'] = secrets
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)s: %(message)s',
@@ -68,15 +74,21 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     if state == 'handshaking':
         states[remote] = packet.next_state
-        await handle_packet(r, w, remote)
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
             await logic_status(r, w, packet, share)
         elif packet.id_ == 0x01:  # StatusStatusPingPong
             await logic_pong(r, w, packet)
     elif state == 'login':
-        pass
+        if packet.id_ == 0x00:  # LoginStart
+            if SERVER_PROPERTIES['online_mode']:
+                await logic_request_encryption(r, w, packet, share)
+            else:
+                await logic_login_success(r, w, packet.username)
+        elif packet.id_ == 0x01:  # LoginEncryptionResponse
+            pass
 
+    asyncio.get_event_loop().create_task(handle_packet(r, w, remote))
 
 async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)

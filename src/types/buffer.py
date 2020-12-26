@@ -54,7 +54,6 @@ class Buffer:
         """
 
         data = packet.encode()
-        data = cls.pack_varint(len(data)) + data
 
         if comp_thresh >= 1:
             if len(data) >= comp_thresh:

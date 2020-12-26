@@ -10,4 +10,4 @@ def generate_verify_hash(shared_secret, public_key):
     verify_hash.update(shared_secret)
     verify_hash.update(public_key)
 
-    return int.from_bytes(verify_hash.digest(), byteorder='big', signed=True)
+    return format(int.from_bytes(verify_hash.digest(), byteorder='big', signed=True), 'x')

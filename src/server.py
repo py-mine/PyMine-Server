@@ -4,10 +4,8 @@ import logging
 import asyncio
 import base64
 import sys
-import os
+import os; sys.path.append(os.getcwd())
 # import uvloop
-
-sys.path.append(os.getcwd())
 
 from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRequest
 from src.data.packet_map import PACKET_MAP

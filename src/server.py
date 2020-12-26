@@ -61,7 +61,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     state = STATES_BY_ID[states.get(remote, 0)]
     packet = buf.unpack_packet(state, 0, PACKET_MAP)
 
-    logger.debug(f'state:{state:<12} | id_:{packet.id_:<3} | packet:{packet.__class__.__name__}')
+    logger.debug(f'state:{state:<12} | id_:{hex(packet.id_):<4} | packet:{packet.__class__.__name__}')
 
     if state == 'handshaking':
         states[remote] = packet.next_state

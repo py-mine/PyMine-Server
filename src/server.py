@@ -44,7 +44,7 @@ try:  # Load favicon
         share['favicon'] = 'data:image/png;base64,' + \
             base64.b64encode(favicon.read()).decode('utf-8')
 except Exception:
-    share['favicon'] = FAVICON
+    share['favicon'] = None
 
 states = {}  # {remote_address: state_id}
 share['states'] = states

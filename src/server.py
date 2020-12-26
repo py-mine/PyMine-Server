@@ -19,7 +19,7 @@ from src.logic.status import status as server_func_status
 global share
 share = {
     'version': '1.16.4',
-    'protocol': 754
+    'protocol': 754,
     'timeout': .15
 }
 

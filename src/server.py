@@ -82,6 +82,8 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             await server_func_status(r, w, packet, share)
         elif packet.id_ == 0x01:  # StatusStatusPingPong
             await server_func_pong(r, w, packet)
+    elif state == 'login':
+        pass
 
 
 async def handle_con(r, w):

@@ -50,7 +50,7 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
-async def handle_packet(r, w, remote):
+async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
     read = await r.read(1)
 
     if read == b'\xFE':

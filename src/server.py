@@ -141,5 +141,8 @@ async def start():
         await server.wait_closed()
         await share['ses'].close()
 
+        if not share['ses'].closed:
+            await asyncio.sleep(.5)
+
 # uvloop.install()
 asyncio.run(start())

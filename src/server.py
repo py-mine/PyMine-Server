@@ -20,7 +20,7 @@ from src.logic.status import pong as server_func_pong  # nopep8
 
 global share
 share = {
-    'server_version': 1
+    'server_version': 1,
     'version': '1.16.4',
     'protocol': 754,
     'timeout': .15,
@@ -92,7 +92,7 @@ async def start():
                 logger.info(f'PPMine 69 started on port {port}!')
             else:
                 logger.info(f'PyMine {share["server_version"]} started on port {port}!')
-                
+
             await server.serve_forever()
     except KeyboardInterrupt:
         pass

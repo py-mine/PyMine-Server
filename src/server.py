@@ -19,7 +19,8 @@ from src.logic.status import status as server_func_status
 
 global share
 share = {
-    'version': '1.16.4'
+    'version': '1.16.4',
+    'timeout': .15
 }
 
 try:  # Load server.properties
@@ -52,9 +53,16 @@ async def handle_packet(r, w, remote):
     read = await r.read(1)
 
     if read == b'\xFE':
-        return HandshakeLegacyPingRequest.decode(Buffer(await asyncio.wait_for(r.read(200), .15)))
+        return HandshakeLegacyPingRequest.decode(Buffer(await asyncio.wait_for(r.read(200), share['timeout'])))
 
-    buf = Buffer(read + await r.read(4))
+    buf = Buffer(read)
+
+    try:
+        for i in range(4):
+            buf.write(await asyncio.wait_for(p.read(1), share['timeout'])
+    except Exception:
+        pass
+
     buf.write(await r.read(buf.unpack_varint()))
 
     state = STATES_BY_ID[states.get(remote, 0)]
@@ -64,7 +72,7 @@ async def handle_packet(r, w, remote):
 
     if state == 'handshaking':
         states[remote] = packet.next_state
-        asyncio.get_event_loop().create_task(handle_packet(r, w, remote))
+        await handle_packet(r, w, remote)
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
             await server_func_status(r, w, packet)

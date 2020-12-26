@@ -71,7 +71,7 @@ class Buffer:
                 self.buf = zlib.decompress(self.read())
                 self.reset()
 
-        return PACKET_MAP[state][(buf.unpack_varint(), to,)].decode(buf)
+        return PACKET_MAP[state][(self.unpack_varint(), to,)].decode(self)
 
     def unpack(self, f: str) -> object:
         unpacked = struct.unpack('>' + f, self.read(struct.calcsize(f)))

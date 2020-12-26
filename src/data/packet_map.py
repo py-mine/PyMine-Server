@@ -20,8 +20,6 @@ def load_packets():
                     packet = module.__dict__.get(name)
                     packet_map[state][packet.id_] = packet
 
-        packet_map[state] = sorted(packet_map[state], key=(lambda p: p.id_))
-
     return make_immutable(packet_map)
 
 

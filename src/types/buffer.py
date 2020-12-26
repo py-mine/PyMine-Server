@@ -6,8 +6,8 @@ import uuid
 import zlib
 
 from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
-from src.types.chat import Chat
 from src.types.packet import Packet
+from src.types.chat import Chat
 from src.data.misc import *
 
 
@@ -91,8 +91,8 @@ class Buffer:
 
         return cls(cls.pack_varint(packet.id) + packet.encode()).to_bytes()
 
-    def unpack_packet(self):
-        raise NotImplemented
+    def unpack_packet(self, state: str, PACKET_MAP: object) -> Packet:
+        return PACKET_MAP[state][self.unpack_varint()].decode(self)
 
     def unpack(self, f: str) -> object:
         unpacked = struct.unpack('>' + f, self.read(struct.calcsize(f)))

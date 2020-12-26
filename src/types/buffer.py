@@ -148,8 +148,7 @@ class Buffer:
         num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
 
         if not (num_min <= num < num_max):
-            raise ValueError(
-                f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
+            raise ValueError(f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
 
         return num
 

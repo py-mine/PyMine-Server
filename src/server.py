@@ -10,9 +10,10 @@ import os
 
 sys.path.append(os.getcwd())
 
-from src.data.packet_map import PACKET_MAP  # nopep8
 from src.types.buffer import Buffer  # nopep8
 from src.types.packet import Packet  # nopep8
+
+from src.data.packet_map import PACKET_MAP  # nopep8
 from src.data.states import *  # nopep8
 from src.data.config import *  # nopep8
 
@@ -26,7 +27,6 @@ from src.logic.status import pong as logic_pong  # nopep8
 from src.logic.commands import handle_commands  # nopep8
 
 from src.util.share import share, logger  # nopep8
-
 import src.util.encryption as encryption  # nopep8
 
 share.update({

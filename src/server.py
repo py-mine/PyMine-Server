@@ -26,6 +26,8 @@ from src.logic.commands import handle_commands  # nopep8
 
 from src.util.share import share, logger  # nopep8
 
+import src.util.encryption as encryption
+
 share.update({
     'server_version': 1,
     'version': '1.16.4',
@@ -45,9 +47,6 @@ share['rsa']['public'] = share['rsa']['private'].public_key()
 states = {}  # {remote: state_id}
 share['states'] = states
 
-secrets = {}  # {remote: secret}
-share['secrets'] = secrets
-
 login_cache = {}  # {remote: {username: username, verify_token: verify_token]}
 
 logger.debug_ = SERVER_PROPERTIES['debug']
@@ -64,8 +63,13 @@ async def close_con(w, remote):
     except Exception:
         pass
 
+    try:
+        del ciphers[remote]
+    except Exception:
+        pass
+
     logger.debug(f'disconnected nicely from {remote[0]}:{remote[1]}')
-    return True
+    return False, None, w
 
 
 async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
@@ -99,7 +103,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         f'IN : state:{state:<11} | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}')
 
     if state == 'handshaking':
-        states[remote] = packet.next_state
+        states[remote] = packet.negen_aes_cipherxt_state
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
             await logic_status(r, w, packet)
@@ -120,20 +124,24 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
             if auth:
                 await logic_login_success(r, w, *auth)
+                cipher = encryption.gen_aes_cipher(packet.shared_key)
+                r = encryption.EncryptedStreamReader(r, cipher.decryptor())
+                w = encryption.EncryptedStreamWriter(r, cipher.encryptor())
             else:
                 await logic_login_kick(w)
                 return await close_con(w, remote)
+
+    return True, r, w
 
 
 async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}')
 
-    while True:
-        res = await handle_packet(r, w, remote)
+    c = True
 
-        if res:
-            break
+    while c:
+        c, r, w = await handle_packet(r, w, remote)
 
 
 async def start():

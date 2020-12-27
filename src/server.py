@@ -49,6 +49,7 @@ share['secrets'] = secrets
 
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 # create console handler with a higher log level
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
@@ -56,7 +57,7 @@ ch.setLevel(logging.DEBUG)
 ch.setFormatter(CustomFormatter())
 
 logger.addHandler(ch)
-share['logger'] = logger
+share['logger'] = logging
 
 
 async def close_con(w, remote):

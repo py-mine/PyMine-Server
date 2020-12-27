@@ -2,7 +2,7 @@
 from src.types.packets.status.status import *
 from src.types.buffer import Buffer
 
-import src.util.share
+from src.util.share import share
 
 
 async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest'):

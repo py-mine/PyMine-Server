@@ -7,7 +7,7 @@ from src.types.packets.login.login import *
 from src.types.buffer import Buffer
 
 from src.util.encryption import *
-import src.util.share
+from src.util.share import share
 
 # https://github.com/ammaraskar/pyCraft/blob/master/minecraft/networking/encryption.py
 

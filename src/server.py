@@ -26,7 +26,7 @@ from src.logic.commands import handle_commands  # nopep8
 from src.util.logging import Logger  # nopep8
 from src.util.share import share
 
-share = {
+share.update({
     'server_version': 1,
     'version': '1.16.4',
     'protocol': 754,
@@ -38,7 +38,7 @@ share = {
     'properties': SERVER_PROPERTIES,
     'favicon': FAVICON,
     'ses': None
-}
+})
 
 share['rsa']['public'] = share['rsa']['private'].public_key()
 

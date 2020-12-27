@@ -1,6 +1,5 @@
 from cryptography.hazmat.primitives.asymmetric import rsa
 import immutables
-import logging
 import asyncio
 import aiohttp
 import random
@@ -23,7 +22,7 @@ from src.logic.login import server_auth as logic_server_auth  # nopep8
 from src.logic.status import status as logic_status  # nopep8
 from src.logic.status import pong as logic_pong  # nopep8
 
-from src.util.logs import CustomFormatter  # nopep8
+from src.util.logging import Logger  # nopep8
 
 global share
 share = {
@@ -49,16 +48,8 @@ secrets = {}  # {remote: secret}
 share['secrets'] = secrets
 
 
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
-# create console handler with a higher log level
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-
-ch.setFormatter(CustomFormatter())
-
-logger.addHandler(ch)
-share['logger'] = logging
+logger = Logger(SERVER_PROPERTIES['debug'])
+share['logger'] = logger
 
 
 async def close_con(w, remote):

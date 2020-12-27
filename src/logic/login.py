@@ -4,6 +4,7 @@ from cryptography.hazmat.primitives import serialization
 import aiohttp
 import uuid
 
+from src.types.packets.login.set_comp import LoginSetCompression
 from src.types.packets.login.login import *
 from src.types.buffer import Buffer
 
@@ -53,6 +54,11 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: d
             return decrypted_shared_key, (name, uuid_,)
 
     return False
+
+
+async def set_compression(w, comp_thresh: int = -1):
+    w.write(LoginSetCompression(comp_thresh))
+    await w.drain()
 
 
 async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, uuid_: uuid.UUID = None):  # nopep8

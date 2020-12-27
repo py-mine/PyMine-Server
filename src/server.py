@@ -64,6 +64,7 @@ async def close_con(w, remote):
     except Exception:
         pass
 
+    logger.debug(f'disconnected nicely from {remote[0]}:{remote[1]}')
     return True
 
 

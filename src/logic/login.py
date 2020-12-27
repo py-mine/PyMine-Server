@@ -28,7 +28,7 @@ async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'Logi
 
 
 async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: dict):
-    if share['rsa']['private'].decrypt(packet.verify_token, PKCS1v15()) == cache['verfy']:
+    if share['rsa']['private'].decrypt(packet.verify_token, PKCS1v15()) == cache['verify']:
         decrypted_shared_key = share['rsa']['private'].decrypt(packet.shared_key, PKCS1v15())
 
         resp = await share['ses'].get(

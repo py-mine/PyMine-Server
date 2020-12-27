@@ -80,7 +80,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     for i in range(5):
         try:
-            read = await asyncio.wait_for(r.read(1), 1)
+            read = await asyncio.wait_for(r.read(1), 5)
         except asyncio.TimeoutError:
             return await close_con(w, remote)
 
@@ -137,7 +137,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
 
             if comp_thresh > 0:
-                await logic_login_set_compression(comp_thresh)
+                await logic_login_set_compression(w, comp_thresh)
 
             await logic_login_success(r, w, *auth)
 

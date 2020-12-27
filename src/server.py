@@ -64,6 +64,8 @@ async def close_con(w, remote):
     except Exception:
         pass
 
+    return True
+
 
 async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
     packet_length = 0
@@ -121,14 +123,16 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
                 await logic_login_kick(w)
                 return await close_con(w, remote)
 
-    asyncio.create_task(handle_packet(r, w, remote))
-
 
 async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}')
 
-    await handle_packet(r, w, remote)
+    while True:
+        res = await handle_packet(r, w, remote)
+
+        if res:
+            break
 
 
 async def start():

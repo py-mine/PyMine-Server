@@ -120,6 +120,7 @@ async def handle_con(r, w):
 async def start():
     addr = SERVER_PROPERTIES['server_ip']
     port = SERVER_PROPERTIES['server_port']
+    
     server = await asyncio.start_server(handle_con, host=addr, port=port)
 
     try:

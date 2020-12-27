@@ -18,10 +18,10 @@ BG_RED = '\x1b[41;1m'
 
 class Logger:
     def __init__(self, debug: bool = True) -> None:
-        self.debug = debug
+        self.debug_ = debug
 
     def debug(self, *message):
-        if self.debug:
+        if self.debug_:
             message = ' '.join(str(m) for m in message)
             print(f'{WHITE}[{nice_time()} {GREY}DEBUG{WHITE}]: {GREY}{message}{RESET}')
 

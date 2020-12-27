@@ -48,7 +48,7 @@ share['states'] = states
 secrets = {}  # {remote: secret}
 share['secrets'] = secrets
 
-login_cache = {}  # {remote: [username, verify_token]}
+login_cache = {}  # {remote: {username: username, verify_token: verify_token]}
 
 logger.debug_ = SERVER_PROPERTIES['debug']
 

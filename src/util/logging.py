@@ -40,3 +40,12 @@ class Logger:
     def critical(self, *message):
         message = ' '.join(str(m) for m in message)
         print(f'{WHITE}{BG_RED}[{nice_time()} CRITICAL ERROR]: {message}{RESET}')
+
+if __name__ == '__main__':
+    logger = Logger()
+
+    logger.debug('This is a', 'debug message')
+    logger.info('This is an', 'info message')
+    logger.warn('This is a', 'warning message')
+    logger.error('This is an', 'error message')
+    logger.critical('This is a', 'critical error message')

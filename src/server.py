@@ -51,8 +51,7 @@ share['states'] = states
 login_cache = {}  # {remote: {username: username, verify_token: verify_token]}
 
 logger.debug_ = SERVER_PROPERTIES['debug']
-
-comp_thresh = SERVER_PROPERTIES['comp_thresh']
+share['comp_thresh'] = SERVER_PROPERTIES['comp_thresh']
 
 
 async def close_con(w, remote):

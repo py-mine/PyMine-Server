@@ -44,7 +44,7 @@ class EncryptedStreamWriter:
         self.writer = writer
         self.encryptor = encryptor
 
-    def write(self, date: bytes):
+    def write(self, data: bytes):
         return self.writer.write(self.encryptor.update(data))
 
     def close(self):

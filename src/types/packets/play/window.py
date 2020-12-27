@@ -6,14 +6,13 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayWindowConfirmation',)
+__all__ = ('PlayWindowConfirmation', 'PlayCloseWindow', 'PlayWindowProperty',)
 
 
 class PlayWindowConfirmation(Packet):
     """A packet indicating whether a request from the client was accepted or if there was a problem.
     Server -> Client"""
-
-    id_ = 0x11
+    id = 0x11
     to = 1
 
     def __init__(self, window_id: int, action_number: int, accepted: bool) -> None:
@@ -30,9 +29,25 @@ class PlayWindowConfirmation(Packet):
 class PlayCloseWindow(Packet):
     """This packet is sent from the server to the client when a window is forcibly closed, such as when a chest is destroyed while it's open. """
     id = 0x12
+    to = 1
 
     def __init__(self, window_id: int):
         self.window_id = window_id
 
     def encode(self):
         return Buffer.pack('B', self.window_id)
+
+
+class PlayWindowProperty(Packet):
+    """This packet is used to inform the client that part of a GUI window should be updated. ClientboundServer -> Client"""
+    to = 1
+    id = 0x14
+
+    def __init__(self, window_id: int, property: int, value: int):
+        self.window_id = window_id
+        self.property = property
+        self.value = value
+
+    def encode(self):
+        return Buffer.pack('B', self.window_id) + Buffer.pack('h', self.property) +\
+            Buffer.pack('h', self.value)

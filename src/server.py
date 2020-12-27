@@ -47,8 +47,7 @@ share['states'] = states
 secrets = {}  # {remote: secret}
 share['secrets'] = secrets
 
-logger = Logger(SERVER_PROPERTIES['debug'])
-share['logger'] = logger
+logger.debug = SERVER_PROPERTIES['debug']
 
 
 async def close_con(w, remote):

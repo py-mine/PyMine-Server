@@ -26,7 +26,7 @@ from src.logic.commands import handle_commands  # nopep8
 
 from src.util.share import share, logger  # nopep8
 
-import src.util.encryption as encryption
+import src.util.encryption as encryption  # nopep8
 
 share.update({
     'server_version': 1,

@@ -61,3 +61,8 @@ async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, uui
 
     w.write(Buffer.pack_packet(LoginSuccess(uuid_, username)))
     await w.drain()
+
+
+async def login_kick(w: 'StreamWriter'):
+    w.write(Buffer.pack_packet(LoginKick('You must be on a legit client and logged in to join this server.')))
+    await w.drain()

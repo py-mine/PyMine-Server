@@ -10,12 +10,13 @@ import os
 
 sys.path.append(os.getcwd())
 
-from src.data.packet_map import PACKET_MAP  # nopep8
 from src.types.buffer import Buffer  # nopep8
 from src.types.packet import Packet  # nopep8
-from src.data.states import *  # nopep8
-from src.data.config import *  # nopep8
 
+from src.data.packet_map import PACKET_MAP  # nopep8
+from src.data.states import *  # nopep8
+
+from src.logic.login import set_compression as logic_login_set_compression  # nopep8
 from src.logic.login import request_encryption as logic_request_encryption  # nopep8
 from src.logic.login import login_success as logic_login_success  # nopep8
 from src.logic.login import server_auth as logic_server_auth  # nopep8
@@ -24,32 +25,15 @@ from src.logic.status import status as logic_status  # nopep8
 from src.logic.status import pong as logic_pong  # nopep8
 from src.logic.commands import handle_commands  # nopep8
 
-from src.util.share import share, logger  # nopep8
-
 import src.util.encryption as encryption  # nopep8
+from src.util.share import *  # nopep8
 
-share.update({
-    'server_version': 1,
-    'version': '1.16.4',
-    'protocol': 754,
-    'timeout': .15,
-    'rsa': {  # https://stackoverflow.com/questions/54495255/python-cryptography-export-key-to-der
-        'private': rsa.generate_private_key(65537, 1024),
-        'public': None
-    },
-    'properties': SERVER_PROPERTIES,
-    'favicon': FAVICON,
-    'ses': None
-})
-
+share['rsa']['private'] = rsa.generate_private_key(65537, 1024)
 share['rsa']['public'] = share['rsa']['private'].public_key()
 
-states = {}  # {remote: state_id}
-share['states'] = states
-
+states = share['states']
 login_cache = {}  # {remote: {username: username, verify_token: verify_token]}
-
-logger.debug_ = SERVER_PROPERTIES['debug']
+logger.debug_ = share['conf']['debug']
 
 
 async def close_con(w, remote):
@@ -77,7 +61,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     for i in range(5):
         try:
-            read = await asyncio.wait_for(r.read(1), 1)
+            read = await asyncio.wait_for(r.read(1), 5)
         except asyncio.TimeoutError:
             return await close_con(w, remote)
 
@@ -100,7 +84,8 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     packet = buf.unpack_packet(state, 0, PACKET_MAP)
 
     logger.debug(
-        f'IN : state:{state:<11} | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}')
+        f'IN : state:{state:<11} | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}'
+    )
 
     if state == 'handshaking':
         states[remote] = packet.next_state
@@ -112,27 +97,34 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             return await close_con(w, remote)
     elif state == 'login':
         if packet.id_ == 0x00:  # LoginStart
-            if SERVER_PROPERTIES['online_mode']:
+            if share['conf']['online_mode']:
                 login_cache[remote] = {'username': packet.username, 'verify': None}
                 await logic_request_encryption(r, w, packet, login_cache[remote])
             else:
                 await logic_login_success(r, w, packet.username)
         elif packet.id_ == 0x01:  # LoginEncryptionResponse
-            decrypted, auth = await logic_server_auth(packet, remote, login_cache[remote])
+            shared_key, auth = await logic_server_auth(packet, remote, login_cache[remote])
 
             del login_cache[remote]
 
-            if auth:
-                await logic_login_success(r, w, *auth)
-
-                cipher = encryption.gen_aes_cipher(decrypted)
-
-                # Replace streams with ones which auto decrypt + encrypt data
-                r = encryption.EncryptedStreamReader(r, cipher.decryptor())
-                w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
-            else:
+            if not auth:
                 await logic_login_kick(w)
                 return await close_con(w, remote)
+
+            cipher = encryption.gen_aes_cipher(shared_key)
+
+            # Replace streams with ones which auto decrypt + encrypt data
+            r = encryption.EncryptedStreamReader(r, cipher.decryptor())
+            w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
+
+            if share['comp_thresh'] > 0:
+                await logic_login_set_compression(w)
+
+            await logic_login_success(r, w, *auth)
+
+            states[remote] = 3  # PLAY
+    elif state == 'play':
+        logger.debug('entered play state!')
 
     return True, r, w
 
@@ -148,8 +140,8 @@ async def handle_con(r, w):
 
 
 async def start():
-    addr = SERVER_PROPERTIES['server_ip']
-    port = SERVER_PROPERTIES['server_port']
+    addr = share['conf']['server_ip']
+    port = share['conf']['server_port']
 
     server = await asyncio.start_server(handle_con, host=addr, port=port)
 

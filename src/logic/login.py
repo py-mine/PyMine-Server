@@ -31,7 +31,7 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: d
     decrypted_verify = share['rsa']['private'].decrypt(packet.verify_token, PKCS1v15())
     if decrypted_verify == cache['verify']:
         resp = await share['ses'].get(
-            'https://sessionserver.mojang.com/session/minecraft/hasJoined?username=username&serverId=hash',
+            'https://sessionserver.mojang.com/session/minecraft/hasJoined',
             params={
                 'username': cache['username'],
                 'serverId': generate_verify_hash(

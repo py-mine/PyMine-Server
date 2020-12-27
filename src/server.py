@@ -69,6 +69,9 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         except asyncio.TimeoutError:
             return await close_con(w, remote)
 
+        if read == b'':
+            return await close_con(w, remote)
+
         if i == 0 and read == b'\xFE':
             logger.warning('legacy ping is not supported currently.')
             return await close_con(w, remote)

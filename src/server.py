@@ -1,100 +1,144 @@
-from src.logic.status import status as server_func_status
-from src.data.states import *
-from src.types.buffer import Buffer
-from src.types.packet import Packet
-from src.data.server_properties import *
-from src.data.packet_map import PACKET_MAP
-from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRequest
+from cryptography.hazmat.primitives.asymmetric import rsa
 import immutables
-import logging
 import asyncio
-import base64
+import aiohttp
+import random
+import struct
 import sys
 import os
 # import uvloop
 
 sys.path.append(os.getcwd())
 
+from src.data.packet_map import PACKET_MAP  # nopep8
+from src.types.buffer import Buffer  # nopep8
+from src.types.packet import Packet  # nopep8
+from src.data.states import *  # nopep8
+from src.data.config import *  # nopep8
+
+from src.logic.login import request_encryption as logic_request_encryption  # nopep8
+from src.logic.login import login_success as logic_login_success  # nopep8
+from src.logic.login import server_auth as logic_server_auth  # nopep8
+from src.logic.status import status as logic_status  # nopep8
+from src.logic.status import pong as logic_pong  # nopep8
+
+from src.util.logging import Logger  # nopep8
 
 global share
 share = {
+    'server_version': 1,
     'version': '1.16.4',
-    'timeout': .15
+    'protocol': 754,
+    'timeout': .15,
+    'rsa': {  # https://stackoverflow.com/questions/54495255/python-cryptography-export-key-to-der
+        'private': rsa.generate_private_key(65537, 1024),
+        'public': None
+    },
+    'properties': SERVER_PROPERTIES,
+    'favicon': FAVICON,
+    'ses': None
 }
 
-try:  # Load server.properties
-    with open('server.properties', 'r+') as f:
-        lines = f.readlines()
+share['rsa']['public'] = share['rsa']['private'].public_key()
 
-        share['PROPERTIES'] = dict(SERVER_PROPERTIES)
-        share['PROPERTIES'].update(parse_properties(lines))
-        share['PROPERTIES'] = immutables.Map(PROPERTIES)
-except Exception:
-    with open('server.properties', 'w+') as f:
-        f.write(SERVER_PROPERTIES_BLANK)
-
-    share['PROPERTIES'] = SERVER_PROPERTIES
-
-try:  # Load favicon
-    with open('server-icon.png', 'rb') as favicon:
-        share['favicon'] = 'data:image/png;base64,' + \
-            base64.b64encode(favicon.read()).decode('utf-8')
-except Exception:
-    share['favicon'] = None
-
-states = {}  # {remote_address: state_id}
+states = {}  # {remote: state_id}
 share['states'] = states
 
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+secrets = {}  # {remote: secret}
+share['secrets'] = secrets
+
+logger = Logger(SERVER_PROPERTIES['debug'])
+share['logger'] = logger
 
 
-async def handle_packet(r, w, remote):
-    read = await r.read(1)
-
-    if read == b'\xFE':
-        return HandshakeLegacyPingRequest.decode(Buffer(await asyncio.wait_for(r.read(200), share['timeout'])))
-
-    buf = Buffer(read)
+async def close_con(w, remote):
+    w.close()
+    await w.wait_closed()
 
     try:
-        for i in range(4):
-            buf.write(await asyncio.wait_for(p.read(1), share['timeout']))
-    except Exception:
+        del states[remote]
+    except BaseException:
         pass
 
-    buf.write(await r.read(buf.unpack_varint()))
+
+async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
+    packet_length = 0
+
+    for i in range(5):
+        try:
+            read = await asyncio.wait_for(r.read(1), 1)
+        except asyncio.TimeoutError:
+            return await close_con(w, remote)
+
+        if read == b'':
+            return await close_con(w, remote)
+
+        if i == 0 and read == b'\xFE':
+            logger.warning('legacy ping is not supported currently.')
+            return await close_con(w, remote)
+
+        b = struct.unpack('B', read)[0]
+        packet_length |= (b & 0x7F) << 7 * i
+
+        if not b & 0x80:
+            break
+
+    if packet_length & (1 << 31):
+        packet_length -= 1 << 32
+
+    buf = Buffer(await r.read(packet_length))
 
     state = STATES_BY_ID[states.get(remote, 0)]
-    packet = buf.unpack_packet(state, PACKET_MAP)
+    packet = buf.unpack_packet(state, 0, PACKET_MAP)
 
-    logger.debug(f'state:{state} | id_:{packet.id_} | packet:{type(packet)}')
+    logger.debug(f'state:{state:<11} | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}')
 
     if state == 'handshaking':
         states[remote] = packet.next_state
-        await handle_packet(r, w, remote)
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
-            await server_func_status(r, w, packet)
+            await logic_status(r, w, packet, share)
+        elif packet.id_ == 0x01:  # StatusStatusPingPong
+            await logic_pong(r, w, packet)
+            return await close_con(w, remote)
+    elif state == 'login':
+        if packet.id_ == 0x00:  # LoginStart
+            if SERVER_PROPERTIES['online_mode']:
+                await logic_request_encryption(r, w, packet, share)
+            else:
+                await logic_login_success(r, w, packet.username)
+        elif packet.id_ == 0x01:  # LoginEncryptionResponse
+            pass
+
+    asyncio.create_task(handle_packet(r, w, remote))
+
 
 
 async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)
-    logger.info(f'Connection received from {remote[0]}:{remote[1]}')
+    logger.debug(f'connection received from {remote[0]}:{remote[1]}')
 
     await handle_packet(r, w, remote)
 
 
 async def start():
-    port = 69
-    server = await asyncio.start_server(handle_con, port=port)
+    addr = SERVER_PROPERTIES['server_ip']
+    port = SERVER_PROPERTIES['server_port']
+    server = await asyncio.start_server(handle_con, host=addr, port=port)
 
     try:
-        async with server:
-            print(f'Server started on port {port}')
-            await server.serve_forever()
+        async with aiohttp.ClientSession() as share['ses']:
+            async with server:
+                if random.randint(0, 999) == 1:
+                    logger.info(f'PPMine 69.0 started on port {addr}:{port}!')
+                else:
+                    logger.info(
+                        f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
+
+                await server.serve_forever()
     except KeyboardInterrupt:
-        pass
+        server.close
+        await server.wait_closed()
 
 # uvloop.install()
 asyncio.run(start())

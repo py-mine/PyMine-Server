@@ -12,7 +12,7 @@ class PlayStatistics(Packet):
     """Send data in the stats menu to client. (Server -> Client)
 
     :param list stats: A list of stat entries (see here: https://wiki.vg/Protocol#Statistics).
-    :attr type id_: Unique packet ID.
+    :attr int id_: Unique packet ID.
     :attr stats:
     """
 

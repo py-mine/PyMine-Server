@@ -17,7 +17,7 @@ class PlayBossBar(Packet):
     :param int action: Action to take.
     :param type **data: Data corresponding to the action.
     :attr type data: Data corresponding to the action.
-    :attr type id_: Unique packet ID.
+    :attr int id_: Unique packet ID.
     :attr uuid:
     :attr action:
     """

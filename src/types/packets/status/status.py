@@ -9,7 +9,7 @@ __all__ = ('StatusStatusRequest', 'StatusStatusResponse', 'StatusStatusPingPong'
 class StatusStatusRequest(Packet):
     """Request from the client to get information on the server. (Client -> Server)
 
-    :attr type id_: Unique packet ID.
+    :attr int id_: Unique packet ID.
     """
 
     id_ = 0x00
@@ -27,7 +27,7 @@ class StatusStatusResponse(Packet):
     """Returns server status data back to the requesting client. (Server -> Client)
 
     :param dict response_data: JSON response data sent back to the client.
-    :attr type id_: Unique packet ID.
+    :attr int id_: Unique packet ID.
     :attr response_data:
     """
 
@@ -69,7 +69,7 @@ class StatusStatusPingPong(Packet):
     """Ping pong? (Server -> Client AND Client -> Server)
 
     :param int payload: A long number, randomly generated or what the client sent.
-    :attr type id_: Unique packet ID.
+    :attr int id_: Unique packet ID.
     :attr type payload:
     """
 

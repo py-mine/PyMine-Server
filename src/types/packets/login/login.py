@@ -6,6 +6,7 @@ import uuid
 
 from src.types.buffer import Buffer
 from src.types.packet import Packet
+from src.types.chat import Chat
 
 __all__ = (
     'LoginStart',
@@ -105,3 +106,23 @@ class LoginSuccess(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack_uuid(self.uuid) + Buffer.pack_string(self.username)
+
+
+class LoginKick(Packet):
+    """Sent by the server to kick a player while in the login state. (Server -> Client)
+
+    :param str reason: The reason for the disconnect.
+    :attr int id_: Unique packet ID.
+    :attr username:
+    """
+
+    id_ = 0x00
+    to = 1
+
+    def __init__(self, reason: str):
+        super().__init__()
+
+        self.reason = reason
+
+    def encode(self) -> bytes:
+        return Buffer.pack_chat(Chat(self.reason))

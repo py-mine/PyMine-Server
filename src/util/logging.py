@@ -20,23 +20,23 @@ class Logger:
     def __init__(self, debug: bool = True) -> None:
         self.debug = debug
 
-    def debug(*message):
+    def debug(self, *message):
         if self.debug:
             message = ' '.join(str(m) for m in message)
             print(f'{WHITE}[{nice_time()} {GREY}DEBUG{WHITE}]: {GREY}{message}{RESET}')
 
-    def info(*message):
+    def info(self, *message):
         message = ' '.join(str(m) for m in message)
         print(f'{WHITE}[{nice_time()} {BLUE}INFO{WHITE}]: {message}{RESET}')
 
-    def warn(*message):
+    def warn(self, *message):
         message = ' '.join(str(m) for m in message)
         print(f'{WHITE}[{nice_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{message}{RESET}')
 
-    def error(*message):
+    def error(self, *message):
         message = ' '.join(str(m) for m in message)
         print(f'{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{message}{RESET}')
 
-    def critical(*message):
+    def critical(self, *message):
         message = ' '.join(str(m) for m in message)
         print(f'{WHITE}{BG_RED}[{nice_time()} CRITICAL ERROR]: {message}{RESET}')

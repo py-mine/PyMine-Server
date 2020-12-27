@@ -28,13 +28,15 @@ async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'Logi
 
 
 async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: dict):
-    if share['rsa']['private'].decrypt(packet.verify_token, PKCS1v15()) == cache['verify']:
+    if share['rsa']['private'].decrypt(packet.verify_token, PKCS1v15()) == cache['verfy']:
+        decrypted_shared_key = share['rsa']['private'].decrypt(packet.shared_key, PKCS1v15())
+
         resp = await share['ses'].get(
             'https://sessionserver.mojang.com/session/minecraft/hasJoined',
             params={
                 'username': cache['username'],
                 'serverId': gen_verify_hash(
-                    share['rsa']['private'].decrypt(packet.shared_key, PKCS1v15()),
+                    decrypted_shared_key,
                     share['rsa']['public'].public_bytes(
                         encoding=serialization.Encoding.DER,
                         format=serialization.PublicFormat.SubjectPublicKeyInfo
@@ -48,7 +50,7 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: d
         if jj is not None:
             uuid_, name = uuid.UUID(jj['id']), jj['name']
 
-            return name, uuid_
+            return decrypted_shared_key, (name, uuid_,)
 
     return False
 

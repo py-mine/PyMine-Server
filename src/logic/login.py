@@ -67,7 +67,7 @@ async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, uui
         jj = await resp.json()
         uuid_ = uuid.UUID(jj['id'])
 
-    w.write(Buffer.pack_packet(LoginSuccess(uuid_, username)))
+    w.write(Buffer.pack_packet(LoginSuccess(uuid_, username), share['comp_thresh']))
     await w.drain()
 
 

@@ -44,6 +44,8 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: d
             }
         )
 
+    print(resp, '\n\n')
+
     jj = await resp.json()
     uuid_, name = uuid.UUID(jj['id']), jj['name']
 

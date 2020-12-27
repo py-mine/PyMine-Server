@@ -111,7 +111,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     elif state == 'login':
         if packet.id_ == 0x00:  # LoginStart
             if SERVER_PROPERTIES['online_mode']:
-                await logic_requyou shoest_encryption(r, w, packet, share)
+                await logic_request_encryption(r, w, packet, share)
             else:
                 await logic_login_success(r, w, packet.username)
         elif packet.id_ == 0x01:  # LoginEncryptionResponse

@@ -16,13 +16,14 @@ from src.types.buffer import Buffer  # nopep8
 from src.types.packet import Packet  # nopep8
 from src.data.states import *  # nopep8
 from src.data.config import *  # nopep8
-from src.util.logs import CustomFormatter  # nopep8
 
 from src.logic.login import request_encryption as logic_request_encryption  # nopep8
 from src.logic.login import login_success as logic_login_success  # nopep8
 from src.logic.login import server_auth as logic_server_auth  # nopep8
 from src.logic.status import status as logic_status  # nopep8
 from src.logic.status import pong as logic_pong  # nopep8
+
+from src.util.logs import CustomFormatter  # nopep8
 
 global share
 share = {
@@ -110,7 +111,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     elif state == 'login':
         if packet.id_ == 0x00:  # LoginStart
             if SERVER_PROPERTIES['online_mode']:
-                await logic_request_encryption(r, w, packet, share)
+                await logic_requyou shoest_encryption(r, w, packet, share)
             else:
                 await logic_login_success(r, w, packet.username)
         elif packet.id_ == 0x01:  # LoginEncryptionResponse

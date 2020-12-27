@@ -33,7 +33,7 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: d
             'https://sessionserver.mojang.com/session/minecraft/hasJoined',
             params={
                 'username': cache['username'],
-                'serverId': generate_verify_hash(
+                'serverId': gen_verify_hash(
                     share['rsa']['private'].decrypt(packet.shared_key, PKCS1v15()),
                     share['rsa']['public'].public_bytes(
                         encoding=serialization.Encoding.DER,

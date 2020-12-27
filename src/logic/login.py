@@ -28,26 +28,24 @@ async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'Logi
 
 
 async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: dict):
-    resp = await share['ses'].get(
-        'https://sessionserver.mojang.com/session/minecraft/hasJoined?username=username&serverId=hash',
-        params={
-            'username': cache['username'],
-            'serverId': generate_verify_hash(
-                packet.shared_key,
-                share['rsa']['public'].public_bytes(
-                    encoding=serialization.Encoding.DER,
-                    format=serialization.PublicFormat.SubjectPublicKeyInfo
+    decrypted_verify = share['rsa']['private'].decrypt(packet.verify_token, PKCS1v15())
+    if decrypted_verify == cache['verify']:
+        resp = await share['ses'].get(
+            'https://sessionserver.mojang.com/session/minecraft/hasJoined?username=username&serverId=hash',
+            params={
+                'username': cache['username'],
+                'serverId': generate_verify_hash(
+                    packet.shared_key,
+                    share['rsa']['public'].public_bytes(
+                        encoding=serialization.Encoding.DER,
+                        format=serialization.PublicFormat.SubjectPublicKeyInfo
+                    )
                 )
-            )
-        }
-    )
+            }
+        )
 
     jj = await resp.json()
     uuid_, name = uuid.UUID(jj['id']), jj['name']
-
-    decrypted_verify = share['rsa']['private'].decrypt(packet.verify_token, PKCS1v15())
-    if decrypted_verify == cache['verify']:
-        print(True)
 
 
 async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, uuid_: uuid.UUID = None):  # nopep8

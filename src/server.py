@@ -1,3 +1,4 @@
+import src.util.encryption as encryption
 from cryptography.hazmat.primitives.asymmetric import rsa
 import immutables
 import asyncio
@@ -26,7 +27,6 @@ from src.logic.commands import handle_commands  # nopep8
 
 from src.util.share import share, logger  # nopep8
 
-import src.util.encryption as encryption
 
 share.update({
     'server_version': 1,

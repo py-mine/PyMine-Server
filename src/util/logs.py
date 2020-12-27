@@ -5,18 +5,23 @@ class CustomFormatter(logging.Formatter):
     """Logging Formatter to add colors and count warning / errors"""
 
     grey = "\x1b[38;21m"
-    yellow = "\x1b[33;21m"
+    yellow = "\x1b[33;1m"
     red = "\x1b[31;21m"
     bold_red = "\x1b[31;1m"
+    blue = "\x1b[34m"
+    green = "\x1b[32m"
+    bg_bright_red = "\x1b[41;1m"
     reset = "\x1b[0m"
-    format = "%(levelname)s - %(asctime)s - %(name)s - %(message)s (%(filename)s:%(lineno)d)"
+    everythings_fine_format = "%(levelname)s" + reset + \
+        ": %(asctime)s - %(name)s - %(message)s (%(filename)s:%(lineno)d)"
+    oh_no_format = "%(levelname)s: %(asctime)s - %(name)s - %(message)s (%(filename)s:%(lineno)d)"
 
     FORMATS = {
-        logging.DEBUG: grey + format + reset,
-        logging.INFO: grey + format + reset,
-        logging.WARNING: yellow + format + reset,
-        logging.ERROR: red + format + reset,
-        logging.CRITICAL: bold_red + format + reset
+        logging.DEBUG: grey + everythings_fine_format + reset,
+        logging.INFO: blue + everythings_fine_format + reset,
+        logging.WARNING: yellow + oh_no_format + reset,
+        logging.ERROR: bold_red + oh_no_format + reset,
+        logging.CRITICAL: bg_bright_red + oh_no_format + reset
     }
 
     def format(self, record):

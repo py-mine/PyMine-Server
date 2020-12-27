@@ -39,7 +39,7 @@ class Logger:
 
     def critical(self, *message):
         message = ' '.join(str(m) for m in message)
-        print(f'{WHITE}{BG_RED}[{nice_time()} CRITICAL ERROR]: {message}{RESET}')
+        print(f'{WHITE}{BG_RED}[{nice_time()} CRITICAL]: {message}{RESET}')
 
 if __name__ == '__main__':
     logger = Logger()

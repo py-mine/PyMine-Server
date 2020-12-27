@@ -135,6 +135,10 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
                 await logic_login_kick(w)
                 return await close_con(w, remote)
 
+            states[remote] = 3  # PLAY
+    elif state == 'play':
+        logger.debug('entered play state!')
+
     return True, r, w
 
 

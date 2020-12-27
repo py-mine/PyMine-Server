@@ -55,7 +55,8 @@ class Buffer:
         """
 
         logger.debug(
-            f'OUT: state:unknown     | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}')
+            f'OUT: state:unknown     | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}'
+        )
 
         data = cls.pack_varint(packet.id_) + packet.encode()
 

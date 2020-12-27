@@ -28,14 +28,13 @@ async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'Logi
 
 
 async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: dict):
-    decrypted_verify = share['rsa']['private'].decrypt(packet.verify_token, PKCS1v15())
-    if decrypted_verify == cache['verify']:
+    if share['rsa']['private'].decrypt(packet.verify_token, PKCS1v15()) == cache['verify']:
         resp = await share['ses'].get(
             'https://sessionserver.mojang.com/session/minecraft/hasJoined',
             params={
                 'username': cache['username'],
                 'serverId': generate_verify_hash(
-                    packet.shared_key,
+                    share['rsa']['private'].decrypt(packet.shared_key, PKCS1v15()),
                     share['rsa']['public'].public_bytes(
                         encoding=serialization.Encoding.DER,
                         format=serialization.PublicFormat.SubjectPublicKeyInfo
@@ -44,10 +43,14 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: d
             }
         )
 
-    print(resp, '\n\n')
+        jj = await resp.json()
 
-    jj = await resp.json()
-    uuid_, name = uuid.UUID(jj['id']), jj['name']
+        if jj is not None:
+            uuid_, name = uuid.UUID(jj['id']), jj['name']
+
+            return uuid_, name
+
+    return False
 
 
 async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, uuid_: uuid.UUID = None):  # nopep8

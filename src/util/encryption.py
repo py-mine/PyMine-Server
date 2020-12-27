@@ -22,7 +22,7 @@ def gen_aes_cipher(shared_key: bytes):
     )
 
 
-def encrypt(data: bytes, encryptor: '_CipherContext)'):
+def encrypt(data: bytes, encryptor: '_CipherContext'):
     return encryptor.update(data)
 
 
@@ -31,7 +31,7 @@ def decrypt(data: bytes, decryptor: '_CipherContext'):
 
 
 class EncryptedStreamReader:
-    def __init__(self, reader: asyncio.StreamReader, decryptor):
+    def __init__(self, reader: asyncio.StreamReader, decryptor: '_CipherContext'):
         self.reader = reader
         self.decryptor = decryptor
 
@@ -40,7 +40,7 @@ class EncryptedStreamReader:
 
 
 class EncryptedStreamWriter:
-    def __init__(self, writer: asyncio.StreamWriter, encryptor):
+    def __init__(self, writer: asyncio.StreamWriter, encryptor: '_CipherContext'):
         self.writer = writer
         self.encryptor = encryptor
 

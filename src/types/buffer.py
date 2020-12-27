@@ -49,7 +49,7 @@ class Buffer:
         self.pos = 0
 
     @classmethod
-    def pack_packet(cls, packet: Packet, comp_thresh: int = -1) -> bytes:  # nopep8
+    def pack_packet(cls, packet: Packet, comp_thresh: int = -1) -> bytes:
         """
         Packs a Packet object into bytes.
         """

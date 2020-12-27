@@ -130,8 +130,6 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
                 await logic_login_kick(w)
                 return await close_con(w, remote)
 
-            await logic_login_success(r, w, *auth)
-
             cipher = encryption.gen_aes_cipher(decrypted)
 
             # Replace streams with ones which auto decrypt + encrypt data
@@ -140,6 +138,8 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
             if comp_thresh > 0:
                 await logic_login_set_compression(comp_thresh)
+
+            await logic_login_success(r, w, *auth)
 
             states[remote] = 3  # PLAY
     elif state == 'play':

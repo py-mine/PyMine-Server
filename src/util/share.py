@@ -1,0 +1,3 @@
+
+global share
+share = {}

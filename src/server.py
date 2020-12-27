@@ -47,6 +47,8 @@ share['states'] = states
 secrets = {}  # {remote: secret}
 share['secrets'] = secrets
 
+login_cache = {}  # {remote: [username, verify_token]}
+
 logger.debug_ = SERVER_PROPERTIES['debug']
 
 
@@ -101,11 +103,15 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     elif state == 'login':
         if packet.id_ == 0x00:  # LoginStart
             if SERVER_PROPERTIES['online_mode']:
-                await logic_request_encryption(r, w, packet)
+                login_cache[remote] = {'username': packet.username, 'verify': None}
+                await logic_request_encryption(r, w, packet, login_cache[remote])
             else:
                 await logic_login_success(r, w, packet.username)
         elif packet.id_ == 0x01:  # LoginEncryptionResponse
-            pass
+            uuid, name = await logic_server_auth(packet, remote, username_cache[remote])
+            del username_cache[remote]
+
+            if share['rsa']['private'].decrypt()
 
     asyncio.create_task(handle_packet(r, w, remote))
 

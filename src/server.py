@@ -15,7 +15,6 @@ from src.types.packet import Packet  # nopep8
 
 from src.data.packet_map import PACKET_MAP  # nopep8
 from src.data.states import *  # nopep8
-from src.data.config import *  # nopep8
 
 from src.logic.login import set_compression as logic_login_set_compression  # nopep8
 from src.logic.login import request_encryption as logic_request_encryption  # nopep8
@@ -26,32 +25,15 @@ from src.logic.status import status as logic_status  # nopep8
 from src.logic.status import pong as logic_pong  # nopep8
 from src.logic.commands import handle_commands  # nopep8
 
-from src.util.share import share, logger  # nopep8
 import src.util.encryption as encryption  # nopep8
+from src.util.share import *  # nopep8
 
-share.update({
-    'server_version': 1,
-    'version': '1.16.4',
-    'protocol': 754,
-    'timeout': .15,
-    'rsa': {  # https://stackoverflow.com/questions/54495255/python-cryptography-export-key-to-der
-        'private': rsa.generate_private_key(65537, 1024),
-        'public': None
-    },
-    'conf': SERVER_PROPERTIES,
-    'favicon': FAVICON,
-    'ses': None
-})
-
+share['rsa']['private'] = rsa.generate_private_key(65537, 1024)
 share['rsa']['public'] = share['rsa']['private'].public_key()
 
-states = {}  # {remote: state_id}
-share['states'] = states
-
+states = share['states']
 login_cache = {}  # {remote: {username: username, verify_token: verify_token]}
-
-logger.debug_ = SERVER_PROPERTIES['debug']
-share['comp_thresh'] = SERVER_PROPERTIES['comp_thresh']
+logger.debug_ = share['conf']['debug']
 
 
 async def close_con(w, remote):
@@ -115,7 +97,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             return await close_con(w, remote)
     elif state == 'login':
         if packet.id_ == 0x00:  # LoginStart
-            if SERVER_PROPERTIES['online_mode']:
+            if share['conf']['online_mode']:
                 login_cache[remote] = {'username': packet.username, 'verify': None}
                 await logic_request_encryption(r, w, packet, login_cache[remote])
             else:
@@ -158,8 +140,8 @@ async def handle_con(r, w):
 
 
 async def start():
-    addr = SERVER_PROPERTIES['server_ip']
-    port = SERVER_PROPERTIES['server_port']
+    addr = share['conf']['server_ip']
+    port = share['conf']['server_port']
 
     server = await asyncio.start_server(handle_con, host=addr, port=port)
 

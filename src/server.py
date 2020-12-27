@@ -95,16 +95,16 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         states[remote] = packet.next_state
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
-            await logic_status(r, w, packet, share)
+            await logic_status(r, w, packet)
         elif packet.id_ == 0x01:  # StatusStatusPingPong
             await logic_pong(r, w, packet)
             return await close_con(w, remote)
     elif state == 'login':
         if packet.id_ == 0x00:  # LoginStart
             if SERVER_PROPERTIES['online_mode']:
-                await logic_request_encryption(r, w, packet, share)
+                await logic_request_encryption(r, w, packet)
             else:
-                await logic_login_success(r, w, packet.username, share)
+                await logic_login_success(r, w, packet.username)
         elif packet.id_ == 0x01:  # LoginEncryptionResponse
             pass
 

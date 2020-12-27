@@ -23,8 +23,7 @@ from src.logic.status import status as logic_status  # nopep8
 from src.logic.status import pong as logic_pong  # nopep8
 from src.logic.commands import handle_commands  # nopep8
 
-from src.util.logging import Logger  # nopep8
-from src.util.share import share
+from src.util.share import share, logger  # nopep8
 
 share.update({
     'server_version': 1,

@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
+import asyncio
 
 
 async def aioinput(prompt: str = '') -> str:

@@ -50,6 +50,7 @@ share['secrets'] = secrets
 logger = Logger(SERVER_PROPERTIES['debug'])
 share['logger'] = logger
 
+
 async def close_con(w, remote):
     w.close()
     await w.wait_closed()

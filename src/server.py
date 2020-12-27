@@ -16,6 +16,7 @@ from src.types.packet import Packet  # nopep8
 from src.data.states import *  # nopep8
 from src.data.config import *  # nopep8
 
+from src.logic.login import set_compression as logic_login_set_compression  # nopep8
 from src.logic.login import request_encryption as logic_request_encryption  # nopep8
 from src.logic.login import login_success as logic_login_success  # nopep8
 from src.logic.login import server_auth as logic_server_auth  # nopep8
@@ -50,6 +51,8 @@ share['states'] = states
 login_cache = {}  # {remote: {username: username, verify_token: verify_token]}
 
 logger.debug_ = SERVER_PROPERTIES['debug']
+
+comp_thresh = SERVER_PROPERTIES['comp_thresh']
 
 
 async def close_con(w, remote):
@@ -126,7 +129,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             if not auth:
                 await logic_login_kick(w)
                 return await close_con(w, remote)
-                
+
             await logic_login_success(r, w, *auth)
 
             cipher = encryption.gen_aes_cipher(decrypted)
@@ -134,6 +137,9 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             # Replace streams with ones which auto decrypt + encrypt data
             r = encryption.EncryptedStreamReader(r, cipher.decryptor())
             w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
+
+            if comp_thresh > 0:
+                await logic_login_set_compression(comp_thresh)
 
             states[remote] = 3  # PLAY
     elif state == 'play':

@@ -134,7 +134,7 @@ async def start():
 
     server = await asyncio.start_server(handle_con, host=addr, port=port)
 
-    asyncio.create_task(handle_commands())
+    cmd_task = asyncio.create_task(handle_commands())
 
     try:
         async with aiohttp.ClientSession() as share['ses']:
@@ -147,6 +147,8 @@ async def start():
 
                 await server.serve_forever()
     except KeyboardInterrupt:
+        cmd_task.cancel()
+
         server.close()
         await server.wait_closed()
 

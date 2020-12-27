@@ -103,7 +103,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         f'IN : state:{state:<11} | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}')
 
     if state == 'handshaking':
-        states[remote] = packet.negen_aes_cipherxt_state
+        states[remote] = packet.next_state
     elif state == 'status':
         if packet.id_ == 0x00:  # StatusStatusRequest
             await logic_status(r, w, packet)

@@ -49,7 +49,7 @@ class Buffer:
         self.pos = 0
 
     @classmethod
-    def pack_packet(cls, packet: Packet, comp_thresh: int = -1, *, encryptor: 'encryptor' = None) -> bytes:  # nopep8
+    def pack_packet(cls, packet: Packet, comp_thresh: int = -1) -> bytes:
         """
         Packs a Packet object into bytes.
         """
@@ -66,12 +66,7 @@ class Buffer:
             else:
                 data = cls.pack_varint(0) + data
 
-        data = cls.pack_varint(len(data)) + data
-
-        if encryptor:
-            return encryptor.encrypt(data)
-
-        return data
+        return cls.pack_varint(len(data)) + data
 
     def unpack_packet(self, state: str, to: int, PACKET_MAP: object, comp_thresh: int = -1) -> Packet:  # nopepe8
         data = self.buf

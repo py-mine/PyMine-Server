@@ -13,6 +13,7 @@ __all__ = (
     'LoginEncryptionRequest',
     'LoginEncryptionResponse',
     'LoginSuccess',
+    'LoginKick',
 )
 
 

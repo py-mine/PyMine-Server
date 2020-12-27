@@ -134,7 +134,6 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     return True, r, w
 
 
-
 async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}')

@@ -1,6 +1,5 @@
 from cryptography.hazmat.primitives.asymmetric import rsa
 import immutables
-import logging
 import asyncio
 import aiohttp
 import random
@@ -16,13 +15,14 @@ from src.types.buffer import Buffer  # nopep8
 from src.types.packet import Packet  # nopep8
 from src.data.states import *  # nopep8
 from src.data.config import *  # nopep8
-from src.util.logs import CustomFormatter  # nopep8
 
 from src.logic.login import request_encryption as logic_request_encryption  # nopep8
 from src.logic.login import login_success as logic_login_success  # nopep8
 from src.logic.login import server_auth as logic_server_auth  # nopep8
 from src.logic.status import status as logic_status  # nopep8
 from src.logic.status import pong as logic_pong  # nopep8
+
+from src.util.logging import Logger  # nopep8
 
 global share
 share = {
@@ -47,17 +47,8 @@ share['states'] = states
 secrets = {}  # {remote: secret}
 share['secrets'] = secrets
 
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
-# create console handler with a higher log level
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-
-ch.setFormatter(CustomFormatter())
-
-logger.addHandler(ch)
-share['logger'] = logging
+logger = Logger(SERVER_PROPERTIES['debug'])
+share['logger'] = logger
 
 
 async def close_con(w, remote):
@@ -79,6 +70,9 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         except asyncio.TimeoutError:
             return await close_con(w, remote)
 
+        if read == b'':
+            return await close_con(w, remote)
+
         if i == 0 and read == b'\xFE':
             logger.warning('legacy ping is not supported currently.')
             return await close_con(w, remote)
@@ -97,7 +91,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     state = STATES_BY_ID[states.get(remote, 0)]
     packet = buf.unpack_packet(state, 0, PACKET_MAP)
 
-    logger.debug(f'state:{state:<12} | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}')
+    logger.debug(f'state:{state:<11} | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}')
 
     if state == 'handshaking':
         states[remote] = packet.next_state

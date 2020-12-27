@@ -58,7 +58,7 @@ async def close_con(w, remote):
 
     try:
         del states[remote]
-    except BaseException:
+    except Exception:
         pass
 
 
@@ -109,6 +109,9 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
                 await logic_login_success(r, w, packet.username)
         elif packet.id_ == 0x01:  # LoginEncryptionResponse
             auth = await logic_server_auth(packet, remote, login_cache[remote])
+
+            del login_cache[remote]
+
             if auth:
                 await logic_login_success(r, w, *auth)
             else:

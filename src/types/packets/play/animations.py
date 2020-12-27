@@ -14,6 +14,7 @@ class PlayEntityAnimation(Packet):
     :param int entity_id: Entity ID of the digging entity.
     :param int animation: Value 0-5 which correspond to a specific animation (https://wiki.vg/Protocol#Entity_Animation_.28clientbound.29).
     :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
     :attr entity_id:
     :attr animation:
     """

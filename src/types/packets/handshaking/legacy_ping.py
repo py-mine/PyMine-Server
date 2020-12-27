@@ -15,6 +15,7 @@ class HandshakeLegacyPingRequest(Packet):
     :param str hostname: The host/address the client is connecting to.
     :param int port: The port the client is connection on.
     :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
     :attr protocol:
     :attr hostname:
     :attr port:

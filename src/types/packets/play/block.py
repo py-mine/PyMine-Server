@@ -18,6 +18,7 @@ class PlayBlockAction(Packet):
     :param int action_param: Action param of the action, see here: https://wiki.vg/Block_Actions.
     :param int block_type: The type of block which the action is for.
     :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
     :attr x:
     :attr y:
     :attr z:

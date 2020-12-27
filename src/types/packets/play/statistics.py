@@ -13,6 +13,7 @@ class PlayStatistics(Packet):
 
     :param list stats: A list of stat entries (see here: https://wiki.vg/Protocol#Statistics).
     :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
     :attr stats:
     """
 

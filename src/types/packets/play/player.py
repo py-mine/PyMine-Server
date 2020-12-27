@@ -18,6 +18,7 @@ class PlayAcknowledgePlayerDigging(Packet):
     :param int status: Value 0-2 to denote whether player should start, cancel, or finish.
     :param bool successful: True if the block was dug successfully.
     :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
     :attr x:
     :attr y:
     :attr z:

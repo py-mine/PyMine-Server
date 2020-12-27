@@ -110,7 +110,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         elif packet.id_ == 0x01:  # LoginEncryptionResponse
             auth = await logic_server_auth(packet, remote, login_cache[remote])
             if auth:
-                await logic_login_succes(r, w, *auth)
+                await logic_login_success(r, w, *auth)
             else:
                 # In the future this should probably result in a kick/disconnect packet being sent
                 return await close_con(w, remote)

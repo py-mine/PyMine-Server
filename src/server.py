@@ -21,6 +21,7 @@ from src.logic.login import login_success as logic_login_success  # nopep8
 from src.logic.login import server_auth as logic_server_auth  # nopep8
 from src.logic.status import status as logic_status  # nopep8
 from src.logic.status import pong as logic_pong  # nopep8
+from src.logic.commands import handle_commands  # nopep8
 
 from src.util.logging import Logger  # nopep8
 
@@ -120,8 +121,10 @@ async def handle_con(r, w):
 async def start():
     addr = SERVER_PROPERTIES['server_ip']
     port = SERVER_PROPERTIES['server_port']
-    
+
     server = await asyncio.start_server(handle_con, host=addr, port=port)
+
+    asyncio.create_task(handle_commands())
 
     try:
         async with aiohttp.ClientSession() as share['ses']:

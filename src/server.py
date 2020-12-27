@@ -24,8 +24,8 @@ from src.logic.status import pong as logic_pong  # nopep8
 from src.logic.commands import handle_commands  # nopep8
 
 from src.util.logging import Logger  # nopep8
+import src.util.share
 
-global share
 share = {
     'server_version': 1,
     'version': '1.16.4',

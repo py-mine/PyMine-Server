@@ -7,11 +7,12 @@ from src.types.packets.login.login import *
 from src.types.buffer import Buffer
 
 from src.util.encryption import *
+import src.util.share
 
 # https://github.com/ammaraskar/pyCraft/blob/master/minecraft/networking/encryption.py
 
 
-async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'LoginStart', share: dict):
+async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'LoginStart'):
     w.write(Buffer.pack_packet(LoginEncryptionRequest(
         share['rsa']['public'].public_bytes(
             encoding=serialization.Encoding.DER,
@@ -22,7 +23,7 @@ async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'Logi
     await w.drain()
 
 
-async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, username: str, share: dict):
+async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, username: str):
     resp = await share['ses'].get(
         'https://sessionserver.mojang.com/session/minecraft/hasJoined?username=username&serverId=hash',
         params={
@@ -42,7 +43,7 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, username
     return uuid.UUID(jj['id']), jj['name']
 
 
-async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, share: dict, uuid_: uuid.UUID = None):  # nopep8
+async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, uuid_: uuid.UUID = None):  # nopep8
     if uuid_ is None:
         resp = await share['ses'].get(f'https://api.mojang.com/users/profiles/minecraft/{username}')
         jj = await resp.json()

@@ -54,6 +54,8 @@ logger.debug_ = SERVER_PROPERTIES['debug']
 
 
 async def close_con(w, remote):
+    await w.drain()
+
     w.close()
     await w.wait_closed()
 

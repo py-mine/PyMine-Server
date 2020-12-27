@@ -31,7 +31,7 @@ def decrypt(data: bytes, decryptor: '_CipherContext'):
 
 
 class EncryptedStreamReader:
-    def __init__(self, reader: asyncio.StreamReader, decryptor: '_CipherContext'):
+    def __init__(self, reader: asyncio.StreamReader, decryptor):
         self.reader = reader
         self.decryptor = decryptor
 
@@ -40,7 +40,7 @@ class EncryptedStreamReader:
 
 
 class EncryptedStreamWriter:
-    def __init__(self, writer: asyncio.StreamWriter, encryptor: '_CipherContext'):
+    def __init__(self, writer: asyncio.StreamWriter, encryptor):
         self.writer = writer
         self.encryptor = encryptor
 

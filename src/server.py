@@ -82,7 +82,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             return await close_con(w, remote)
 
         if i == 0 and read == b'\xFE':
-            logger.warning('legacy ping is not supported currently.')
+            logger.warn('legacy ping is not supported currently.')
             return await close_con(w, remote)
 
         b = struct.unpack('B', read)[0]

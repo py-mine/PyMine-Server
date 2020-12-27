@@ -83,7 +83,7 @@ class StatusStatusPingPong(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> StatusStatusPingPong:
-        return cls(buf.unpack('l'))
+        return cls(buf.unpack('q'))
 
     def encode(self) -> bytes:
-        return Buffer.pack('l', self.payload)
+        return Buffer.pack('q', self.payload)

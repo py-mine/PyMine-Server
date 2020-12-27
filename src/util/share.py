@@ -15,7 +15,7 @@ share = {
     'conf': SERVER_PROPERTIES,
     'favicon': FAVICON,
     'ses': None,
-    'states': {}, # {remote: state_id}
+    'states': {},  # {remote: state_id}
     'comp_thresh': SERVER_PROPERTIES['comp_thresh']
 }
 

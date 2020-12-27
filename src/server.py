@@ -103,7 +103,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             else:
                 await logic_login_success(r, w, packet.username)
         elif packet.id_ == 0x01:  # LoginEncryptionResponse
-            decrypted, auth = await logic_server_auth(packet, remote, login_cache[remote])
+            shared_key, auth = await logic_server_auth(packet, remote, login_cache[remote])
 
             del login_cache[remote]
 
@@ -111,7 +111,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
                 await logic_login_kick(w)
                 return await close_con(w, remote)
 
-            cipher = encryption.gen_aes_cipher(decrypted)
+            cipher = encryption.gen_aes_cipher(shared_key)
 
             # Replace streams with ones which auto decrypt + encrypt data
             r = encryption.EncryptedStreamReader(r, cipher.decryptor())

@@ -48,7 +48,7 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: d
         if jj is not None:
             uuid_, name = uuid.UUID(jj['id']), jj['name']
 
-            return uuid_, name
+            return name, uuid_
 
     return False
 

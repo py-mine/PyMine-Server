@@ -17,6 +17,5 @@ def gen_verify_hash(shared_secret: bytes, public_key: bytes):
 def gen_aes_cipher(shared_secret: bytes):
     return Cipher(
         algorithms.AES(shared_secret),
-        modes.CFB8(shared_secret),
-        backend=default_backend()
+        modes.CFB8(shared_secret)
     )

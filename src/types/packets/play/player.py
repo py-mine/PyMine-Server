@@ -27,6 +27,7 @@ class PlayAcknowledgePlayerDigging(Packet):
     """
 
     id_ = 0x07
+    to = 1
 
     def __init__(self, x: int, y: int, z: int, block: int, status: int, successful: bool) -> None:
         super().__init__()

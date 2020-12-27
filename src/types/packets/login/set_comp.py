@@ -17,6 +17,7 @@ class LoginSetCompression(Packet):
     """
 
     id_ = 0x03
+    to = 1
 
     def __init__(self, comp_thresh: int = -1) -> None:
         super().__init__()

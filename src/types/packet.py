@@ -11,6 +11,8 @@ class Packet:
     """
 
     id_ = None
+    to = None
 
     def __init__(self) -> None:
         self.id_ = self.__class__.id_
+        self.to = self.__class__.to

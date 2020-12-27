@@ -26,6 +26,7 @@ class PlayBlockEntityData(Packet):
     """
 
     id_ = 0x09
+    to = 1
 
     def __init__(self, x: int, y: int, z: int, action: int, nbt_data: nbt.TAG) -> None:
         super().__init__()

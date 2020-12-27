@@ -13,6 +13,7 @@ class StatusStatusRequest(Packet):
     """
 
     id_ = 0x00
+    to = 0
 
     def __init__(self) -> None:
         super().__init__()
@@ -31,6 +32,7 @@ class StatusStatusResponse(Packet):
     """
 
     id_ = 0x00
+    to = 1
 
     def __init__(self, response_data: dict) -> None:
         # What response_data should be like
@@ -68,12 +70,16 @@ class StatusStatusPingPong(Packet):
 
     :param int payload: A long number, randomly generated or what the client sent.
     :attr type id_: Unique packet ID.
+    :attr type payload:
     """
 
     id_ = 0x01
+    to = 2
 
     def __init__(self, payload: int) -> None:
         super().__init__()
+
+        self.payload = payload
 
     @classmethod
     def decode(cls, buf: Buffer) -> StatusStatusPingPong:

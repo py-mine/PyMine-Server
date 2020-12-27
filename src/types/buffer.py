@@ -49,13 +49,14 @@ class Buffer:
         self.pos = 0
 
     @classmethod
-    def pack_packet(cls, packet: Packet, comp_thresh: int = -1) -> bytes:  # nopep8
+    def pack_packet(cls, packet: Packet, comp_thresh: int = -1) -> bytes:
         """
         Packs a Packet object into bytes.
         """
 
         logger.debug(
-            f'OUT: state:unknown     | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}')
+            f'OUT: state:unknown     | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}'
+        )
 
         data = cls.pack_varint(packet.id_) + packet.encode()
 

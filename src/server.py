@@ -26,6 +26,8 @@ from src.logic.commands import handle_commands  # nopep8
 
 from src.util.share import share, logger  # nopep8
 
+import src.util.encryption as encryption  # nopep8
+
 share.update({
     'server_version': 1,
     'version': '1.16.4',
@@ -45,10 +47,7 @@ share['rsa']['public'] = share['rsa']['private'].public_key()
 states = {}  # {remote: state_id}
 share['states'] = states
 
-secrets = {}  # {remote: secret}
-share['secrets'] = secrets
-
-login_cache = {}  # {remote: [username, verify_token]}
+login_cache = {}  # {remote: {username: username, verify_token: verify_token]}
 
 logger.debug_ = SERVER_PROPERTIES['debug']
 
@@ -64,6 +63,14 @@ async def close_con(w, remote):
     except Exception:
         pass
 
+    try:
+        del ciphers[remote]
+    except Exception:
+        pass
+
+    logger.debug(f'disconnected nicely from {remote[0]}:{remote[1]}')
+    return False, None, w
+
 
 async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
     packet_length = 0
@@ -75,7 +82,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             return await close_con(w, remote)
 
         if i == 0 and read == b'\xFE':
-            logger.warning('legacy ping is not supported currently.')
+            logger.warn('legacy ping is not supported currently.')
             return await close_con(w, remote)
 
         b = struct.unpack('B', read)[0]
@@ -117,18 +124,24 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
             if auth:
                 await logic_login_success(r, w, *auth)
+                cipher = encryption.gen_aes_cipher(packet.shared_key)
+                r = encryption.EncryptedStreamReader(r, cipher.decryptor())
+                w = encryption.EncryptedStreamWriter(r, cipher.encryptor())
             else:
                 await logic_login_kick(w)
                 return await close_con(w, remote)
 
-    asyncio.create_task(handle_packet(r, w, remote))
+    return True, r, w
 
 
 async def handle_con(r, w):
     remote = w.get_extra_info('peername')  # (host, port)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}')
 
-    await handle_packet(r, w, remote)
+    c = True
+
+    while c:
+        c, r, w = await handle_packet(r, w, remote)
 
 
 async def start():

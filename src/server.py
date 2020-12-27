@@ -124,7 +124,9 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
             if auth:
                 await logic_login_success(r, w, *auth)
+                
                 cipher = encryption.gen_aes_cipher(decrypted)
+
                 r = encryption.EncryptedStreamReader(r, cipher.decryptor())
                 w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
             else:

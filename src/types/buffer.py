@@ -215,7 +215,7 @@ class Buffer:
     def pack_uuid(cls, uuid: uuid.UUID) -> bytes:
         """Packs a UUID into bytes."""
 
-        return uuid.to_bytes()
+        return uuid.bytes
 
     def unpack_uuid(self):
         """Unpacks a UUID from the buffer."""

@@ -53,7 +53,7 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: d
 
             return decrypted_shared_key, (name, uuid_,)
 
-    return False
+    return False, False
 
 
 async def set_compression(w, comp_thresh: int = -1):

@@ -126,7 +126,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
                 await logic_login_success(r, w, *auth)
                 cipher = encryption.gen_aes_cipher(decrypted)
                 r = encryption.EncryptedStreamReader(r, cipher.decryptor())
-                w = encryption.EncryptedStreamWriter(r, cipher.encryptor())
+                w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
             else:
                 await logic_login_kick(w)
                 return await close_con(w, remote)

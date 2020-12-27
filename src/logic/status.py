@@ -2,8 +2,10 @@
 from src.types.packets.status.status import *
 from src.types.buffer import Buffer
 
+import src.util.share
 
-async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest', share: dict):
+
+async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest'):
     data = {
         'version': {
             'name': share['version'],

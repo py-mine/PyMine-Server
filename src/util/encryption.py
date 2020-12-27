@@ -50,7 +50,7 @@ class EncryptedStreamWriter:
     def close(self):
         return self.writer.close()
 
-    def get_extra_info(name: str, default: object = None):
+    def get_extra_info(self, name: str, default: object = None):
         return self.writer.get_extra_info(name, default)
 
     async def drain(self):

@@ -56,8 +56,8 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: d
     return False, False
 
 
-async def set_compression(w: 'StreamWriter', comp_thresh: int = -1):
-    w.write(Buffer.pack_packet(LoginSetCompression(comp_thresh)))
+async def set_compression(w: 'StreamWriter'):
+    w.write(Buffer.pack_packet(LoginSetCompression(share['comp_thresh'])))
     await w.drain()
 
 

@@ -136,7 +136,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
 
             if share['comp_thresh'] > 0:
-                await logic_login_set_compression(w, share['comp_thresh'])
+                await logic_login_set_compression(w)
 
             await logic_login_success(r, w, *auth)
 

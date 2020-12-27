@@ -18,7 +18,8 @@ class PlayBlockEntityData(Packet):
     :param int z: The z coordinate of the position.
     :param int action: The action to be carried out (see https://wiki.vg/Protocol#Block_Entity_Data).
     :param nbt.TAG nbt_data: The nbt data associated with the action/block.
-    :attr type id_: Unique packet ID.
+    :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
     :attr x:
     :attr y:
     :attr z:

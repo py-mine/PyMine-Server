@@ -6,12 +6,14 @@ import uuid
 
 from src.types.buffer import Buffer
 from src.types.packet import Packet
+from src.types.chat import Chat
 
 __all__ = (
     'LoginStart',
     'LoginEncryptionRequest',
     'LoginEncryptionResponse',
     'LoginSuccess',
+    'LoginKick',
 )
 
 
@@ -19,7 +21,8 @@ class LoginStart(Packet):
     """Packet from client asking to start login process. (Client -> Server)
 
     :param str username: Username of the client who sent the request.
-    :attr type id_: Unique packet ID.
+    :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
     :attr username:
     """
 
@@ -41,7 +44,8 @@ class LoginEncryptionRequest(Packet):
 
     :param bytes public_key: Public key.
     :attr type verify_token: Verify token, randomly generated.
-    :attr type id_: Unique packet ID.
+    :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
     :attr public_key:
     """
 
@@ -65,7 +69,8 @@ class LoginEncryptionResponse(Packet):
 
     :param bytes shared_key: The shared key used in the login process.
     :param bytes verify_token: The verify token used in the login process.
-    :attr type id_: Unique packet ID.
+    :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
     :attr shared_key:
     :attr verify_token:
     """
@@ -89,7 +94,8 @@ class LoginSuccess(Packet):
 
     :param uuid.UUID uuid: The UUID of the connecting player/client.
     :param str username: The username of the connecting player/client.
-    :attr type id_: Unique packet ID.
+    :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
     :attr uuid:
     :attr username:
     """
@@ -105,3 +111,24 @@ class LoginSuccess(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack_uuid(self.uuid) + Buffer.pack_string(self.username)
+
+
+class LoginKick(Packet):
+    """Sent by the server to kick a player while in the login state. (Server -> Client)
+
+    :param str reason: The reason for the disconnect.
+    :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr username:
+    """
+
+    id_ = 0x00
+    to = 1
+
+    def __init__(self, reason: str):
+        super().__init__()
+
+        self.reason = reason
+
+    def encode(self) -> bytes:
+        return Buffer.pack_chat(Chat(self.reason))

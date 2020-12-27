@@ -7,8 +7,9 @@ import zlib
 
 from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
 from src.types.packet import Packet
-from src.types.chat import Chat
 from src.data.misc import *
+
+from src.util.share import logger
 
 
 class Buffer:
@@ -52,6 +53,10 @@ class Buffer:
         """
         Packs a Packet object into bytes.
         """
+
+        logger.debug(
+            f'OUT: state:unknown     | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}'
+        )
 
         data = cls.pack_varint(packet.id_) + packet.encode()
 
@@ -215,7 +220,7 @@ class Buffer:
     def pack_uuid(cls, uuid: uuid.UUID) -> bytes:
         """Packs a UUID into bytes."""
 
-        return uuid.to_bytes()
+        return uuid.bytes
 
     def unpack_uuid(self):
         """Unpacks a UUID from the buffer."""
@@ -223,12 +228,12 @@ class Buffer:
         return uuid.UUID(bytes=self.read(16))
 
     @classmethod
-    def pack_chat(cls, msg: Chat) -> bytes:
+    def pack_chat(cls, msg: 'Chat') -> bytes:
         """Packs a Minecraft chat message into bytes."""
 
-        return msg.to_bytes()
+        return cls.pack_json(msg.msg)
 
-    def unpack_chat(self) -> Chat:
+    def unpack_chat(self) -> 'Chat':
         """Unpacks a Minecraft chat message from the buffer."""
 
         return Chat.from_buf(self)

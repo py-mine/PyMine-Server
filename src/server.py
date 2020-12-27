@@ -38,7 +38,7 @@ share.update({
         'private': rsa.generate_private_key(65537, 1024),
         'public': None
     },
-    'properties': SERVER_PROPERTIES,
+    'conf': SERVER_PROPERTIES,
     'favicon': FAVICON,
     'ses': None
 })

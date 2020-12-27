@@ -20,7 +20,7 @@ class LoginStart(Packet):
     """Packet from client asking to start login process. (Client -> Server)
 
     :param str username: Username of the client who sent the request.
-    :attr type id_: Unique packet ID.
+    :attr int id_: Unique packet ID.
     :attr username:
     """
 
@@ -42,7 +42,7 @@ class LoginEncryptionRequest(Packet):
 
     :param bytes public_key: Public key.
     :attr type verify_token: Verify token, randomly generated.
-    :attr type id_: Unique packet ID.
+    :attr int id_: Unique packet ID.
     :attr public_key:
     """
 
@@ -66,7 +66,7 @@ class LoginEncryptionResponse(Packet):
 
     :param bytes shared_key: The shared key used in the login process.
     :param bytes verify_token: The verify token used in the login process.
-    :attr type id_: Unique packet ID.
+    :attr int id_: Unique packet ID.
     :attr shared_key:
     :attr verify_token:
     """
@@ -90,7 +90,7 @@ class LoginSuccess(Packet):
 
     :param uuid.UUID uuid: The UUID of the connecting player/client.
     :param str username: The username of the connecting player/client.
-    :attr type id_: Unique packet ID.
+    :attr int id_: Unique packet ID.
     :attr uuid:
     :attr username:
     """

@@ -12,7 +12,7 @@ async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequ
             'protocol': share['protocol']
         },
         'players': {
-            'max': share['properties']['max_players'],
+            'max': share['conf']['max_players'],
             'online': len(share['states']),
             'sample': [
                 {
@@ -30,7 +30,7 @@ async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequ
             ]
         },
         'description': {  # a Chat
-            'text': share['properties']['motd']
+            'text': share['conf']['motd']
         }
     }
 

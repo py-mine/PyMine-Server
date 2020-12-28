@@ -36,7 +36,7 @@ login_cache = {}  # {remote: {username: username, verify_token: verify_token]}
 logger.debug_ = share['conf']['debug']
 
 
-async def close_con(w, remote):
+async def close_con(w, remote):  # Close a connection to a client
     await w.drain()
 
     w.close()
@@ -51,6 +51,7 @@ async def close_con(w, remote):
     return False, None, w
 
 
+# Handle / respond to packets, this is a loop
 async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
     packet_length = 0
 
@@ -124,7 +125,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     return True, r, w
 
 
-async def handle_con(r, w):
+async def handle_con(r, w):  # Handle a connection from a client
     remote = w.get_extra_info('peername')  # (host, port)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}')
 
@@ -134,13 +135,13 @@ async def handle_con(r, w):
         c, r, w = await handle_packet(r, w, remote)
 
 
-async def start():
+async def start():  # Actually start the server
     addr = share['conf']['server_ip']
     port = share['conf']['server_port']
 
     server = share['server'] = await asyncio.start_server(handle_con, host=addr, port=port)
 
-    cmd_task = asyncio.create_task(handle_commands())
+    cmd_task = asyncio.create_task(handle_commands())  # Used to handle commands
     lan_support_task = asyncio.create_task(ping_lan())
 
     try:

@@ -24,6 +24,7 @@ from src.logic.login import login_kick as logic_login_kick  # nopep8
 from src.logic.status import status as logic_status  # nopep8
 from src.logic.status import pong as logic_pong  # nopep8
 from src.logic.commands import handle_commands  # nopep8
+from src.logic.lan_support import ping_lan # nopep8
 
 import src.util.encryption as encryption  # nopep8
 from src.util.share import *  # nopep8
@@ -146,6 +147,7 @@ async def start():
     server = share['server'] = await asyncio.start_server(handle_con, host=addr, port=port)
 
     cmd_task = asyncio.create_task(handle_commands())
+    lan_support_task = asyncio.create_task(ping_lan())
 
     try:
         async with aiohttp.ClientSession() as share['ses']:
@@ -159,7 +161,10 @@ async def start():
                 await server.serve_forever()
     except (asyncio.CancelledError, KeyboardInterrupt):
         logger.info('closing server...')
+
         cmd_task.cancel()
+        lan_support_task.cancel()
+
         logger.info('server closed.')
 
 # uvloop.install()

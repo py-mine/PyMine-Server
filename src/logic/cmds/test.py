@@ -10,3 +10,8 @@ def test_exception(uuid: str, args: list):
 @command(name='echo')
 def echo(uuid: str, args: list):
     logger.info(f'{uuid}: {" ".join(args)}')
+
+
+@command(name='help')
+def help(uuid: str, args: list):
+    logger.info('no.')

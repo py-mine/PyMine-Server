@@ -13,7 +13,17 @@ class PlayExplosion(Packet):
     id_ = 0x1B
     to = 1
 
-    def __init__(self, x: int, y: int, z: int, strength: int, record_count: int, records: list, pmx: int, pmy: int, pmz: int):
+    def __init__(
+            self,
+            x: int,
+            y: int,
+            z: int,
+            strength: int,
+            record_count: int,
+            records: list,
+            pmx: int,
+            pmy: int,
+            pmz: int):
         self.x = x
         self.y = y
         self.z = z
@@ -25,4 +35,13 @@ class PlayExplosion(Packet):
         self.pmz = pmz
 
     def encode(self):
-        return Buffer.pack('f', self.x) + Buffer.pack('f', self.y) + Buffer.pack('f', self.z) + Buffer.pack('f', self.strength) + Buffer.pack('i', self.record_count) + Buffer.pack_array('b', self.records) + Buffer.pack('f', self.pmx) + Buffer.pack('f', self.pmy) + Buffer.pack('f', pmz)
+        return Buffer.pack('f',
+                           self.x) + Buffer.pack('f',
+                                                 self.y) + Buffer.pack('f',
+                                                                       self.z) + Buffer.pack('f',
+                                                                                             self.strength) + Buffer.pack('i',
+                                                                                                                          self.record_count) + Buffer.pack_array('b',
+                                                                                                                                                                 self.records) + Buffer.pack('f',
+                                                                                                                                                                                             self.pmx) + Buffer.pack('f',
+                                                                                                                                                                                                                     self.pmy) + Buffer.pack('f',
+                                                                                                                                                                                                                                             pmz)

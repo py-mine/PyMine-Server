@@ -26,7 +26,6 @@ from src.logic.status import pong as logic_pong  # nopep8
 from src.logic.commands import handle_commands  # nopep8
 
 import src.util.encryption as encryption  # nopep8
-from src.util.close import close_server  # nopep8
 from src.util.share import *  # nopep8
 
 share['rsa']['private'] = rsa.generate_private_key(65537, 1024)

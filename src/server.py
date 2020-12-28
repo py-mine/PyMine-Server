@@ -55,6 +55,9 @@ async def close_con(w, remote):  # Close a connection to a client
 async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
     packet_length = 0
 
+    # Basically an implementation of Buffer.unpack_varint()
+    # Except designed to read directly from a a StreamReader
+    # And also to handle legacy server list ping packets
     for i in range(5):
         try:
             read = await asyncio.wait_for(r.read(1), 5)
@@ -96,7 +99,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             if share['conf']['online_mode']:
                 login_cache[remote] = {'username': packet.username, 'verify': None}
                 await logic_request_encryption(r, w, packet, login_cache[remote])
-            else:
+            else:  # If no auth is used, go straight to login success
                 await logic_login_success(r, w, packet.username)
         elif packet.id_ == 0x01:  # LoginEncryptionResponse
             shared_key, auth = await logic_server_auth(packet, remote, login_cache[remote])
@@ -107,9 +110,10 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
                 await logic_login_kick(w)
                 return await close_con(w, remote)
 
+            # Generate a cipher for that client using the shared key from the client
             cipher = encryption.gen_aes_cipher(shared_key)
 
-            # Replace streams with ones which auto decrypt + encrypt data
+            # Replace streams with ones which auto decrypt + encrypt data when reading/writing
             r = encryption.EncryptedStreamReader(r, cipher.decryptor())
             w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
 
@@ -147,7 +151,7 @@ async def start():  # Actually start the server
     try:
         async with aiohttp.ClientSession() as share['ses']:
             async with server:
-                if random.randint(0, 999) == 1:
+                if random.randint(0, 999) == 1:  # shhhhh
                     logger.info(f'PPMine 69.0 started on port {addr}:{port}!')
                 else:
                     logger.info(

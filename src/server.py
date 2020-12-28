@@ -28,6 +28,21 @@ from src.logic.lan_support import ping_lan  # nopep8
 import src.util.encryption as encryption  # nopep8
 from src.util.share import *  # nopep8
 
+if '--dump-packets' in sys.argv:
+    out = ''
+
+    play_only = '--play-only' in sys.argv
+
+    for state, tup in PACKET_MAP.items():
+        if (play_only and state == 'play') or not play_only:
+            out += '\n' + state + '\n'
+
+            for id_, to in sorted(tup, key=(lambda t: t[0])):
+                out += f'0x{id_:02X}\n'
+
+    print(out)
+    exit(0)
+
 share['rsa']['private'] = rsa.generate_private_key(65537, 1024)
 share['rsa']['public'] = share['rsa']['private'].public_key()
 

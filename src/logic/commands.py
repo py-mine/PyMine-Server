@@ -1,9 +1,10 @@
 import aioconsole
 import importlib
+import traceback
 import asyncio
 import os
 
-from src.util.share import share
+from src.util.share import share, logger
 
 registered_commands = {}
 
@@ -41,10 +42,15 @@ async def handle_commands():
 
             cmd_func = registered_commands.get(cmd)
 
-            if cmd_func is not None:
-                if asyncio.iscoroutinefunction(cmd_func):
-                    await cmd_func('server', args)
-                else:
-                    cmd_func('server', args)
+            print(cmd_func)
+
+            try:
+                if cmd_func is not None:
+                    if asyncio.iscoroutinefunction(cmd_func):
+                        await cmd_func('server', args)
+                    else:
+                        cmd_func('server', args)
+            except Exception as e:
+                logger.error(''.join(traceback.format_exception(type(e), e, e.__traceback__, 4)))
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass

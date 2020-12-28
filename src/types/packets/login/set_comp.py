@@ -13,6 +13,7 @@ class LoginSetCompression(Packet):
 
     :param int comp_thresh: Compression level of future packets, -1 to disable compression.
     :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
     :attr comp_thresh:
     """
 

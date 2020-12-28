@@ -1,3 +1,4 @@
+aioconsole
 aiohttp
 cryptography
 immutables

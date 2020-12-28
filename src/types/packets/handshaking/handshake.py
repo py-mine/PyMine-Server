@@ -16,6 +16,7 @@ class HandshakeHandshake(Packet):
     :param int port: The port the client is connection on.
     :param int next_state: The next state which the server should transfer to. 1 for status, 2 for login.
     :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
     :attr protocol:
     :attr address:
     :attr port:

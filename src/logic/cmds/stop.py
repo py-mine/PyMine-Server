@@ -3,5 +3,5 @@ from src.util.share import share
 
 
 @command(name='stop')
-async def stop_server(uuid: str, cmd: str):
+async def stop_server(uuid: str, args: list):
     share['server'].close()

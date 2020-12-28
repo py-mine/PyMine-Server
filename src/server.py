@@ -163,4 +163,4 @@ async def start():
         logger.info('server closed.')
 
 # uvloop.install()
-asyncio.get_event_loop().run_until_complete(start())
+asyncio.run(start())

@@ -37,6 +37,7 @@ def load_properties():
         with open('server.yml', 'w+') as f:
             f.write(yaml.dump(dict(SERVER_PROPERTIES_DEFAULT)))
 
+    # Check for missing
     if any([(key not in properties) for key in SERVER_PROPERTIES_DEFAULT.keys()]):
         p_temp = properties
         properties = dict(SERVER_PROPERTIES_DEFAULT)
@@ -44,6 +45,13 @@ def load_properties():
 
         with open('server.yml', 'w') as f:
             f.write(yaml.dump(properties))
+
+    # Reset server.yml if any of the types is incorrect
+    if any([(type(v) is not type(SERVER_PROPERTIES_DEFAULT[k])) for k, v in properties.items()]):
+        properties = SERVER_PROPERTIES_DEFAULT
+
+        with open('server.yml', 'w') as f:
+            f.write(yaml.dump(dict(properties)))
 
     return Map(properties)
 

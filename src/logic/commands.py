@@ -17,6 +17,6 @@ async def handle_commands():
 
     try:
         while True:
-            await handle_command(await aioconsole.ainput('>'))
+            await handle_command(await aioconsole.ainput(''))
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass

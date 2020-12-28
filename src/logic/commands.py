@@ -1,12 +1,12 @@
 import asyncio
 
-from src.util.close import close_server
 from src.util.aioinput import aioinput
+from src.util.share import share
 
 
 async def handle_command(cmd: str):
     if cmd == 'stop':
-        await close_server()
+        share['server'].close()
         return False
 
     return True

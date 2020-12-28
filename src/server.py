@@ -158,11 +158,8 @@ async def start():
                         f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
 
                 await server.serve_forever()
-    except KeyboardInterrupt:
-        cmd_task.cancel()
-        await close_server()
-    except asyncio.CancelledError:
-        pass
+    except (asyncio.CancelledError, KeyboardInterrupt):
+        print('bruh')
 
 # uvloop.install()
-asyncio.run(start())
+asyncio.get_event_loop().run_until_complete(start())

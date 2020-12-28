@@ -30,18 +30,18 @@ def command(name: str):
 
 async def handle_commands():
     try:
-        in_split = (await aioconsole.ainput('>')).split(' ')
+        while True:
+            in_split = (await aioconsole.ainput('>')).split(' ')
+            cmd = in_split[0]
 
-        cmd = in_split[0]
+            if len(in_split) > 0:
+                args = in_split[1:]
+            else:
+                args = []
 
-        if len(in_split) > 0:
-            args = in_split[1:]
-        else:
-            args = []
+            reg_cmd = registered_commands.get(cmd)
 
-        reg_cmd = registered_commands.get(cmd)
-
-        if reg_cmd is not None:
-            await reg_cmd('server', args)
+            if reg_cmd is not None:
+                await reg_cmd('server', args)
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass

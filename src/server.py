@@ -6,7 +6,6 @@ import random
 import struct
 import sys
 import os
-# import uvloop
 
 sys.path.append(os.getcwd())
 
@@ -37,7 +36,7 @@ login_cache = {}  # {remote: {username: username, verify_token: verify_token]}
 logger.debug_ = share['conf']['debug']
 
 
-async def close_con(w, remote):
+async def close_con(w, remote):  # Close a connection to a client
     await w.drain()
 
     w.close()
@@ -48,18 +47,17 @@ async def close_con(w, remote):
     except Exception:
         pass
 
-    try:
-        del ciphers[remote]
-    except Exception:
-        pass
-
-    logger.debug(f'disconnected nicely from {remote[0]}:{remote[1]}')
+    logger.debug(f'Disconnected nicely from {remote[0]}:{remote[1]}.')
     return False, None, w
 
 
+# Handle / respond to packets, this is a loop
 async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):
     packet_length = 0
 
+    # Basically an implementation of Buffer.unpack_varint()
+    # except designed to read directly from a a StreamReader
+    # and also to handle legacy server list ping packets
     for i in range(5):
         try:
             read = await asyncio.wait_for(r.read(1), 5)
@@ -67,7 +65,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             return await close_con(w, remote)
 
         if i == 0 and read == b'\xFE':
-            logger.warn('legacy ping is not supported currently.')
+            logger.warn('Legacy ping is not supported currently.')
             return await close_con(w, remote)
 
         b = struct.unpack('B', read)[0]
@@ -101,7 +99,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             if share['conf']['online_mode']:
                 login_cache[remote] = {'username': packet.username, 'verify': None}
                 await logic_request_encryption(r, w, packet, login_cache[remote])
-            else:
+            else:  # If no auth is used, go straight to login success
                 await logic_login_success(r, w, packet.username)
         elif packet.id_ == 0x01:  # LoginEncryptionResponse
             shared_key, auth = await logic_server_auth(packet, remote, login_cache[remote])
@@ -112,13 +110,14 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
                 await logic_login_kick(w)
                 return await close_con(w, remote)
 
+            # Generate a cipher for that client using the shared key from the client
             cipher = encryption.gen_aes_cipher(shared_key)
 
-            # Replace streams with ones which auto decrypt + encrypt data
+            # Replace streams with ones which auto decrypt + encrypt data when reading/writing
             r = encryption.EncryptedStreamReader(r, cipher.decryptor())
             w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
 
-            if share['comp_thresh'] > 0:
+            if share['comp_thresh'] > 0:  # Send set compression packet if needed
                 await logic_login_set_compression(w)
 
             await logic_login_success(r, w, *auth)
@@ -127,11 +126,14 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     elif state == 'play':
         logger.debug('entered play state!')
 
+    # Return whether handle_con should continue handling packets,
+    # as well as the same StreamReader and StreamWriter just in
+    # case they have been replaced by encrypted versions
     return True, r, w
 
 
-async def handle_con(r, w):
-    remote = w.get_extra_info('peername')  # (host, port)
+async def handle_con(r, w):  # Handle a connection from a client
+    remote = w.get_extra_info('peername')  # (host, port,)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}')
 
     c = True
@@ -140,32 +142,31 @@ async def handle_con(r, w):
         c, r, w = await handle_packet(r, w, remote)
 
 
-async def start():
+async def start():  # Actually start the server
     addr = share['conf']['server_ip']
     port = share['conf']['server_port']
 
     server = share['server'] = await asyncio.start_server(handle_con, host=addr, port=port)
 
-    cmd_task = asyncio.create_task(handle_commands())
-    lan_support_task = asyncio.create_task(ping_lan())
+    cmd_task = asyncio.create_task(handle_commands())  # Used to handle commands
+    lan_support_task = asyncio.create_task(ping_lan())  # Adds lan support
 
     try:
         async with aiohttp.ClientSession() as share['ses']:
             async with server:
-                if random.randint(0, 999) == 1:
+                if random.randint(0, 999) == 1:  # shhhhh
                     logger.info(f'PPMine 69.0 started on port {addr}:{port}!')
                 else:
                     logger.info(
                         f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
 
                 await server.serve_forever()
-    except (asyncio.CancelledError, KeyboardInterrupt):
-        logger.info('closing server...')
+    except (asyncio.CancelledError, KeyboardInterrupt,):
+        logger.info('Closing server...')
 
         cmd_task.cancel()
         lan_support_task.cancel()
 
-        logger.info('server closed.')
+        logger.info('Server closed.')
 
-# uvloop.install()
 asyncio.run(start())

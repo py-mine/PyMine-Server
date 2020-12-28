@@ -1,4 +1,5 @@
 aioconsole
+asyncio_dgram
 aiohttp
 cryptography
 immutables

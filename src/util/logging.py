@@ -18,6 +18,12 @@ BG_RED = '\x1b[41;1m'
 
 
 class Logger:
+    """Custom logging implementation.
+
+    :param bool debug: Whether to show debug messages or not.
+    :attr type debug_: The value of the debug parameter.
+    """
+
     def __init__(self, debug: bool = True) -> None:
         self.debug_ = debug
 
@@ -43,7 +49,7 @@ class Logger:
         print(f'{START}{WHITE}{BG_RED}[{nice_time()} CRITICAL]: {message}{END}')
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # Used to test colors
     logger = Logger()
 
     logger.debug('This is a', 'debug message')

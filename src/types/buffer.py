@@ -54,7 +54,7 @@ class Buffer:
         Packs a Packet object into bytes.
         """
 
-        logger.debug(
+        logger.debug(  # We log this here for consistency and not having to implement it everywhere
             f'OUT: state:unknown     | id:{hex(packet.id_):<4} | packet:{type(packet).__name__}'
         )
 

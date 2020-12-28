@@ -22,20 +22,39 @@ SERVER_PROPERTIES_DEFAULT = Map({
     'spawn_npcs': True,
     'spawn_animals': True,
     'spawn_monsters': True,
-    'generate_structures': True
+    'generate_structures': True,
+    'support_lan': False
 })
 
 
 def load_properties():
+    properties = SERVER_PROPERTIES_DEFAULT
+
     try:
         with open('server.yml', 'r') as f:
-            properties = dict(SERVER_PROPERTIES_DEFAULT)
-            properties.update(yaml.safe_load(f.read()))
-            return properties
+            properties = yaml.safe_load(f.read())
     except FileNotFoundError:
         with open('server.yml', 'w+') as f:
             f.write(yaml.dump(dict(SERVER_PROPERTIES_DEFAULT)))
-        return SERVER_PROPERTIES_DEFAULT
+
+    # Check for missing
+    if any([(key not in properties) for key in SERVER_PROPERTIES_DEFAULT.keys()]):
+        p_temp = properties
+        properties = dict(SERVER_PROPERTIES_DEFAULT)
+        properties.update(p_temp)
+
+        with open('server.yml', 'w') as f:
+            f.write(yaml.dump(properties))
+
+    # Reset server.yml if any of the types is incorrect
+    if any([(not isinstance(v, type(SERVER_PROPERTIES_DEFAULT[k])))
+            for k, v in properties.items()]):
+        properties = SERVER_PROPERTIES_DEFAULT
+
+        with open('server.yml', 'w') as f:
+            f.write(yaml.dump(dict(properties)))
+
+    return Map(properties)
 
 
 def load_favicon():

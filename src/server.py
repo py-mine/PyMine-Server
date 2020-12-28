@@ -158,7 +158,7 @@ async def start():
                         f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
 
                 await server.serve_forever()
-    except (asyncio.CancelledError, KeyboardInterrupt):
+    except (asyncio.CancelledError, KeyboardInterrupt,):
         logger.info('closing server...')
 
         cmd_task.cancel()

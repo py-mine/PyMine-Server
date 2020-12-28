@@ -6,7 +6,6 @@ import random
 import struct
 import sys
 import os
-# import uvloop
 
 sys.path.append(os.getcwd())
 
@@ -167,5 +166,4 @@ async def start():
 
         logger.info('server closed.')
 
-# uvloop.install()
 asyncio.run(start())

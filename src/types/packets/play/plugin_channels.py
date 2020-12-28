@@ -24,7 +24,7 @@ class PlayPluginMessageClientBound(Packet):
         self.data = data
 
     def encode(self) -> bytes:
-        return data
+        return self.data
 
 
 # class PlayPluginMessageServerBound(Packet):

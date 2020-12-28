@@ -10,7 +10,7 @@ __all__ = ('PlayNamedSoundEffect',)
 
 class PlayNamedSoundEffect(Packet):
     """Used to play a sound effect on the client. Custom sounds may be added by resource packs. Clientbound."""
-    
+
     id_ = 0x18
     to = 1
 

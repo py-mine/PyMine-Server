@@ -1,7 +1,6 @@
 import aioconsole
 import asyncio
 
-from src.util.aioinput import aioinput
 from src.util.share import share
 
 

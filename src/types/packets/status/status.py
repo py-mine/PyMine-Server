@@ -70,7 +70,7 @@ class StatusStatusPingPong(Packet):
 
     :param int payload: A long number, randomly generated or what the client sent.
     :attr int id_: Unique packet ID.
-    :attr type payload:
+    :attr int payload:
     """
 
     id_ = 0x01

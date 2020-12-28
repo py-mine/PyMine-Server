@@ -61,3 +61,52 @@ class PlayDisconnect(Packet):
 
     def encode(self):
         return Buffer.pack_chat(self.reason)
+
+
+class PlayPlayerAbilitiesClientBound(Packet):
+    """Defines the player's abilities. (Server -> Client)
+
+    :param bytes flags: Client data bitfield, see here: https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29.
+    :param float flying_speed: Speed at which client is flying.
+    :param float fov_modifier: FOV modifier value.
+    :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr flags:
+    :attr flying_speed:
+    :attr fov_modifier:
+    """
+
+    id_ = 0x30
+    to = 1
+
+    def __init__(self, flags: bytes, flying_speed: float, fov_modifier: float) -> None:
+        super().__init__()
+
+        self.flags = flags
+        self.flying_speed = flying_speed
+        self.fov_modifier = fov_modifier
+
+    def encode(self) -> bytes:
+        return self.flags + Buffer.pack('f', self.flying_speed) + \
+            Buffer.pack('f', self.fov_modifier)
+
+
+class PlayPlayerAbilitiesServerBound(Packet):
+    """Tells the server whether the client is flying or not. (Client -> Server)
+
+    :param bool flying: Whether player is flying or not.
+    :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr flying:
+    """
+
+    id_ = 0x1A
+    to = 0
+
+    def __init__(self, flying: bool) -> None:
+        super().__init__()
+
+        self.flying = flying
+
+    def decode(self, buf: Buffer) -> PlayPlayerAbilitiesServerBound:
+        return (buf.unpack('b') == 0x02)

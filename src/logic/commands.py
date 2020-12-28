@@ -7,7 +7,7 @@ registered_commands = {}
 
 # Example command
 # @command(name='somecmd')
-# async def some_command(uuid: str, text: str) -> none:
+# async def some_command(uuid: str, args: list) -> none:
 #     pass
 
 
@@ -30,10 +30,18 @@ def command(name: str):
 
 async def handle_commands():
     try:
-        cmd = await aioconsole.ainput('>')
-        reg_cmd = registered_commands.get(cmd.split(' ')[0])
+        in_split = (await aioconsole.ainput('>')).split(' ')
+
+        cmd = in_split[0]
+
+        if len(in_split) > 0:
+            args = in_split[1:]
+        else:
+            args = []
+
+        reg_cmd = registered_commands.get(cmd)
 
         if reg_cmd is not None:
-            await reg_cmd('server', cmd)
+            await reg_cmd('server', args)
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass

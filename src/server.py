@@ -37,16 +37,8 @@ if '--dump-packets' in sys.argv:
         if (play_only and state == 'play') or not play_only:
             print('\n' + state)
 
-            last = -1
-            
             for id_, to in sorted(tup, key=(lambda t: t[0])):
-                if id_ - 1 != last:
-                    for i in reversed(range(id_ - last)):
-                        print(f'0x{id_-i:02X} (MISSING)')
-                else:
-                    print(f'0x{id_:02X} ({dirs[to] if to is not None else "missing dir (to)"})')
-
-                last = id_
+                print(f'0x{id_:02X} ({dirs[to] if to is not None else "missing dir (to)"})')
 
     exit(0)
 

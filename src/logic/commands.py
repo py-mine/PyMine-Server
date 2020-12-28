@@ -1,3 +1,4 @@
+import aioconsole
 import asyncio
 
 from src.util.aioinput import aioinput
@@ -16,7 +17,7 @@ async def handle_commands():
     run = True
 
     try:
-        while run:
-            run = await handle_command(await aioinput(''))
-    except KeyboardInterrupt:
+        while True:
+            await handle_command(await aioconsole.ainput('>'))
+    except (KeyboardInterrupt, asyncio.CancelledError):
         pass

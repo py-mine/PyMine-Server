@@ -38,15 +38,12 @@ def load_properties():
             f.write(yaml.dump(dict(SERVER_PROPERTIES_DEFAULT)))
 
     if any([(key not in properties) for key in SERVER_PROPERTIES_DEFAULT.keys()]):
-        print('need update')
         p_temp = properties
         properties = dict(SERVER_PROPERTIES_DEFAULT)
         properties.update(p_temp)
 
         with open('server.yml', 'w') as f:
             f.write(yaml.dump(properties))
-
-    print('after')
 
     return Map(properties)
 

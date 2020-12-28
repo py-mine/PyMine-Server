@@ -56,8 +56,8 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     packet_length = 0
 
     # Basically an implementation of Buffer.unpack_varint()
-    # Except designed to read directly from a a StreamReader
-    # And also to handle legacy server list ping packets
+    # except designed to read directly from a a StreamReader
+    # and also to handle legacy server list ping packets
     for i in range(5):
         try:
             read = await asyncio.wait_for(r.read(1), 5)
@@ -117,7 +117,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             r = encryption.EncryptedStreamReader(r, cipher.decryptor())
             w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
 
-            if share['comp_thresh'] > 0:
+            if share['comp_thresh'] > 0:  # Send set compression packet if needed
                 await logic_login_set_compression(w)
 
             await logic_login_success(r, w, *auth)
@@ -126,6 +126,9 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     elif state == 'play':
         logger.debug('entered play state!')
 
+    # Return whether handle_con should continue handling packets,
+    # as well as the same StreamReader and StreamWriter just in
+    # case they have been replaced by encrypted versions
     return True, r, w
 
 

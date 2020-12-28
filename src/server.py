@@ -37,8 +37,13 @@ if '--dump-packets' in sys.argv:
         if (play_only and state == 'play') or not play_only:
             print('\n' + state)
 
+            last = -1
             for id_, to in sorted(tup, key=(lambda t: t[0])):
-                print(f'0x{id_:02X} ({dirs[to] if to is not None else "unknown"})')
+                if id_ - 1 != last:
+                    print(f'0x{id_:02X} (MISSING)')
+
+                print(f'0x{id_:02X} ({dirs[to] if to is not None else "missing direction (to)"})')
+                last = id_
 
     exit(0)
 

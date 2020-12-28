@@ -15,9 +15,7 @@ async def ping_lan():
             )
 
             stream.close()
-        except asyncio.TimeoutError:
+        except Exception:
             pass
-        except Exception as e:
-            print(e)
 
         await asyncio.sleep(1.5)

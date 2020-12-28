@@ -4,6 +4,7 @@ from src.data.config import *
 __all__ = ('share', 'logger',)
 
 share = {
+    'server': None,
     'server_version': 1,
     'version': '1.16.4',
     'protocol': 754,

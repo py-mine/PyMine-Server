@@ -26,6 +26,7 @@ from src.logic.status import pong as logic_pong  # nopep8
 from src.logic.commands import handle_commands  # nopep8
 
 import src.util.encryption as encryption  # nopep8
+from src.util.close import close  # nopep8
 from src.util.share import *  # nopep8
 
 share['rsa']['private'] = rsa.generate_private_key(65537, 1024)
@@ -143,7 +144,7 @@ async def start():
     addr = share['conf']['server_ip']
     port = share['conf']['server_port']
 
-    server = await asyncio.start_server(handle_con, host=addr, port=port)
+    server = share['server'] = await asyncio.start_server(handle_con, host=addr, port=port)
 
     cmd_task = asyncio.create_task(handle_commands())
 
@@ -159,9 +160,7 @@ async def start():
                 await server.serve_forever()
     except KeyboardInterrupt:
         cmd_task.cancel()
-
-        server.close()
-        await server.wait_closed()
+        await close_server()
 
 # uvloop.install()
 asyncio.run(start())

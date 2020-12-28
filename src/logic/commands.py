@@ -43,4 +43,4 @@ async def handle_commands():
 
 @command(name='stop')
 async def stop_server(uuid: str, cmd: str):
-    share['server'].stop()
+    share['server'].close()

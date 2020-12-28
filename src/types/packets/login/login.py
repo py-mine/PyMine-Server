@@ -13,7 +13,7 @@ __all__ = (
     'LoginEncryptionRequest',
     'LoginEncryptionResponse',
     'LoginSuccess',
-    'LoginKick',
+    'LoginDisconnect',
 )
 
 
@@ -113,7 +113,7 @@ class LoginSuccess(Packet):
         return Buffer.pack_uuid(self.uuid) + Buffer.pack_string(self.username)
 
 
-class LoginKick(Packet):
+class LoginDisconnect(Packet):
     """Sent by the server to kick a player while in the login state. (Server -> Client)
 
     :param str reason: The reason for the disconnect.

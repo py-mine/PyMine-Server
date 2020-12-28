@@ -73,6 +73,6 @@ async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, uui
 
 async def login_kick(w: 'StreamWriter'):
     w.write(Buffer.pack_packet(
-        LoginKick('Failed to authenticate your connection.')
+        LoginDisconnect('Failed to authenticate your connection.')
     ))
     await w.drain()

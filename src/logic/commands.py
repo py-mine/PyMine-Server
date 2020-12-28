@@ -41,6 +41,8 @@ async def handle_commands():
 
             reg_cmd = registered_commands.get(cmd)
 
+            print(reg_cmd)
+
             if reg_cmd is not None:
                 await reg_cmd('server', args)
     except (KeyboardInterrupt, asyncio.CancelledError):

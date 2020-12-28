@@ -49,7 +49,7 @@ class Logger:
         print(f'{START}{WHITE}{BG_RED}[{nice_time()} CRITICAL]: {message}{END}')
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # Used to test colors
     logger = Logger()
 
     logger.debug('This is a', 'debug message')

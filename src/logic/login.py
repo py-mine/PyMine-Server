@@ -13,6 +13,7 @@ from src.util.share import share
 
 # https://github.com/ammaraskar/pyCraft/blob/master/minecraft/networking/encryption.py
 
+
 # Send an encryption request packet to the client
 async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'LoginStart', lc: dict):
     packet = LoginEncryptionRequest(

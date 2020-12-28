@@ -50,7 +50,7 @@ if '--dump-packets' in sys.argv:
                 try:
                     done.index(i)
                 except ValueError:
-                    print(f'0x{i:02x}, ', end='')
+                    print(f'0x{i:02X}, ', end='')
 
             print()
 

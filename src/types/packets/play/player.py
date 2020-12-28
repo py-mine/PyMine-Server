@@ -52,7 +52,8 @@ class PlayDisconnect(Packet):
     """Sent by the server before it disconnects a client. The client assumes that the server has already closed the connection by the time the packet arrives.
 
     Clientbound(Server -> Client)"""
-   id_ = 0x19
+    
+    id_ = 0x19
     to = 1
 
     def __init__(self, reason: Chat):

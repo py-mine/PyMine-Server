@@ -38,7 +38,7 @@ def load_properties():
             f.write(yaml.dump(dict(SERVER_PROPERTIES_DEFAULT)))
 
     if any([key not in SERVER_PROPERTIES_DEFAULT for key in properties.keys()]):
-        p_temp = proerties
+        p_temp = properties
         properties = dict(SERVER_PROPERTIES_DEFAULT)
         properties.update(p_temp)
 

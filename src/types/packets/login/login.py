@@ -125,7 +125,7 @@ class LoginDisconnect(Packet):
     id_ = 0x00
     to = 1
 
-    def __init__(self, reason: str):
+    def __init__(self, reason: str) -> None:
         super().__init__()
 
         self.reason = reason

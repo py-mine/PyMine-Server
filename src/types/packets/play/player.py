@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from src.types.packet import Packet
 from src.types.buffer import Buffer
+from src.types.chat import Chat
 
 __all__ = ('PlayAcknowledgePlayerDigging',)
 
@@ -45,3 +46,17 @@ class PlayAcknowledgePlayerDigging(Packet):
             Buffer.pack_varint(self.block) + \
             Buffer.pack_varint(self.status) + \
             Buffer.pack_bool(self.successful)
+
+
+class PlayDisconnect(Packet):
+    """Sent by the server before it disconnects a client. The client assumes that the server has already closed the connection by the time the packet arrives.
+
+    Clientbound(Server -> Client)"""
+   id_ = 0x19
+    to = 1
+
+    def __init__(self, reason: Chat):
+        self.reason = reason
+
+    def encode(self):
+        return Buffer.pack_chat(self.reason)

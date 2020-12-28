@@ -10,7 +10,7 @@ async def ping_lan():
             stream = await asyncio.wait_for(asyncio_dgram.connect(('224.0.2.60', 4445)), .5)
 
             await stream.send(
-                f'[MOTD]{share["conf"]["motd"]}[/MOTD]' \
+                f'[MOTD]{share["conf"]["motd"]}[/MOTD]'
                 f'[AD]{share["conf"]["server_port"]}[/AD]'.encode('utf-8')
             )
         except BaseException:

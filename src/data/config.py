@@ -27,16 +27,24 @@ SERVER_PROPERTIES_DEFAULT = Map({
 
 
 def load_properties():
+    properties = SERVER_PROPERTIES_DEFAULT
+
     try:
         with open('server.yml', 'r') as f:
-            properties = dict(SERVER_PROPERTIES_DEFAULT)
-            properties.update(yaml.safe_load(f.read()))
-            return properties
+            properties = yaml.safe_load(f.read())
     except FileNotFoundError:
         with open('server.yml', 'w+') as f:
             f.write(yaml.dump(dict(SERVER_PROPERTIES_DEFAULT)))
-        return SERVER_PROPERTIES_DEFAULT
 
+    if any([key not in SERVER_PROPERTIES_DEFAULT for key in properties.keys()]):
+        p_temp = proerties
+        properties = dict(SERVER_PROPERTIES_DEFAULT)
+        properties.update(p_temp)
+
+        with open('server.yml', 'w') as f:
+            f.write(yaml.dump(properties))
+
+    return Map(properties)
 
 def load_favicon():
     try:

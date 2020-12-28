@@ -52,7 +52,7 @@ async def close_con(w, remote):
     except Exception:
         pass
 
-    logger.debug(f'disconnected nicely from {remote[0]}:{remote[1]}')
+    logger.debug(f'Disconnected nicely from {remote[0]}:{remote[1]}.')
     return False, None, w
 
 
@@ -66,7 +66,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             return await close_con(w, remote)
 
         if i == 0 and read == b'\xFE':
-            logger.warn('legacy ping is not supported currently.')
+            logger.warn('Legacy ping is not supported currently.')
             return await close_con(w, remote)
 
         b = struct.unpack('B', read)[0]
@@ -159,11 +159,11 @@ async def start():
 
                 await server.serve_forever()
     except (asyncio.CancelledError, KeyboardInterrupt,):
-        logger.info('closing server...')
+        logger.info('Closing server...')
 
         cmd_task.cancel()
         lan_support_task.cancel()
 
-        logger.info('server closed.')
+        logger.info('Server closed.')
 
 asyncio.run(start())

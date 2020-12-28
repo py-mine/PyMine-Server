@@ -47,11 +47,6 @@ async def close_con(w, remote):
     except Exception:
         pass
 
-    try:
-        del ciphers[remote]
-    except Exception:
-        pass
-
     logger.debug(f'Disconnected nicely from {remote[0]}:{remote[1]}.')
     return False, None, w
 

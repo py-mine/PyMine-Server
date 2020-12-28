@@ -3,6 +3,7 @@ from __future__ import annoations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
+
 class PlayPluginMessageClientBound(Packet):
     """Used to send a "plugin message". See here https://wiki.vg/Protocol#Plugin_Message_.28serverbound.29 (Server -> Client)
 

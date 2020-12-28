@@ -22,7 +22,8 @@ SERVER_PROPERTIES_DEFAULT = Map({
     'spawn_npcs': True,
     'spawn_animals': True,
     'spawn_monsters': True,
-    'generate_structures': True
+    'generate_structures': True,
+    'support_lan': False
 })
 
 

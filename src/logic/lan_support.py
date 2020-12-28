@@ -13,9 +13,12 @@ async def ping_lan():
                 f'[MOTD]{share["conf"]["motd"]}[/MOTD]' \
                 f'[AD]{share["conf"]["server_port"]}[/AD]'.encode('utf-8')
             )
+        except BaseException:
+            pass
 
+        try:
             stream.close()
-        except Exception:
+        except NameError:
             pass
 
         await asyncio.sleep(1.5)

@@ -10,6 +10,7 @@ class StatusStatusRequest(Packet):
     """Request from the client to get information on the server. (Client -> Server)
 
     :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
     """
 
     id_ = 0x00
@@ -28,6 +29,7 @@ class StatusStatusResponse(Packet):
 
     :param dict response_data: JSON response data sent back to the client.
     :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
     :attr response_data:
     """
 

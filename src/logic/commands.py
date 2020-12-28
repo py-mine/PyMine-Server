@@ -5,11 +5,6 @@ from src.util.share import share
 
 registered_commands = {}
 
-# Example command
-# @command(name='somecmd')
-# async def some_command(uuid: str, args: list) -> none:
-#     pass
-
 
 def command(name: str):
     if name in registered_commands:
@@ -18,10 +13,7 @@ def command(name: str):
     if ' ' in name:
         raise Exception('Command name may not contain spaces.')
 
-    async def command_deco(func: 'function'):
-        if not asyncio.iscoroutine(func):
-            raise Exception('Commands must be coroutines.')
-
+    def command_deco(func: 'function'):
         registered_commands[name] = func
         return func
 
@@ -47,3 +39,10 @@ async def handle_commands():
                 await reg_cmd('server', args)
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass
+    except Exception as e:
+        print(e)
+
+
+@command(name='stop')
+async def stop_server(uuid: str, cmd: str):
+    share['server'].stop()

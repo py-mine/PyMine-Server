@@ -161,6 +161,8 @@ async def start():
     except KeyboardInterrupt:
         cmd_task.cancel()
         await close_server()
+    except asyncio.CancelledError:
+        pass
 
 # uvloop.install()
 asyncio.run(start())

@@ -13,7 +13,7 @@ def command(name: str):
     if ' ' in name:
         raise Exception('Command name may not contain spaces.')
 
-    def command_deco(func: 'function'):
+    def command_deco(func):
         registered_commands[name] = func
         return func
 
@@ -31,14 +31,15 @@ async def handle_commands():
             else:
                 args = []
 
-            reg_cmd = registered_commands.get(cmd)
+            cmd_func = registered_commands.get(cmd)
 
-            if reg_cmd is not None:
-                await reg_cmd('server', args)
+            if cmd_func is not None:
+                if asyncio.iscoroutinefunction(cmd_func):
+                    await cmd_func('server', args)
+                else:
+                    cmd_func('server', args)
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass
-    except Exception as e:
-        print(e)
 
 
 @command(name='stop')

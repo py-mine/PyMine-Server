@@ -160,7 +160,7 @@ async def start():
     except (asyncio.CancelledError, KeyboardInterrupt):
         logger.info('closing server...')
         cmd_task.cancel()
-        logger.info('closing server...')
+        logger.info('server closed.')
 
 # uvloop.install()
 asyncio.get_event_loop().run_until_complete(start())

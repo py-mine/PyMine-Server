@@ -1,4 +1,4 @@
-from __future__ import annoations
+from __future__ import annotations
 
 from src.types.packet import Packet
 from src.types.buffer import Buffer

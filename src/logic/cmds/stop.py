@@ -1,4 +1,4 @@
-from src.util.commands import command
+from src.logic.commands import command
 
 
 @command(name='stop')

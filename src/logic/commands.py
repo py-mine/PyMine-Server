@@ -42,8 +42,6 @@ async def handle_commands():
 
             cmd_func = registered_commands.get(cmd)
 
-            print(cmd_func)
-
             try:
                 if cmd_func is not None:
                     if asyncio.iscoroutinefunction(cmd_func):

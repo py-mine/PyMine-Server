@@ -70,6 +70,7 @@ class StatusStatusPingPong(Packet):
 
     :param int payload: A long number, randomly generated or what the client sent.
     :attr type id_: Unique packet ID.
+    :attr type payload:
     """
 
     id_ = 0x01
@@ -77,6 +78,8 @@ class StatusStatusPingPong(Packet):
 
     def __init__(self, payload: int) -> None:
         super().__init__()
+
+        self.payload = payload
 
     @classmethod
     def decode(cls, buf: Buffer) -> StatusStatusPingPong:

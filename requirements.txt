@@ -4,4 +4,3 @@ cryptography
 immutables
 nbt
 PyYAML
-uvloop

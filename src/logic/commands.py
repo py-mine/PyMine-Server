@@ -1,9 +1,17 @@
 import aioconsole
+import importlib
 import asyncio
+import os
 
 from src.util.share import share
 
 registered_commands = {}
+
+
+def load_commands():  # only loads commands inside cmds folder, not subfolders
+    for file in os.listdir('src/logic/cmds'):
+        if file.endswith('.py'):
+            importlib.import_module(f'src.logic.cmds.{file[:-3]}')
 
 
 def command(name: str):
@@ -40,8 +48,3 @@ async def handle_commands():
                     cmd_func('server', args)
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass
-
-
-@command(name='stop')
-async def stop_server(uuid: str, cmd: str):
-    share['server'].close()

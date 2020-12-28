@@ -43,7 +43,7 @@ if '--dump-packets' in sys.argv:
                     for i in reversed(range(id_ - last)):
                         print(f'0x{id_-i:02X} (MISSING)')
                 else:
-                    print(f'0x{id_:02X} ({dirs[to] if to is not None else "missing direction (to)"})')
+                    print(f'0x{id_:02X} ({dirs[to] if to is not None else "missing dir (to)"})')
                 last = id_
 
     exit(0)

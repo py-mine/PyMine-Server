@@ -1,4 +1,5 @@
 from src.logic.commands import command
+from src.util.share import share
 
 
 @command(name='stop')

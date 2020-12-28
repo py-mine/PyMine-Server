@@ -12,7 +12,7 @@ async def handle_command(cmd: str):
     return True
 
 
-async def handle_commands(server, cmd_task):
+async def handle_commands():
     run = True
 
     try:

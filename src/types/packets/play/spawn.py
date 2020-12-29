@@ -125,7 +125,7 @@ class PlaySpawnPlayer(Packet):
     id = 0x04
     to = 1  # client
 
-    def __init__(self, entity_id: int, player_uuid: uuid.UUID, x: int, y: int, z: int, pitch: int, yaw: int):
+    def __init__(self, entity_id: int, player_uuid: uuid.UUID, x: int, y: int, z: int, pitch: int, yaw: int):  # nopep8
         super.__init__()
         self.entity_id = entity_id
         self.player_uuid = player_uuid

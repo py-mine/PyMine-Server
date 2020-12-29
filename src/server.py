@@ -171,4 +171,7 @@ async def start():  # Actually start the server
 
         logger.info('Server closed.')
 
-asyncio.run(start())
+try:
+    asyncio.run(start())
+except BaseException as e:
+    logger.critical(logger.f_traceback(e))

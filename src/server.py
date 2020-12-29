@@ -151,7 +151,9 @@ async def start():  # Actually start the server
     server = share['server'] = await asyncio.start_server(handle_con, host=addr, port=port)
 
     cmd_task = asyncio.create_task(handle_server_commands())  # Used to handle commands
-    lan_support_task = asyncio.create_task(ping_lan())  # Adds lan support
+
+    if share['conf']['support_lan']:
+        lan_support_task = asyncio.create_task(ping_lan())  # Adds lan support
 
     try:
         async with aiohttp.ClientSession() as share['ses']:

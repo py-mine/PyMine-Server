@@ -56,6 +56,14 @@ async def handle_commands():
     try:
         while True:
             in_text = await aioconsole.ainput('>')
-            asyncio.create_task(handle_command(in_text))
+
+            # In the future, commands *should* be handled async,
+            # however, due to the way the console works rn we can't
+            # without messing up the output
+            # asyncio.create_task(handle_command(in_text))
+            
+            await handle_command(in_text)
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass
+    except Exception as e:
+        print(e, type(e))

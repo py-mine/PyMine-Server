@@ -32,11 +32,11 @@ async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: 
             return await close_con(w, remote)
 
         # Generate a cipher for that client using the shared key from the client
-        cipher = encryption.gen_aes_cipher(shared_key)
+        cipher = gen_aes_cipher(shared_key)
 
         # Replace streams with ones which auto decrypt + encrypt data when reading/writing
-        r = encryption.EncryptedStreamReader(r, cipher.decryptor())
-        w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
+        r = EncryptedStreamReader(r, cipher.decryptor())
+        w = EncryptedStreamWriter(w, cipher.encryptor())
 
         if share['comp_thresh'] > 0:  # Send set compression packet if needed
             await set_compression(w)

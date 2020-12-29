@@ -6,7 +6,7 @@ from src.util.share import share
 
 
 # Handles all status logic (all packets in the status state)
-async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple):
+async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple) -> tuple:
     if packet.id_ == 0x00:  # StatusStatusRequest
         await send_status(r, w, packet)
     elif packet.id_ == 0x01:  # StatusStatusPingPong
@@ -16,7 +16,7 @@ async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote:
     return True, r, w
 
 
-async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest'):
+async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest') -> None:
     data = {
         'version': {
             'name': share['version'],
@@ -52,6 +52,6 @@ async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatu
     await w.drain()
 
 
-async def pong(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusPingPong'):
+async def pong(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusPingPong') -> None:
     w.write(Buffer.pack_packet(packet))
     await w.drain()

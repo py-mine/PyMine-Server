@@ -28,7 +28,7 @@ async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: 
         del login_cache[remote]
 
         if not auth:
-            await ogin_kick(w)
+            await login_kick(w)
             return await close_con(w, remote)
 
         # Generate a cipher for that client using the shared key from the client

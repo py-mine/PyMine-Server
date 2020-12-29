@@ -44,7 +44,7 @@ async def handle_server_command(uuid: str, in_text: str):
                 await cmd_func(uuid, args)
             else:
                 cmd_func(uuid, args)
-        except Exception as e:
+        except BaseException as e:
             logger.error(logger.f_traceback(e))
     else:
         logger.warn(f'Invalid/unknown command: {cmd}')
@@ -63,5 +63,5 @@ async def handle_server_commands():
             await handle_server_command('server', in_text)
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass
-    except Exception as e:
+    except BaseException as e:
         print(e, type(e))

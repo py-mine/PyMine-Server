@@ -46,7 +46,7 @@ async def close_con(w, remote):  # Close a connection to a client
 
     try:
         del states[remote]
-    except Exception:
+    except BaseException:
         pass
 
     logger.debug(f'Disconnected nicely from {remote[0]}:{remote[1]}.')

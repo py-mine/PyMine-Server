@@ -1,4 +1,4 @@
-from random import random
+from random import randint
 
 __all__ = ('string_hash_code', 'gen_seed',)
 
@@ -14,4 +14,4 @@ def string_hash_code(s: str):
 
 
 def gen_seed():
-    return random() * (2 ** 64)
+    return randint(0, 2 ** 64)

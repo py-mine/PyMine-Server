@@ -50,7 +50,7 @@ async def handle_command(in_text):
                 ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4))
             )
     else:
-        logger.warn('Invalid/unknown command.')
+        logger.warn(f'Invalid/unknown command: {cmd}')
 
 async def handle_commands():
     try:

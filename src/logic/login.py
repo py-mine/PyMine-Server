@@ -12,6 +12,10 @@ from src.util.encryption import *
 from src.util.share import share
 
 
+async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: remote):
+    pass
+
+
 # Send an encryption request packet to the client
 async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'LoginStart', lc: dict):
     packet = LoginEncryptionRequest(

@@ -6,6 +6,7 @@ import uuid
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
+
 __all__ = (
     'PlayEntitySpawn',
     'PlayLivingEntitySpawn',
@@ -115,3 +116,22 @@ class PlayPaintingSpawn(Packet):
         return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.entity_uuid) + \
             Buffer.pack_varint(self.motive) + Buffer.pack_pos(self.location) + \
             Buffer.pack('b', self.direction)
+
+
+class PlaySpawnPlayer(Packet):
+    """This packet is sent by the server when a player comes into visible range, not when a player joins.
+    Clientbound(Server -> Client)"""
+    id = 0x04
+    to = 1  # client
+
+    def __init__(self, entity_id: int, player_uuid: uuid.UUID, x: int, y: int, z: int, pitch: int, yaw: int):
+        super.__init__()
+        self.entity_id = entity_id
+        self.player_id = player_id
+        self.x, self.y, self.z = x, y, z
+        self.pitch, self.yaw = pitch, yaw
+
+    def encode():
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.player_id) +\
+            Buffer.pack('d', self.x) + Buffer.pack('d', self.y) + Buffer.pack('d', self.z) +\
+            Buffer.pack('B', self.pitch) + Buffer.pack('B', self.yaw)

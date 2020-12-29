@@ -2,7 +2,7 @@ from src.logic.commands import command, handle_command
 from src.util.share import logger
 
 
-@command(name='exec')
+@command(name='exec', node='pymine.cmds.exec')
 async def exec_command(uuid: str, args: list):
     file_name = ''.join(args)
 

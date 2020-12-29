@@ -19,7 +19,7 @@ from src.logic.login import login as logic_login  # nopep8
 from src.logic.play import play as logic_play  # nopep8
 from src.logic.lan_support import ping_lan  # nopep8
 
-from src.util.share import *  # nopep8
+from src.util.share import share, logger  # nopep8
 
 if '--dump-packets' in sys.argv:
     from src.util.data_gen import show_packets  # nopep8

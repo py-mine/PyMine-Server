@@ -49,7 +49,7 @@ class Logger:
         message = ' '.join(str(m) for m in message)
         print(f'{START}{WHITE}{BG_RED}[{nice_time()} CRITICAL]: {message}{END}')
 
-    def f_traceback(self, e: Exception):
+    def f_traceback(self, e: BaseException):
         return ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4))
 
 

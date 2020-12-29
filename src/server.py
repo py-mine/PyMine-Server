@@ -17,7 +17,6 @@ from src.logic.commands import handle_server_commands, load_commands  # nopep8
 from src.logic.status import status as logic_status  # nopep8
 from src.logic.login import login as logic_login  # nopep8
 from src.logic.play import play as logic_play  # nopep8
-from src.logic.lan_support import ping_lan  # nopep8
 
 from src.util.share import share, logger  # nopep8
 
@@ -119,9 +118,6 @@ async def start():  # Actually start the server
 
     cmd_task = asyncio.create_task(handle_server_commands())  # Used to handle commands
 
-    if share['conf']['support_lan']:
-        lan_support_task = asyncio.create_task(ping_lan())  # Adds lan support
-
     try:
         async with aiohttp.ClientSession() as share['ses']:
             async with server:
@@ -136,7 +132,6 @@ async def start():  # Actually start the server
         logger.info('Closing server...')
 
         cmd_task.cancel()
-        lan_support_task.cancel()
 
         logger.info('Server closed.')
 

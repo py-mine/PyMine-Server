@@ -1,4 +1,5 @@
 from immutables import Map
+import random
 import base64
 import yaml
 
@@ -9,6 +10,7 @@ SERVER_PROPERTIES_DEFAULT = Map({
     'server_ip': '0.0.0.0',
     'server_port': 25565,
     'level_name': 'world',
+    'seed': int(random.random()*2**48),
     'gamemode': 'survival',
     'difficulty': 'easy',
     'max_players': 20,

@@ -17,8 +17,8 @@ from src.data.states import *  # nopep8
 
 from src.logic.login import set_compression as logic_login_set_compression  # nopep8
 from src.logic.login import request_encryption as logic_request_encryption  # nopep8
+from src.logic.commands import handle_server_commands, load_commands  # nopep8
 from src.logic.login import login_success as logic_login_success  # nopep8
-from src.logic.commands import handle_commands, load_commands  # nopep8
 from src.logic.login import server_auth as logic_server_auth  # nopep8
 from src.logic.login import login_kick as logic_login_kick  # nopep8
 from src.logic.status import status as logic_status  # nopep8
@@ -150,7 +150,7 @@ async def start():  # Actually start the server
 
     server = share['server'] = await asyncio.start_server(handle_con, host=addr, port=port)
 
-    cmd_task = asyncio.create_task(handle_commands())  # Used to handle commands
+    cmd_task = asyncio.create_task(handle_server_commands())  # Used to handle commands
     lan_support_task = asyncio.create_task(ping_lan())  # Adds lan support
 
     try:

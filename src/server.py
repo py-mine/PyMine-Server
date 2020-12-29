@@ -93,6 +93,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     elif state == 'status':
         return await logic_status(r, w, packet, remote)
     elif state == 'login':
+        return await logic_login(r, w, packet, remote)
     elif state == 'play':
         logger.debug('entered play state!')
 

@@ -52,6 +52,8 @@ async def close_con(w, remote):  # Close a connection to a client
     logger.debug(f'Disconnected nicely from {remote[0]}:{remote[1]}.')
     return False, None, w
 
+share['close_con'] = close_con
+
 
 # Handle / respond to packets, this is a loop
 async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote: tuple):

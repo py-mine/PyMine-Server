@@ -50,7 +50,8 @@ class Logger:
         print(f'{START}{WHITE}{BG_RED}[{nice_time()} CRITICAL]: {message}{END}')
 
     def f_traceback(self, e: BaseException):
-        return ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4))
+        return '\n' \
+            ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4)).rstrip('\n')
 
 
 if __name__ == '__main__':  # Used to test colors

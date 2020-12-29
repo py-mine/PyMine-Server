@@ -28,6 +28,7 @@ def command(name: str):
 
     return command_deco
 
+
 async def handle_command(in_text):
     in_split = in_text.split(' ')
     cmd = in_split[0]
@@ -52,6 +53,7 @@ async def handle_command(in_text):
     else:
         logger.warn(f'Invalid/unknown command: {cmd}')
 
+
 async def handle_commands():
     try:
         while True:
@@ -61,7 +63,7 @@ async def handle_commands():
             # however, due to the way the console works rn we can't
             # without messing up the output
             # asyncio.create_task(handle_command(in_text))
-            
+
             await handle_command(in_text)
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass

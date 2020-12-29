@@ -1,4 +1,4 @@
-from src.logic.commands import command, handle_command
+from src.logic.commands import command, handle_server_command
 from src.util.share import logger
 
 

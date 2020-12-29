@@ -29,7 +29,7 @@ def command(name: str, node: str):
     return command_deco
 
 
-async def handle_command(uuid: str, in_text: str):
+async def handle_server_command(uuid: str, in_text: str):
     in_split = in_text.split(' ')
     cmd = in_split.pop(0)
 
@@ -51,7 +51,7 @@ async def handle_command(uuid: str, in_text: str):
         logger.warn(f'Invalid/unknown command: {cmd}')
 
 
-async def handle_commands():
+async def handle_server_commands():
     try:
         while True:
             in_text = await aioconsole.ainput('>')
@@ -61,7 +61,7 @@ async def handle_commands():
             # without messing up the output
             # asyncio.create_task(handle_command(in_text))
 
-            await handle_command('server', in_text)
+            await handle_server_command('server', in_text)
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass
     except Exception as e:

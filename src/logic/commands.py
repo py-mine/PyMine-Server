@@ -35,9 +35,11 @@ async def handle_server_command(uuid: str, in_text: str):
 
     args = ''.join(in_split)
 
-    cmd_func = registered_commands.get(cmd)[0]
+    reg_cmd = registered_commands.get(cmd)
 
-    if cmd_func is not None:
+    if reg_cmd is not None:
+        cmd_func = reg_cmd[0]
+
         try:
             if asyncio.iscoroutinefunction(cmd_func):
                 await cmd_func(uuid, args)

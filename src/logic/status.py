@@ -11,6 +11,8 @@ async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote:
         await pong(r, w, packet)
         return await share['close_con'](w, remote)
 
+    return True, r, w
+
 async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest'):
     data = {
         'version': {

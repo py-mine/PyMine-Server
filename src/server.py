@@ -20,7 +20,6 @@ from src.logic.status import status as logic_status  # nopep8
 from src.logic.login import login as logic_login  # nopep8
 from src.logic.lan_support import ping_lan  # nopep8
 
-import src.util.encryption as encryption  # nopep8
 from src.util.share import *  # nopep8
 
 load_commands()

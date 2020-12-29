@@ -1,6 +1,5 @@
 import aioconsole
 import importlib
-import traceback
 import asyncio
 import os
 
@@ -46,9 +45,7 @@ async def handle_server_command(uuid: str, in_text: str):
             else:
                 cmd_func(uuid, args)
         except Exception as e:
-            logger.error(
-                ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4))
-            )
+            logger.error(logger.f_traceback(e))            )
     else:
         logger.warn(f'Invalid/unknown command: {cmd}')
 

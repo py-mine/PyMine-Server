@@ -34,6 +34,7 @@ class PlayCloseWindow(Packet):
     to = 1
 
     def __init__(self, window_id: int):
+        super().__init__()
         self.window_id = window_id
 
     def encode(self):

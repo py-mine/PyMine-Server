@@ -1,3 +1,4 @@
+import traceback
 import time
 import os
 
@@ -47,6 +48,9 @@ class Logger:
     def critical(self, *message):
         message = ' '.join(str(m) for m in message)
         print(f'{START}{WHITE}{BG_RED}[{nice_time()} CRITICAL]: {message}{END}')
+
+    def f_traceback(self, e):
+        return ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4))
 
 
 if __name__ == '__main__':  # Used to test colors

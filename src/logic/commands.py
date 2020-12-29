@@ -28,31 +28,34 @@ def command(name: str):
 
     return command_deco
 
+async def handle_command(in_text):
+    in_split = in_text.split(' ')
+    cmd = in_split[0]
+
+    if len(in_split) > 0:
+        args = in_split[1:]
+    else:
+        args = []
+
+    cmd_func = registered_commands.get(cmd)
+
+    if cmd_func is not None:
+        try:
+            if asyncio.iscoroutinefunction(cmd_func):
+                await cmd_func('server', args)
+            else:
+                cmd_func('server', args)
+        except Exception as e:
+            logger.error(
+                ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4))
+            )
+    else:
+        logger.warn('Invalid/unknown command.')
 
 async def handle_commands():
     try:
         while True:
-            in_split = (await aioconsole.ainput('>')).split(' ')
-            cmd = in_split[0]
-
-            if len(in_split) > 0:
-                args = in_split[1:]
-            else:
-                args = []
-
-            cmd_func = registered_commands.get(cmd)
-
-            if cmd_func is not None:
-                try:
-                    if asyncio.iscoroutinefunction(cmd_func):
-                        await cmd_func('server', args)
-                    else:
-                        cmd_func('server', args)
-                except Exception as e:
-                    logger.error(
-                        ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4))
-                    )
-            else:
-                logger.warn('Invalid/unknown command.')
+            in_text = await aioconsole.ainput('>')
+            asyncio.create_task(handle_command(in_text))
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass

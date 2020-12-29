@@ -1,8 +1,6 @@
 from random import randint
 import hashlib
 
-__all__ = ('string_hash_code', 'gen_seed',)
-
 
 def string_hash_code(s: str) -> int:
     n = len(s)

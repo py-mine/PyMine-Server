@@ -2,7 +2,7 @@ from immutables import Map
 import base64
 import yaml
 
-from src.util.seeds import *
+from src.util.seeds import string_hash_code, gen_seed
 
 __all__ = ('SERVER_PROPERTIES_DEFAULT', 'SERVER_PROPERTIES', 'FAVICON',)
 

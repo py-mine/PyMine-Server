@@ -111,3 +111,40 @@ class PlayPlayerAbilitiesServerBound(Packet):
 
     def decode(self, buf: Buffer) -> PlayPlayerAbilitiesServerBound:
         return (buf.unpack('b') == 0x02)
+
+
+class PlayJoinGame(Packet):
+
+    id_ = 0x24
+    to = 1
+
+    def __init__(self, entity_id: int, is_hardcore: bool, gamemode: int, prev_gamemode: int, world_names: list, dim_codec: 'nbt.Tag', dimension: 'nbt.Tag', world_name: str, hashed_seed: int, max_players: int, view_distance: int, reduced_debug_info: bool, enable_respawn_screen: bool, is_debug: bool, is_flat: bool):
+        super().__init__()
+
+        self.entity_id = entity_id
+        self.is_hardcore = is_hardcore
+        self.gamemode = gamemode
+        self.prev_gamemode = prev_gamemode
+        self.world_names = world_names
+        self.dim_codec = dim_codec
+        self.dimension = dimension
+        self.world_name = world_name
+        self.hashed_seed = hashed_seed
+        self.max_players = max_players
+        self.view_distance = view_distance
+        self.reduced_debug_info = reduced_debug_info
+        self.enable_respawn_screen = enable_respawn_screen
+        self.is_debug = is_debug
+        self.is_flat = is_flat
+
+    def encode(self) -> bytes:
+        return Buffer.pack('i', self.entity_id) + Buffer.pack_bool(self.is_hardcore) + \
+            Buffer.pack('B', self.gamemode) + Buffer.pack('b', self.prev_gamemode) + \
+            Buffer.pack_varint(len(self.world_names)) + \
+            b''.join([Buffer.pack_string(w) for w in self.world_names]) + \
+            Buffer.pack_nbt(self.dim_codec) + Buffer.pack_nbt(self.dimension) + \
+            Buffer.pack_string(self.world_name) + Buffer.pack('q', self.hashed_seed) + \
+            Buffer.pack_varint(self.max_players) + Buffer.pack_varint(self.view_distance) + \
+            Buffer.pack_bool(self.reduced_debug_info) + \
+            Buffer.pack_bool(self.enable_respawn_screen) + Buffer.pack_bool(self.is_debug) + \
+            Buffer.pack_bool(self.is_flat)

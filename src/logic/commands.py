@@ -15,7 +15,7 @@ def load_commands():  # only loads commands inside cmds folder, not subfolders
             importlib.import_module(f'src.logic.cmds.{file[:-3]}')
 
 
-def command(name: str):
+def command(name: str, node: str):
     if name in registered_commands:
         raise Exception('Command name is already in use.')
 
@@ -23,29 +23,26 @@ def command(name: str):
         raise Exception('Command name may not contain spaces.')
 
     def command_deco(func):
-        registered_commands[name] = func
+        registered_commands[name] = func, node
         return func
 
     return command_deco
 
 
-async def handle_command(in_text):
+async def handle_command(uuid: str, in_text: str):
     in_split = in_text.split(' ')
-    cmd = in_split[0]
+    cmd = in_split.pop(0)
 
-    if len(in_split) > 0:
-        args = in_split[1:]
-    else:
-        args = []
+    args = ''.join(in_split)
 
-    cmd_func = registered_commands.get(cmd)
+    cmd_func = registered_commands.get(cmd)[0]
 
     if cmd_func is not None:
         try:
             if asyncio.iscoroutinefunction(cmd_func):
-                await cmd_func('server', args)
+                await cmd_func(uuid, args)
             else:
-                cmd_func('server', args)
+                cmd_func(uuid, args)
         except Exception as e:
             logger.error(
                 ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4))
@@ -64,7 +61,7 @@ async def handle_commands():
             # without messing up the output
             # asyncio.create_task(handle_command(in_text))
 
-            await handle_command(in_text)
+            await handle_command('server', in_text)
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass
     except Exception as e:

@@ -16,6 +16,7 @@ from src.data.states import *  # nopep8
 from src.logic.commands import handle_server_commands, load_commands  # nopep8
 from src.logic.status import status as logic_status  # nopep8
 from src.logic.login import login as logic_login  # nopep8
+from src.logic.play import play as logic_play  # nopep8
 from src.logic.lan_support import ping_lan  # nopep8
 
 from src.util.share import *  # nopep8
@@ -93,12 +94,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     elif state == 'login':
         return await logic_login(r, w, packet, remote)
     elif state == 'play':
-        logger.debug('entered play state!')
-
-    # Return whether handle_con should continue handling packets,
-    # as well as the same StreamReader and StreamWriter just in
-    # case they have been replaced by encrypted versions
-    return True, r, w
+        return await logic_play(r, w, packet, remote)
 
 
 async def handle_con(r, w):  # Handle a connection from a client

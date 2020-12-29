@@ -30,7 +30,7 @@ async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: 
 
         if not auth:
             await login_kick(w)
-            return await close_con(w, remote)
+            return await share['close_con'](w, remote)
 
         # Generate a cipher for that client using the shared key from the client
         cipher = gen_aes_cipher(shared_key)

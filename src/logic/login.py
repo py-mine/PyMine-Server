@@ -11,6 +11,8 @@ from src.types.buffer import Buffer
 from src.util.encryption import *
 from src.util.share import share
 
+login_cache = {}  # {remote: {username: username, verify_token: verify_token]}
+
 
 async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: remote):
     pass

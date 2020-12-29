@@ -33,7 +33,6 @@ share['rsa']['private'] = rsa.generate_private_key(65537, 1024)
 share['rsa']['public'] = share['rsa']['private'].public_key()
 
 states = share['states']
-login_cache = {}  # {remote: {username: username, verify_token: verify_token]}
 logger.debug_ = share['conf']['debug']
 
 

@@ -15,3 +15,8 @@ async def exec_command(uuid: str, args: list):
 
     except FileNotFoundError:
         logger.warn('Can\'t find that file...')
+
+
+@command(name='echo', node='pymine.cmds.echo')
+def echo(uuid: str, text: str):
+    logger.info(f'{uuid}: {text}')

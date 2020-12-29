@@ -44,6 +44,8 @@ async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: 
 
         states[remote] = 3  # PLAY
 
+    return True, r, w
+
 
 # Send an encryption request packet to the client
 async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'LoginStart', lc: dict):

@@ -1,7 +1,8 @@
 from immutables import Map
-import random
 import base64
 import yaml
+
+from src.util.seeds import *
 
 __all__ = ('SERVER_PROPERTIES_DEFAULT', 'SERVER_PROPERTIES', 'FAVICON',)
 
@@ -10,7 +11,7 @@ SERVER_PROPERTIES_DEFAULT = Map({
     'server_ip': '0.0.0.0',
     'server_port': 25565,
     'level_name': 'world',
-    'seed': int(random.random()*2**48),
+    'seed': gen_seed(),
     'gamemode': 'survival',
     'difficulty': 'easy',
     'max_players': 20,
@@ -48,13 +49,14 @@ def load_properties():
         with open('server.yml', 'w') as f:
             f.write(yaml.dump(properties))
 
-    # Reset server.yml if any of the types is incorrect
-    if any([(not isinstance(v, type(SERVER_PROPERTIES_DEFAULT[k])))
-            for k, v in properties.items()]):
-        properties = SERVER_PROPERTIES_DEFAULT
+    if type(properties['seed']) == str:  # seed is str, we need int
+        properties['seed'] = string_hash_code(properties['seed'][:20])
+
+    if properties['seed'] > 2 ** 64:  # seed is too big
+        properties['seed'] = gen_seed()
 
         with open('server.yml', 'w') as f:
-            f.write(yaml.dump(dict(properties)))
+            f.write(yaml.dump(properties))
 
     return Map(properties)
 

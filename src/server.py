@@ -21,6 +21,7 @@ from src.logic.commands import handle_server_commands, load_commands  # nopep8
 from src.logic.login import login_success as logic_login_success  # nopep8
 from src.logic.login import server_auth as logic_server_auth  # nopep8
 from src.logic.login import login_kick as logic_login_kick  # nopep8
+from src.logic.status import status as logic_status  # nopep8
 from src.logic.lan_support import ping_lan  # nopep8
 
 import src.util.encryption as encryption  # nopep8

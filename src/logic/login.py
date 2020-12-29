@@ -15,6 +15,7 @@ login_cache = {}  # {remote: {username: username, verify_token: verify_token]}
 
 states = share['states']
 
+
 # Contains all the logic for logging in (handles all packets in the login state)
 async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple):
     if packet.id_ == 0x00:  # LoginStart

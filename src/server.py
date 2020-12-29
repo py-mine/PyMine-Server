@@ -17,12 +17,12 @@ from src.data.states import *  # nopep8
 
 from src.logic.login import set_compression as logic_login_set_compression  # nopep8
 from src.logic.login import request_encryption as logic_request_encryption  # nopep8
+from src.logic.commands import handle_server_commands, load_commands  # nopep8
 from src.logic.login import login_success as logic_login_success  # nopep8
 from src.logic.login import server_auth as logic_server_auth  # nopep8
 from src.logic.login import login_kick as logic_login_kick  # nopep8
 from src.logic.status import status as logic_status  # nopep8
 from src.logic.status import pong as logic_pong  # nopep8
-from src.logic.commands import handle_commands  # nopep8
 from src.logic.lan_support import ping_lan  # nopep8
 
 import src.util.encryption as encryption  # nopep8
@@ -32,6 +32,8 @@ if '--dump-packets' in sys.argv:
     from src.util.data_gen import show_packets  # nopep8
     show_packets(PACKET_MAP, ('--play-only' in sys.argv))
     exit(0)
+
+load_commands()
 
 share['rsa']['private'] = rsa.generate_private_key(65537, 1024)
 share['rsa']['public'] = share['rsa']['private'].public_key()
@@ -49,7 +51,7 @@ async def close_con(w, remote):  # Close a connection to a client
 
     try:
         del states[remote]
-    except Exception:
+    except BaseException:
         pass
 
     logger.debug(f'Disconnected nicely from {remote[0]}:{remote[1]}.')
@@ -153,8 +155,10 @@ async def start():  # Actually start the server
 
     server = share['server'] = await asyncio.start_server(handle_con, host=addr, port=port)
 
-    cmd_task = asyncio.create_task(handle_commands())  # Used to handle commands
-    lan_support_task = asyncio.create_task(ping_lan())  # Adds lan support
+    cmd_task = asyncio.create_task(handle_server_commands())  # Used to handle commands
+
+    if share['conf']['support_lan']:
+        lan_support_task = asyncio.create_task(ping_lan())  # Adds lan support
 
     try:
         async with aiohttp.ClientSession() as share['ses']:
@@ -174,4 +178,7 @@ async def start():  # Actually start the server
 
         logger.info('Server closed.')
 
-asyncio.run(start())
+try:
+    asyncio.run(start())
+except BaseException as e:
+    logger.critical(logger.f_traceback(e))

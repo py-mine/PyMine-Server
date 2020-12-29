@@ -114,6 +114,41 @@ class PlayPlayerAbilitiesServerBound(Packet):
 
 
 class PlayJoinGame(Packet):
+    """Tells the client the necessary information to actually join the game. (Server -> Client)
+
+    :param int entity_id: The player's entity ID.
+    :param bool is_hardcore: Whether the world is hardcore mode or not.
+    :param int gamemode: The player's gamemode.
+    :param int prev_gamemode: The player's previous gamemode.
+    :param list world_names: All of the worlds loaded on the server.
+    :param 'nbt.Tag' dim_codec: Represents a dimension and biome registry, see here: https://wiki.vg/Protocol#Join_Game.
+    :param 'nbt.Tag' dimension: A dimension type, see here: https://wiki.vg/Protocol#Join_Game.
+    :param str world_name: The name of the world the player is joining.
+    :param int hashed_seed: First 8 bytes of SHA-256 hash of the world's seed.
+    :param int max_players: Max players allowed on the server, now ignored.
+    :param int view_distance: Max view distance allowed by the server.
+    :param bool reduced_debug_info: Whether debug info should be reduced or not.
+    :param bool enable_respawn_screen: Set to false when the doImmediateRespawn gamerule is true.
+    :param bool is_debug: If the world is a debug world.
+    :param bool is_flat: If the world is a superflat world.
+    :attr int id_: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr entity_id:
+    :attr is_hardcore:
+    :attr gamemode:
+    :attr prev_gamemode:
+    :attr world_names:
+    :attr dim_codec:
+    :attr dimension:
+    :attr world_name:
+    :attr hashed_seed:
+    :attr max_players:
+    :attr view_distance:
+    :attr reduced_debug_info:
+    :attr enable_respawn_screen:
+    :attr is_debug:
+    :attr is_flat:
+    """
 
     id_ = 0x24
     to = 1

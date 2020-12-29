@@ -1,5 +1,4 @@
 from cryptography.hazmat.primitives.asymmetric import rsa
-import immutables
 import asyncio
 import aiohttp
 import random
@@ -10,7 +9,6 @@ import os
 sys.path.append(os.getcwd())
 
 from src.types.buffer import Buffer  # nopep8
-from src.types.packet import Packet  # nopep8
 
 from src.data.packet_map import PACKET_MAP  # nopep8
 from src.data.states import *  # nopep8

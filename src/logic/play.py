@@ -7,5 +7,5 @@ async def play(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: t
     pass
 
 
-async def finish_login(r: 'StreamReader', w: 'StreamWriter', remote: tuple) -> None:
+async def finish_join(r: 'StreamReader', w: 'StreamWriter', remote: tuple) -> None:
     pass

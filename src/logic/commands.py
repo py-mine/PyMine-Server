@@ -28,7 +28,7 @@ def command(name: str, node: str):
     return command_deco
 
 
-async def handle_server_command(uuid: str, in_text: str):
+async def handle_server_command(in_text: str):
     in_split = in_text.split(' ')
     cmd = in_split.pop(0)
 
@@ -41,9 +41,9 @@ async def handle_server_command(uuid: str, in_text: str):
 
         try:
             if asyncio.iscoroutinefunction(cmd_func):
-                await cmd_func(uuid, args)
+                await cmd_func('server', args)
             else:
-                cmd_func(uuid, args)
+                cmd_func('server', args)
         except BaseException as e:
             logger.error(logger.f_traceback(e))
     else:
@@ -60,7 +60,7 @@ async def handle_server_commands():
             # without messing up the output
             # asyncio.create_task(handle_command(in_text))
 
-            await handle_server_command('server', in_text)
+            await handle_server_command(in_text)
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass
     except BaseException as e:

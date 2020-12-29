@@ -3,7 +3,7 @@ from cryptography.hazmat.primitives.ciphers.base import _CipherContext
 import hashlib
 import asyncio
 
-__all__ = ('gen_verify_hash', 'gen_aes_cipher',)
+__all__ = ('gen_verify_hash', 'gen_aes_cipher', 'EncryptedStreamReader', 'EncryptedStreamWriter',)
 
 
 def gen_verify_hash(shared_key: bytes, public_key: bytes):

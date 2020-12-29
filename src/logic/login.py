@@ -26,6 +26,7 @@ async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: 
             await request_encryption(r, w, packet, login_cache[remote])
         else:  # If no auth is used, go straight to login success
             await login_success(r, w, packet.username)
+            states[remote] = 3
     elif packet.id_ == 0x01:  # LoginEncryptionResponse
         shared_key, auth = await server_auth(packet, remote, login_cache[remote])
 

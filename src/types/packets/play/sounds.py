@@ -15,6 +15,7 @@ class PlayNamedSoundEffect(Packet):
     to = 1
 
     def __init__(self, name: str, category: int, effect_pos_x: int, effect_pos_y: int, effect_pos_z: int, volume: int, pitch: int):  # nopep8
+        super().__init__()
         self.name = name
         self.category = category
         self.effect_pos_x = effect_pos_x

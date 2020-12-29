@@ -6,7 +6,13 @@ from src.types.packet import Packet
 from src.types.buffer import Buffer
 from src.types.chat import Chat
 
-__all__ = ('PlayAcknowledgePlayerDigging',)
+__all__ = (
+    'PlayAcknowledgePlayerDigging',
+    'PlayDisconnect',
+    'PlayPlayerAbilitiesClientBound',
+    'PlayPlayerAbilitiesServerBound',
+    'PlayJoinGame',
+)
 
 
 class PlayAcknowledgePlayerDigging(Packet):

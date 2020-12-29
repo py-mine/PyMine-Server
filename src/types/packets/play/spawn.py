@@ -49,6 +49,7 @@ class PlayEntitySpawn(Packet):
 
 class PlaySpawnExperienceOrb(Packet):
     """Spawns one or more experience orbs. Client bound(Server -> Client)."""
+    to = 1
 
     id_ = 0x01
 

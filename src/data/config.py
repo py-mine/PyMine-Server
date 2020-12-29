@@ -49,7 +49,7 @@ def load_properties():
         with open('server.yml', 'w') as f:
             f.write(yaml.dump(properties))
 
-    if type(properties['seed']) == str:  # seed is str, we need int
+    if isinstance(properties['seed'], str):  # seed is str, we need int
         properties['seed'] = string_hash_code(properties['seed'][:20])
 
     if properties['seed'] > 2 ** 64:  # seed is too big

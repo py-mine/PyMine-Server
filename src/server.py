@@ -92,7 +92,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     if state == 'handshaking':
         states[remote] = packet.next_state
     elif state == 'status':
-        return
+        return await logic_status(r, w, packet, remote)
     elif state == 'login':
         if packet.id_ == 0x00:  # LoginStart
             if share['conf']['online_mode']:

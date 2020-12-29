@@ -5,7 +5,7 @@ from src.types.buffer import Buffer
 from src.util.share import share
 
 
-async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest'):
+async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest'):
     data = {
         'version': {
             'name': share['version'],

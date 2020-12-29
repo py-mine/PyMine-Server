@@ -45,7 +45,7 @@ async def handle_server_command(uuid: str, in_text: str):
             else:
                 cmd_func(uuid, args)
         except Exception as e:
-            logger.error(logger.f_traceback(e))            )
+            logger.error(logger.f_traceback(e))
     else:
         logger.warn(f'Invalid/unknown command: {cmd}')
 

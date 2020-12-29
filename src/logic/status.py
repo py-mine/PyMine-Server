@@ -4,7 +4,6 @@ from src.types.buffer import Buffer
 
 from src.util.share import share
 
-
 # Handles all status logic (all packets in the status state)
 async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple):
     if packet.id_ == 0x00:  # StatusStatusRequest

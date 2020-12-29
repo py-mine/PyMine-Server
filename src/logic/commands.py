@@ -33,7 +33,7 @@ async def handle_server_command(uuid: str, in_text: str):
     in_split = in_text.split(' ')
     cmd = in_split.pop(0)
 
-    args = ''.join(in_split)
+    args = ' '.join(in_split)
 
     reg_cmd = registered_commands.get(cmd)
 

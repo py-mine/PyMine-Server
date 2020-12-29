@@ -15,12 +15,7 @@ from src.types.packet import Packet  # nopep8
 from src.data.packet_map import PACKET_MAP  # nopep8
 from src.data.states import *  # nopep8
 
-from src.logic.login import set_compression as logic_login_set_compression  # nopep8
-from src.logic.login import request_encryption as logic_request_encryption  # nopep8
 from src.logic.commands import handle_server_commands, load_commands  # nopep8
-from src.logic.login import login_success as logic_login_success  # nopep8
-from src.logic.login import server_auth as logic_server_auth  # nopep8
-from src.logic.login import login_kick as logic_login_kick  # nopep8
 from src.logic.status import status as logic_status  # nopep8
 from src.logic.lan_support import ping_lan  # nopep8
 

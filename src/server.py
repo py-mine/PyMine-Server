@@ -106,7 +106,11 @@ async def handle_con(r, w):  # Handle a connection from a client
     c = True
 
     while c:
-        c, r, w = await handle_packet(r, w, remote)
+        try:
+            c, r, w = await handle_packet(r, w, remote)
+        except BaseException as e:
+            await close_con(w)
+            logger.error(logger.f_traceback(e))
 
 
 async def start():  # Actually start the server

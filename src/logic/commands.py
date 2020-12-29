@@ -53,6 +53,6 @@ async def handle_commands():
                         ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4))
                     )
             else:
-                logger.info('Invalid/unknown command.')
+                logger.warn('Invalid/unknown command.')
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass

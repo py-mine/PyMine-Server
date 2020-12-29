@@ -9,7 +9,7 @@ async def exec_command(uuid: str, args: list):
         with open(file_name, 'r') as f:
             cmds_lines = [l.rstrip('\n') for l in f.readlines()]
 
-            for cmd_line in cmds_line:
+            for cmd_line in cmds_lines:
                 await handle_command(cmd_line)
 
     except FileNotFoundError:

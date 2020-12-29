@@ -8,6 +8,8 @@ from src.types.packets.login.set_comp import LoginSetCompression
 from src.types.packets.login.login import *
 from src.types.buffer import Buffer
 
+from src.logic.play import finish_login
+
 from src.util.encryption import *
 from src.util.share import share
 
@@ -46,6 +48,10 @@ async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: 
         await login_success(r, w, *auth)
 
         states[remote] = 3  # PLAY
+
+        # After LoginSuccess we need to send join game packets, however these are play packets,
+        # so we pass them off to src/logic/play.py
+        await finish_join(r, w, remote)
 
     return True, r, w
 
@@ -96,7 +102,7 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: d
 
 
 # Set the the compression threshold for all future packets
-async def set_compression(w: 'StreamWriter') -> None:
+async def set_compression(w: 'StreamWriter') -> None:w.write(Buffer.pack_packet())
     w.write(Buffer.pack_packet(LoginSetCompression(share['comp_thresh'])))
     await w.drain()
 
@@ -108,6 +114,7 @@ async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, uui
         jj = await resp.json()
         uuid_ = uuid.UUID(jj['id'])
 
+    # LoginSuccess packet, tells client they've logged in succesfully
     w.write(Buffer.pack_packet(LoginSuccess(uuid_, username), share['comp_thresh']))
     await w.drain()
 

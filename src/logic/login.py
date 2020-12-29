@@ -12,7 +12,9 @@ from src.util.encryption import *
 from src.util.share import share
 
 login_cache = {}  # {remote: {username: username, verify_token: verify_token]}
+
 states = share['states']
+close_con = share['close_con']
 
 # Contains all the logic for logging in (handles all packets in the login state)
 async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple):

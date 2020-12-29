@@ -12,6 +12,7 @@ __all__ = (
     'PlayLivingEntitySpawn',
     'PlayPaintingSpawn',
     'PlaySpawnExperienceOrb',
+    'PlaySpawnPlayer',
 )
 
 

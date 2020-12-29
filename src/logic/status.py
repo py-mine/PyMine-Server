@@ -4,6 +4,12 @@ from src.types.buffer import Buffer
 
 from src.util.share import share
 
+async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple):
+    if packet.id_ == 0x00:  # StatusStatusRequest
+        await logic_status(r, w, packet)
+    elif packet.id_ == 0x01:  # StatusStatusPingPong
+        await logic_pong(r, w, packet)
+        return await share['close_con'](w, remote)
 
 async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest'):
     data = {

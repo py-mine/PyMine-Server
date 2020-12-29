@@ -153,7 +153,23 @@ class PlayJoinGame(Packet):
     id_ = 0x24
     to = 1
 
-    def __init__(self, entity_id: int, is_hardcore: bool, gamemode: int, prev_gamemode: int, world_names: list, dim_codec: 'nbt.Tag', dimension: 'nbt.Tag', world_name: str, hashed_seed: int, max_players: int, view_distance: int, reduced_debug_info: bool, enable_respawn_screen: bool, is_debug: bool, is_flat: bool):
+    def __init__(
+            self,
+            entity_id: int,
+            is_hardcore: bool,
+            gamemode: int,
+            prev_gamemode: int,
+            world_names: list,
+            dim_codec: 'nbt.Tag',
+            dimension: 'nbt.Tag',
+            world_name: str,
+            hashed_seed: int,
+            max_players: int,
+            view_distance: int,
+            reduced_debug_info: bool,
+            enable_respawn_screen: bool,
+            is_debug: bool,
+            is_flat: bool):
         super().__init__()
 
         self.entity_id = entity_id

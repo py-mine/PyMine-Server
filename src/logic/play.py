@@ -1,7 +1,10 @@
+import hashlib
+
 from src.types.packets.play import player as packets_player
 from src.types.buffer import Buffer
 
 from src.util.share import share, logger
+from src.util.seeds import seed_hash
 
 
 async def play(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple) -> tuple:

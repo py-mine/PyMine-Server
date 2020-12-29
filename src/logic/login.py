@@ -18,16 +18,16 @@ async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: 
     if packet.id_ == 0x00:  # LoginStart
         if share['conf']['online_mode']:
             login_cache[remote] = {'username': packet.username, 'verify': None}
-            await logic_request_encryption(r, w, packet, login_cache[remote])
+            await request_encryption(r, w, packet, login_cache[remote])
         else:  # If no auth is used, go straight to login success
-            await logic_login_success(r, w, packet.username)
+            await login_success(r, w, packet.username)
     elif packet.id_ == 0x01:  # LoginEncryptionResponse
-        shared_key, auth = await logic_server_auth(packet, remote, login_cache[remote])
+        shared_key, auth = await server_auth(packet, remote, login_cache[remote])
 
         del login_cache[remote]
 
         if not auth:
-            await logic_login_kick(w)
+            await ogin_kick(w)
             return await close_con(w, remote)
 
         # Generate a cipher for that client using the shared key from the client
@@ -38,9 +38,9 @@ async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: 
         w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
 
         if share['comp_thresh'] > 0:  # Send set compression packet if needed
-            await logic_login_set_compression(w)
+            await set_compression(w)
 
-        await logic_login_success(r, w, *auth)
+        await login_success(r, w, *auth)
 
         states[remote] = 3  # PLAY
 

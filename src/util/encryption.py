@@ -23,14 +23,6 @@ def gen_aes_cipher(shared_key: bytes):
     )
 
 
-def encrypt(data: bytes, encryptor: '_CipherContext'):
-    return encryptor.update(data)
-
-
-def decrypt(data: bytes, decryptor: '_CipherContext'):
-    return decryptor.update(data)
-
-
 class EncryptedStreamReader:  # Used to encrypt data read via a StreamReader
     def __init__(self, reader: asyncio.StreamReader, decryptor: '_CipherContext'):
         self.reader = reader

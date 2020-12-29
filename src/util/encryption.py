@@ -3,7 +3,7 @@ from cryptography.hazmat.primitives.ciphers.base import _CipherContext
 import hashlib
 import asyncio
 
-__all__ = ('gen_verify_hash', 'gen_aes_cipher',)
+__all__ = ('gen_verify_hash', 'gen_aes_cipher', 'EncryptedStreamReader', 'EncryptedStreamWriter',)
 
 
 def gen_verify_hash(shared_key: bytes, public_key: bytes):
@@ -21,14 +21,6 @@ def gen_aes_cipher(shared_key: bytes):
         algorithms.AES(shared_key),
         modes.CFB8(shared_key)
     )
-
-
-def encrypt(data: bytes, encryptor: '_CipherContext'):
-    return encryptor.update(data)
-
-
-def decrypt(data: bytes, decryptor: '_CipherContext'):
-    return decryptor.update(data)
 
 
 class EncryptedStreamReader:  # Used to encrypt data read via a StreamReader

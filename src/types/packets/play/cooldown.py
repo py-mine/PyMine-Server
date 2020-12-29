@@ -20,6 +20,7 @@ class PlaySetCooldown(Packet):
     to = 1
 
     def __init__(self, item_id: int, cooldown_ticks: int):
+        super().__init__()
         self.item_id = item_id
         self.cooldown_ticks = cooldown_ticks
 

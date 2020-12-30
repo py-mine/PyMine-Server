@@ -117,7 +117,7 @@ class PlayPlayerAbilitiesServerBound(Packet):
 
         self.flying = flying
 
-    @clasmethod
+    @classmethod
     def decode(cls, buf: Buffer) -> PlayPlayerAbilitiesServerBound:
         return cls(buf.unpack('b') == 0x02)
 

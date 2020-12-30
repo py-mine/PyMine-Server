@@ -132,13 +132,13 @@ class PlayKeepAliveServerBound(Packet):
     id = 0x10
     to = 0
 
-    def __init__(self, keep_alive_id: int):
+    def __init__(self, keep_alive_id: int) -> None:
         super().__init__()
 
         self.keep_alive_id = keep_alive_id
 
     @classmethod
-    def decode(cls, buf: Buffer):
+    def decode(cls, buf: Buffer) -> PlayKeepAliveServerBound:
         return cls(buf.unpack('q'))
 
 

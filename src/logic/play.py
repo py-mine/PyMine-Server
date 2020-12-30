@@ -28,8 +28,8 @@ async def finish_login(r: StreamReader, w: StreamWriter, remote: tuple) -> None:
         -1,  # Should be previous gamemode
         # Should be actual world names
         [f'minecraft:{lvl_name}', f'minecraft:{lvl_name}_nether', f'minecraft:{lvl_name}_the_end'],
-        dim_codec,
-        dimension,
+        nbt.TAG_Int(1),
+        nbt.TAG_Int(1),
         f'minecraft:{lvl_name}',  # should be actual current world name
         seed_hash(share['conf']['seed']),
         share['conf']['max_players'],

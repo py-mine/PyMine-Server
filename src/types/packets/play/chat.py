@@ -14,7 +14,17 @@ __all__ = (
 
 
 class PlayChatMessageClientBound(Packet):
-    """TODO: make good docstring. (Server -> Client)"""
+    """A chat message from the server to the client (Server -> Client)
+
+    :param Chat data: The actual chat data.
+    :param int position: Where on the GUI the message is to be displayed.
+    :param uuid.UUID sender: Unknown, see here: https://wiki.vg/Protocol#Chat_Message_.28clientbound.29.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr data:
+    :attr position:
+    :attr sender:
+    """
 
     id = 0x0E
     to = 1

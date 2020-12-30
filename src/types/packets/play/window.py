@@ -51,7 +51,7 @@ class PlayWindowProperty(Packet):
 
     def __init__(self, window_id: int, property: int, value: int):
         super().__init__()
-        
+
         self.window_id = window_id
         self.property = property
         self.value = value

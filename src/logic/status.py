@@ -9,7 +9,7 @@ from src.util.share import share, logger
 
 # Handles all status logic (all packets in the status state)
 async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple) -> tuple:
-    if packet.id_ == 0x00:  # StatusStatusRequest
+    if packet.id == 0x00:  # StatusStatusRequest
         await send_status(r, w, packet)
     elif packet.id == 0x01:  # StatusStatusPingPong
         await pong(r, w, packet)

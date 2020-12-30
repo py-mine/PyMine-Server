@@ -43,6 +43,27 @@ class PlayCloseWindow(Packet):
         return Buffer.pack('B', self.window_id)
 
 
+class PlayWindowItems(Packet):
+    """Sent by the server when multiple slots in an inventory window are updated (Server -> Client)
+
+    :param list slots: The updated inventory slots.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr slots:
+    """
+
+    id = 0x13
+    to = 1
+
+    def __init__(self, slots: list):
+        super().__init__()
+
+        self.slots = slots
+
+    def encode(self):
+        return Buffer.pack('h', len(self.slots)) + b''.join(Buffer.pack_slot(s) for s in self.slots)
+
+
 class PlayWindowProperty(Packet):
     """This packet is used to inform the client that part of a GUI window should be updated. ClientboundServer -> Client"""
 

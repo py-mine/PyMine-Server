@@ -21,3 +21,6 @@ share = {
 }
 
 logger = Logger()
+
+entity_id_cache = {}  # {remote: entity_id}
+user_cache = {}  # {entity_id: {remote: tuple, uuid: str}}

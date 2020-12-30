@@ -93,7 +93,7 @@ class PlayTabCompleteServerBound(Packet):
 class PlayTabCompleteClientBound(Packet):
     """"TODO: make good docstring. (Server -> Client)"""
 
-    id = 0x11
+    id = 0xF
     to = 1
 
     def __init__(

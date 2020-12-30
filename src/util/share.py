@@ -1,5 +1,5 @@
+from src.data.config import SERVER_PROPERTIES, FAVICON
 from src.util.logging import Logger
-from src.data.config import *
 
 __all__ = ('share', 'logger',)
 

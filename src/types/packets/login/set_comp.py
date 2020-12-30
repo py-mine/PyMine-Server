@@ -12,12 +12,12 @@ class LoginSetCompression(Packet):
     """While not directly related to logging in, this packet is sent by the server during the login process. (Server -> Client)
 
     :param int comp_thresh: Compression level of future packets, -1 to disable compression.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr comp_thresh:
     """
 
-    id_ = 0x03
+    id = 0x03
     to = 1
 
     def __init__(self, comp_thresh: int = -1) -> None:

@@ -18,7 +18,7 @@ class PlayBlockEntityData(Packet):
     :param int z: The z coordinate of the position.
     :param int action: The action to be carried out (see https://wiki.vg/Protocol#Block_Entity_Data).
     :param nbt.TAG nbt_data: The nbt data associated with the action/block.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr x:
     :attr y:
@@ -27,15 +27,13 @@ class PlayBlockEntityData(Packet):
     :attr nbt_data:
     """
 
-    id_ = 0x09
+    id = 0x09
     to = 1
 
     def __init__(self, x: int, y: int, z: int, action: int, nbt_data: nbt.TAG) -> None:
         super().__init__()
 
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x, self.y, self.z = x, y, z
         self.action = action
         self.nbt_data = nbt_data
 

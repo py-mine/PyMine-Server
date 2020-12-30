@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 from nbt import nbt
-import asyncio
 
 from src.types.packet import Packet
 from src.types.buffer import Buffer
@@ -26,7 +25,7 @@ class PlayAcknowledgePlayerDigging(Packet):
     :param int block: The block state id of the block that is being broken/dug.
     :param int status: Value 0-2 to denote whether player should start, cancel, or finish.
     :param bool successful: True if the block was dug successfully.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr x:
     :attr y:
@@ -36,15 +35,13 @@ class PlayAcknowledgePlayerDigging(Packet):
     :attr successful:
     """
 
-    id_ = 0x07
+    id = 0x07
     to = 1
 
     def __init__(self, x: int, y: int, z: int, block: int, status: int, successful: bool) -> None:
         super().__init__()
 
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x, self.y, self.z = x, y, z
         self.block = block
         self.status = status
         self.successful = successful
@@ -61,11 +58,12 @@ class PlayDisconnect(Packet):
 
     Clientbound(Server -> Client)"""
 
-    id_ = 0x19
+    id = 0x19
     to = 1
 
     def __init__(self, reason: Chat):
         super().__init__()
+
         self.reason = reason
 
     def encode(self):
@@ -78,14 +76,14 @@ class PlayPlayerAbilitiesClientBound(Packet):
     :param bytes flags: Client data bitfield, see here: https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29.
     :param float flying_speed: Speed at which client is flying.
     :param float fov_modifier: FOV modifier value.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr flags:
     :attr flying_speed:
     :attr fov_modifier:
     """
 
-    id_ = 0x30
+    id = 0x30
     to = 1
 
     def __init__(self, flags: bytes, flying_speed: float, fov_modifier: float) -> None:
@@ -104,12 +102,12 @@ class PlayPlayerAbilitiesServerBound(Packet):
     """Tells the server whether the client is flying or not. (Client -> Server)
 
     :param bool flying: Whether player is flying or not.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr flying:
     """
 
-    id_ = 0x1A
+    id = 0x1A
     to = 0
 
     def __init__(self, flying: bool) -> None:
@@ -129,8 +127,8 @@ class PlayJoinGame(Packet):
     :param int gamemode: The player's gamemode.
     :param int prev_gamemode: The player's previous gamemode.
     :param list world_names: All of the worlds loaded on the server.
-    :param 'nbt.Tag' dim_codec: Represents a dimension and biome registry, see here: https://wiki.vg/Protocol#Join_Game.
-    :param 'nbt.Tag' dimension: A dimension type, see here: https://wiki.vg/Protocol#Join_Game.
+    :param nbt.Tag dim_codec: Represents a dimension and biome registry, see here: https://wiki.vg/Protocol#Join_Game.
+    :param nbt.Tag dimension: A dimension type, see here: https://wiki.vg/Protocol#Join_Game.
     :param str world_name: The name of the world the player is joining.
     :param int hashed_seed: First 8 bytes of SHA-256 hash of the world's seed.
     :param int max_players: Max players allowed on the server, now ignored.
@@ -139,7 +137,7 @@ class PlayJoinGame(Packet):
     :param bool enable_respawn_screen: Set to false when the doImmediateRespawn gamerule is true.
     :param bool is_debug: If the world is a debug world.
     :param bool is_flat: If the world is a superflat world.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr entity_id:
     :attr is_hardcore:
@@ -158,7 +156,7 @@ class PlayJoinGame(Packet):
     :attr is_flat:
     """
 
-    id_ = 0x24
+    id = 0x24
     to = 1
 
     def __init__(
@@ -168,8 +166,8 @@ class PlayJoinGame(Packet):
             gamemode: int,
             prev_gamemode: int,
             world_names: list,
-            dim_codec: 'nbt.Tag',
-            dimension: 'nbt.Tag',
+            dim_codec: nbt.Tag,
+            dimension: nbt.Tag,
             world_name: str,
             hashed_seed: int,
             max_players: int,

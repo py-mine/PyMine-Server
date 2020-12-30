@@ -20,12 +20,12 @@ if '--packets' in sys.argv or '-P' in sys.argv:
         if to_dump == 'all' or state in to_dump:
             print('\n' + state)
 
-            for id_, to in sorted(tup, key=(lambda t: 0 if t[0] is None else t[0])):
-                if id_ is None:
+            for id, to in sorted(tup, key=(lambda t: 0 if t[0] is None else t[0])):
+                if id is None:
                     print('MISSING ID')
                 else:
-                    print(f'0x{id_:02X} ({"missing .to attribute" if to is None else dirs[to]})')
-                    done.append(id_)
+                    print(f'0x{id:02X} ({"missing .to attribute" if to is None else dirs[to]})')
+                    done.append(id)
 
             if len(done) < max(done) - 1 and max(done) != 0xFF:
                 print('MISSING: ', end='')

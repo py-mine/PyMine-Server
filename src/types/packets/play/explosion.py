@@ -10,14 +10,13 @@ __all__ = ('PlayExplosion',)
 
 class PlayExplosion(Packet):
     """Sent when an explosion occurs (creepers, TNT, and ghast fireballs).                          Each block in Records is set to air. Coordinates for each axis in record is int(X) + record."""
-    id_ = 0x1B
+    id = 0x1B
     to = 1
 
     def __init__(self, x: int, y: int, z: int, strength: int, record_count: int, records: list, pmx: int, pmy: int, pmz: int):  # nopep8
         super().__init__()
-        self.x = x
-        self.y = y
-        self.z = z
+
+        self.x, self.y, self.z = x, y, z
         self.strength = strength
         self.record_count = record_count
         self.records = records

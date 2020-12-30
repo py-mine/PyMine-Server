@@ -5,12 +5,13 @@ import time
 
 from src.types.packets.play import player as packets_player
 from src.types.buffer import Buffer
+from src.types.buffer import Packet
 
 from src.util.share import share, logger, entity_id_cache, user_cache
 from src.util.seeds import seed_hash
 
 
-async def play(r: StreamReader, w: StreamWriter, packet: 'Packet', remote: tuple) -> tuple:
+async def play(r: StreamReader, w: StreamWriter, packet: Packet, remote: tuple) -> tuple:
     pass
 
 

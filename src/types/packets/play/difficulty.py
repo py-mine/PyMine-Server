@@ -1,4 +1,4 @@
-"""Contains packets related to server difficulty"""
+"""Contains packets related to server difficulty."""
 
 from __future__ import annotations
 

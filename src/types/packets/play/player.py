@@ -1,8 +1,8 @@
 """Contains packets related to players."""
 
 from __future__ import annotations
+from nbt import nbt
 import asyncio
-import nbt
 
 from src.types.packet import Packet
 from src.types.buffer import Buffer

@@ -46,14 +46,6 @@ def load_properties():
         with open('server.yml', 'w') as f:
             f.write(yaml.dump(properties))
 
-    # Reset server.yml if any of the types is incorrect
-    if any([(not isinstance(v, type(SERVER_PROPERTIES_DEFAULT[k])))
-            for k, v in properties.items()]):
-        properties = SERVER_PROPERTIES_DEFAULT
-
-        with open('server.yml', 'w') as f:
-            f.write(yaml.dump(dict(properties)))
-
     return Map(properties)
 
 

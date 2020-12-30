@@ -13,6 +13,8 @@ __all__ = (
     'PlayPlayerAbilitiesClientBound',
     'PlayPlayerAbilitiesServerBound',
     'PlayJoinGame',
+    'PlayKeepAliveClientBound',
+    'PlayKeepAliveServerBound',
 )
 
 

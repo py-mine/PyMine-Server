@@ -327,7 +327,7 @@ class PlayClientSettings(Packet):
             chat_mode: int,
             chat_colors: bool,
             displayed_skin_parts: int,
-            main_hand: int):
+            main_hand: int) -> None:
         super().__init__()
 
         self.locale = locale

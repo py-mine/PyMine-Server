@@ -44,10 +44,8 @@ class PlayBlockAction(Packet):
         self.block_type = block_type
 
     def encode(self) -> bytes:
-        return Buffer.pack_pos(self.x, self.y, self.z) + \
-            Buffer.pack('B', self.action_id) + \
-            Buffer.pack('B', self.action_param) + \
-            Buffer.pack_varint(self.block_type)
+        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack('B', self.action_id) + \
+            Buffer.pack('B', self.action_param) + Buffer.pack_varint(self.block_type)
 
 
 class PlayBlockChange(Packet):

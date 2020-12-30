@@ -7,14 +7,14 @@ from src.types.packet import Packet
 from src.types.buffer import Buffer
 
 __all__ = (
-    'PlayWindowConfirmation',
+    'PlayWindowConfirmationClientBound',
     'PlayCloseWindow',
     'PlayWindowProperty',
     'PlayWindowItems',
 )
 
 
-class PlayWindowConfirmation(Packet):
+class PlayWindowConfirmationClientBound(Packet):
     """A packet indicating whether a request from the client was accepted or if there was a problem.
     Server -> Client"""
 

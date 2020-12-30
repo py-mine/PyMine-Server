@@ -63,6 +63,7 @@ class PlayChatMessageServerBound(Packet):
     def decode(cls, buf: Buffer) -> PlayChatMessageServerBound:
         return cls(buf.unpack_string())
 
+
 class PlayTabComplete(Packet):
     """"TODO: make good docstring. (Server -> Client)"""
 

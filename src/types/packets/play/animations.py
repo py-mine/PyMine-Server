@@ -16,13 +16,13 @@ class PlayEntityAnimation(Packet):
 
     :param int entity_id: Entity ID of the digging entity.
     :param int animation: Value 0-5 which correspond to a specific animation (https://wiki.vg/Protocol#Entity_Animation_.28clientbound.29).
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr entity_id:
     :attr animation:
     """
 
-    id_ = 0x05
+    id = 0x05
     to = 1
 
     def __init__(self, entity_id: int, animation: int) -> None:
@@ -43,7 +43,7 @@ class PlayBlockBreakAnimation(Packet):
     :param int y: The y coordinate of the location to play the animation.
     :param int z: The z coordinate of the location to play the animation.
     :param int stage: Stage from 0-9 in the breaking animation.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr entity_id:
     :attr x:
     :attr y:
@@ -51,7 +51,7 @@ class PlayBlockBreakAnimation(Packet):
     :attr stage:
     """
 
-    id_ = 0x08
+    id = 0x08
     to = 1
 
     def __init__(self, entity_id: int, x: int, y: int, z: int, stage: int) -> None:

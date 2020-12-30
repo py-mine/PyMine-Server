@@ -12,12 +12,12 @@ class PlayStatistics(Packet):
     """Send data in the stats menu to client. (Server -> Client)
 
     :param list stats: A list of stat entries (see here: https://wiki.vg/Protocol#Statistics).
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr stats:
     """
 
-    id_ = 0x06
+    id = 0x06
     to = 1
 
     def __init__(self, stats: list) -> None:

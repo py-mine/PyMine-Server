@@ -13,7 +13,7 @@ __all__ = ('PlayChatMessage', 'PlayTabComplete')
 class PlayChatMessage(Packet):
     """TODO: make good docstring. (Server -> Client)"""
 
-    id_ = 0x0E
+    id = 0x0E
     to = 1
 
     def __init__(self, data: Chat, position: int, sender: uuid.UUID) -> None:
@@ -31,7 +31,7 @@ class PlayChatMessage(Packet):
 class PlayTabComplete(Packet):
     """"TODO: make good docstring. (Server -> Client)"""
 
-    id_ = 0x11
+    id = 0x11
     to = 1
 
     def __init__(self, id: int, start: int, length: int, count: int, matches: list) -> None:

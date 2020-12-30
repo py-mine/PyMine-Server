@@ -12,12 +12,12 @@ class PlayServerDifficulty(Packet):
     """Used by the server to update the difficulty in the client's menu. (Server -> Client)
 
     :param int difficulty: The difficulty level, see here: https://wiki.vg/Protocol#Server_Difficulty.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr difficulty:
     """
 
-    id_ = 0x0D
+    id = 0x0D
     to = 1
 
     def __init__(self, difficulty: int) -> None:

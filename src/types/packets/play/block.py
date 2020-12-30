@@ -17,7 +17,7 @@ class PlayBlockAction(Packet):
     :param int action_id: Block action ID, see here: https://wiki.vg/Block_Actions.
     :param int action_param: Action param of the action, see here: https://wiki.vg/Block_Actions.
     :param int block_type: The type of block which the action is for.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr x:
     :attr y:
@@ -27,7 +27,7 @@ class PlayBlockAction(Packet):
     :attr block_type:
     """
 
-    id_ = 0x0A
+    id = 0x0A
     to = 1
 
     def __init__(self, x: int, y: int, z: int, action_id: int, action_param: int, block_type: int) -> None:  # nopep8
@@ -52,14 +52,14 @@ class PlayBlockChange(Packet):
     :param int y: The y coordinate of the location where this occurs.
     :param int z: The z coordinate of the location where this occurs.
     :param int block_id: Block ID of what to change the block to.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr x:
     :attr y:
     :attr z:
     :attr block_id:
     """
 
-    id_ = 0x0B
+    id = 0x0B
     to = 1
 
     def __init__(self, x: int, y: int, z: int, block_id: int) -> None:
@@ -80,7 +80,7 @@ class PlayGenerateStructure(Packet):
     :param int z: The z coordinate of the jigsaw block.
     :param int levels: The value of the levels slider in the block interface.
     :param bool keep_jigsaws: Unknown.
-    :attr type id_: Unique packet ID.
+    :attr type id: Unique packet ID.
     :attr type to: Packet direction.
     :attr x:
     :attr y:
@@ -89,7 +89,7 @@ class PlayGenerateStructure(Packet):
     :attr keep_jigsaws:
     """
 
-    id_ = 0x0F
+    id = 0x0F
     to = 0
 
     def __init__(self, x: int, y: int, z: int, levels: int, keep_jigsaws: bool):

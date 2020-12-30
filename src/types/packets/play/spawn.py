@@ -19,7 +19,7 @@ __all__ = (
 class PlayEntitySpawn(Packet):
     """Sent by the server when a vehicle or other non-living entity is created. Client bound(Server -> Client)."""
 
-    id_ = 0x00
+    id = 0x00
     to = 1
 
     def __init__(self, entity_id: int, object_uuid: uuid.UUID, type: int,
@@ -50,7 +50,7 @@ class PlaySpawnExperienceOrb(Packet):
     """Spawns one or more experience orbs. Client bound(Server -> Client)."""
     to = 1
 
-    id_ = 0x01
+    id = 0x01
 
     def __init__(self, entity_id: int, x: int = 0, y: int = 0, z: int = 0, count: int = 1237) -> None:  # nopep8
         super().__init__()
@@ -68,7 +68,7 @@ class PlaySpawnExperienceOrb(Packet):
 class PlayLivingEntitySpawn(Packet):
     """Sent by the server when a living entity is spawned.  Client bound(Server -> Client)."""
 
-    id_ = 0x02
+    id = 0x02
     to = 1
 
     def __init__(self, entity_id: int, object_uuid: uuid.UUID, type: int,
@@ -99,7 +99,7 @@ class PlayLivingEntitySpawn(Packet):
 class PlayPaintingSpawn(Packet):
     """This packet shows location, name, and type of painting.  Client bound(Server -> Client)."""
 
-    id_ = 0x03
+    id = 0x03
     to = 1
 
     def __init__(self, entity_id: int, entity_uuid: uuid.UUID, motive: int,
@@ -121,7 +121,7 @@ class PlayPaintingSpawn(Packet):
 class PlaySpawnPlayer(Packet):
     """This packet is sent by the server when a player comes into visible range, not when a player joins.
     Clientbound(Server -> Client)"""
-    id_ = 0x04
+    id = 0x04
     to = 1  # client
 
     def __init__(self, entity_id: int, player_uuid: uuid.UUID, x: int, y: int, z: int, pitch: int, yaw: int):  # nopep8

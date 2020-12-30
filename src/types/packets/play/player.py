@@ -19,7 +19,7 @@ class PlayAcknowledgePlayerDigging(Packet):
     :param int block: The block state id of the block that is being broken/dug.
     :param int status: Value 0-2 to denote whether player should start, cancel, or finish.
     :param bool successful: True if the block was dug successfully.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr x:
     :attr y:
@@ -29,7 +29,7 @@ class PlayAcknowledgePlayerDigging(Packet):
     :attr successful:
     """
 
-    id_ = 0x07
+    id = 0x07
     to = 1
 
     def __init__(self, x: int, y: int, z: int, block: int, status: int, successful: bool) -> None:
@@ -52,7 +52,7 @@ class PlayDisconnect(Packet):
 
     Clientbound(Server -> Client)"""
 
-    id_ = 0x19
+    id = 0x19
     to = 1
 
     def __init__(self, reason: Chat):
@@ -70,14 +70,14 @@ class PlayPlayerAbilitiesClientBound(Packet):
     :param bytes flags: Client data bitfield, see here: https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29.
     :param float flying_speed: Speed at which client is flying.
     :param float fov_modifier: FOV modifier value.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr flags:
     :attr flying_speed:
     :attr fov_modifier:
     """
 
-    id_ = 0x30
+    id = 0x30
     to = 1
 
     def __init__(self, flags: bytes, flying_speed: float, fov_modifier: float) -> None:
@@ -96,12 +96,12 @@ class PlayPlayerAbilitiesServerBound(Packet):
     """Tells the server whether the client is flying or not. (Client -> Server)
 
     :param bool flying: Whether player is flying or not.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr flying:
     """
 
-    id_ = 0x1A
+    id = 0x1A
     to = 0
 
     def __init__(self, flying: bool) -> None:
@@ -131,7 +131,7 @@ class PlayJoinGame(Packet):
     :param bool enable_respawn_screen: Set to false when the doImmediateRespawn gamerule is true.
     :param bool is_debug: If the world is a debug world.
     :param bool is_flat: If the world is a superflat world.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr entity_id:
     :attr is_hardcore:
@@ -150,7 +150,7 @@ class PlayJoinGame(Packet):
     :attr is_flat:
     """
 
-    id_ = 0x24
+    id = 0x24
     to = 1
 
     def __init__(

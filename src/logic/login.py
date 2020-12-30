@@ -18,13 +18,13 @@ states = share['states']
 
 # Contains all the logic for logging in (handles all packets in the login state)
 async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple):
-    if packet.id_ == 0x00:  # LoginStart
+    if packet.id == 0x00:  # LoginStart
         if share['conf']['online_mode']:
             login_cache[remote] = {'username': packet.username, 'verify': None}
             await request_encryption(r, w, packet, login_cache[remote])
         else:  # If no auth is used, go straight to login success
             await login_success(r, w, packet.username)
-    elif packet.id_ == 0x01:  # LoginEncryptionResponse
+    elif packet.id == 0x01:  # LoginEncryptionResponse
         shared_key, auth = await server_auth(packet, remote, login_cache[remote])
 
         del login_cache[remote]

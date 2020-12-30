@@ -13,7 +13,7 @@ class PlayWindowConfirmation(Packet):
     """A packet indicating whether a request from the client was accepted or if there was a problem.
     Server -> Client"""
 
-    id_ = 0x11
+    id = 0x11
     to = 1
 
     def __init__(self, window_id: int, action_number: int, accepted: bool) -> None:
@@ -31,7 +31,7 @@ class PlayWindowConfirmation(Packet):
 class PlayCloseWindow(Packet):
     """This packet is sent from the server to the client when a window is forcibly closed, such as when a chest is destroyed while it's open. """
 
-    id_ = 0x12
+    id = 0x12
     to = 1
 
     def __init__(self, window_id: int):
@@ -46,7 +46,7 @@ class PlayCloseWindow(Packet):
 class PlayWindowProperty(Packet):
     """This packet is used to inform the client that part of a GUI window should be updated. ClientboundServer -> Client"""
 
-    id_ = 0x14
+    id = 0x14
     to = 1
 
     def __init__(self, window_id: int, property: int, value: int):

@@ -14,14 +14,14 @@ class HandshakeLegacyPingRequest(Packet):
     :param int protocol: Protocol version being used, should now always be 74/4a.
     :param str hostname: The host/address the client is connecting to.
     :param int port: The port the client is connection on.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr protocol:
     :attr hostname:
     :attr port:
     """
 
-    id_ = 0xFE
+    id = 0xFE
     to = 0
 
     def __init__(self, protocol: int, hostname: str, port: int) -> None:
@@ -44,14 +44,14 @@ class HandshakeLegacyPingResponse(Packet):
     :param str motd: The server MOTD.
     :param int players_online: Amount of players currently on the server.
     :param int players_max: Maximum players allowed on the server.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr version:
     :attr motd:
     :attr players_online:
     :attr players_max:
     """
 
-    id_ = 0xFF
+    id = 0xFF
     to = 1
 
     def __init__(self, version: str, motd: str, players_online: int, players_max: int) -> None:

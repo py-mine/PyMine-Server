@@ -64,16 +64,24 @@ class PlayChatMessageServerBound(Packet):
         return cls(buf.unpack_string())
 
 
+class PlayTabCompleteServerBound(Packet):
+
+    id = 0x06
+    to = 1
+
+    def __init__(self, )
+
+
 class PlayTabCompleteClientBound(Packet):
     """"TODO: make good docstring. (Server -> Client)"""
 
     id = 0x11
     to = 1
 
-    def __init__(self, id: int, start: int, length: int, count: int, matches: list) -> None:
+    def __init__(self, transaction_id: int, start: int, length: int, count: int, matches: list) -> None:
         super().__init__()
 
-        self.id = id
+        self.transaction_id = transaction_id
         self.start = start
         self.length = length
         self.count = count

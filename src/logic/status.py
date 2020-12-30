@@ -1,4 +1,4 @@
-#from src.types.packets.handshaking.legacy_ping import *
+from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingResponse
 from src.types.packets.status.status import *
 from src.types.buffer import Buffer
 
@@ -55,3 +55,18 @@ async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatu
 async def pong(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusPingPong') -> None:
     w.write(Buffer.pack_packet(packet))
     await w.drain()
+
+
+async def legacy_ping(r: 'StreamReader', w: 'StreamWriter', remote: tuple) -> None:
+    # while True:
+    #     try:
+    #         await asyncio.wait_for(r.read(1), 5)
+    #     except BaseException:
+    #         break
+
+    w.write(Buffer.pack_packet(HandshakeLegacyPingResponse(
+        share['version'],
+        share['conf']['motd'],
+        69,  # In the future should be the actual online players
+        share['conf']['max_players']
+    )))

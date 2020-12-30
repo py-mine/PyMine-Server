@@ -1,3 +1,5 @@
+import asyncio
+
 from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingResponse
 from src.types.packets.status.status import *
 from src.types.buffer import Buffer

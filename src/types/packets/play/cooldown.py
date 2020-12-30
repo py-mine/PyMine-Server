@@ -16,11 +16,12 @@ class PlaySetCooldown(Packet):
     :attr int id: The unique ID of the packet.
     """
 
-    id_ = 0x16
+    id = 0x16
     to = 1
 
     def __init__(self, item_id: int, cooldown_ticks: int):
         super().__init__()
+
         self.item_id = item_id
         self.cooldown_ticks = cooldown_ticks
 

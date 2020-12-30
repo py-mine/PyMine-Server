@@ -7,9 +7,9 @@ from src.util.share import share
 
 # Handles all status logic (all packets in the status state)
 async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple):
-    if packet.id_ == 0x00:  # StatusStatusRequest
+    if packet.id == 0x00:  # StatusStatusRequest
         await send_status(r, w, packet)
-    elif packet.id_ == 0x01:  # StatusStatusPingPong
+    elif packet.id == 0x01:  # StatusStatusPingPong
         await pong(r, w, packet)
         return await share['close_con'](w, remote)
 

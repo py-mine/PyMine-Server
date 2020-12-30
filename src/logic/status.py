@@ -17,7 +17,6 @@ async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote:
 
 
 async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest') -> None:
-    raise Exception
     data = {
         'version': {
             'name': share['version'],

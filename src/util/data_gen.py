@@ -15,7 +15,7 @@ if '--packets' in sys.argv or '-P' in sys.argv:
         to_dump = sys.argv[2:]
 
     for state, tup in PACKET_MAP.items():
-        done = []
+        done = [[], []]
 
         if to_dump == 'all' or state in to_dump:
             print('\n' + state)
@@ -25,17 +25,23 @@ if '--packets' in sys.argv or '-P' in sys.argv:
                     print('MISSING ID')
                 else:
                     print(f'0x{id:02X} ({"missing .to attribute" if to is None else dirs[to]})')
-                    done.append(id)
 
-            if len(done) < max(done) - 1 and max(done) != 0xFF:
-                print('MISSING: ', end='')
+                    if to == 2:
+                        for l in done:
+                            l.append(id)
+                    else:
+                        done[to].append(id)
 
-                for i in range(max(done)):
-                    try:
-                        done.index(i)
-                    except ValueError:
-                        print(f'0x{i:02X}, ', end='')
+            for to, done_l in enumerate(done):
+                if len(done_l) < max(done_l) - 1 and max(done_l) != 0xFF:
+                    print(f'MISSING ({dirs[to]}): ', end='')
 
-                print()
+                    for i in range(max(done_l)):
+                        try:
+                            done_l.index(i)
+                        except ValueError:
+                            print(f'0x{i:02X}, ', end='')
+
+                    print()
 else:
     print('Nothing to dump?')

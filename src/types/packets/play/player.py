@@ -119,6 +119,28 @@ class PlayPlayerAbilitiesServerBound(Packet):
         return (buf.unpack('b') == 0x02)
 
 
+class PlayKeepAliveServerBound(Packet):
+    """Sent by client in order to maintain connection with server. (Client -> Server)
+
+    :param int keep_alive_id: A randomly generated (by the server) integer/long.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr keep_alive_id:
+    """
+
+    id = 0x10
+    to = 0
+
+    def __init__(self, keep_alive_id: int):
+        super().__init__()
+
+        self.keep_alive_id = keep_alive_id
+
+    @classmethod
+    def decode(cls, buf: Buffer):
+        return cls(buf.unpack('q'))
+
+
 class PlayJoinGame(Packet):
     """Tells the client the necessary information to actually join the game. (Server -> Client)
 

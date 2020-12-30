@@ -14,7 +14,7 @@ async def play(r: StreamReader, w: StreamWriter, packet: 'Packet', remote: tuple
     pass
 
 
-async def finish_login(r: StreamReader, w: StreamWriter, remote: tuple) -> None:
+async def finish_join(r: StreamReader, w: StreamWriter, remote: tuple) -> None:
     lvl_name = share['conf']['level_name']
     entity_id = entity_id_cache.get(remote)
 
@@ -28,8 +28,8 @@ async def finish_login(r: StreamReader, w: StreamWriter, remote: tuple) -> None:
         -1,  # Should be previous gamemode
         # Should be actual world names
         [f'minecraft:{lvl_name}', f'minecraft:{lvl_name}_nether', f'minecraft:{lvl_name}_the_end'],
-        nbt.TAG_Int(1),
-        nbt.TAG_Int(1),
+        nbt.TAG_Int(name='bruh', value=1),
+        nbt.TAG_Int(name='bruh', value=1),
         f'minecraft:{lvl_name}',  # should be actual current world name
         seed_hash(share['conf']['seed']),
         share['conf']['max_players'],

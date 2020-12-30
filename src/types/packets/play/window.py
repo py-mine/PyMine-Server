@@ -86,7 +86,14 @@ class PlayClickWindow(Packet):
     id = 0x09
     to = 0
 
-    def __init__(self, window_id: int, slot_number: int, button: int, action_number: int, mode: int, slot: dict) -> None:
+    def __init__(
+            self,
+            window_id: int,
+            slot_number: int,
+            button: int,
+            action_number: int,
+            mode: int,
+            slot: dict) -> None:
         super().__init__()
 
         self.window_id = window_id

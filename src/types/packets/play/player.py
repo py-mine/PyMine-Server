@@ -1,6 +1,7 @@
 """Contains packets related to players."""
 
 from __future__ import annotations
+from nbt import nbt
 
 from src.types.packet import Packet
 from src.types.buffer import Buffer
@@ -121,8 +122,8 @@ class PlayJoinGame(Packet):
     :param int gamemode: The player's gamemode.
     :param int prev_gamemode: The player's previous gamemode.
     :param list world_names: All of the worlds loaded on the server.
-    :param 'nbt.Tag' dim_codec: Represents a dimension and biome registry, see here: https://wiki.vg/Protocol#Join_Game.
-    :param 'nbt.Tag' dimension: A dimension type, see here: https://wiki.vg/Protocol#Join_Game.
+    :param nbt.Tag dim_codec: Represents a dimension and biome registry, see here: https://wiki.vg/Protocol#Join_Game.
+    :param nbt.Tag dimension: A dimension type, see here: https://wiki.vg/Protocol#Join_Game.
     :param str world_name: The name of the world the player is joining.
     :param int hashed_seed: First 8 bytes of SHA-256 hash of the world's seed.
     :param int max_players: Max players allowed on the server, now ignored.
@@ -160,8 +161,8 @@ class PlayJoinGame(Packet):
             gamemode: int,
             prev_gamemode: int,
             world_names: list,
-            dim_codec: 'nbt.Tag',
-            dimension: 'nbt.Tag',
+            dim_codec: nbt.Tag,
+            dimension: nbt.Tag,
             world_name: str,
             hashed_seed: int,
             max_players: int,

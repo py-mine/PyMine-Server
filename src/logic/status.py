@@ -59,11 +59,13 @@ async def pong(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusPingPo
 
 
 async def legacy_ping(r: 'StreamReader', w: 'StreamWriter', remote: tuple) -> None:
-    # while True:
-    #     try:
-    #         await asyncio.wait_for(r.read(1), 5)
-    #     except BaseException:
-    #         break
+    while True:
+        try:
+            await asyncio.wait_for(r.read(1), 1)
+        except BaseException:
+            break
+
+    logger.debug('IN : state:legacy      | id:0xFE | packet:HandshakeLegacyPingRequest')
 
     w.write(HandshakeLegacyPingResponse(
         share['version'],
@@ -72,3 +74,5 @@ async def legacy_ping(r: 'StreamReader', w: 'StreamWriter', remote: tuple) -> No
         share['conf']['max_players']
     ).encode())
     await w.drain()
+
+    logger.debug('OUT: state:legacy      | id:0xFF | packet:HandshakeLegacyPingResponse')

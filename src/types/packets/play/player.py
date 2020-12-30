@@ -16,6 +16,7 @@ __all__ = (
     'PlayKeepAliveClientBound',
     'PlayKeepAliveServerBound',
     'PlayTeleportConfirm',
+    'PlayClientStatus',
 )
 
 
@@ -271,4 +272,26 @@ class PlayTeleportConfirm(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayTeleportConfirm:
+        return cls(buf.unpack_varint())
+
+
+class PlayClientStatus(Packet):
+    """Used by the client to denote when the client has either (0) clicked respawn button or (1) opened the statistics menu. (Client -> Server)
+
+    :param int action_id: Whether client has (0) clicked respawn or (1) opened stats menu.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr action_id:
+    """
+
+    id = 0x04
+    to = 0
+
+    def __init__(self, action_id: int) -> None:
+        super().__init__()
+
+        self.action_id = action_id
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayClientStatus:
         return cls(buf.unpack_varint())

@@ -36,7 +36,7 @@ class PlayTabComplete(Packet):
 
     def __init__(self, id: int, start: int, length: int, count: int, matches: list) -> None:
         super().__init__()
-        
+
         self.id = id
         self.start = start
         self.length = length

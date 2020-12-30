@@ -3,8 +3,8 @@
 from __future__ import annotations
 import uuid
 
-from src.type_s.packet import Packet
-from src.type_s.buffer import Buffer
+from src.types.packet import Packet
+from src.types.buffer import Buffer
 
 
 __all__ = (

@@ -12,7 +12,7 @@ if '--packets' in sys.argv:
     if len(sys.argv) < 3:  # only call to run program + --packets
         to_dump = 'all'
     else:
-        to_dump = sys.argv[3:]
+        to_dump = sys.argv[2:]
 
     for state, tup in PACKET_MAP.items():
         done = []

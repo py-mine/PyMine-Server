@@ -15,6 +15,7 @@ __all__ = (
     'PlayJoinGame',
     'PlayKeepAliveClientBound',
     'PlayKeepAliveServerBound',
+    'PlayTeleportConfirm',
 )
 
 
@@ -63,12 +64,12 @@ class PlayDisconnect(Packet):
     id = 0x19
     to = 1
 
-    def __init__(self, reason: Chat):
+    def __init__(self, reason: Chat) -> None:
         super().__init__()
 
         self.reason = reason
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack_chat(self.reason)
 
 
@@ -221,7 +222,7 @@ class PlayJoinGame(Packet):
             reduced_debug_info: bool,
             enable_respawn_screen: bool,
             is_debug: bool,
-            is_flat: bool):
+            is_flat: bool) -> None:
         super().__init__()
 
         self.entity_id = entity_id
@@ -251,3 +252,25 @@ class PlayJoinGame(Packet):
             Buffer.pack_bool(self.reduced_debug_info) + \
             Buffer.pack_bool(self.enable_respawn_screen) + Buffer.pack_bool(self.is_debug) + \
             Buffer.pack_bool(self.is_flat)
+
+
+class PlayTeleportConfirm(Packet):
+    """Sent by the client as a confirmation to a player position and look packet. (Client -> Server)
+
+    :param int teleport_id: Description of parameter `teleport_id`.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr teleport_id:
+    """
+
+    id = 0x00
+    to = 0
+
+    def __init__(self, teleport_id: int):
+        super().__init__()
+
+        self.teleport_id = teleport_id
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayTeleportConfirm:
+        return cls(buf.unpack_varint())

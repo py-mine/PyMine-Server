@@ -320,7 +320,14 @@ class PlayClientSettings(Packet):
     id = 0x05
     to = 0
 
-    def __init__(self, locale: str, view_distance: int, chat_mode: int, chat_colors: bool, displayed_skin_parts: int, main_hand: int):
+    def __init__(
+            self,
+            locale: str,
+            view_distance: int,
+            chat_mode: int,
+            chat_colors: bool,
+            displayed_skin_parts: int,
+            main_hand: int):
         super().__init__()
 
         self.locale = locale

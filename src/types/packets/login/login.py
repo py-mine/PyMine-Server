@@ -36,7 +36,7 @@ class LoginStart(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> LoginStart:
-        return LoginStart(buf.read(buf.unpack_varint()).decode('UTF-8'))
+        return cls(buf.read(buf.unpack_varint()).decode('UTF-8'))
 
 
 class LoginEncryptionRequest(Packet):
@@ -86,7 +86,7 @@ class LoginEncryptionResponse(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> LoginEncryptionResponse:
-        return LoginEncryptionResponse(buf.read(buf.unpack_varint()), buf.read(buf.unpack_varint()))
+        return cls(buf.read(buf.unpack_varint()), buf.read(buf.unpack_varint()))
 
 
 class LoginSuccess(Packet):

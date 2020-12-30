@@ -10,8 +10,8 @@ sys.path.append(os.getcwd())
 
 from src.types.buffer import Buffer  # nopep8
 
+from src.data.states import STATES_BY_ID, STATES_BY_NAME  # nopep8
 from src.data.packet_map import PACKET_MAP  # nopep8
-from src.data.states import *  # nopep8
 
 from src.logic.commands import handle_server_commands, load_commands  # nopep8
 from src.logic.status import legacy_ping as logic_legacy_ping  # nopep8

@@ -1,4 +1,4 @@
-"""Contains packets relating to client logins"""
+"""Contains packets relating to client logins."""
 
 from __future__ import annotations
 import secrets

@@ -1,4 +1,4 @@
-"""Contains packets that support the legacy server list ping protocol"""
+"""Contains packets that support the legacy server list ping protocol."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Contains HandshakeHandshake, a packet for starting the connection between the server and client"""
+"""Contains HandshakeHandshake, a packet for starting the connection between the server and client."""
 
 from __future__ import annotations
 

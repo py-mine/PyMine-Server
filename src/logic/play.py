@@ -1,5 +1,5 @@
+from asyncio import StreamReader, StreamWriter
 from nbt import nbt
-import asyncio
 import hashlib
 import time
 
@@ -10,11 +10,11 @@ from src.util.share import share, logger, entity_id_cache, user_cache
 from src.util.seeds import seed_hash
 
 
-async def play(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple) -> tuple:
+async def play(r: StreamReader, w: StreamWriter, packet: 'Packet', remote: tuple) -> tuple:
     pass
 
 
-async def finish_login(r: 'StreamReader', w: 'StreamWriter', remote: tuple) -> None:
+async def finish_login(r: StreamReader, w: StreamWriter, remote: tuple) -> None:
     lvl_name = share['conf']['level_name']
     entity_id = entity_id_cache.get(remote)
 

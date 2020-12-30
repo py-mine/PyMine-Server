@@ -7,10 +7,13 @@ from src.types.packet import Packet
 from src.types.buffer import Buffer
 from src.types.chat import Chat
 
-__all__ = ('PlayChatMessage', 'PlayTabComplete')
+__all__ = (
+    'PlayChatMessageClientBound',
+    'PlayTabComplete',
+)
 
 
-class PlayChatMessage(Packet):
+class PlayChatMessageClientBound(Packet):
     """TODO: make good docstring. (Server -> Client)"""
 
     id = 0x0E

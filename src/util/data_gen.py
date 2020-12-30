@@ -1,24 +1,41 @@
+import sys
+import os
 
-def show_packets(PACKET_MAP: object, play_only: bool) -> None:
+sys.path.append(os.getcwd())
+
+from src.data.packet_map import PACKET_MAP  # nopep8
+from src.data.states import STATES_BY_ID  # nopep8
+
+if '--packets' in sys.argv or '-P' in sys.argv:
     dirs = ('serverbound', 'clientbound', 'both',)
+
+    if len(sys.argv) < 3:  # only call to run program + --packets
+        to_dump = 'all'
+    else:
+        to_dump = sys.argv[2:]
 
     for state, tup in PACKET_MAP.items():
         done = []
-        if (play_only and state == 'play') or not play_only:
+
+        if to_dump == 'all' or state in to_dump:
             print('\n' + state)
 
-            for id_, to in sorted(tup, key=(lambda t: t[0])):
-                print(f'0x{id_:02X} ({dirs[to] if to is not None else "missing dir (to)"})')
-
-                if (id_ < 0xFE and state == 'handshaking') or state != 'handshaking':  # Exclude legacy packets
+            for id_, to in sorted(tup, key=(lambda t: 0 if t[0] is None else t[0])):
+                if id_ is None:
+                    print('MISSING ID')
+                else:
+                    print(f'0x{id_:02X} ({"missing .to attribute" if to is None else dirs[to]})')
                     done.append(id_)
 
-            print('MISSING: ', end='')
+            if len(done) < max(done) - 1 and max(done) != 0xFF:
+                print('MISSING: ', end='')
 
-            for i in range(max(done)):
-                try:
-                    done.index(i)
-                except ValueError:
-                    print(f'0x{i:02X}, ', end='')
+                for i in range(max(done)):
+                    try:
+                        done.index(i)
+                    except ValueError:
+                        print(f'0x{i:02X}, ', end='')
 
-            print()
+                print()
+else:
+    print('Nothing to dump?')

@@ -256,7 +256,7 @@ class PlayJoinGame(Packet):
 class PlayTeleportConfirm(Packet):
     """Sent by the client as a confirmation to a player position and look packet. (Client -> Server)
 
-    :param int teleport_id: Description of parameter `teleport_id`.
+    :param int teleport_id: ID given by a player pos and look packet.
     :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr teleport_id:

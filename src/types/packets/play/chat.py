@@ -9,6 +9,7 @@ from src.types.chat import Chat
 
 __all__ = (
     'PlayChatMessageClientBound',
+    'PlayChatMessageServerBound',
     'PlayTabComplete',
 )
 
@@ -40,6 +41,27 @@ class PlayChatMessageClientBound(Packet):
         return Buffer.pack_chat(self.data) + Buffer.pack('b', self.position) + \
             Buffer.pack_uuid(self.sender)
 
+
+class PlayChatMessageServerBound(Packet):
+    """A chat message from a client to the server. Can be a command. (Client -> Server)
+
+    :param str message: The raw text sent by the client.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr message:
+    """
+
+    id = 0x03
+    to = 0
+
+    def __init__(self, message: str) -> None:
+        super().__init__()
+
+        self.message = message
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayChatMessageServerBound:
+        return cls(buf.unpack_string())
 
 class PlayTabComplete(Packet):
     """"TODO: make good docstring. (Server -> Client)"""

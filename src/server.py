@@ -20,11 +20,6 @@ from src.logic.lan_support import ping_lan  # nopep8
 
 from src.util.share import *  # nopep8
 
-if '--dump-packets' in sys.argv:
-    from src.util.data_gen import show_packets  # nopep8
-    show_packets(PACKET_MAP, ('--play-only' in sys.argv))
-    exit(0)
-
 load_commands()
 
 share['rsa']['private'] = rsa.generate_private_key(65537, 1024)

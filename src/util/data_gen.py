@@ -6,7 +6,7 @@ sys.path.append(os.getcwd())
 from src.data.packet_map import PACKET_MAP  # nopep8
 from src.data.states import STATES_BY_ID  # nopep8
 
-if '--packets' in sys.argv:
+if '--packets' in sys.argv or '-P' in sys.argv:
     dirs = ('serverbound', 'clientbound', 'both',)
 
     if len(sys.argv) < 3:  # only call to run program + --packets

@@ -38,8 +38,8 @@ class Buffer:
             if length is None:
                 length = len(self.buf)
                 return self.buf[self.pos:]
-            else:
-                return self.buf[self.pos:self.pos + length]
+
+            return self.buf[self.pos:self.pos + length]
         finally:
             self.pos += length
 

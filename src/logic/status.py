@@ -17,6 +17,7 @@ async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote:
 
 
 async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest') -> None:
+    raise Exception
     data = {
         'version': {
             'name': share['version'],
@@ -64,9 +65,9 @@ async def legacy_ping(r: 'StreamReader', w: 'StreamWriter', remote: tuple) -> No
     #     except BaseException:
     #         break
 
-    w.write(Buffer.pack_packet(HandshakeLegacyPingResponse(
+    w.write(HandshakeLegacyPingResponse(
         share['version'],
         share['conf']['motd'],
         69,  # In the future should be the actual online players
         share['conf']['max_players']
-    )))
+    ).encode())

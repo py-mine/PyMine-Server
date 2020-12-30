@@ -3,8 +3,8 @@
 from __future__ import annotations
 import uuid
 
-from src.types.packet import Packet
-from src.types.buffer import Buffer
+from src.type_s.packet import Packet
+from src.type_s.buffer import Buffer
 
 
 __all__ = (
@@ -22,14 +22,14 @@ class PlayEntitySpawn(Packet):
     id = 0x00
     to = 1
 
-    def __init__(self, entity_id: int, object_uuid: uuid.UUID, type: int,
+    def __init__(self, entity_id: int, object_uuid: uuid.UUID, type_: int,
                  x: int, y: int, z: int, pitch: int, yaw: int, data: int,
                  vloc_x: int, vloc_y: int, vloc_z: int) -> None:
         super().__init__()
 
         self.entity_id = entity_id
         self.object_uuid = object_uuid
-        self.type = type
+        self.type_ = type_
         self.x, self.y, self.z = x, y, z
         self.pitch = pitch
         self.yaw = yaw
@@ -40,7 +40,7 @@ class PlayEntitySpawn(Packet):
 
     def encode(self):
         return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.object_uuid) + \
-            Buffer.pack_varint(self.type) + Buffer.pack('d' + self.x) +\
+            Buffer.pack_varint(self.type_) + Buffer.pack('d' + self.x) +\
             Buffer.pack('d' + self.y) + Buffer.pack('d' + self.z) + Buffer.pack('i' + self.pitch) +\
             Buffer.pack('i' + self.yaw) + Buffer.pack('h' + self.vloc_x) +\
             Buffer.pack('h' + self.vloc_x) + Buffer.pack('h' + self.vloc_z)
@@ -71,14 +71,14 @@ class PlayLivingEntitySpawn(Packet):
     id = 0x02
     to = 1
 
-    def __init__(self, entity_id: int, object_uuid: uuid.UUID, type: int,
+    def __init__(self, entity_id: int, object_uuid: uuid.UUID, type_: int,
                  x: int, y: int, z: int, pitch: int, head_pitch: int, yaw: int,
                  vloc_x: int, vloc_y: int, vloc_z: int) -> None:
         super().__init__()
 
         self.entity_id = entity_id
         self.object_uuid = object_uuid
-        self.type = type
+        self.type_ = type_
         self.x, self.y, self.z = x, y, z
         self.pitch = pitch
         self.yaw = yaw
@@ -89,7 +89,7 @@ class PlayLivingEntitySpawn(Packet):
 
     def encode(self):
         return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.object_uuid) +\
-            Buffer.pack_varint(self.type) + Buffer.pack('d' + self.x) +\
+            Buffer.pack_varint(self.type_) + Buffer.pack('d' + self.x) +\
             Buffer.pack('d' + self.y) + Buffer.pack('d' + self.z) +\
             Buffer.pack('i' + self.pitch) + Buffer.pack('i' + self.yaw) +\
             Buffer.pack('i', self.head_pitch) + Buffer.pack('h' + self.vloc_x) +\
@@ -97,7 +97,7 @@ class PlayLivingEntitySpawn(Packet):
 
 
 class PlayPaintingSpawn(Packet):
-    """This packet shows location, name, and type of painting.  Client bound(Server -> Client)."""
+    """This packet shows location, name, and type_ of painting.  Client bound(Server -> Client)."""
 
     id = 0x03
     to = 1

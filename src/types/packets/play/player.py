@@ -244,7 +244,7 @@ class PlayJoinGame(Packet):
         return Buffer.pack('i', self.entity_id) + Buffer.pack_bool(self.is_hardcore) + \
             Buffer.pack('B', self.gamemode) + Buffer.pack('b', self.prev_gamemode) + \
             Buffer.pack_varint(len(self.world_names)) + \
-            b''.join([Buffer.pack_string(w) for w in self.world_names]) + \
+            b''.join(Buffer.pack_string(w) for w in self.world_names) + \
             Buffer.pack_nbt(self.dim_codec) + Buffer.pack_nbt(self.dimension) + \
             Buffer.pack_string(self.world_name) + Buffer.pack('q', self.hashed_seed) + \
             Buffer.pack_varint(self.max_players) + Buffer.pack_varint(self.view_distance) + \

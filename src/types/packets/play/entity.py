@@ -33,9 +33,7 @@ class PlayBlockEntityData(Packet):
     def __init__(self, x: int, y: int, z: int, action: int, nbt_data: nbt.TAG) -> None:
         super().__init__()
 
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x, self.y, self.z = x, y, z
         self.action = action
         self.nbt_data = nbt_data
 

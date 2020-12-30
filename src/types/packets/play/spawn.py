@@ -30,9 +30,7 @@ class PlayEntitySpawn(Packet):
         self.entity_id = entity_id
         self.object_uuid = object_uuid
         self.type = type
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x, self.y, self.z = x, y, z
         self.pitch = pitch
         self.yaw = yaw
         self.data = data
@@ -58,9 +56,7 @@ class PlaySpawnExperienceOrb(Packet):
         super().__init__()
 
         self.entity_id = entity_id
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x, self.y, self.z = x, y, z
         self.count = count
 
     def encode(self):
@@ -83,9 +79,7 @@ class PlayLivingEntitySpawn(Packet):
         self.entity_id = entity_id
         self.object_uuid = object_uuid
         self.type = type
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x, self.y, self.z = x, y, z
         self.pitch = pitch
         self.yaw = yaw
         self.head_pitch = head_pitch
@@ -132,7 +126,7 @@ class PlaySpawnPlayer(Packet):
 
     def __init__(self, entity_id: int, player_uuid: uuid.UUID, x: int, y: int, z: int, pitch: int, yaw: int):  # nopep8
         super.__init__()
-        
+
         self.entity_id = entity_id
         self.player_uuid = player_uuid
         self.x, self.y, self.z = x, y, z

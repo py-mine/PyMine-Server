@@ -35,9 +35,7 @@ class PlayAcknowledgePlayerDigging(Packet):
     def __init__(self, x: int, y: int, z: int, block: int, status: int, successful: bool) -> None:
         super().__init__()
 
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x, self.y, self.z = x, y, z
         self.block = block
         self.status = status
         self.successful = successful
@@ -59,7 +57,7 @@ class PlayDisconnect(Packet):
 
     def __init__(self, reason: Chat):
         super().__init__()
-        
+
         self.reason = reason
 
     def encode(self):

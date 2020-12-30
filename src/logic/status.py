@@ -71,3 +71,4 @@ async def legacy_ping(r: 'StreamReader', w: 'StreamWriter', remote: tuple) -> No
         69,  # In the future should be the actual online players
         share['conf']['max_players']
     ).encode())
+    await w.drain()

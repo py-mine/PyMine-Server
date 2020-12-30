@@ -4,7 +4,7 @@ from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRespons
 from src.types.packets.status.status import *
 from src.types.buffer import Buffer
 
-from src.util.share import share
+from src.util.share import share, logger
 
 
 # Handles all status logic (all packets in the status state)
@@ -60,12 +60,6 @@ async def pong(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusPingPo
 
 
 async def legacy_ping(r: 'StreamReader', w: 'StreamWriter', remote: tuple) -> None:
-    while True:
-        try:
-            await asyncio.wait_for(r.read(1), 1)
-        except BaseException:
-            break
-
     logger.debug('IN : state:legacy      | id:0xFE | packet:HandshakeLegacyPingRequest')
 
     w.write(HandshakeLegacyPingResponse(

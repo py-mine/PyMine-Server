@@ -1,4 +1,4 @@
-"""Contains packets related to entitys."""
+"""Contains packets related to blocks."""
 
 from __future__ import annotations
 

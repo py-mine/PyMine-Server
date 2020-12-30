@@ -9,6 +9,7 @@ from src.types.buffer import Buffer
 __all__ = (
     'PlayWindowConfirmationClientBound',
     'PlayWindowConfirmationServerBound',
+    'PlayClickWindow',
     'PlayCloseWindowButton',
     'PlayCloseWindow',
     'PlayWindowProperty',
@@ -61,6 +62,50 @@ class PlayWindowConfirmationServerBound(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayWindowConfirmationServerBound:
         return cls(buf.unpack('b'), buf.unpack('h'), buf.unpack_bool())
+
+
+class PlayClickWindow(Packet):
+    """Sent when the client clicks on a slot in a window. (Client -> Server)
+
+    :param int window_id: The ID of the window where the action occurred.
+    :param int slot_number: The number of the slot that was clicked.
+    :param int button: Description of parameter `button`.
+    :param int action_number: Unique number, see here: https://wiki.vg/Protocol#Click_Window_Button.
+    :param int mode: The inventory operation mode.
+    :param dict slot: The slot item.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr window_id:
+    :attr slot_number:
+    :attr button:
+    :attr action_number:
+    :attr mode:
+    :attr slot:
+    """
+
+    id = 0x09
+    to = 0
+
+    def __init__(self, window_id: int, slot_number: int, button: int, action_number: int, mode: int, slot: dict) -> None:
+        super().__init__()
+
+        self.window_id = window_id
+        self.slot_number = slow_number
+        self.button = button
+        self.action_number = action_number
+        self.mode = mode
+        self.slot = slot
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayClickWindow:
+        return cls(
+            buf.unpack('B'),
+            buf.unpack('h'),
+            buf.unpack('b'),
+            buf.unpack('h'),
+            buf.unpack_varint(),
+            buf.unpack_slot()
+        )
 
 
 class PlayCloseWindowButton(Packet):

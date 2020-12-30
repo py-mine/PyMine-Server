@@ -8,6 +8,7 @@ from src.types.buffer import Buffer
 
 __all__ = (
     'PlayWindowConfirmationClientBound',
+    'PlayWindowConfirmationServerBound',
     'PlayCloseWindow',
     'PlayWindowProperty',
     'PlayWindowItems',
@@ -31,6 +32,34 @@ class PlayWindowConfirmationClientBound(Packet):
     def encode(self) -> bytes:
         return Buffer.pack('b', self.window_id) + Buffer.pack('h', self.action_number) + \
             Buffer.pack_bool(self.accepted)
+
+
+class PlayWindowConfirmationServerBound(Packet):
+    """Used by the client to respond to a nearly identical packet by the server. (Client -> Server)
+
+    :param int window_id: The ID of the window/open inventory.
+    :param int action_number: The unique number of the action.
+    :param bool accepted: Whether the action was allowed or denied.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr window_id:
+    :attr action_number:
+    :attr accepted:
+    """
+
+    id = 0x07
+    to = 0
+
+    def __init__(self, window_id: int, action_number: int, accepted: bool) -> None:
+        super().__init__()
+
+        self.window_id = window_id
+        self.action_number = action_number
+        self.accepted = accepted
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayWindowConfirmationServerBound:
+        return cls(buf.unpack('b'), buf.unpack('h'), buf.unpack_bool())
 
 
 class PlayCloseWindow(Packet):

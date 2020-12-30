@@ -8,7 +8,7 @@ from src.types.packets.login.set_comp import LoginSetCompression
 from src.types.packets.login.login import *
 from src.types.buffer import Buffer
 
-from src.logic.play import finish_login
+from src.logic.play import finish_join
 
 from src.util.encryption import *
 from src.util.share import share

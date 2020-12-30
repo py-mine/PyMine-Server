@@ -72,6 +72,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         packet_length |= (b & 0x7F) << 7 * i
 
         if not b & 0x80:
+            print('break')
             break
 
     if packet_length & (1 << 31):
@@ -88,7 +89,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     if state == 'handshaking':
         states[remote] = packet.next_state
-        return r, w, remote
+        return True, r, w
     elif state == 'status':
         return await logic_status(r, w, packet, remote)
     elif state == 'login':

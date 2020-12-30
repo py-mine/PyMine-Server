@@ -18,6 +18,7 @@ class PlayChatMessage(Packet):
 
     def __init__(self, data: Chat, position: int, sender: uuid.UUID) -> None:
         super().__init__()
+
         self.data = data
         self.position = position
         self.sender = sender
@@ -35,6 +36,7 @@ class PlayTabComplete(Packet):
 
     def __init__(self, id: int, start: int, length: int, count: int, matches: list) -> None:
         super().__init__()
+        
         self.id = id
         self.start = start
         self.length = length

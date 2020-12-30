@@ -58,9 +58,7 @@ class PlayBlockBreakAnimation(Packet):
         super().__init__()
 
         self.entity_id = entity_id
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x, self.y, self.z = x, y, z
         self.stage = stage
 
     def encode(self) -> bytes:

@@ -33,9 +33,7 @@ class PlayBlockAction(Packet):
     def __init__(self, x: int, y: int, z: int, action_id: int, action_param: int, block_type: int) -> None:  # nopep8
         super().__init__()
 
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x, self.y, self.z = x, y, z
         self.action_id = action_id
         self.action_param = action_param
         self.block_type = block_type
@@ -67,9 +65,7 @@ class PlayBlockChange(Packet):
     def __init__(self, x: int, y: int, z: int, block_id: int) -> None:
         super().__init__()
 
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x, self.y, self.z = x, y, z
         self.block_id = block_id
 
     def encode(self) -> bytes:

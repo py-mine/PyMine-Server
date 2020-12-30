@@ -17,6 +17,7 @@ __all__ = (
     'PlayKeepAliveServerBound',
     'PlayTeleportConfirm',
     'PlayClientStatus',
+    'PlayClientSettings',
 )
 
 
@@ -295,3 +296,47 @@ class PlayClientStatus(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayClientStatus:
         return cls(buf.unpack_varint())
+
+
+class PlayClientSettings(Packet):
+    """Used by client to update its settings either on server join or whenever. (Client -> Server)
+
+    :param str locale: The locale of the client, example: en_US or en_GB.
+    :param int view_distance: The client's view distance.
+    :param int chat_mode: The client's chat mode, see here: https://wiki.vg/Protocol#Keep_Alive_.28clientbound.29.
+    :param bool chat_colors: Whether the client has chat colors enabled or not.
+    :param int displayed_skin_parts: A bit mask describing which parts of the client's skin are visible.
+    :param int main_hand: Either left (0) or right (1).
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr locale:
+    :attr view_distance:
+    :attr chat_mode:
+    :attr chat_colors:
+    :attr displayed_skin_parts:
+    :attr main_hand:
+    """
+
+    id = 0x05
+    to = 0
+
+    def __init__(self, locale: str, view_distance: int, chat_mode: int, chat_colors: bool, displayed_skin_parts: int, main_hand: int):
+        super().__init__()
+
+        self.locale = locale
+        self.view_distance = view_distance
+        self.chat_mode = chat_mode
+        self.chat_colors = chat_colors
+        self.displayed_skin_parts = displayed_skin_parts
+        self.main_hand = main_hand
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayClientSettings:
+        return cls(
+            buf.unpack_string(),
+            buf.unpack('b'),
+            buf.unpack_varint(),
+            buf.unpack_bool(),
+            buf.unpack('B'),
+            buf.unpack_varint()
+        )

@@ -9,6 +9,7 @@ from src.types.buffer import Buffer
 __all__ = (
     'PlayWindowConfirmationClientBound',
     'PlayWindowConfirmationServerBound',
+    'PlayCloseWindowButton',
     'PlayCloseWindow',
     'PlayWindowProperty',
     'PlayWindowItems',
@@ -60,6 +61,31 @@ class PlayWindowConfirmationServerBound(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayWindowConfirmationServerBound:
         return cls(buf.unpack('b'), buf.unpack('h'), buf.unpack_bool())
+
+
+class PlayCloseWindowButton(Packet):
+    """Sent by the client when a window close button is clicked. (Client -> Server)
+
+    :param int window_id: The ID of the window sent by an open window packet.
+    :param int button_id: Meaning depends on window type, see here: https://wiki.vg/Protocol#Click_Window_Button.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr window_id:
+    :attr button_id:
+    """
+
+    id = 0x08
+    to = 0
+
+    def __init__(self, window_id: int, button_id: int) -> None:
+        super().__init__()
+
+        self.window_id = window_id
+        self.button_id = button_id
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayCloseWindowButton:
+        return cls(buf.unpack('b'), buf.unpack('b'))
 
 
 class PlayCloseWindow(Packet):

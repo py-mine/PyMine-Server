@@ -18,6 +18,7 @@ class PlayWindowConfirmation(Packet):
 
     def __init__(self, window_id: int, action_number: int, accepted: bool) -> None:
         super().__init__()
+
         self.window_id = window_id
         self.action_number = action_number
         self.accepted = accepted
@@ -35,6 +36,7 @@ class PlayCloseWindow(Packet):
 
     def __init__(self, window_id: int):
         super().__init__()
+
         self.window_id = window_id
 
     def encode(self):
@@ -49,6 +51,7 @@ class PlayWindowProperty(Packet):
 
     def __init__(self, window_id: int, property: int, value: int):
         super().__init__()
+        
         self.window_id = window_id
         self.property = property
         self.value = value

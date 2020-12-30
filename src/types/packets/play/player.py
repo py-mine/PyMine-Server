@@ -59,6 +59,7 @@ class PlayDisconnect(Packet):
 
     def __init__(self, reason: Chat):
         super().__init__()
+        
         self.reason = reason
 
     def encode(self):

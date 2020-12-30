@@ -26,6 +26,7 @@ class PlayEntitySpawn(Packet):
                  x: int, y: int, z: int, pitch: int, yaw: int, data: int,
                  vloc_x: int, vloc_y: int, vloc_z: int) -> None:
         super().__init__()
+
         self.entity_id = entity_id
         self.object_uuid = object_uuid
         self.type = type
@@ -55,6 +56,7 @@ class PlaySpawnExperienceOrb(Packet):
 
     def __init__(self, entity_id: int, x: int = 0, y: int = 0, z: int = 0, count: int = 1237) -> None:  # nopep8
         super().__init__()
+
         self.entity_id = entity_id
         self.x = x
         self.y = y
@@ -77,6 +79,7 @@ class PlayLivingEntitySpawn(Packet):
                  x: int, y: int, z: int, pitch: int, head_pitch: int, yaw: int,
                  vloc_x: int, vloc_y: int, vloc_z: int) -> None:
         super().__init__()
+
         self.entity_id = entity_id
         self.object_uuid = object_uuid
         self.type = type
@@ -108,6 +111,7 @@ class PlayPaintingSpawn(Packet):
     def __init__(self, entity_id: int, entity_uuid: uuid.UUID, motive: int,
                  location: int, direction: int) -> None:
         super().__init__()
+
         self.entity_id = entity_id
         self.entity_uuid = entity_uuid
         self.motive = motive
@@ -128,6 +132,7 @@ class PlaySpawnPlayer(Packet):
 
     def __init__(self, entity_id: int, player_uuid: uuid.UUID, x: int, y: int, z: int, pitch: int, yaw: int):  # nopep8
         super.__init__()
+        
         self.entity_id = entity_id
         self.player_uuid = player_uuid
         self.x, self.y, self.z = x, y, z

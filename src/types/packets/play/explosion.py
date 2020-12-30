@@ -15,6 +15,7 @@ class PlayExplosion(Packet):
 
     def __init__(self, x: int, y: int, z: int, strength: int, record_count: int, records: list, pmx: int, pmy: int, pmz: int):  # nopep8
         super().__init__()
+        
         self.x = x
         self.y = y
         self.z = z

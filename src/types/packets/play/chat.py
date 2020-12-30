@@ -36,7 +36,7 @@ class PlayChatMessageClientBound(Packet):
         self.position = position
         self.sender = sender
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack_chat(self.data) + Buffer.pack('b', self.position) + \
             Buffer.pack_uuid(self.sender)
 

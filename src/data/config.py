@@ -14,6 +14,7 @@ SERVER_PROPERTIES_DEFAULT = Map({
     'seed': gen_seed(),
     'gamemode': 'survival',
     'difficulty': 'easy',
+    'hardcore': False,
     'max_players': 20,
     'online_mode': True,
     'white_list': True,

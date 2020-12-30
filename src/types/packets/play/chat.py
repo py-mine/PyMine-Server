@@ -10,7 +10,7 @@ from src.types.chat import Chat
 __all__ = (
     'PlayChatMessageClientBound',
     'PlayChatMessageServerBound',
-    'PlayTabComplete',
+    'PlayTabCompleteClientBound',
 )
 
 
@@ -64,7 +64,7 @@ class PlayChatMessageServerBound(Packet):
         return cls(buf.unpack_string())
 
 
-class PlayTabComplete(Packet):
+class PlayTabCompleteClientBound(Packet):
     """"TODO: make good docstring. (Server -> Client)"""
 
     id = 0x11

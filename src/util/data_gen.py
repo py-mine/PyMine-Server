@@ -37,3 +37,5 @@ if '--packets' in sys.argv:
                         print(f'0x{i:02X}, ', end='')
 
                 print()
+else:
+    print('Nothing to dump?')

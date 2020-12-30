@@ -24,7 +24,10 @@ async def finish_login(r: 'StreamReader', w: 'StreamWriter', remote: tuple) -> N
         share['conf']['hardcore'],
         0,  # Shoudl be current gamemode
         -1,  # Should be previous gamemode
-        [f'minecraft:{lvl_name}', f'minecraft:{lvl_name}_nether', f'minecraft:{lvl_name}_the_end'],  # Should be actual world names
+        [f'minecraft:{lvl_name}',
+         f'minecraft:{lvl_name}_nether',
+         f'minecraft:{lvl_name}_the_end'],
+        # Should be actual world names
         dim_codec,
         dimension,
         f'minecraft:{lvl_name}',  # should be actual current world name

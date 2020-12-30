@@ -90,7 +90,7 @@ class PlayClickWindow(Packet):
         super().__init__()
 
         self.window_id = window_id
-        self.slot_number = slow_number
+        self.slot_number = slot_number
         self.button = button
         self.action_number = action_number
         self.mode = mode

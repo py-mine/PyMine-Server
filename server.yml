@@ -3,17 +3,18 @@ debug: true
 difficulty: easy
 gamemode: survival
 generate_structures: true
+hardcore: false
 level_name: world
 max_players: 20
 motd: A Minecraft Server
 online_mode: true
 pvp: true
+seed: 15680143890333300779
 server_ip: 0.0.0.0
 server_port: 25565
 spawn_animals: true
 spawn_monsters: true
 spawn_npcs: true
 spawn_protection: 16
-support_lan: false
 view_distance: 10
 white_list: true

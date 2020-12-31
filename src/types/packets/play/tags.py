@@ -60,6 +60,6 @@ class PlayTags(Packet):
 
                 for value in tags[identifier]:
                     # values should be encoded as varints, so we need their id
-                    out += REG.encode(value)
+                    out += Buffer.pack_varint(REG.encode(value))
 
         return out

@@ -106,7 +106,7 @@ async def handle_con(r, w):  # Handle a connection from a client
             logger.error(logger.f_traceback(e))
             break
 
-    await close_con(w)
+    await close_con(w, remote)
 
 
 async def start():  # Actually start the server

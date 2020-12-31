@@ -10,6 +10,7 @@ __all__ = (
     'ENTITY_REGISTRY',
 )
 
+
 class Registry:
     def __init__(self, data: dict):
         self.data = make_immutable({k: v['protocol_id'] for k, v in data.items()})
@@ -20,6 +21,7 @@ class Registry:
 
     def decode(self, value: object) -> object:
         return self.data_reversed[value]
+
 
 with open('src/data/registries.json') as registry:  # generated from server jar
     REGISTRY = make_immutable(json.load(registry))

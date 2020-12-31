@@ -27,6 +27,7 @@ for tag_type in os.listdir('src/data/tags'):
         with open(f'src/data/tags/{tag_type}/{tag_file}') as f:
             TAGS[tag_type][tag_file[:-5]] = json.load(f)['values']
 
+
 def parse(values: list, tag_type: str):
     new_values = []
 
@@ -38,6 +39,7 @@ def parse(values: list, tag_type: str):
         return parse(new_values, tag_type)
 
     return new_values
+
 
 for tag_type in TAGS:
     for identifier, values in TAGS[tag_type].items():

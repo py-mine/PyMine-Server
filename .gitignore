@@ -1,8 +1,8 @@
 # src/**/*.c
-server.properties
-server-icon.png
-server.yml
-bruh
+/server.properties
+/server-icon.png
+/server.yml
+/bruh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -135,5 +135,5 @@ dmypy.json
 .pyre/
 
 # Sh-wayz's shit
-tags
+/tags
 .tmuxinator.yml

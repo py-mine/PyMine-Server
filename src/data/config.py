@@ -42,7 +42,10 @@ def load_properties():
 
     # Check for missing
     if any([(key not in properties) for key in SERVER_PROPERTIES_DEFAULT.keys()]):
-        properties = {dict(SERVER_PROPERTIES_DEFAULT), **properties}
+        # properties = {dict(SERVER_PROPERTIES_DEFAULT), **properties}  # not supported till 3.8
+        old_props = properties
+        properties = SERVER_PROPERTIES_DEFAULT
+        properties.update(old_props)
 
         with open('server.yml', 'w') as f:
             f.write(yaml.dump(properties))

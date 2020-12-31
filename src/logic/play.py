@@ -20,7 +20,7 @@ async def finish_join(r: StreamReader, w: StreamWriter, remote: tuple) -> None:
     entity_id = entity_id_cache.get(remote)
 
     if entity_id is None:
-        entity_id_cache[remote] = int(time.time())
+        entity_id = entity_id_cache[remote] = int(time.time())
 
     w.write(Buffer.pack_packet(packets_player.PlayJoinGame(
         entity_id,

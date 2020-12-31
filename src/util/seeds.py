@@ -16,7 +16,7 @@ def gen_seed() -> int:
     return randint(0, (2 ** 64) - 1)
 
 
-def seed_hash(seed: int):
+def seed_hash(seed: int) -> int:
     m = hashlib.sha256()
     m.update(seed.to_bytes(8, 'big'))
-    return m.digest()[:8]
+    return int.from_bytes(m.digest()[:8], 'big')

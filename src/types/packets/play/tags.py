@@ -55,7 +55,8 @@ class PlayTags(Packet):
             out += Buffer.pack_varint(len(tags))  # pack length
 
             for identifier in tags:
-                out += Buffer.pack_string(identifier) + Buffer.pack_varint(len(tags[identifier]))  # pack length of upcoming array
+                out += Buffer.pack_string(identifier) + \  # The identifier itself
+                    Buffer.pack_varint(len(tags[identifier]))  # pack length of upcoming array
 
                 for value in tags[identifier]:
                     # values should be encoded as varints, so we need their id

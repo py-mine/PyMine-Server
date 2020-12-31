@@ -208,7 +208,7 @@ class Buffer:
         if tag is None:
             return b'\x00'
 
-        buf = cls().buf
+        buf = cls()
         tag._render_buffer(buf)
         return buf.buf
 

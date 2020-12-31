@@ -5,6 +5,8 @@ __all__ = (
     'REGISTRY',
     'ITEMS_BY_NAME',
     'ITEMS_BY_ID',
+    'PARTICLES_BY_NAME',
+    'PARTICLES_BY_ID',
 )
 
 with open('src/data/registries.json') as registry:  # generated from server jar

@@ -48,7 +48,7 @@ def load_properties():
         properties.update(old_props)
 
         with open('server.yml', 'w') as f:
-            f.write(yaml.dump(properties))
+            f.write(yaml.dump(dict(properties)))
 
     if isinstance(properties['seed'], str):  # seed is str, we need int
         properties['seed'] = string_hash_code(properties['seed'][:20])
@@ -57,7 +57,7 @@ def load_properties():
         properties['seed'] = gen_seed()
 
         with open('server.yml', 'w') as f:
-            f.write(yaml.dump(properties))
+            f.write(yaml.dump(dict(properties)))
 
     return Map(properties)
 

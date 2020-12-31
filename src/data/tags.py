@@ -38,5 +38,4 @@ for tag_type in TAGS:
         if len(new_values) > 0:
             TAGS[tag_type][identifier] = new_values
 
-print(TAGS['items']['flowers'])
 TAGS = make_immutable(TAGS)

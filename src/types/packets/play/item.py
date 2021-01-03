@@ -9,7 +9,7 @@ __all__ = ('PlayUseItem',)
 
 
 class PlayUseItem(Packet):
-    """Short summary.
+    """Sent by the client when the use item key is pressed. (Client -> Server)
 
     :param int hand: The hand used for the animation. main hand (0) or offhand (1).
     :attr type id: Unique packet ID.

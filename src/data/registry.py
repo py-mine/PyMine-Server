@@ -1,6 +1,6 @@
 import json
 
-from src.types.registry import registry
+from src.types.registry import Registry
 
 __all__ = (
     'ITEM_REGISTRY',

@@ -8,6 +8,8 @@ from src.types.packets.login.set_comp import LoginSetCompression
 from src.types.packets.login.login import *
 from src.types.buffer import Buffer
 
+from src.logic.play import finish_join
+
 from src.util.encryption import *
 from src.util.share import share
 
@@ -17,13 +19,14 @@ states = share['states']
 
 
 # Contains all the logic for logging in (handles all packets in the login state)
-async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple):
+async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple) -> tuple:
     if packet.id == 0x00:  # LoginStart
         if share['conf']['online_mode']:
             login_cache[remote] = {'username': packet.username, 'verify': None}
             await request_encryption(r, w, packet, login_cache[remote])
         else:  # If no auth is used, go straight to login success
             await login_success(r, w, packet.username)
+            states[remote] = 3
     elif packet.id == 0x01:  # LoginEncryptionResponse
         shared_key, auth = await server_auth(packet, remote, login_cache[remote])
 
@@ -47,11 +50,15 @@ async def login(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: 
 
         states[remote] = 3  # PLAY
 
+        # After LoginSuccess we need to send join game packets, however these are play packets,
+        # so we pass them off to src/logic/play.py
+        await finish_join(r, w, remote)
+
     return True, r, w
 
 
 # Send an encryption request packet to the client
-async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'LoginStart', lc: dict):
+async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'LoginStart', lc: dict) -> None:  # nopep8
     packet = LoginEncryptionRequest(
         share['rsa']['public'].public_bytes(
             encoding=serialization.Encoding.DER,
@@ -67,7 +74,7 @@ async def request_encryption(r: 'StreamReader', w: 'StreamWriter', packet: 'Logi
 
 # Verifies that the shared key and token are the same, and does other authentication methods
 # Returns the decrypted shared key and the client's username and uuid
-async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: dict):
+async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: dict) -> tuple:
     if share['rsa']['private'].decrypt(packet.verify_token, PKCS1v15()) == cache['verify']:
         decrypted_shared_key = share['rsa']['private'].decrypt(packet.shared_key, PKCS1v15())
 
@@ -96,24 +103,25 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: d
 
 
 # Set the the compression threshold for all future packets
-async def set_compression(w: 'StreamWriter'):
+async def set_compression(w: 'StreamWriter') -> None:
     w.write(Buffer.pack_packet(LoginSetCompression(share['comp_thresh'])))
     await w.drain()
 
 
 # Tell the client they've logged in succesfully
-async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, uuid_: uuid.UUID = None):  # nopep8
+async def login_success(r: 'StreamReader', w: 'StreamWriter', username: str, uuid_: uuid.UUID = None) -> None:  # nopep8
     if uuid_ is None:
         resp = await share['ses'].get(f'https://api.mojang.com/users/profiles/minecraft/{username}')
         jj = await resp.json()
         uuid_ = uuid.UUID(jj['id'])
 
+    # LoginSuccess packet, tells client they've logged in succesfully
     w.write(Buffer.pack_packet(LoginSuccess(uuid_, username), share['comp_thresh']))
     await w.drain()
 
 
 # Tell the client they did a bad
-async def login_kick(w: 'StreamWriter'):
+async def login_kick(w: 'StreamWriter') -> None:
     w.write(Buffer.pack_packet(
         LoginDisconnect('Failed to authenticate your connection.')
     ))

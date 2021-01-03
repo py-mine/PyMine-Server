@@ -146,7 +146,7 @@ class PlayCloseWindowClientBound(Packet):
     id = 0x12
     to = 1
 
-    def __init__(self, window_id: int):
+    def __init__(self, window_id: int) -> None:
         super().__init__()
 
         self.window_id = window_id
@@ -167,12 +167,12 @@ class PlayWindowItems(Packet):
     id = 0x13
     to = 1
 
-    def __init__(self, slots: list):
+    def __init__(self, slots: list) -> None:
         super().__init__()
 
         self.slots = slots
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack('h', len(self.slots)) + b''.join(Buffer.pack_slot(s) for s in self.slots)
 
 
@@ -182,13 +182,13 @@ class PlayWindowProperty(Packet):
     id = 0x14
     to = 1
 
-    def __init__(self, window_id: int, property: int, value: int):
+    def __init__(self, window_id: int, property: int, value: int) -> None:
         super().__init__()
 
         self.window_id = window_id
         self.property = property
         self.value = value
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack('B', self.window_id) + Buffer.pack('h', self.property) +\
             Buffer.pack('h', self.value)

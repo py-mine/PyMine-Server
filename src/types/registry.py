@@ -2,6 +2,7 @@ from immutables import Map
 
 from src.util.immutable import make_immutable
 
+
 class Registry:
     def __init__(self, data: object):
         if isinstance(data, (dict, Map)):

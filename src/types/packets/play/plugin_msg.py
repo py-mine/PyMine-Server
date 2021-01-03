@@ -5,7 +5,9 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayPluginMessageClientBound',)
+from src.util.share import logger
+
+__all__ = ('PlayPluginMessageClientBound', 'PlayPluginMessageServerBound')
 
 
 class PlayPluginMessageClientBound(Packet):
@@ -29,15 +31,22 @@ class PlayPluginMessageClientBound(Packet):
         return self.data
 
 
-# class PlayPluginMessageServerBound(Packet):
-#
-#     id = 0x0B
-#     to = 0
-#
-#     def __init__(self, data: bytes) -> None:
-#         super().__init__()
-#
-#         self.data = data
-#
-#     def decode(self, buf: Buffer) -> PlayPluginMessageServerBound:
-#         raise NotImplementedError
+class PlayPluginMessageServerBound(Packet):
+    """Short summary.
+
+    :param bytes data: Data to be sent to the client.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr data:
+    """
+
+    id = 0x0B
+    to = 0
+
+    def __init__(self, data: bytes) -> None:
+        super().__init__()
+
+        self.data = data
+
+    def decode(self, buf: Buffer) -> PlayPluginMessageServerBound:
+        return PlayPluginMessageServerBound(buf.read())

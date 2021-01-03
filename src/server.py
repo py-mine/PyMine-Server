@@ -19,6 +19,7 @@ from src.logic.status import status as logic_status  # nopep8
 from src.logic.login import login as logic_login  # nopep8
 from src.logic.play import play as logic_play  # nopep8
 
+from src.util.logging import task_exception_handler  # nopep8
 from src.util.share import share, logger  # nopep8
 
 load_commands()
@@ -98,6 +99,8 @@ async def handle_con(r, w):  # Handle a connection from a client
     remote = w.get_extra_info('peername')  # (host, port,)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}.')
 
+    raise Exception
+
     c = True
 
     while c:
@@ -135,7 +138,12 @@ async def start():  # Actually start the server
 
         logger.info('Server closed.')
 
+
+loop = asyncio.get_event_loop()
+loop.set_debug(True)
+loop.set_exception_handler(task_exception_handler)
+
 try:
-    asyncio.run(start())
+    loop.run_until_complete(start())
 except BaseException as e:
     logger.critical(logger.f_traceback(e))

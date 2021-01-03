@@ -5,7 +5,12 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayBlockAction', 'PlayBlockChange', 'PlayGenerateStructure')
+__all__ = (
+    'PlayBlockAction',
+    'PlayBlockChange',
+    'PlayGenerateStructure',
+    'PlayQueryBlockNBT',
+)
 
 
 class PlayBlockAction(Packet):
@@ -39,10 +44,8 @@ class PlayBlockAction(Packet):
         self.block_type = block_type
 
     def encode(self) -> bytes:
-        return Buffer.pack_pos(self.x, self.y, self.z) + \
-            Buffer.pack('B', self.action_id) + \
-            Buffer.pack('B', self.action_param) + \
-            Buffer.pack_varint(self.block_type)
+        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack('B', self.action_id) + \
+            Buffer.pack('B', self.action_param) + Buffer.pack_varint(self.block_type)
 
 
 class PlayBlockChange(Packet):
@@ -102,3 +105,32 @@ class PlayGenerateStructure(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayGenerateStructure:
         return cls(*buf.unpack_pos(), buf.unpack_varint(), buf.unpack_bool())
+
+
+class PlayQueryBlockNBT(Packet):
+    """Used when SHIFT+F3+I is used on a block. (Client -> Server)
+
+    :param int transaction_id: Number used to verify that a response matches.
+    :param int x: The x coordinate of the block.
+    :param int y: The y coordinate of the block.
+    :param int z: The z coordinate of the block.
+    :attr type id: Unique packet ID.
+    :attr type to: Packet direction.
+    :attr transaction_id:
+    :attr x:
+    :attr y:
+    :attr z:
+    """
+
+    id = 0x01
+    to = 0
+
+    def __init__(self, transaction_id: int, x: int, y: int, z: int) -> None:
+        super().__init__()
+
+        self.transaction_id = transaction_id
+        self.x, self.y, self.z = x, y, z
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayQueryBlockNBT:
+        return cls(buf.unpack_varint(), *buf.unpack_pos())

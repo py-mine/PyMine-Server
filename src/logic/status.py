@@ -13,7 +13,7 @@ async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote:
         await send_status(r, w, packet)
     elif packet.id == 0x01:  # StatusStatusPingPong
         await pong(r, w, packet)
-        return await share['close_con'](w, remote)
+        return False, r, w
 
     return True, r, w
 

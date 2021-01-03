@@ -1,8 +1,9 @@
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives.ciphers.base import _CipherContext
 import hashlib
 import asyncio
 
-__all__ = ('gen_verify_hash', 'gen_aes_cipher',)
+__all__ = ('gen_verify_hash', 'gen_aes_cipher', 'EncryptedStreamReader', 'EncryptedStreamWriter',)
 
 
 def gen_verify_hash(shared_key: bytes, public_key: bytes):
@@ -22,16 +23,8 @@ def gen_aes_cipher(shared_key: bytes):
     )
 
 
-def encrypt(data: bytes, encryptor):
-    return encryptor.update(data)
-
-
-def decrypt(data: bytes, decryptor):
-    return decryptor.update(data)
-
-
-class EncryptedStreamReader:
-    def __init__(self, reader: asyncio.StreamReader, decryptor):
+class EncryptedStreamReader:  # Used to encrypt data read via a StreamReader
+    def __init__(self, reader: asyncio.StreamReader, decryptor: '_CipherContext'):
         self.reader = reader
         self.decryptor = decryptor
 
@@ -39,8 +32,8 @@ class EncryptedStreamReader:
         return self.decryptor.update(await self.reader.read(n))
 
 
-class EncryptedStreamWriter:
-    def __init__(self, writer: asyncio.StreamWriter, encryptor):
+class EncryptedStreamWriter:  # Used to encrypt data sent via a StreamWriter
+    def __init__(self, writer: asyncio.StreamWriter, encryptor: '_CipherContext'):
         self.writer = writer
         self.encryptor = encryptor
 

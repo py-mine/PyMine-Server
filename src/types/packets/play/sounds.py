@@ -10,11 +10,13 @@ __all__ = ('PlayNamedSoundEffect',)
 
 class PlayNamedSoundEffect(Packet):
     """Used to play a sound effect on the client. Custom sounds may be added by resource packs. Clientbound."""
-    
-    id_ = 0x18
+
+    id = 0x18
     to = 1
 
     def __init__(self, name: str, category: int, effect_pos_x: int, effect_pos_y: int, effect_pos_z: int, volume: int, pitch: int):  # nopep8
+        super().__init__()
+
         self.name = name
         self.category = category
         self.effect_pos_x = effect_pos_x

@@ -9,10 +9,11 @@ __all__ = ('StatusStatusRequest', 'StatusStatusResponse', 'StatusStatusPingPong'
 class StatusStatusRequest(Packet):
     """Request from the client to get information on the server. (Client -> Server)
 
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     """
 
-    id_ = 0x00
+    id = 0x00
     to = 0
 
     def __init__(self) -> None:
@@ -27,11 +28,12 @@ class StatusStatusResponse(Packet):
     """Returns server status data back to the requesting client. (Server -> Client)
 
     :param dict response_data: JSON response data sent back to the client.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr response_data:
     """
 
-    id_ = 0x00
+    id = 0x00
     to = 1
 
     def __init__(self, response_data: dict) -> None:
@@ -69,11 +71,11 @@ class StatusStatusPingPong(Packet):
     """Ping pong? (Server -> Client AND Client -> Server)
 
     :param int payload: A long number, randomly generated or what the client sent.
-    :attr int id_: Unique packet ID.
-    :attr type payload:
+    :attr int id: Unique packet ID.
+    :attr int payload:
     """
 
-    id_ = 0x01
+    id = 0x01
     to = 2
 
     def __init__(self, payload: int) -> None:

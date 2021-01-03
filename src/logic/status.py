@@ -5,7 +5,18 @@ from src.types.buffer import Buffer
 from src.util.share import share
 
 
-async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest'):
+# Handles all status logic (all packets in the status state)
+async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple):
+    if packet.id == 0x00:  # StatusStatusRequest
+        await send_status(r, w, packet)
+    elif packet.id == 0x01:  # StatusStatusPingPong
+        await pong(r, w, packet)
+        return await share['close_con'](w, remote)
+
+    return True, r, w
+
+
+async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest'):
     data = {
         'version': {
             'name': share['version'],

@@ -17,7 +17,7 @@
 * Unless there's a good reason, lines shouldn't be longer than 100 characters
 * Use `snake_case` for variables
 * Constants should either be loaded from a config file or be in `UPPER_SNAKE_CASE`
-* Tuples should always be incased in () and have an extra comma at the end. Example: `(val1, val2,)`
+* Standalone tuples should always be incased in () and have an extra comma at the end. Example: `my_tup = (val1, val2,)`
 
 ### Classes
 * There should be two new lines before the start of a class unless it's indented
@@ -31,8 +31,7 @@
 * If a method's return type is the method's class, do `from __future__ import annotations` to fix NameErrors
 
 ### Docstrings
-* Docstrings should be present for classes and functions with a newline after them
-* Docstrings that are too long should not start on the same line as `"""`
+* Docstrings should be present for files, classes, and functions with a newline after them
 * Docstrings that are small enough should look like `"""Information"""`
 
 ### Imports

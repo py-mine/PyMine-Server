@@ -1,4 +1,4 @@
-"""Contains packets relating to client logins"""
+"""Contains packets relating to client logins."""
 
 from __future__ import annotations
 import secrets
@@ -21,12 +21,12 @@ class LoginStart(Packet):
     """Packet from client asking to start login process. (Client -> Server)
 
     :param str username: Username of the client who sent the request.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr username:
     """
 
-    id_ = 0x00
+    id = 0x00
     to = 0
 
     def __init__(self, username: str) -> None:
@@ -36,7 +36,7 @@ class LoginStart(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> LoginStart:
-        return LoginStart(buf.read(buf.unpack_varint()).decode('UTF-8'))
+        return cls(buf.read(buf.unpack_varint()).decode('UTF-8'))
 
 
 class LoginEncryptionRequest(Packet):
@@ -44,12 +44,12 @@ class LoginEncryptionRequest(Packet):
 
     :param bytes public_key: Public key.
     :attr type verify_token: Verify token, randomly generated.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr public_key:
     """
 
-    id_ = 0x01
+    id = 0x01
     to = 1
 
     def __init__(self, public_key: bytes) -> None:  # https://wiki.vg/Protocol#Encryption_Request
@@ -69,13 +69,13 @@ class LoginEncryptionResponse(Packet):
 
     :param bytes shared_key: The shared key used in the login process.
     :param bytes verify_token: The verify token used in the login process.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr shared_key:
     :attr verify_token:
     """
 
-    id_ = 0x01
+    id = 0x01
     to = 0
 
     def __init__(self, shared_key: bytes, verify_token: bytes) -> None:
@@ -86,7 +86,7 @@ class LoginEncryptionResponse(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> LoginEncryptionResponse:
-        return LoginEncryptionResponse(buf.read(buf.unpack_varint()), buf.read(buf.unpack_varint()))
+        return cls(buf.read(buf.unpack_varint()), buf.read(buf.unpack_varint()))
 
 
 class LoginSuccess(Packet):
@@ -94,13 +94,13 @@ class LoginSuccess(Packet):
 
     :param uuid.UUID uuid: The UUID of the connecting player/client.
     :param str username: The username of the connecting player/client.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr uuid:
     :attr username:
     """
 
-    id_ = 0x02
+    id = 0x02
     to = 1
 
     def __init__(self, uuid_: uuid.UUID, username: str) -> None:
@@ -117,15 +117,15 @@ class LoginDisconnect(Packet):
     """Sent by the server to kick a player while in the login state. (Server -> Client)
 
     :param str reason: The reason for the disconnect.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr username:
     """
 
-    id_ = 0x00
+    id = 0x00
     to = 1
 
-    def __init__(self, reason: str):
+    def __init__(self, reason: str) -> None:
         super().__init__()
 
         self.reason = reason

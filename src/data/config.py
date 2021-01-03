@@ -31,6 +31,8 @@ SERVER_PROPERTIES_DEFAULT = Map({
 
 
 def load_properties():
+    properties = SERVER_PROPERTIES_DEFAULT
+
     try:
         with open('server.yml', 'r') as f:
             properties = yaml.safe_load(f.read())
@@ -38,26 +40,23 @@ def load_properties():
         with open('server.yml', 'w+') as f:
             f.write(yaml.dump(dict(SERVER_PROPERTIES_DEFAULT)))
 
-        return SERVER_PROPERTIES_DEFAULT
-
     # Check for missing
     if any([(key not in properties) for key in SERVER_PROPERTIES_DEFAULT.keys()]):
-        # properties = {dict(SERVER_PROPERTIES_DEFAULT), **properties}  # not supported till 3.8
-        old_props = properties
-        properties = SERVER_PROPERTIES_DEFAULT
-        properties.update(old_props)
+        p_temp = properties
+        properties = dict(SERVER_PROPERTIES_DEFAULT)
+        properties.update(p_temp)
 
         with open('server.yml', 'w') as f:
-            f.write(yaml.dump(dict(properties)))
+            f.write(yaml.dump(properties))
 
     if isinstance(properties['seed'], str):  # seed is str, we need int
         properties['seed'] = string_hash_code(properties['seed'][:20])
 
-    if properties['seed'] > 2 ** 64 - 1:  # seed is too big
+    if properties['seed'] > 2 ** 64:  # seed is too big
         properties['seed'] = gen_seed()
 
         with open('server.yml', 'w') as f:
-            f.write(yaml.dump(dict(properties)))
+            f.write(yaml.dump(properties))
 
     return Map(properties)
 

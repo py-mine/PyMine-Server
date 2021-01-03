@@ -6,10 +6,19 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayWindowConfirmation', 'PlayCloseWindow', 'PlayWindowProperty',)
+__all__ = (
+    'PlayWindowConfirmationClientBound',
+    'PlayWindowConfirmationServerBound',
+    'PlayClickWindow',
+    'PlayCloseWindowButton',
+    'PlayCloseWindowServerBound',
+    'PlayCloseWindowClientBound',
+    'PlayWindowProperty',
+    'PlayWindowItems',
+)
 
 
-class PlayWindowConfirmation(Packet):
+class PlayWindowConfirmationClientBound(Packet):
     """A packet indicating whether a request from the client was accepted or if there was a problem.
     Server -> Client"""
 
@@ -28,19 +37,166 @@ class PlayWindowConfirmation(Packet):
             Buffer.pack_bool(self.accepted)
 
 
-class PlayCloseWindow(Packet):
-    """This packet is sent from the server to the client when a window is forcibly closed, such as when a chest is destroyed while it's open. """
+class PlayWindowConfirmationServerBound(Packet):
+    """Used by the client to respond to a nearly identical packet by the server. (Client -> Server)
 
-    id = 0x12
-    to = 1
+    :param int window_id: The ID of the window/open inventory.
+    :param int action_number: The unique number of the action.
+    :param bool accepted: Whether the action was allowed or denied.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr window_id:
+    :attr action_number:
+    :attr accepted:
+    """
+
+    id = 0x07
+    to = 0
+
+    def __init__(self, window_id: int, action_number: int, accepted: bool) -> None:
+        super().__init__()
+
+        self.window_id = window_id
+        self.action_number = action_number
+        self.accepted = accepted
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayWindowConfirmationServerBound:
+        return cls(buf.unpack('b'), buf.unpack('h'), buf.unpack_bool())
+
+
+class PlayClickWindow(Packet):
+    """Sent when the client clicks on a slot in a window. (Client -> Server)
+
+    :param int window_id: The ID of the window where the action occurred.
+    :param int slot_number: The number of the slot that was clicked.
+    :param int button: Description of parameter `button`.
+    :param int action_number: Unique number, see here: https://wiki.vg/Protocol#Click_Window_Button.
+    :param int mode: The inventory operation mode.
+    :param dict slot: The slot item.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr window_id:
+    :attr slot_number:
+    :attr button:
+    :attr action_number:
+    :attr mode:
+    :attr slot:
+    """
+
+    id = 0x09
+    to = 0
+
+    def __init__(
+            self,
+            window_id: int,
+            slot_number: int,
+            button: int,
+            action_number: int,
+            mode: int,
+            slot: dict) -> None:
+        super().__init__()
+
+        self.window_id = window_id
+        self.slot_number = slot_number
+        self.button = button
+        self.action_number = action_number
+        self.mode = mode
+        self.slot = slot
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayClickWindow:
+        return cls(
+            buf.unpack('B'),
+            buf.unpack('h'),
+            buf.unpack('b'),
+            buf.unpack('h'),
+            buf.unpack_varint(),
+            buf.unpack_slot()
+        )
+
+
+class PlayCloseWindowButton(Packet):
+    """Sent by the client when a window close button is clicked. (Client -> Server)
+
+    :param int window_id: The ID of the window sent by an open window packet.
+    :param int button_id: Meaning depends on window type, see here: https://wiki.vg/Protocol#Click_Window_Button.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr window_id:
+    :attr button_id:
+    """
+
+    id = 0x08
+    to = 0
+
+    def __init__(self, window_id: int, button_id: int) -> None:
+        super().__init__()
+
+        self.window_id = window_id
+        self.button_id = button_id
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayCloseWindowButton:
+        return cls(buf.unpack('b'), buf.unpack('b'))
+
+
+class PlayCloseWindowServerBound(Packet):
+    """Packet sent by the client when it closes a container window. (Client -> Server)
+
+    :param int window_id: The ID of the window that was closed, 0 for player's inventory.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr window_id:
+    """
+
+    id = 0x0A
+    to = 0
 
     def __init__(self, window_id: int):
         super().__init__()
 
         self.window_id = window_id
 
-    def encode(self):
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayCloseWindowServerBound:
+        return cls(buf.unpack('b'))
+
+
+class PlayCloseWindowClientBound(Packet):
+    """This packet is sent from the server to the client when a window is forcibly closed, such as when a chest is destroyed while it's open. """
+
+    id = 0x12
+    to = 1
+
+    def __init__(self, window_id: int) -> None:
+        super().__init__()
+
+        self.window_id = window_id
+
+    def encode(self) -> bytes:
         return Buffer.pack('B', self.window_id)
+
+
+class PlayWindowItems(Packet):
+    """Sent by the server when multiple slots in an inventory window are updated (Server -> Client)
+
+    :param list slots: The updated inventory slots.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr slots:
+    """
+
+    id = 0x13
+    to = 1
+
+    def __init__(self, slots: list) -> None:
+        super().__init__()
+
+        self.slots = slots
+
+    def encode(self) -> bytes:
+        return Buffer.pack('h', len(self.slots)) + b''.join(Buffer.pack_slot(s) for s in self.slots)
 
 
 class PlayWindowProperty(Packet):
@@ -49,13 +205,13 @@ class PlayWindowProperty(Packet):
     id = 0x14
     to = 1
 
-    def __init__(self, window_id: int, property: int, value: int):
+    def __init__(self, window_id: int, property: int, value: int) -> None:
         super().__init__()
 
         self.window_id = window_id
         self.property = property
         self.value = value
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack('B', self.window_id) + Buffer.pack('h', self.property) +\
             Buffer.pack('h', self.value)

@@ -5,7 +5,7 @@ import json
 import uuid
 import zlib
 
-from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
+from src.data.registry import ITEM_REGISTRY
 from src.types.packet import Packet
 from src.data.misc import *
 
@@ -38,8 +38,8 @@ class Buffer:
             if length is None:
                 length = len(self.buf)
                 return self.buf[self.pos:]
-            else:
-                return self.buf[self.pos:self.pos + length]
+
+            return self.buf[self.pos:self.pos + length]
         finally:
             self.pos += length
 
@@ -274,7 +274,7 @@ class Buffer:
     def pack_slot(cls, item: str = None, count: int = 1, tag: nbt.TAG = None):
         """Packs an inventory/container slot into bytes."""
 
-        item_id = ITEMS_BY_NAME[item]  # needed to support recipes
+        item_id = ITEM_REGISTRY.encode(item)  # needed to support recipes
 
         if item_id is None:
             return cls.pack('?', False)
@@ -291,7 +291,7 @@ class Buffer:
             return {'item': None}
 
         return {
-            'item': ITEMS_BY_ID[self.unpack_varint()],
+            'item': ITEM_REGISTRY.decode(self.unpack_varint()),
             'count': self.unpack('b'),
             'tag': self.unpack_nbt()
         }

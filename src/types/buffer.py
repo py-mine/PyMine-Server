@@ -208,7 +208,9 @@ class Buffer:
         if tag is None:
             return b'\x00'
 
-        return tag._render_buffer(cls.buf)
+        buf = cls()
+        tag._render_buffer(buf)
+        return buf.buf
 
     def unpack_nbt(self) -> object:
         """Unpacks a NBT tag(s) from the buffer"""

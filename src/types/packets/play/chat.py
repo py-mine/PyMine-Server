@@ -96,11 +96,7 @@ class PlayTabCompleteClientBound(Packet):
     id = 0xF
     to = 1
 
-    def __init__(
-            self,
-            transaction_id: int,
-            start: int,
-            matches: list) -> None:
+    def __init__(self, transaction_id: int, start: int, matches: list) -> None:
         super().__init__()
 
         self.transaction_id = transaction_id

@@ -205,7 +205,7 @@ class PlayJoinGame(Packet):
     :attr is_flat:
     """
 
-    id = 0x24PlayPlayerPositionAndRotationServerBound
+    id = 0x24
     to = 1
 
     def __init__(

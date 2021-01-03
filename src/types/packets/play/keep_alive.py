@@ -3,12 +3,47 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayKeepAliveClientBound' ,)
- class PlayKeepAliveClientBound(Packet):
-     """The server will frequently send out a keep-alive, each containing a random ID. The client must respond with the same packet. If the client does not respond to them for over 30 seconds, the server kicks the client. Vice versa, if the server does not send any keep-alives for 20 seconds, the client will disconnect and yields a "Timed out" exception. """
-     id = 0x1F
-     to = 1
-    def __init__(self, keep_alive_id: int):
+__all__ = ('PlayKeepAliveClientBound', 'PlayKeepAliveServerBound',)
+
+
+class PlayKeepAliveClientBound(Packet):
+    """Sent by the server in order to maintain connection with the client. (Server -> Client)
+
+    :param int keep_alive_id: A randomly generated (by the server) integer/long.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr keep_alive_id:
+    """
+
+    id = 0x1F
+    to = 1
+
+    def __init__(self, keep_alive_id: int) -> None:
+        super().__init__()
+
         self.keep_alive_id = keep_alive_id
-    def encode(self):
-        return Buffer.pack('l', self.keep_alive_id)
+
+    def encode(self) -> bytes:
+        return Buffer.pack('q', self.keep_alive_id)
+
+
+class PlayKeepAliveServerBound(Packet):
+    """Sent by client in order to maintain connection with server. (Client -> Server)
+
+    :param int keep_alive_id: A randomly generated (by the server) integer/long.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr keep_alive_id:
+    """
+
+    id = 0x10
+    to = 0
+
+    def __init__(self, keep_alive_id: int) -> None:
+        super().__init__()
+
+        self.keep_alive_id = keep_alive_id
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayKeepAliveServerBound:
+        return cls(buf.unpack('q'))

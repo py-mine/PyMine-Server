@@ -2,6 +2,8 @@ from immutables import Map
 import base64
 import yaml
 
+from src.util.seeds import string_hash_code, gen_seed
+
 __all__ = ('SERVER_PROPERTIES_DEFAULT', 'SERVER_PROPERTIES', 'FAVICON',)
 
 SERVER_PROPERTIES_DEFAULT = Map({
@@ -9,8 +11,10 @@ SERVER_PROPERTIES_DEFAULT = Map({
     'server_ip': '0.0.0.0',
     'server_port': 25565,
     'level_name': 'world',
+    'seed': gen_seed(),
     'gamemode': 'survival',
     'difficulty': 'easy',
+    'hardcore': False,
     'max_players': 20,
     'online_mode': True,
     'white_list': True,
@@ -22,14 +26,11 @@ SERVER_PROPERTIES_DEFAULT = Map({
     'spawn_npcs': True,
     'spawn_animals': True,
     'spawn_monsters': True,
-    'generate_structures': True,
-    'support_lan': False
+    'generate_structures': True
 })
 
 
 def load_properties():
-    properties = SERVER_PROPERTIES_DEFAULT
-
     try:
         with open('server.yml', 'r') as f:
             properties = yaml.safe_load(f.read())
@@ -37,14 +38,26 @@ def load_properties():
         with open('server.yml', 'w+') as f:
             f.write(yaml.dump(dict(SERVER_PROPERTIES_DEFAULT)))
 
+        return SERVER_PROPERTIES_DEFAULT
+
     # Check for missing
     if any([(key not in properties) for key in SERVER_PROPERTIES_DEFAULT.keys()]):
-        p_temp = properties
-        properties = dict(SERVER_PROPERTIES_DEFAULT)
-        properties.update(p_temp)
+        # properties = {dict(SERVER_PROPERTIES_DEFAULT), **properties}  # not supported till 3.8
+        old_props = properties
+        properties = SERVER_PROPERTIES_DEFAULT
+        properties.update(old_props)
 
         with open('server.yml', 'w') as f:
-            f.write(yaml.dump(properties))
+            f.write(yaml.dump(dict(properties)))
+
+    if isinstance(properties['seed'], str):  # seed is str, we need int
+        properties['seed'] = string_hash_code(properties['seed'][:20])
+
+    if properties['seed'] > 2 ** 64 - 1:  # seed is too big
+        properties['seed'] = gen_seed()
+
+        with open('server.yml', 'w') as f:
+            f.write(yaml.dump(dict(properties)))
 
     return Map(properties)
 

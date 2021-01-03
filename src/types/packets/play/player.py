@@ -309,7 +309,14 @@ class PlayPlayerPositionAndRotationServerBound(Packet):
     id = 0x13
     to = 0
 
-    def __init__(self, x: float, feet_y: float, z: float, yaw: float, pitch: float, on_ground: bool) -> None:
+    def __init__(
+            self,
+            x: float,
+            feet_y: float,
+            z: float,
+            yaw: float,
+            pitch: float,
+            on_ground: bool) -> None:
         super().__init__()
 
         self.x = x

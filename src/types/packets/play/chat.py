@@ -105,8 +105,11 @@ class PlayTabCompleteClientBound(Packet):
 
         # Matches should be something like:
         # [
-        #     matching element,
-        #     tooltip
+        #     [
+        #         matching element,
+        #         tooltip
+        #     ],
+        #     ...
         # ]
 
     def encode(self):

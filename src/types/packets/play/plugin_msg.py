@@ -1,3 +1,5 @@
+"""Contains packets relating to plugin channels and messages. See here: https://wiki.vg/Plugin_channels"""
+
 from __future__ import annotations
 
 from src.types.packet import Packet

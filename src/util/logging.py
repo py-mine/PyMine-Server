@@ -8,7 +8,7 @@ if os.name == 'nt':
 
 nice_time = (lambda: time.strftime('%x %H:%M:%S'))
 
-START = ''
+START = '\x1b[1m'
 END = '\x1b[0m'
 WHITE = '\x1b[97m'
 GREY = '\x1b[37m'

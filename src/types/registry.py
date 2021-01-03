@@ -1,8 +1,10 @@
+from immutables import Map
+
 from src.util.immutable import make_immutable
 
 class Registry:
     def __init__(self, data: object):
-        if isinstance(data, dict):
+        if isinstance(data, (dict, Map)):
             self.data = make_immutable({k: v['protocol_id'] for k, v in data.items()})
             self.data_reversed = make_immutable({v: k for k, v in data.items()})
         elif isinstance(data, (list, tuple)):
@@ -10,7 +12,7 @@ class Registry:
             self.data_reversed = make_immutable({v: i for i, v in enumerate(data)})
         else:
             raise Exception(
-                'Creating a registry from something other than a dict, tuple, or list is unsupported'
+                'Creating a registry from something other than a dict, Map, tuple, or list is unsupported'
             )
 
     def encode(self, key: object) -> object:

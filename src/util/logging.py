@@ -54,6 +54,12 @@ class Logger:
             ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4)).rstrip('\n')
 
 
+def task_exception_handler(loop, context):
+    print(BG_RED, end='')
+    loop.default_exception_handler(context)
+    print(RESET)
+
+
 if __name__ == '__main__':  # Used to test colors
     logger = Logger()
 

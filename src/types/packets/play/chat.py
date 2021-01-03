@@ -100,7 +100,6 @@ class PlayTabCompleteClientBound(Packet):
             self,
             transaction_id: int,
             start: int,
-            length: int,
             matches: list) -> None:
         super().__init__()
 

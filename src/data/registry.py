@@ -1,18 +1,21 @@
-from immutables import Map
 import json
 
+from src.util.immutable import make_immutable
+from src.types.registry import Registry
+
 __all__ = (
-    'REGISTRY',
-    'ITEMS_BY_NAME',
-    'ITEMS_BY_ID',
+    'ITEM_REGISTRY',
+    'PARTICLE_REGISTRY',
+    'FLUID_REGISTRY',
+    'BLOCK_REGISTRY',
+    'ENTITY_REGISTRY',
 )
 
 with open('src/data/registries.json') as registry:  # generated from server jar
-    REGISTRY = json.load(registry)
+    REGISTRY = make_immutable(json.load(registry))
 
-ITEMS_BY_NAME = Map({k: v['protocol_id'] for k, v in REGISTRY['minecraft:item']['entries'].items()})
-ITEMS_BY_ID = Map({v: k for k, v in ITEMS_BY_NAME.items()})
-
-PARTICLES_BY_NAME = Map({k: v['protocol_id']
-                         for k, v in REGISTRY['minecraft:particle_type']['entries'].items()})
-PARTICLES_BY_ID = Map({v: k for k, v in PARTICLES_BY_NAME.items()})
+ITEM_REGISTRY = Registry(REGISTRY['minecraft:item']['entries'])
+PARTICLE_REGISTRY = Registry(REGISTRY['minecraft:particle_type']['entries'])
+FLUID_REGISTRY = Registry(REGISTRY['minecraft:fluid']['entries'])
+BLOCK_REGISTRY = Registry(REGISTRY['minecraft:block']['entries'])
+ENTITY_REGISTRY = Registry(REGISTRY['minecraft:entity_type']['entries'])

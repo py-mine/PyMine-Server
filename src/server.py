@@ -11,14 +11,15 @@ sys.path.append(os.getcwd())
 from src.types.buffer import Buffer  # nopep8
 
 from src.data.packet_map import PACKET_MAP  # nopep8
-from src.data.states import *  # nopep8
+from src.data.states import STATES  # nopep8
 
 from src.logic.commands import handle_server_commands, load_commands  # nopep8
+from src.logic.status import legacy_ping as logic_legacy_ping  # nopep8
 from src.logic.status import status as logic_status  # nopep8
 from src.logic.login import login as logic_login  # nopep8
-from src.logic.lan_support import ping_lan  # nopep8
+from src.logic.play import play as logic_play  # nopep8
 
-from src.util.share import *  # nopep8
+from src.util.share import share, logger  # nopep8
 
 load_commands()
 
@@ -60,7 +61,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             return await close_con(w, remote)
 
         if i == 0 and read == b'\xFE':
-            logger.warn('Legacy ping is not supported currently.')
+            await logic_legacy_ping(r, w, remote)
             return await close_con(w, remote)
 
         b = struct.unpack('B', read)[0]
@@ -74,26 +75,23 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     buf = Buffer(await r.read(packet_length))
 
-    state = STATES_BY_ID[states.get(remote, 0)]
+    state = STATES.decode(states.get(remote, 0))
     packet = buf.unpack_packet(state, 0, PACKET_MAP)
 
-    logger.debug(
-        f'IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}'
-    )
+    logger.debug(f'IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}')
 
     if state == 'handshaking':
         states[remote] = packet.next_state
-    elif state == 'status':
-        return await logic_status(r, w, packet, remote)
-    elif state == 'login':
-        return await logic_login(r, w, packet, remote)
-    elif state == 'play':
-        logger.debug('entered play state!')
+        return True, r, w
 
-    # Return whether handle_con should continue handling packets,
-    # as well as the same StreamReader and StreamWriter just in
-    # case they have been replaced by encrypted versions
-    return True, r, w
+    if state == 'status':
+        return await logic_status(r, w, packet, remote)
+
+    if state == 'login':
+        return await logic_login(r, w, packet, remote)
+
+    if state == 'play':
+        return await logic_play(r, w, packet, remote)
 
 
 async def handle_con(r, w):  # Handle a connection from a client
@@ -106,8 +104,10 @@ async def handle_con(r, w):  # Handle a connection from a client
         try:
             c, r, w = await handle_packet(r, w, remote)
         except BaseException as e:
-            await close_con(w)
             logger.error(logger.f_traceback(e))
+            break
+
+    await close_con(w, remote)
 
 
 async def start():  # Actually start the server
@@ -117,9 +117,6 @@ async def start():  # Actually start the server
     server = share['server'] = await asyncio.start_server(handle_con, host=addr, port=port)
 
     cmd_task = asyncio.create_task(handle_server_commands())  # Used to handle commands
-
-    if share['conf']['support_lan']:
-        lan_support_task = asyncio.create_task(ping_lan())  # Adds lan support
 
     try:
         async with aiohttp.ClientSession() as share['ses']:
@@ -135,7 +132,6 @@ async def start():  # Actually start the server
         logger.info('Closing server...')
 
         cmd_task.cancel()
-        lan_support_task.cancel()
 
         logger.info('Server closed.')
 

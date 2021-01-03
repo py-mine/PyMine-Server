@@ -5,7 +5,7 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayUseItem', 'PlayEditBook',)
+__all__ = ('PlayUseItem', 'PlayEditBook', 'PlayPickItem',)
 
 
 class PlayUseItem(Packet):
@@ -56,3 +56,25 @@ class PlayEditBook(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayEditBook:
         return cls(buf.unpack_slot(), buf.unpack_bool(), buf.unpack_varint())
+
+
+class PlayPickItem(Packet):
+    """Used to swap out an empty space on the hotbar with the item in the given inventory slot. (Client -> Server)
+
+    :param int slot_to_use: The slot to use.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr slot_to_use:
+    """
+
+    id = 0x18
+    to = 0
+
+    def __init__(self, slot_to_use: int) -> None:
+        super().__init__()
+
+        self.slot_to_use = slot_to_use
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayPickItem:
+        return cls(buf.unpack_varint())

@@ -298,7 +298,7 @@ class PlayTeleportConfirm(Packet):
     id = 0x00
     to = 0
 
-    def __init__(self, teleport_id: int):
+    def __init__(self, teleport_id: int) -> None:
         super().__init__()
 
         self.teleport_id = teleport_id

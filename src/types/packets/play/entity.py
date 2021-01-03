@@ -46,8 +46,8 @@ class PlayQueryEntityNBT(Packet):
 
     :param int transaction_id: Incremental ID used so the client can verify responses.
     :param int entity_id: The ID of the entity to query.
-    :attr type id: Unique packet ID.
-    :attr type to: Packet direction.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr transaction_id:
     :attr entity_id:
     """
@@ -76,8 +76,8 @@ class PlayInteractEntity(Packet):
     :param int target_z: The z coordinate of where the target is, can be None.
     :param int hand: The hand used.
     :param bool sneaking: Whether the client was sneaking or not.
-    :attr type id: Unique packet ID.
-    :attr type to: Packet direction.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr entity_id:
     :attr type_:
     :attr target_x:

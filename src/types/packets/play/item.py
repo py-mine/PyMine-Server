@@ -12,8 +12,8 @@ class PlayUseItem(Packet):
     """Sent by the client when the use item key is pressed. (Client -> Server)
 
     :param int hand: The hand used for the animation. main hand (0) or offhand (1).
-    :attr type id: Unique packet ID.
-    :attr type to: Packet direction.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr hand:
     """
 
@@ -36,8 +36,8 @@ class PlayEditBook(Packet):
     :param dict new_book: The new slot/data for the book.
     :param bool is_signing: Whether the player is signing the book or just saving a draft.
     :param int hand: The hand used. Either main hand (0) or offhand (1).
-    :attr type id: Unique packet ID.
-    :attr type to: Packet direction.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr new_book:
     :attr is_signing:
     :attr hand:

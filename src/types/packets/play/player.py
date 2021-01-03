@@ -354,7 +354,7 @@ class PlayPlayerRotation(Packet):
     id = 0x14
     to = 0
 
-    def __init__(self, yaw: float, pitch: float: on_ground: bool) -> None:
+    def __init__(self, yaw: float, pitch: float, on_ground: bool) -> None:
         super().__init__()
 
         self.yaw = yaw

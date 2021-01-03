@@ -37,6 +37,6 @@ if '--packets' in sys.argv or '-P' in sys.argv:
                         except ValueError:
                             print(f'0x{i:02X}, ', end='')
 
-                    print()
+                    print('\x1b[D\x1b[D ')
 else:
     print('Nothing to dump?')

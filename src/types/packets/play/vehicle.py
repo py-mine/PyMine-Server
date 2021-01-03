@@ -3,7 +3,7 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayVehicleMoveServerBound',)
+__all__ = ('PlayVehicleMoveServerBound', 'PlaySteerBoat')
 
 
 class PlayVehicleMoveServerBound(Packet):
@@ -36,3 +36,28 @@ class PlayVehicleMoveServerBound(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayVehicleMoveServerBound:
         return cls(*(buf.unpack('d') for _ in range(5)))
+
+
+class PlaySteerBoat(Packet):
+    """Used to visually update when the boat paddles are turning. (Client -> Server)
+
+    :param bool left_paddle_turning: Whether the left paddle is turning or not.
+    :param bool right_paddle_turning: Whether the right paddle is turning or not.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr left_paddle_turning:
+    :attr right_paddle_turning:
+    """
+
+    id = 0x17
+    to = 0
+
+    def __init__(self, left_paddle_turning: bool, right_paddle_turning: bool) -> None:
+        super().__init__()
+
+        self.left_paddle_turning = left_paddle_turning
+        self.right_paddle_turning = right_paddle_turning
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlaySteerBoat:
+        return cls(buf.unpack_bool(), buf.unpack_bool())

@@ -49,6 +49,7 @@ class Logger:
         message = ' '.join(str(m) for m in message)
         print(f'{START}{WHITE}{BG_RED}[{nice_time()} CRITICAL]: {message}{END}')
 
+    @staticmethod
     def f_traceback(self, e: BaseException):
         return '\n' + \
             ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4)).rstrip('\n')
@@ -56,7 +57,7 @@ class Logger:
 
 def task_exception_handler(loop, context):
     print(BG_RED, end='')
-    loop.default_exception_handler(context)
+    print(context)
     print(RESET)
 
 

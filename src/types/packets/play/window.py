@@ -11,7 +11,7 @@ __all__ = (
     'PlayWindowConfirmationServerBound',
     'PlayClickWindow',
     'PlayCloseWindowButton',
-    'PlayCloseWindow',
+    'PlayCloseWindowClientBound',
     'PlayWindowProperty',
     'PlayWindowItems',
 )
@@ -140,7 +140,7 @@ class PlayCloseWindowButton(Packet):
         return cls(buf.unpack('b'), buf.unpack('b'))
 
 
-class PlayCloseWindow(Packet):
+class PlayCloseWindowClientBound(Packet):
     """This packet is sent from the server to the client when a window is forcibly closed, such as when a chest is destroyed while it's open. """
 
     id = 0x12
@@ -151,7 +151,7 @@ class PlayCloseWindow(Packet):
 
         self.window_id = window_id
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack('B', self.window_id)
 
 

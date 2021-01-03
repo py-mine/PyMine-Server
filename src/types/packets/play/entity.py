@@ -6,7 +6,7 @@ import nbt
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayBlockEntityData',)
+__all__ = ('PlayBlockEntityData', 'PlayQueryEntityNBT',)
 
 
 class PlayBlockEntityData(Packet):
@@ -39,3 +39,28 @@ class PlayBlockEntityData(Packet):
     def encode(self) -> bytes:
         return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack('B', self.action) + \
             Buffer.pack_nbt(self.nbt_data)
+
+
+class PlayQueryEntityNBT(Packet):
+    """Sent by the client when Shift+F3+I is used. (Client -> Server)
+
+    :param int transaction_id: Incremental ID used so the client can verify responses.
+    :param int entity_id: The ID of the entity to query.
+    :attr type id: Unique packet ID.
+    :attr type to: Packet direction.
+    :attr transaction_id:
+    :attr entity_id:
+    """
+
+    id = 0x0D
+    to = 0
+
+    def __init__(self, transaction_id: int, entity_id: int) -> None:
+        super().__init__()
+
+        self.transaction_id = transaction_id
+        self.entity_id = entity_id
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayQueryEntityNBT:
+        return cls(buf.unpack_varint(), buf.unpack_varint())

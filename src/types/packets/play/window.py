@@ -11,6 +11,7 @@ __all__ = (
     'PlayWindowConfirmationServerBound',
     'PlayClickWindow',
     'PlayCloseWindowButton',
+    'PlayCloseWindowServerBound',
     'PlayCloseWindowClientBound',
     'PlayWindowProperty',
     'PlayWindowItems',
@@ -138,6 +139,28 @@ class PlayCloseWindowButton(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayCloseWindowButton:
         return cls(buf.unpack('b'), buf.unpack('b'))
+
+
+class PlayCloseWindowServerBound(Packet):
+    """Packet sent by the client when it closes a container window. (Client -> Server)
+
+    :param int window_id: The ID of the window that was closed, 0 for player's inventory.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr window_id:
+    """
+
+    id = 0x0A
+    to = 0
+
+    def __init__(self, window_id: int):
+        super().__init__()
+
+        self.window_id = window_id
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayCloseWindowServerBound:
+        return cls(buf.unpack('b'))
 
 
 class PlayCloseWindowClientBound(Packet):

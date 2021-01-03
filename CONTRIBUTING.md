@@ -31,8 +31,7 @@
 * If a method's return type is the method's class, do `from __future__ import annotations` to fix NameErrors
 
 ### Docstrings
-* Docstrings should be present for classes and functions with a newline after them
-* Docstrings that are too long should not start on the same line as `"""`
+* Docstrings should be present for files, classes, and functions with a newline after them
 * Docstrings that are small enough should look like `"""Information"""`
 
 ### Imports

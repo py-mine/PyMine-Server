@@ -32,7 +32,7 @@ class PlayPluginMessageClientBound(Packet):
 
 
 class PlayPluginMessageServerBound(Packet):
-    """Short summary.
+    """Used to send plugin data to the server (Client -> Server)
 
     :param bytes data: Data to be sent to the client.
     :attr int id: Unique packet ID.

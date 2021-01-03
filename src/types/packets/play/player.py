@@ -17,7 +17,6 @@ __all__ = (
     'PlayPlayerPositionAndRotationServerBound',
     'PlayPlayerRotation',
     'PlayPlayerMovement',
-    'PlayVehicleMoveServerBound',
     'PlayTeleportConfirm',
     'PlayClientStatus',
     'PlayClientSettings',
@@ -345,38 +344,6 @@ class PlayPlayerMovement(Packet):
         return cls(buf.unpack_bool())
 
 
-class PlayVehicleMoveServerBound(Packet):
-    """Sent when a player/client moves in a vehicle. (Client -> Server)
-
-    :param float x: The x coordinate of where the player is.
-    :param float y: The y coordinate of where the player is.
-    :param float z: The z coordinate of where the player is.
-    :param float yaw: The yaw (absolute rotation on x axis) in degrees.
-    :param float pitch: The pitch (absolute rotation on y axis) in degrees.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr yaw:
-    :attr pitch:
-    """
-
-    id = 0x16
-    to = 0
-
-    def __init__(self, x: float, y: float, z: float, yaw: float, pitch: float) -> None:
-        super().__init__()
-
-        self.x, self.y, self.z = x, y, z
-        self.yaw = yaw
-        self.pitch = pitch
-
-    @classmethod
-    def decode(cls, buf: Buffer) -> PlayVehicleMoveServerBound:
-        return cls(*(buf.unpack('d') for _ in range(5)))
-
-
 class PlayTeleportConfirm(Packet):
     """Sent by the client as a confirmation to a player position and look packet. (Client -> Server)
 
@@ -470,3 +437,25 @@ class PlayClientSettings(Packet):
             buf.unpack('B'),
             buf.unpack_varint()
         )
+
+
+class PlayPickItem(Packet):
+    """Used to swap out an empty space on the hotbar with the item in the given inventory slot. (Client -> Server)
+
+    :param int slot_to_use: The slot to use.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr slot_to_use:
+    """
+
+    id = 0x18
+    to = 0
+
+    def __init__(self, slot_to_use: int) -> None:
+        super().__init__()
+
+        self.slot_to_use = slot_to_use
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayPickItem:
+        return cls(buf.unpack_varint())

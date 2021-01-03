@@ -15,6 +15,7 @@ __all__ = (
     'PlayJoinGame',
     'PlayKeepAliveClientBound',
     'PlayKeepAliveServerBound',
+    'PlayPlayerPosition',
     'PlayTeleportConfirm',
     'PlayClientStatus',
     'PlayClientSettings',
@@ -252,6 +253,37 @@ class PlayJoinGame(Packet):
             Buffer.pack_bool(self.reduced_debug_info) + \
             Buffer.pack_bool(self.enable_respawn_screen) + Buffer.pack_bool(self.is_debug) + \
             Buffer.pack_bool(self.is_flat)
+
+
+class PlayPlayerPosition(Packet):
+    """Used by the client to update the client's position. (Client -> Server)
+
+    :param float x: The x coordinate of where the player is.
+    :param float feet_y: The y coordinate of where the player's feet are.
+    :param float z: The z coordinate of where the player is.
+    :param bool on_ground: Whether the player/client is on the ground or not.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr x:
+    :attr feet_y:
+    :attr z:
+    :attr on_ground:
+    """
+
+    id = 0x11
+    to = 0
+
+    def __init__(self, x: float, feet_y: float, z: float, on_ground: bool) -> None:
+        super().__init__()
+
+        self.x = x
+        self.feet_y = feet_y
+        self.z = z
+        self.on_ground = on_ground
+
+    @classmethod
+    def decode(cls, buf: Buffer):
+        return cls(buf.unpack('d'), buf.unpack('d'), buf.unpack('d'), buf.unpack_bool())
 
 
 class PlayTeleportConfirm(Packet):

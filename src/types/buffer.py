@@ -5,7 +5,7 @@ import json
 import uuid
 import zlib
 
-from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
+from src.data.registry import ITEM_REGISTRY
 from src.types.packet import Packet
 from src.data.misc import *
 

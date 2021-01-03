@@ -270,7 +270,7 @@ class PlayPlayerPosition(Packet):
     :attr on_ground:
     """
 
-    id = 0x11
+    id = 0x12
     to = 0
 
     def __init__(self, x: float, feet_y: float, z: float, on_ground: bool) -> None:

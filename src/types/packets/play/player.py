@@ -8,6 +8,7 @@ from src.types.buffer import Buffer
 from src.types.chat import Chat
 
 __all__ = (
+    'PlayPlayerDigging',
     'PlayAcknowledgePlayerDigging',
     'PlayDisconnect',
     'PlayPlayerAbilitiesClientBound',
@@ -21,6 +22,38 @@ __all__ = (
     'PlayClientStatus',
     'PlayClientSettings',
 )
+
+
+class PlayPlayerDigging(Packet):
+    """Sent by the client when the start mining a block. (Client -> Server)
+
+    :param int status: The action the player is taking against the block, see here: https://wiki.vg/Protocol#Player_Digging.
+    :param int x: The x coordinate of the block.
+    :param int y: The y coordinate of the block.
+    :param int z: The z coordinate of the block.
+    :param int face: The face of the block that the player is mining.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr status:
+    :attr x:
+    :attr y:
+    :attr z:
+    :attr face:
+    """
+
+    id = 0x1B
+    to = 0
+
+    def __init__(self, status: int, x: int, y: int, z: int, face: int) -> None:
+        super().__init__()
+
+        self.status = status
+        self.x, self.y, self.z = x, y, z
+        self.face = face
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayPlayerDigging:
+        return cls(buf.unpack_varint(), *buf.unpack_pos(), buf.unpack('b'))
 
 
 class PlayAcknowledgePlayerDigging(Packet):

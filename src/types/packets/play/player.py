@@ -17,6 +17,7 @@ __all__ = (
     'PlayKeepAliveServerBound',
     'PlayPlayerPosition',
     'PlayPlayerPositionAndRotationServerBound',
+    'PlayPlayerRotation',
     'PlayTeleportConfirm',
     'PlayClientStatus',
     'PlayClientSettings',
@@ -336,6 +337,33 @@ class PlayPlayerPositionAndRotationServerBound(Packet):
             buf.unpack('d'),
             buf.unpack_bool()
         )
+
+
+class PlayPlayerRotation(Packet):
+    """Used by the client to update their rotation, see here: https://wiki.vg/Protocol#Player_Rotation. (Client -> Server)
+
+    :param float yaw: The yaw (absolute rotation on x axis) in degrees.
+    :param float pitch: The pitch (absolute rotation on y axis) in degrees.
+    :param bool on_ground: Whether the player/client is on the ground or not.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr yaw:
+    :attr pitch:
+    """
+
+    id = 0x14
+    to = 0
+
+    def __init__(self, yaw: float, pitch: float: on_ground: bool) -> None:
+        super().__init__()
+
+        self.yaw = yaw
+        self.pitch = pitch
+        self.on_ground = on_ground
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayPlayerRotation:
+        return cls(buf.unpack('d'), buf.unpack('d'), buf.unpack_bool())
 
 
 class PlayTeleportConfirm(Packet):

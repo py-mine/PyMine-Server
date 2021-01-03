@@ -90,7 +90,15 @@ class PlayInteractEntity(Packet):
     id = 0x0E
     to = 0
 
-    def __init__(self, entity_id: int, type_: int, target_x: int, target_y: int, target_z: int, hand: int, sneaking: bool) -> None:
+    def __init__(
+            self,
+            entity_id: int,
+            type_: int,
+            target_x: int,
+            target_y: int,
+            target_z: int,
+            hand: int,
+            sneaking: bool) -> None:
         super().__init__()
 
         self.entity_id = entity_id

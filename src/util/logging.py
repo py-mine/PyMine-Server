@@ -56,7 +56,10 @@ class Logger:
 
 
 def task_exception_handler(loop, ctx):
-    print(f'{START}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{ctx}{END}')
+    if ctx['exception']:
+        print(f'{START}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{Logger.f_traceback(ctx["exception"])}{END}')
+    else:
+        print(f'{START}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{ctx["message"]}{END}')
 
 
 if __name__ == '__main__':  # Used to test colors

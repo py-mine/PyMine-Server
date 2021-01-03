@@ -124,3 +124,5 @@ class PlayTabCompleteClientBound(Packet):
                 out += Buffer.pack_bool(True) + Buffer.pack_chat(Chat(m[1]))
             else:
                 out += Buffer.pack_bool(False)
+
+        return out

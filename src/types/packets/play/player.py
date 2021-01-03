@@ -18,6 +18,7 @@ __all__ = (
     'PlayPlayerPosition',
     'PlayPlayerPositionAndRotationServerBound',
     'PlayPlayerRotation',
+    'PlayPlayerMovement',
     'PlayTeleportConfirm',
     'PlayClientStatus',
     'PlayClientSettings',
@@ -364,6 +365,28 @@ class PlayPlayerRotation(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayPlayerRotation:
         return cls(buf.unpack('d'), buf.unpack('d'), buf.unpack_bool())
+
+
+class PlayPlayerMovement(Packet):
+    """Tells server whether client/player is on ground or not. (Client -> Server)
+
+    :param bool on_ground: Whether the player/client is on the ground or not.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr on_ground:
+    """
+
+    id = 0x15
+    to = 0
+
+    def __init__(self, on_ground: bool) -> None:
+        super().__init__()
+
+        self.on_ground = on_ground
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayPlayerMovement:
+        return cls(buf.unpack_bool())
 
 
 class PlayTeleportConfirm(Packet):

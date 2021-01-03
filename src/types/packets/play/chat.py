@@ -101,17 +101,27 @@ class PlayTabCompleteClientBound(Packet):
             transaction_id: int,
             start: int,
             length: int,
-            count: int,
             matches: list) -> None:
         super().__init__()
 
         self.transaction_id = transaction_id
         self.start = start
-        self.length = length
-        self.count = count
         self.matches = matches
 
+        # Matches should be something like:
+        # [
+        #     matching element,
+        #     tooltip
+        # ]
+
     def encode(self):
-        return Buffer.pack_varint(self.id) + Buffer.pack_varint(self.start) + \
-            Buffer.pack_varint(self.length) + Buffer.pack_varint(self.count) + \
-            Buffer.pack_array(self.matches)
+        out = Buffer.pack_varint(self.id) + Buffer.pack_varint(self.start) + \
+            Buffer.pack_varint(self.length) + Buffer.pack_varint(len(self.matches))
+
+        for m in self.matches:
+            out += Buffer.pack_string(m[0])
+
+            if len(m) > 1:
+                out += Buffer.pack_bool(True) + Buffer.pack_chat(Chat(m[1]))
+            else:
+                out += Buffer.pack_bool(False)

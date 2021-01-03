@@ -12,7 +12,7 @@ __all__ = (
 )
 
 with open('src/data/registries.json') as registry:  # generated from server jar
-    REGISTRY = json.load(registry)
+    REGISTRY = make_immutable(json.load(registry))
 
 ITEM_REGISTRY = Registry(REGISTRY['minecraft:item']['entries'])
 PARTICLE_REGISTRY = Registry(REGISTRY['minecraft:particle_type']['entries'])

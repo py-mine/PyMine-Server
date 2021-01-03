@@ -11,7 +11,7 @@ sys.path.append(os.getcwd())
 from src.types.buffer import Buffer  # nopep8
 
 from src.data.packet_map import PACKET_MAP  # nopep8
-from src.data.states import *  # nopep8
+from src.data.states import STATES  # nopep8
 
 from src.logic.commands import handle_server_commands, load_commands  # nopep8
 from src.logic.status import legacy_ping as logic_legacy_ping  # nopep8
@@ -75,7 +75,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     buf = Buffer(await r.read(packet_length))
 
-    state = STATES_BY_ID[states.get(remote, 0)]
+    state = STATES.decode(states.get(remote, 0))
     packet = buf.unpack_packet(state, 0, PACKET_MAP)
 
     logger.debug(f'IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}')

@@ -12,7 +12,6 @@ __all__ = ('PlayBlockEntityData',)
 class PlayBlockEntityData(Packet):
     """Sets the block entity associated with the block at the given location. (Server -> Client).
 
-
     :param int x: The x coordinate of the position.
     :param int y: The y coordinate of the position.
     :param int z: The z coordinate of the position.

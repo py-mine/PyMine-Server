@@ -85,11 +85,14 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     if state == 'handshaking':
         states[remote] = packet.next_state
         return True, r, w
-    elif state == 'status':
+
+    if state == 'status':
         return await logic_status(r, w, packet, remote)
-    elif state == 'login':
+
+    if state == 'login':
         return await logic_login(r, w, packet, remote)
-    elif state == 'play':
+
+    if state == 'play':
         return await logic_play(r, w, packet, remote)
 
 

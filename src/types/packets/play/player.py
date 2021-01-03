@@ -7,7 +7,18 @@ from src.types.packet import Packet
 from src.types.buffer import Buffer
 from src.types.chat import Chat
 
-__all__ = ('PlayAcknowledgePlayerDigging',)
+__all__ = (
+    'PlayAcknowledgePlayerDigging',
+    'PlayDisconnect',
+    'PlayPlayerAbilitiesClientBound',
+    'PlayPlayerAbilitiesServerBound',
+    'PlayJoinGame',
+    'PlayKeepAliveClientBound',
+    'PlayKeepAliveServerBound',
+    'PlayTeleportConfirm',
+    'PlayClientStatus',
+    'PlayClientSettings',
+)
 
 
 class PlayAcknowledgePlayerDigging(Packet):
@@ -41,10 +52,8 @@ class PlayAcknowledgePlayerDigging(Packet):
         self.successful = successful
 
     def encode(self) -> bytes:
-        return Buffer.pack_pos(self.x, self.y, self.z) + \
-            Buffer.pack_varint(self.block) + \
-            Buffer.pack_varint(self.status) + \
-            Buffer.pack_bool(self.successful)
+        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack_varint(self.block) + \
+            Buffer.pack_varint(self.status) + Buffer.pack_bool(self.successful)
 
 
 class PlayDisconnect(Packet):
@@ -55,12 +64,12 @@ class PlayDisconnect(Packet):
     id = 0x19
     to = 1
 
-    def __init__(self, reason: Chat):
+    def __init__(self, reason: Chat) -> None:
         super().__init__()
 
         self.reason = reason
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack_chat(self.reason)
 
 
@@ -109,8 +118,52 @@ class PlayPlayerAbilitiesServerBound(Packet):
 
         self.flying = flying
 
-    def decode(self, buf: Buffer) -> PlayPlayerAbilitiesServerBound:
-        return (buf.unpack('b') == 0x02)
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayPlayerAbilitiesServerBound:
+        return cls(buf.unpack('b') == 0x02)
+
+
+class PlayKeepAliveClientBound(Packet):
+    """Sent by the server in order to maintain connection with the client. (Server -> Client)
+
+    :param int keep_alive_id: A randomly generated (by the server) integer/long.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr keep_alive_id:
+    """
+
+    id = 0x1F
+    to = 1
+
+    def __init__(self, keep_alive_id: int) -> None:
+        super().__init__()
+
+        self.keep_alive_id = keep_alive_id
+
+    def encode(self) -> bytes:
+        return Buffer.pack('q', self.keep_alive_id)
+
+
+class PlayKeepAliveServerBound(Packet):
+    """Sent by client in order to maintain connection with server. (Client -> Server)
+
+    :param int keep_alive_id: A randomly generated (by the server) integer/long.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr keep_alive_id:
+    """
+
+    id = 0x10
+    to = 0
+
+    def __init__(self, keep_alive_id: int) -> None:
+        super().__init__()
+
+        self.keep_alive_id = keep_alive_id
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayKeepAliveServerBound:
+        return cls(buf.unpack('q'))
 
 
 class PlayJoinGame(Packet):
@@ -169,7 +222,7 @@ class PlayJoinGame(Packet):
             reduced_debug_info: bool,
             enable_respawn_screen: bool,
             is_debug: bool,
-            is_flat: bool):
+            is_flat: bool) -> None:
         super().__init__()
 
         self.entity_id = entity_id
@@ -192,10 +245,105 @@ class PlayJoinGame(Packet):
         return Buffer.pack('i', self.entity_id) + Buffer.pack_bool(self.is_hardcore) + \
             Buffer.pack('B', self.gamemode) + Buffer.pack('b', self.prev_gamemode) + \
             Buffer.pack_varint(len(self.world_names)) + \
-            b''.join([Buffer.pack_string(w) for w in self.world_names]) + \
+            b''.join(Buffer.pack_string(w) for w in self.world_names) + \
             Buffer.pack_nbt(self.dim_codec) + Buffer.pack_nbt(self.dimension) + \
             Buffer.pack_string(self.world_name) + Buffer.pack('q', self.hashed_seed) + \
             Buffer.pack_varint(self.max_players) + Buffer.pack_varint(self.view_distance) + \
             Buffer.pack_bool(self.reduced_debug_info) + \
             Buffer.pack_bool(self.enable_respawn_screen) + Buffer.pack_bool(self.is_debug) + \
             Buffer.pack_bool(self.is_flat)
+
+
+class PlayTeleportConfirm(Packet):
+    """Sent by the client as a confirmation to a player position and look packet. (Client -> Server)
+
+    :param int teleport_id: ID given by a player pos and look packet.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr teleport_id:
+    """
+
+    id = 0x00
+    to = 0
+
+    def __init__(self, teleport_id: int):
+        super().__init__()
+
+        self.teleport_id = teleport_id
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayTeleportConfirm:
+        return cls(buf.unpack_varint())
+
+
+class PlayClientStatus(Packet):
+    """Used by the client to denote when the client has either (0) clicked respawn button or (1) opened the statistics menu. (Client -> Server)
+
+    :param int action_id: Whether client has (0) clicked respawn or (1) opened stats menu.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr action_id:
+    """
+
+    id = 0x04
+    to = 0
+
+    def __init__(self, action_id: int) -> None:
+        super().__init__()
+
+        self.action_id = action_id
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayClientStatus:
+        return cls(buf.unpack_varint())
+
+
+class PlayClientSettings(Packet):
+    """Used by client to update its settings either on server join or whenever. (Client -> Server)
+
+    :param str locale: The locale of the client, example: en_US or en_GB.
+    :param int view_distance: The client's view distance.
+    :param int chat_mode: The client's chat mode, see here: https://wiki.vg/Protocol#Keep_Alive_.28clientbound.29.
+    :param bool chat_colors: Whether the client has chat colors enabled or not.
+    :param int displayed_skin_parts: A bit mask describing which parts of the client's skin are visible.
+    :param int main_hand: Either left (0) or right (1).
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr locale:
+    :attr view_distance:
+    :attr chat_mode:
+    :attr chat_colors:
+    :attr displayed_skin_parts:
+    :attr main_hand:
+    """
+
+    id = 0x05
+    to = 0
+
+    def __init__(
+            self,
+            locale: str,
+            view_distance: int,
+            chat_mode: int,
+            chat_colors: bool,
+            displayed_skin_parts: int,
+            main_hand: int) -> None:
+        super().__init__()
+
+        self.locale = locale
+        self.view_distance = view_distance
+        self.chat_mode = chat_mode
+        self.chat_colors = chat_colors
+        self.displayed_skin_parts = displayed_skin_parts
+        self.main_hand = main_hand
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayClientSettings:
+        return cls(
+            buf.unpack_string(),
+            buf.unpack('b'),
+            buf.unpack_varint(),
+            buf.unpack_bool(),
+            buf.unpack('B'),
+            buf.unpack_varint()
+        )

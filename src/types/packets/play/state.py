@@ -10,6 +10,7 @@ __all__ = ('PlayChangeGameState',)
 
 class PlayChangeGameState(Packet):
     """insert fancy doscstring here (server -> client)"""
+    
 	id = 0x1D
 	to = 1
 

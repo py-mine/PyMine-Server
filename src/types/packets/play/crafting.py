@@ -3,10 +3,12 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('CraftRecipeRequest',)
+__all__ = (
+    'CraftRecipeRequest',
+)
 
 
-class CraftRecipeRequest(Packet):
+class PlayCraftRecipeRequest(Packet):
     """Sent when a client/player clicks a recipe in the crafting book that is craftable.
 
     :param int window_id: ID of the crafting table window.

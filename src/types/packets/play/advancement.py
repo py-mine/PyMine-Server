@@ -31,3 +31,19 @@ class PlayAdvancementTab(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayAdvancementTab:
         return cls(buf.unpack_varint(), (buf.unpack_varint() if buf.unpack_bool() else None))
+
+
+class PlaySelectAdvancementTab(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x3C
+    to = 1
+
+    def __init__(self, has_id: bool, optional_identifier: str) -> None:
+        super().__init__()
+
+        self.has_id = has_id
+        self.optional_identifier = optional_identifier
+
+    def encode(self) -> bytes:
+        return Buffer.pack_bool(self.has_id) + Buffer.pack_string(self.optional_identifier)

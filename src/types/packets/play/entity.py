@@ -168,7 +168,7 @@ class PlayEntityAction(Packet):
 
 class PlayEntityMovement(Packet):
     """insert fancy doscstring here (server -> client)"""
-    
+
     id = 0x2A
     to = 1
 

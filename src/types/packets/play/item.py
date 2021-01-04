@@ -5,7 +5,12 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayUseItem', 'PlayEditBook', 'PlayPickItem',)
+__all__ = (
+    'PlayUseItem',
+    'PlayEditBook',
+    'PlayPickItem',
+    'PlayNameItem',
+)
 
 
 class PlayUseItem(Packet):
@@ -78,3 +83,25 @@ class PlayPickItem(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayPickItem:
         return cls(buf.unpack_varint())
+
+
+class PlayNameItem(Packet):
+    """Used by the client when renaming something in an anvil. (Client -> Server)
+
+    :param str item_name: The new name of the item.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr item_name:
+    """
+
+    id = 0x20
+    to = 0
+
+    def __init__(self, item_name: str) -> None:
+        super().__init__()
+
+        self.item_name = item_name
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayNameItem:
+        return cls(buf.unpack_string())

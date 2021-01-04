@@ -1,4 +1,3 @@
-
 """Contains packets related to windows."""
 
 from __future__ import annotations
@@ -15,6 +14,8 @@ __all__ = (
     'PlayCloseWindowClientBound',
     'PlayWindowProperty',
     'PlayWindowItems',
+    'PlaySetSlot',
+    'PlayOpenHorseWindow',
 )
 
 
@@ -221,3 +222,49 @@ class PlayWindowProperty(Packet):
     def encode(self) -> bytes:
         return Buffer.pack('B', self.window_id) + Buffer.pack('h', self.prop) + \
             Buffer.pack('h', self.value)
+
+
+class PlaySetSlot(Packet):
+    """Sent by the server when an item in a slot (in a window) is added/removed."""
+
+    id = 0x15
+    to = 1
+
+    def __init__(self, window_id: int, slot: int, slot_data: dict) -> None:
+        super.__init__()
+
+        self.win_id = window_id
+        self.slot = slot
+        self.slot_data = slot_data
+
+    def encode(self) -> bytes:
+        return Buffer.pack('b', self.window_id) + Buffer.pack('h', self.slot) + \
+            Buffer.pack_slot(self.slot_data)
+
+
+class PlayOpenHorseWindow(Packet):
+    """Tells the client to open the horse GUI. (Server -> Client)
+
+    :param int window_id: Window ID of the GUI window.
+    :param int num_slots: Number of slots available for use.
+    :param int entity_id: The entity ID of the horse.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr window_id:
+    :attr num_slots:
+    :attr entity_id:
+    """
+
+    id = 0x1E
+    to = 1
+
+    def __init__(self, window_id: int, num_slots: int, entity_id: int) -> None:
+        super().__init__()
+
+        self.window_id = window_id
+        self.num_slots = num_slots
+        self.entity_id = entity_id
+
+    def encode(self) -> bytes:
+        return Buffer.pack('b', self.window_id) + Buffer.pack_varint(self.num_slots) + \
+            Buffer.pack('i', self.entity_id)

@@ -1,3 +1,5 @@
+"""Contains packets related to crafting and recipes."""
+
 from __future__ import annotations
 
 from src.types.packet import Packet
@@ -7,6 +9,7 @@ __all__ = (
     'PlayCraftRecipeRequest',
     'PlaySetDisplayedRecipe',
     'PlaySetRecipeBookState',
+    'PlayCraftRecipeResponse',
 )
 
 
@@ -86,3 +89,19 @@ class PlaySetRecipeBookState(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlaySetRecipeBookState:
         return cls(buf.unpack_varint(), buf.unpack_bool(), buf.unpack_bool())
+
+
+class PlayCraftRecipeResponse(Packet):
+    """insert fancy docstring here (server -> client)"""
+
+    id = 0x2F
+    to = 1
+
+    def __init__(self, window_id: int, recipe_identifier: str) -> None:
+        super().__init__()
+
+        self.window_id = window_id
+        self.recipe_identifier = recipe_identifier
+
+    def encode(self) -> bytes:
+        return Buffer.pack('b', self.window_id) + Buffer.pack_string(self.recipe_identifier)

@@ -6,7 +6,12 @@ import nbt
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayBlockEntityData', 'PlayQueryEntityNBT', 'PlayInteractEntity')
+__all__ = (
+    'PlayBlockEntityData',
+    'PlayQueryEntityNBT',
+    'PlayInteractEntity',
+    'PlaySteerVehicle',
+)
 
 
 class PlayBlockEntityData(Packet):

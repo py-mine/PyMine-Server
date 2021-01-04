@@ -214,3 +214,14 @@ class PlayWindowProperty(Packet):
     def encode(self) -> bytes:
         return Buffer.pack('B', self.window_id) + Buffer.pack('h', self.prop) + \
             Buffer.pack('h', self.value)
+
+class PlaySetSlot(Packet):
+    """Sent by the server when an item in a slot (in a window) is added/removed."""
+    def __init__(self, window_id: int, slot: int, slot_data: dict):
+        super.__init__()
+
+        self.win_id = window_id
+        self.slot = slot
+        self.slot_data = slot_data
+    def encode(self):
+        return Buffer.pack('b', self.window_id) + Buffer.pack('h', self.slot) + Buffer.pack_slot(self.slot_data)

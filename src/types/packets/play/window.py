@@ -1,4 +1,3 @@
-
 """Contains packets related to windows."""
 
 from __future__ import annotations

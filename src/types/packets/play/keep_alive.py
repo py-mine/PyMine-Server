@@ -1,3 +1,5 @@
+"""Contains packets for maintaining the connection between client and server."""
+
 from __future__ import annotations
 
 from src.types.packet import Packet

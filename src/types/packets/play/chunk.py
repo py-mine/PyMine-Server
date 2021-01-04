@@ -1,4 +1,4 @@
-"""Contains packets relating to chunks"""
+"""Contains packets relating to chunks."""
 
 from __future__ import annotations
 

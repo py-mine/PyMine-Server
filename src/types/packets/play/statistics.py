@@ -1,4 +1,4 @@
-"""Contains statistic packet."""
+"""Contains statistics packet."""
 
 from __future__ import annotations
 

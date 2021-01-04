@@ -5,6 +5,7 @@ from src.types.buffer import Buffer
 
 __all__ = ('PlayResourcePackStatus',)
 
+
 class PlayResourcePackStatus(Packet):
     """Used by the client to send the status of whether a resource pack was loaded or not. (Client -> Server)
 

@@ -5,7 +5,10 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayAdvancementTab',)
+__all__ = (
+    'PlayAdvancementTab',
+    'PlaySelectAdvancementTab',
+)
 
 
 class PlayAdvancementTab(Packet):

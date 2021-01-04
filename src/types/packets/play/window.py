@@ -14,6 +14,7 @@ __all__ = (
     'PlayCloseWindowClientBound',
     'PlayWindowProperty',
     'PlayWindowItems',
+    'PlaySetSlot',
 )
 
 

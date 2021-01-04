@@ -164,3 +164,17 @@ class PlayEntityAction(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayEntityAction:
         return cls(buf.unpack_varint(), buf.unpack_varint(), buf.unpack_varint())
+
+
+class PlayEntityMovement(Packet):
+    """insert fancy doscstring here (server -> client)"""
+    id = 0x2A
+    to = 1
+
+    def __init__(self, entity_id: int) -> None:
+        super().__init_()
+
+        self.entity_id = entity_id
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.entity_id)

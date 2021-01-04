@@ -14,6 +14,8 @@ class PlayUnloadChunk(Packet):
     to = 1
 
     def __init__(self, chunk_x: int, chunk_z: int):
+        super().__init__()
+
         self.chunk_x, self.chunk_z = chunk_x, chunk_z
 
     def encode(self):

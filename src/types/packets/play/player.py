@@ -21,6 +21,7 @@ __all__ = (
     'PlayTeleportConfirm',
     'PlayClientStatus',
     'PlayClientSettings',
+    'PlayCreativeInventoryAction',
 )
 
 
@@ -470,3 +471,26 @@ class PlayClientSettings(Packet):
             buf.unpack('B'),
             buf.unpack_varint()
         )
+
+
+class PlayCreativeInventoryAction(Packet):
+    """Sent when a client/player clicks in their inventory in creative mode. (Client -> Server)
+
+    :param int slot: The inventory slot that was clicked.
+    :param dict clicked_item: The actual slot data for the clicked item.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr slot:
+    :attr clicked_item:
+    """
+
+    id = 0x28
+    to = 0
+
+    def __init__(self, slot: int, clicked_item: dict) -> None:
+        self.slot = slot
+        self.clicked_item = clicked_item
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayCreativeInventoryAction:
+        return cls(buf.unpack('h'), buf.unpack_slot())

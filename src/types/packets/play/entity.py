@@ -9,7 +9,8 @@ from src.types.buffer import Buffer
 __all__ = (
     'PlayBlockEntityData',
     'PlayQueryEntityNBT',
-    'PlayInteractEntity'
+    'PlayInteractEntity',
+    'PlayEntityAction',
 )
 
 

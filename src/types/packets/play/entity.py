@@ -6,7 +6,12 @@ import nbt
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayBlockEntityData', 'PlayQueryEntityNBT', 'PlayInteractEntity')
+__all__ = (
+    'PlayBlockEntityData',
+    'PlayQueryEntityNBT',
+    'PlayInteractEntity',
+    'PlayEntityAction',
+)
 
 
 class PlayBlockEntityData(Packet):
@@ -46,8 +51,8 @@ class PlayQueryEntityNBT(Packet):
 
     :param int transaction_id: Incremental ID used so the client can verify responses.
     :param int entity_id: The ID of the entity to query.
-    :attr type id: Unique packet ID.
-    :attr type to: Packet direction.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr transaction_id:
     :attr entity_id:
     """
@@ -76,8 +81,8 @@ class PlayInteractEntity(Packet):
     :param int target_z: The z coordinate of where the target is, can be None.
     :param int hand: The hand used.
     :param bool sneaking: Whether the client was sneaking or not.
-    :attr type id: Unique packet ID.
-    :attr type to: Packet direction.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr entity_id:
     :attr type_:
     :attr target_x:
@@ -131,3 +136,31 @@ class PlayInteractEntity(Packet):
         sneaking = buf.unpack_bool()
 
         return cls(entity_id, type_, target_x, target_y, target_z, hand, sneaking)
+
+
+class PlayEntityAction(Packet):
+    """Sent by the client to indicate it has performed a certain action. (Client -> Server)
+
+    :param int entity_id: The ID of the entity.
+    :param int action_id: The action occurring, see here: https://wiki.vg/Protocol#Entity_Action.
+    :param int jump_boost: Used with jumping while riding a horse.
+    :attr type id: Description of parameter `id`.
+    :attr type to: Description of parameter `to`.
+    :attr entity_id:
+    :attr action_id:
+    :attr jump_boost:
+    """
+
+    id = 0x1C
+    to = 0
+
+    def __init__(self, entity_id: int, action_id: int, jump_boost: int) -> None:
+        super().__init__()
+
+        self.entity_id = entity_id
+        self.action_id = action_id
+        self.jump_boost = jump_boost
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayEntityAction:
+        return cls(buf.unpack_varint(), buf.unpack_varint(), buf.unpack_varint())

@@ -83,8 +83,8 @@ class PlayGenerateStructure(Packet):
     :param int z: The z coordinate of the jigsaw block.
     :param int levels: The value of the levels slider in the block interface.
     :param bool keep_jigsaws: Unknown.
-    :attr type id: Unique packet ID.
-    :attr type to: Packet direction.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr x:
     :attr y:
     :attr z:
@@ -114,8 +114,8 @@ class PlayQueryBlockNBT(Packet):
     :param int x: The x coordinate of the block.
     :param int y: The y coordinate of the block.
     :param int z: The z coordinate of the block.
-    :attr type id: Unique packet ID.
-    :attr type to: Packet direction.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr transaction_id:
     :attr x:
     :attr y:

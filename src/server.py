@@ -19,6 +19,7 @@ from src.logic.status import status as logic_status  # nopep8
 from src.logic.login import login as logic_login  # nopep8
 from src.logic.play import play as logic_play  # nopep8
 
+from src.util.logging import task_exception_handler  # nopep8
 from src.util.share import share, logger  # nopep8
 
 load_commands()
@@ -75,7 +76,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     buf = Buffer(await r.read(packet_length))
 
-    state = STATES.decode(states.get(remote, 0))
+    state = STATES.encode(states.get(remote, 0))
     packet = buf.unpack_packet(state, 0, PACKET_MAP)
 
     logger.debug(f'IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}')
@@ -135,7 +136,12 @@ async def start():  # Actually start the server
 
         logger.info('Server closed.')
 
+
+loop = asyncio.get_event_loop()
+loop.set_debug(True)
+loop.set_exception_handler(task_exception_handler)
+
 try:
-    asyncio.run(start())
+    loop.run_until_complete(start())
 except BaseException as e:
     logger.critical(logger.f_traceback(e))

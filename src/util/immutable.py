@@ -14,7 +14,8 @@ def make_immutable(obj: object) -> object:
             obj[k] = make_immutable(v)
 
         return Map(obj)
-    elif isinstance(obj, list):
+
+    if isinstance(obj, list):
         for i, v in enumerate(obj):
             obj[i] = make_immutable(v)
 

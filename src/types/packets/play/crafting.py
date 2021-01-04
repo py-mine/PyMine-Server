@@ -4,7 +4,7 @@ from src.types.packet import Packet
 from src.types.buffer import Buffer
 
 __all__ = (
-    'CraftRecipeRequest',
+    'PlayCraftRecipeRequest',
     'PlaySetDisplayedRecipe',
     'PlaySetRecipeBookState',
 )

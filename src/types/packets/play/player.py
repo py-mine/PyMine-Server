@@ -26,6 +26,7 @@ __all__ = (
     'PlaySpectate',
     'PlayCamera',
     'PlayUpdateViewPosition',
+    'PlayUpdateViewDistance',
 )
 
 
@@ -551,3 +552,18 @@ class PlayUpdateViewPosition(Packet):
 
     def encode(self) -> bytes:
         Buffer.pack_varint(self.chunk_x) + Buffer.pack_varint(self.chunk_z)
+
+
+class PlayUpdateViewDistance(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x41
+    to = 1
+
+    def __init__(self, view_distance: int) -> None:
+        super().__init__()
+
+        self.view_distance
+
+    def encode(self) -> bytes:
+        Buffer.pack_varint(self.view_distance)

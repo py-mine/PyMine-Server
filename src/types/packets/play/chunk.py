@@ -50,7 +50,16 @@ class PlayChunkData(Packet):
     id = 0x20
     to = 1
 
-    def __init__(self, chunk_x: int, chunk_z: int, full_chunk: bool, prim_bit_mask: int, heightmaps: nbt.TAG, data: bytes, block_entities: list, biomes: int = None) -> None:
+    def __init__(
+            self,
+            chunk_x: int,
+            chunk_z: int,
+            full_chunk: bool,
+            prim_bit_mask: int,
+            heightmaps: nbt.TAG,
+            data: bytes,
+            block_entities: list,
+            biomes: int = None) -> None:
         super().__init__()
 
         self.chunk_x, self.chunk_z = chunk_x, chunk_z

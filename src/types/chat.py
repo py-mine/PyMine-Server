@@ -38,7 +38,7 @@ class Chat:
             if isinstance(msg, str):
                 if mode == 'plain':
                     return re.sub('§.', '', msg)
-                    
+
                 if mode == 'normal':
                     return self.msg
 

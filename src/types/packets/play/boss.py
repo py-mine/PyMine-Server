@@ -17,12 +17,14 @@ class PlayBossBar(Packet):
     :param int action: Action to take.
     :param type **data: Data corresponding to the action.
     :attr type data: Data corresponding to the action.
-    :attr type id_: Unique packet ID.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr uuid:
     :attr action:
     """
 
-    id_ = 0x0C
+    id = 0x0C
+    to = 1
 
     def __init__(self, uuid: uuid.UUID, action: int, **data: dict) -> None:
         super().__init__()

@@ -10,7 +10,9 @@ class Packet:
     :attr id:
     """
 
-    id_ = None
+    id: int = None
+    to: int = None
 
     def __init__(self) -> None:
-        self.id_ = self.__class__.id_
+        self.id: int = self.__class__.id
+        self.to: int = self.__class__.to

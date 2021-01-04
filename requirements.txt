@@ -1,3 +1,7 @@
+aioconsole
+asyncio_dgram
+aiohttp
+cryptography
 immutables
 nbt
-uvloop
+PyYAML

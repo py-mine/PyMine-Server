@@ -3,14 +3,38 @@
 from __future__ import annotations
 
 from src.types.packet import Packet
+from src.types.buffer import Buffer
 
 __all__ = ('PlayStatistics',)
 
 
 class PlayStatistics(Packet):
-    """Sent as a response to Client Status 0x04 (id 1). Will only send the changed values if previously requested. Client bound(Client -> Server)."""
+    """Send data in the stats menu to client. (Server -> Client)
 
-    id_ = 0x06
+    :param list stats: A list of stat entries (see here: https://wiki.vg/Protocol#Statistics).
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr stats:
+    """
 
-    def __init__(self, response_data: dict) -> None:
+    id = 0x06
+    to = 1
+
+    def __init__(self, stats: list) -> None:
         super().__init__()
+
+        self.stats = stats
+
+        # Stats should be a list like:
+        # [
+        #     [category_id: int, statistic_id: int, value: int],
+        #     ...
+        # ]
+
+    def encode(self) -> bytes:
+        out = Buffer.pack_varint(len(self.stats))
+
+        for entry in self.stats:
+            out += b''.join(Buffer.pack_varint(e) for e in entry)
+
+        return out

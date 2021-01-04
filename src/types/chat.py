@@ -1,6 +1,7 @@
 from __future__ import annotations
 import re
 
+from src.types.buffer import Buffer
 from src.data.formats import *
 
 
@@ -25,11 +26,6 @@ class Chat:
         """Creates a Minecraft chat message from json."""
 
         return cls({'text': text})
-
-    def to_bytes(self) -> bytes:
-        """Converts a Minecraft chat message to bytes."""
-
-        return Buffer.pack_json(self.msg)
 
     # For mode arg
     # 'plain' = plain text, no formatting

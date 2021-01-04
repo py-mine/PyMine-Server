@@ -1,4 +1,4 @@
-"""Contains HandshakeHandshake, a packet for starting the connection between the server and client"""
+"""Contains HandshakeHandshake, a packet for starting the connection between the server and client."""
 
 from __future__ import annotations
 
@@ -15,14 +15,16 @@ class HandshakeHandshake(Packet):
     :param str address: The host/address the client is connecting to.
     :param int port: The port the client is connection on.
     :param int next_state: The next state which the server should transfer to. 1 for status, 2 for login.
-    :attr int id_: Unique packet ID.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr protocol:
     :attr address:
     :attr port:
     :attr next_state:
     """
 
-    id_ = 0x00
+    id = 0x00
+    to = 0
 
     def __init__(self, protocol: int, address: str, port: int, next_state: int) -> None:
         super().__init__()

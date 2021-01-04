@@ -6,9 +6,10 @@ import uuid
 import zlib
 
 from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
-from src.types.chat import Chat
 from src.types.packet import Packet
 from src.data.misc import *
+
+from src.util.share import logger
 
 
 class Buffer:
@@ -48,51 +49,36 @@ class Buffer:
         self.pos = 0
 
     @classmethod
-    def from_bytes(cls, data: bytes, comp_thresh: int = -1) -> Buffer:
+    def pack_packet(cls, packet: Packet, comp_thresh: int = -1) -> bytes:
         """
-        Creates a Buffer object from bytes, handles compression
-        and length prefixing
-        """
-
-        buf = cls(data)
-        buf = cls(buf.read(buf.unpack_varint()))  # Handle length prefixing
-
-        # Handle if the data was compressed
-        if comp_thresh >= 0:
-            uncomp_len = buf.unpack_varint()  # Handle decompressed length prefixing
-
-            if uncomp_len > 0:
-                # Create new Buffer from decompressed data
-                buf = cls(zlib.decompress(buf.read()))
-
-        return buf
-
-    def to_bytes(self, comp_thresh: int = -1) -> bytes:
-        """
-        Packs the final Buffer into bytes, readies the data to be sent,
-        handles compression and length prefixing.
+        Packs a Packet object into bytes.
         """
 
-        if comp_thresh >= 0:
-            if len(self.buf) >= comp_thresh:
-                data = self.pack_varint(len(self.buf)) + zlib.compress(self.buf)
+        logger.debug(  # We log this here for consistency and not having to implement it everywhere
+            f'OUT: state:unknown     | id:0x{packet.id:02X} | packet:{type(packet).__name__}'
+        )
+
+        data = cls.pack_varint(packet.id) + packet.encode()
+
+        if comp_thresh >= 1:
+            if len(data) >= comp_thresh:
+                data = cls.pack_varint(len(data)) + zlib.compress(data)
             else:
-                data = self.pack_varint(0) + self.buf
-        else:
-            data = self.buf
+                data = cls.pack_varint(0) + data
 
-        return self.pack_varint(len(data), max_bits=32) + data
+        return cls.pack_varint(len(data)) + data
 
-    @classmethod
-    def pack_packet(cls, packet: Packet):
-        """
-        Packs a packet into bytes.
-        """
+    def unpack_packet(self, state: str, to: int, PACKET_MAP: object, comp_thresh: int = -1) -> Packet:  # nopepe8
+        data = self.buf
 
-        return cls(cls.pack_varint(packet.id) + packet.encode()).to_bytes()
+        if comp_thresh >= 0:
+            uncomp_len = self.unpack_varint()
 
-    def unpack_packet(self):
-        raise NotImplemented
+            if uncom_len > 0:
+                data = zlib.decompress(self.read())
+
+        packet = PACKET_MAP[state][(self.unpack_varint(), to,)].decode(self)
+        return packet
 
     def unpack(self, f: str) -> object:
         unpacked = struct.unpack('>' + f, self.read(struct.calcsize(f)))
@@ -150,7 +136,7 @@ class Buffer:
 
         for i in range(10):
             b = self.unpack('B')
-            num |= (b & 0x7F) << (7 * i)
+            num |= (b & 0x7F) << 7 * i
 
             if not b & 0x80:
                 break
@@ -161,8 +147,7 @@ class Buffer:
         num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
 
         if not (num_min <= num < num_max):
-            raise ValueError(
-                f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
+            raise ValueError(f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
 
         return num
 
@@ -235,7 +220,7 @@ class Buffer:
     def pack_uuid(cls, uuid: uuid.UUID) -> bytes:
         """Packs a UUID into bytes."""
 
-        return uuid.to_bytes()
+        return uuid.bytes
 
     def unpack_uuid(self):
         """Unpacks a UUID from the buffer."""
@@ -243,15 +228,15 @@ class Buffer:
         return uuid.UUID(bytes=self.read(16))
 
     @classmethod
-    def pack_chat(cls, msg: Message) -> bytes:
+    def pack_chat(cls, msg: 'Chat') -> bytes:
         """Packs a Minecraft chat message into bytes."""
 
-        return msg.to_bytes()
+        return cls.pack_json(msg.msg)
 
-    def unpack_chat(self) -> Message:
+    def unpack_chat(self) -> 'Chat':
         """Unpacks a Minecraft chat message from the buffer."""
 
-        return Message.from_buf(self)
+        return Chat.from_buf(self)
 
     @classmethod
     def pack_pos(cls, x, y, z) -> bytes:

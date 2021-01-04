@@ -1,5 +1,3 @@
-# src/**/*.c
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -132,3 +130,4 @@ dmypy.json
 
 # Sh-wayz's shit
 tags
+.tmuxinator.yml

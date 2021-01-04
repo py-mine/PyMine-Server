@@ -29,8 +29,8 @@ class PlayChunkData(Packet):
 
     :param int chunk_x: The chunk x coordinate (block x coordinate // 16).
     :param int chunk_z: The chunk z coordinate (block z coordinate // 16).
-    :param bool full_chunk: Description of parameter `full_chunk`.
-    :param int prim_bit_mask: Description of parameter `prim_bit_mask`.
+    :param bool full_chunk: See here: https://wiki.vg/Chunk_Format#Full_chunk.
+    :param int prim_bit_mask: Bitmask with bits set to 1 for every 16×16×16 chunk section whose data is included in Data. The least significant bit represents the chunk section at the bottom of the chunk column (from y=0 to y=15).
     :param nbt.TAG heightmaps: Compound containing one long array named MOTION_BLOCKING, which is a heightmap for the highest solid block at each position in the chunk (as a compacted long array with 256 entries at 9 bits per entry totaling 36 longs). The Notchian server also adds a WORLD_SURFACE long array, the purpose of which is unknown, but it's not required for the chunk to be accepted.
     :param bytes data: See chunk data format: https://wiki.vg/Chunk_Format#Full_chunk.
     :param list block_entities: Array of nbt.TAGs.

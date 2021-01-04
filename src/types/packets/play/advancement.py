@@ -45,4 +45,5 @@ class PlaySelectAdvancementTab(Packet):
         self.optional_identifier = optional_identifier
 
     def encode(self) -> bytes:
-        Buffer.pack_bool(self.optional_identifier is not None) + Buffer.pack_string(self.optional_identifier)
+        Buffer.pack_bool(self.optional_identifier is not None) + \
+            Buffer.pack_string(self.optional_identifier)

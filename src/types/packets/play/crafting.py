@@ -11,7 +11,7 @@ __all__ = (
 
 
 class PlayCraftRecipeRequest(Packet):
-    """Sent when a client/player clicks a recipe in the crafting book that is craftable.
+    """Sent when a client/player clicks a recipe in the crafting book that is craftable. (Client -> Server)
 
     :param int window_id: ID of the crafting table window.
     :param str recipe_identifier: The recipe identifier.
@@ -39,7 +39,7 @@ class PlayCraftRecipeRequest(Packet):
 
 
 class PlaySetDisplayedRecipe(Packet):
-    """Replaces Recipe Book Data, type 0. See here: https://wiki.vg/Protocol#Set_Displayed_Recipe
+    """Replaces Recipe Book Data, type 0. See here: https://wiki.vg/Protocol#Set_Displayed_Recipe (Client -> Server)
 
     :param str recipe_id: The identifier for the recipe.
     :attr int id: Unique packet ID.
@@ -61,7 +61,7 @@ class PlaySetDisplayedRecipe(Packet):
 
 
 class PlaySetRecipeBookState(Packet):
-    """Replaces Recipe Book Data, type 1. See here: https://wiki.vg/Protocol#Set_Recipe_Book_State
+    """Replaces Recipe Book Data, type 1. See here: https://wiki.vg/Protocol#Set_Recipe_Book_State (Client -> Server)
 
     :param int book_id: One of the following: crafting (0), furnace (1), blast furnace (2), smoker (3).
     :param bool book_open: Whether the crafting book is open or not.

@@ -39,10 +39,10 @@ class PlaySelectAdvancementTab(Packet):
     id = 0x3C
     to = 1
 
-    def __init__(self, has_id: bool, optional_identifier: str) -> None:
+    def __init__(self, optional_identifier: str) -> None:
         super().__init__()
 
         self.optional_identifier = optional_identifier
 
     def encode(self) -> bytes:
-        Buffer.pack_string(self.optional_identifier)
+        Buffer.pack_bool(self.optional_identifier is not None) + Buffer.pack_string(self.optional_identifier)

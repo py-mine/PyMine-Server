@@ -11,6 +11,7 @@ __all__ = (
     'PlayQueryEntityNBT',
     'PlayInteractEntity',
     'PlayEntityAction',
+    'PlayEntityMovement',
 )
 
 

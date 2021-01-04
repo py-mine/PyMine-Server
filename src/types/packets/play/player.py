@@ -518,3 +518,18 @@ class PlaySpectate(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlaySpectate:
         return cls(buf.unpack_uuid())
+
+
+class PlayCamera(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x3E
+    to = 1
+
+    def __init__(self, camera_id: int) -> None:
+        super().__init__()
+
+        self.camera_id = camera_id
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.camera_id)

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from nbt import nbt
+import uuid
 
 from src.types.packet import Packet
 from src.types.buffer import Buffer
@@ -21,6 +22,8 @@ __all__ = (
     'PlayTeleportConfirm',
     'PlayClientStatus',
     'PlayClientSettings',
+    'PlayCreativeInventoryAction',
+    'PlaySpectate',
 )
 
 
@@ -470,3 +473,48 @@ class PlayClientSettings(Packet):
             buf.unpack('B'),
             buf.unpack_varint()
         )
+
+
+class PlayCreativeInventoryAction(Packet):
+    """Sent when a client/player clicks in their inventory in creative mode. (Client -> Server)
+
+    :param int slot: The inventory slot that was clicked.
+    :param dict clicked_item: The actual slot data for the clicked item.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr slot:
+    :attr clicked_item:
+    """
+
+    id = 0x28
+    to = 0
+
+    def __init__(self, slot: int, clicked_item: dict) -> None:
+        self.slot = slot
+        self.clicked_item = clicked_item
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayCreativeInventoryAction:
+        return cls(buf.unpack('h'), buf.unpack_slot())
+
+
+class PlaySpectate(Packet):
+    """Used by the client to spectate a given entity. (Client -> Server)
+
+    :param uuid.UUID target: The target entity/player to teleport to and spectate.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr target:
+    """
+
+    id = 0x2D
+    to = 0
+
+    def __init__(self, target: uuid.UUID) -> None:
+        super().__init__()
+
+        self.target = target
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlaySpectate:
+        return cls(buf.unpack_uuid())

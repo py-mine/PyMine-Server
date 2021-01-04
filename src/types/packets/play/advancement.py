@@ -1,9 +1,14 @@
+"""Contains packets related to advancements."""
+
 from __future__ import annotations
 
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayAdvancementTab',)
+__all__ = (
+    'PlayAdvancementTab',
+    'PlaySelectAdvancementTab',
+)
 
 
 class PlayAdvancementTab(Packet):
@@ -29,3 +34,18 @@ class PlayAdvancementTab(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayAdvancementTab:
         return cls(buf.unpack_varint(), (buf.unpack_varint() if buf.unpack_bool() else None))
+
+
+class PlaySelectAdvancementTab(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x3C
+    to = 1
+
+    def __init__(self, opt_identifier: str = None) -> None:
+        super().__init__()
+
+        self.opt_identifier = opt_identifier
+
+    def encode(self) -> bytes:
+        Buffer.pack_bool(self.opt_identifier is not None) + Buffer.pack_string(self.opt_identifier)

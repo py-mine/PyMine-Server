@@ -1,3 +1,5 @@
+"""Contains packets related to vehicles and vehicle movement."""
+
 from __future__ import annotations
 
 from src.types.packet import Packet
@@ -39,7 +41,13 @@ class PlayVehicleMoveServerBound(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayVehicleMoveServerBound:
-        return cls(*(buf.unpack('d') for _ in range(5)))
+        return cls(
+            buf.unpack('d'),
+            buf.unpack('d'),
+            buf.unpack('d'),
+            buf.unpack('d'),
+            buf.unpack('d')
+        )
 
 
 class PlaySteerBoat(Packet):

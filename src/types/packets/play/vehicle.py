@@ -3,7 +3,11 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayVehicleMoveServerBound', 'PlaySteerBoat')
+__all__ = (
+    'PlayVehicleMoveServerBound',
+    'PlaySteerBoat',
+    'PlaySteerVehicle',
+)
 
 
 class PlayVehicleMoveServerBound(Packet):
@@ -61,3 +65,31 @@ class PlaySteerBoat(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlaySteerBoat:
         return cls(buf.unpack_bool(), buf.unpack_bool())
+
+
+class PlaySteerVehicle(Packet):
+    """Sent by the client when movement-related input is sent while on a vehicle. (Client -> Server)
+
+    :param float sideways: Position to the left of the player.
+    :param float forward: Positive forward? See here: https://wiki.vg/Protocol#Steer_Vehicle.
+    :param int flags: Bit mask: 0x01=jump, 0x02=unmount.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr sideways:
+    :attr forward:
+    :attr flags:
+    """
+
+    id = 0x1D
+    to = 0
+
+    def __init__(self, sideways: float, forward: float, flags: int) -> None:
+        super().__init__()
+
+        self.sideways = sideways
+        self.forward = forward
+        self.flags = flags
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlaySteerVehicle:
+        return cls(buf.unpack('f'), buf.unpack('f'), buf.unpack('B'))

@@ -5,7 +5,7 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayGenerateStructure', 'PlayUpdateJigsawBlock',)
+__all__ = ('PlayGenerateStructure', 'PlayUpdateJigsawBlock', 'PlayUpdateStructureBlock')
 
 
 class PlayGenerateStructure(Packet):
@@ -88,3 +88,80 @@ class PlayUpdateJigsawBlock(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayUpdateJigsawBlock:
         return cls(*buf.unpack_pos(), *(buf.unpack_string() for _ in range(5)))
+
+
+class PlayUpdateStructureBlock(Packet):
+    """Sent by the client to update a structure block. (Client -> Server)
+
+    :param int x: The x coordinate of the structure block.
+    :param int y: The y coordinate of the structure block.
+    :param int z: The z coordinate of the structure block.
+    :param int action: An additional action to perform other than saving the data, see here: https://wiki.vg/Protocol#Update_Structure_Block
+    :param int mode: One of: save (0), load (1), corner (2), data (3).
+    :param str name: The name of the structure.
+    :param int offset_x: The x offset (between -32 and 32).
+    :param int offset_y: The y offset (between -32 and 32).
+    :param int offset_z: The z offset (between -32 and 32).
+    :param int size_x: The x axis size (between -32 and 32).
+    :param int size_y: The y axis size (between -32 and 32).
+    :param int size_z: The z axis size (between -32 and 32).
+    :param int mirror: One of: none (0), left_right (1), front_back (2).
+    :param int rotation: One of: none (0), clockwise 90 (1), clockwise 180 (2), counter-clockwise 90 (3).
+    :param str metadata: Additional metadata.
+    :param float integrity: Integrity between 0 and 1.
+    :param int seed: Unknown.
+    :param int flags: Additional flags, see here: https://wiki.vg/Protocol#Update_Structure_Block.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr x:
+    :attr y:
+    :attr z:
+    :attr action:
+    :attr mode:
+    :attr name:
+    :attr offset_x:
+    :attr offset_y:
+    :attr offset_z:
+    :attr size_x:
+    :attr size_y:
+    :attr size_z:
+    :attr mirror:
+    :attr rotation:
+    :attr metadata:
+    :attr integrity:
+    :attr seed:
+    :attr flags:
+    """
+
+    id = 0x2A
+    to = 0
+
+    def __init__(self, x: int, y: int, z: int, action: int, mode: int, name: str, offset_x: int, offset_y: int, offset_z: int, size_x: int, size_y: int, size_z: int, mirror: int, rotation: int, metadata: str, integrity: float, seed: int, flags: int) -> None:
+        self.x, self.y, self.z = x, y, z
+        self.action = action
+        self.mode = mode
+        self.name = name
+        self.offset_x, self.offset_y, self.offset_z = offset_x, offset_y, offset_z
+        self.size_x, self.size_y, self.size_z = size_x, size_y, size_z
+        self.mirror = mirrorself
+        self.rotation = rotation
+        self.metadata = metadata
+        self.integrity = integrity
+        self.seed = seed
+        self.flags = flags
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayUpdateStructureBlock:
+        return cls(
+            *buf.unpack_pos(),
+            buf.unpack_varint(),
+            buf.unpack_varint(),
+            buf.unpack_string(),
+            *(buf.unpack('b') for _ in range(6)),
+            buf.unpack_varint(),
+            buf.unpack_varint(),
+            buf.unpack_string(),
+            buf.unpack('f'),
+            buf.unpack_varint(),
+            buf.unpack('b')
+        )

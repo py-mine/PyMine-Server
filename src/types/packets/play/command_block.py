@@ -7,6 +7,7 @@ from src.types.buffer import Buffer
 
 __all__ = ('PlayUpdateCommandBlock', 'PlayUpdateCommandBlockMinecart',)
 
+
 class PlayUpdateCommandBlock(Packet):
     """Used when a client updates a command block. (Client -> Server)
 

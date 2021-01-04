@@ -5,7 +5,7 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayUpdateCommandBlock',)
+__all__ = ('PlayUpdateCommandBlock', 'PlayUpdateCommandBlockMinecart',)
 
 class PlayUpdateCommandBlock(Packet):
     """Used when a client updates a command block. (Client -> Server)
@@ -40,3 +40,31 @@ class PlayUpdateCommandBlock(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayUpdateCommandBlock:
         return cls(*buf.unpack_pos(), buf.unpack_string(), buf.unpack_varint(), buf.unpack('b'))
+
+
+class PlayUpdateCommandBlockMinecart(Packet):
+    """Sent when the client updates a command block minecart. (Client -> Server)
+
+    :param int entity_id: The ID of the entity (the minecart).
+    :param str command: The command text in the command block.
+    :param bool track_output: Whether output from the last command is saved.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr entity_id:
+    :attr command:
+    :attr track_output:
+    """
+
+    id = 0x27
+    to = 0
+
+    def __init__(self, entity_id: int, command: str, track_output: bool) -> None:
+        super().__init__()
+
+        self.entity_id = entity_id
+        self.command = command
+        self.track_output = track_output
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayUpdateCommandBlockMinecart:
+        return cls(buf.unpack_varint(), buf.unpack_string(), buf.unpack_bool())

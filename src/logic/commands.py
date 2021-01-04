@@ -7,7 +7,7 @@ from src.util.share import share, logger
 
 registered_commands = {}
 
-
+# loads default built in commands
 def load_commands():  # only loads commands inside cmds folder, not subfolders
     for file in os.listdir('src/logic/cmds'):
         if file.endswith('.py'):
@@ -16,10 +16,10 @@ def load_commands():  # only loads commands inside cmds folder, not subfolders
 
 def command(name: str, node: str):
     if name in registered_commands:
-        raise Exception('Command name is already in use.')
+        raise ValueError('Command name is already in use.')
 
     if ' ' in name:
-        raise Exception('Command name may not contain spaces.')
+        raise ValueError('Command name may not contain spaces.')
 
     def command_deco(func):
         registered_commands[name] = func, node

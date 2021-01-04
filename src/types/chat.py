@@ -38,9 +38,11 @@ class Chat:
             if isinstance(msg, str):
                 if mode == 'plain':
                     return re.sub('§.', '', msg)
-                elif mode == 'normal':
+                    
+                if mode == 'normal':
                     return self.msg
-                elif mode == 'color':
+
+                if mode == 'color':
                     colored = ''
 
                     for i, c in enumerate(msg):

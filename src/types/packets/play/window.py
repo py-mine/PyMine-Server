@@ -219,7 +219,7 @@ class PlayWindowProperty(Packet):
 
 class PlaySetSlot(Packet):
     """Sent by the server when an item in a slot (in a window) is added/removed."""
-    
+
     id = 0x15
     to = 1
 

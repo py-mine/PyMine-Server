@@ -10,6 +10,7 @@ __all__ = (
     'PlayEditBook',
     'PlayPickItem',
     'PlayNameItem',
+    'PlayHeldItemChangeServerBound',
 )
 
 
@@ -105,3 +106,25 @@ class PlayNameItem(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayNameItem:
         return cls(buf.unpack_string())
+
+
+class PlayHeldItemChangeServerBound(Packet):
+    """Sent when the player selects a new slot. (Client -> Server)
+
+    :param int slot: The new selected slot.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr slot:
+    """
+
+    id = 0x25
+    to = 0
+
+    def __init__(self, slot: int) -> None:
+        super().__init__()
+
+        self.slot = slot
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayHeldItemChangeServerBound:
+        return cls(buf.unpack('h'))

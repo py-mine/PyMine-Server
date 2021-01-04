@@ -64,4 +64,4 @@ async def handle_server_commands():
     except (KeyboardInterrupt, asyncio.CancelledError):
         pass
     except BaseException as e:
-        print(e, type(e))
+        logger.error(logger.f_traceback(e))

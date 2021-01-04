@@ -5,15 +5,21 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayUseItem', 'PlayEditBook',)
+__all__ = (
+    'PlayUseItem',
+    'PlayEditBook',
+    'PlayPickItem',
+    'PlayNameItem',
+    'PlayHeldItemChangeServerBound',
+)
 
 
 class PlayUseItem(Packet):
     """Sent by the client when the use item key is pressed. (Client -> Server)
 
     :param int hand: The hand used for the animation. main hand (0) or offhand (1).
-    :attr type id: Unique packet ID.
-    :attr type to: Packet direction.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr hand:
     """
 
@@ -36,8 +42,8 @@ class PlayEditBook(Packet):
     :param dict new_book: The new slot/data for the book.
     :param bool is_signing: Whether the player is signing the book or just saving a draft.
     :param int hand: The hand used. Either main hand (0) or offhand (1).
-    :attr type id: Unique packet ID.
-    :attr type to: Packet direction.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr new_book:
     :attr is_signing:
     :attr hand:
@@ -56,3 +62,69 @@ class PlayEditBook(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayEditBook:
         return cls(buf.unpack_slot(), buf.unpack_bool(), buf.unpack_varint())
+
+
+class PlayPickItem(Packet):
+    """Used to swap out an empty space on the hotbar with the item in the given inventory slot. (Client -> Server)
+
+    :param int slot_to_use: The slot to use.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr slot_to_use:
+    """
+
+    id = 0x18
+    to = 0
+
+    def __init__(self, slot_to_use: int) -> None:
+        super().__init__()
+
+        self.slot_to_use = slot_to_use
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayPickItem:
+        return cls(buf.unpack_varint())
+
+
+class PlayNameItem(Packet):
+    """Used by the client when renaming something in an anvil. (Client -> Server)
+
+    :param str item_name: The new name of the item.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr item_name:
+    """
+
+    id = 0x20
+    to = 0
+
+    def __init__(self, item_name: str) -> None:
+        super().__init__()
+
+        self.item_name = item_name
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayNameItem:
+        return cls(buf.unpack_string())
+
+
+class PlayHeldItemChangeServerBound(Packet):
+    """Sent when the player selects a new slot. (Client -> Server)
+
+    :param int slot: The new selected slot.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr slot:
+    """
+
+    id = 0x25
+    to = 0
+
+    def __init__(self, slot: int) -> None:
+        super().__init__()
+
+        self.slot = slot
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayHeldItemChangeServerBound:
+        return cls(buf.unpack('h'))

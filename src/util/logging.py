@@ -49,9 +49,18 @@ class Logger:
         message = ' '.join(str(m) for m in message)
         print(f'{START}{WHITE}{BG_RED}[{nice_time()} CRITICAL]: {message}{END}')
 
-    def f_traceback(self, e: BaseException):
+    @staticmethod
+    def f_traceback(e: BaseException):
         return '\n' + \
             ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4)).rstrip('\n')
+
+
+def task_exception_handler(loop, ctx):
+    if ctx['exception']:
+        print(
+            f'{START}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{Logger.f_traceback(ctx["exception"])}{END}')
+    else:
+        print(f'{START}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{ctx["message"]}{END}')
 
 
 if __name__ == '__main__':  # Used to test colors

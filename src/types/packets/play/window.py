@@ -205,13 +205,13 @@ class PlayWindowProperty(Packet):
     id = 0x14
     to = 1
 
-    def __init__(self, window_id: int, property: int, value: int) -> None:
+    def __init__(self, window_id: int, prop: int, value: int) -> None:
         super().__init__()
 
         self.window_id = window_id
-        self.property = property
+        self.prop = prop
         self.value = value
 
     def encode(self) -> bytes:
-        return Buffer.pack('B', self.window_id) + Buffer.pack('h', self.property) +\
+        return Buffer.pack('B', self.window_id) + Buffer.pack('h', self.prop) + \
             Buffer.pack('h', self.value)

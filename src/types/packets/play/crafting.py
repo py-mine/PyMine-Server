@@ -5,6 +5,7 @@ from src.types.buffer import Buffer
 
 __all__ = (
     'CraftRecipeRequest',
+    'PlaySetDisplayedRecipe',
 )
 
 
@@ -34,3 +35,25 @@ class PlayCraftRecipeRequest(Packet):
     @classmethod
     def decode(cls, buf: Buffer):
         return cls(buf.unpack('b'), buf.unpack_string(), buf.unpack_bool())
+
+
+class PlaySetDisplayedRecipe(Packet):
+    """Replaces Recipe Book Data, type 0? See here: https://wiki.vg/Protocol#Set_Displayed_Recipe
+
+    :param str recipe_id: The identifier for the recipe.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr recipe_id:
+    """
+
+    id = 0x1E
+    to = 0
+
+    def __init__(self, recipe_id: str) -> None:
+        super().__init__()
+
+        self.recipe_id = recipe_id
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlaySetDisplayedRecipe:
+        return cls(buf.unpack_string())

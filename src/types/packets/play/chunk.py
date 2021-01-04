@@ -10,14 +10,14 @@ __all__ = ('PlayUnloadChunk',)
 
 class PlayUnloadChunk(Packet):
     """Tells the client to unload a chunk column. Clientbound(Server => Client)"""
-    
+
     id = 0x1C
     to = 1
 
-    def __init__(self, chunk_x: int, chunk_z: int):
+    def __init__(self, chunk_x: int, chunk_z: int) -> None:
         super().__init__()
 
         self.chunk_x, self.chunk_z = chunk_x, chunk_z
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack('i', self.chunk_x) + Buffer.pack('i', self.chunk_z)

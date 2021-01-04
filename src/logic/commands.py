@@ -5,7 +5,7 @@ import os
 
 from src.util.share import share, logger
 
-registered_commands = {}
+registered_commands = {}  # {name: (function, permission_node),..}
 
 # loads default built in commands
 def load_commands():  # only loads commands inside cmds folder, not subfolders

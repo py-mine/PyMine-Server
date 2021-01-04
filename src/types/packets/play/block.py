@@ -8,7 +8,6 @@ from src.types.buffer import Buffer
 __all__ = (
     'PlayBlockAction',
     'PlayBlockChange',
-    'PlayGenerateStructure',
     'PlayQueryBlockNBT',
 )
 
@@ -73,38 +72,6 @@ class PlayBlockChange(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack_varint(self.block_id)
-
-
-class PlayGenerateStructure(Packet):
-    """Sent by the client when the generate button is pressed on a jigsaw block. (Client -> Server)
-
-    :param int x: The x coordinate of the jigsaw block.
-    :param int y: The y coordinate of the jigsaw block.
-    :param int z: The z coordinate of the jigsaw block.
-    :param int levels: The value of the levels slider in the block interface.
-    :param bool keep_jigsaws: Unknown.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr levels:
-    :attr keep_jigsaws:
-    """
-
-    id = 0x0F
-    to = 0
-
-    def __init__(self, x: int, y: int, z: int, levels: int, keep_jigsaws: bool):
-        super().__init__()
-
-        self.x, self.y, self.z = x, y, z
-        self.levels = levels
-        self.keep_jigsaws = keep_jigsaws
-
-    @classmethod
-    def decode(cls, buf: Buffer) -> PlayGenerateStructure:
-        return cls(*buf.unpack_pos(), buf.unpack_varint(), buf.unpack_bool())
 
 
 class PlayQueryBlockNBT(Packet):

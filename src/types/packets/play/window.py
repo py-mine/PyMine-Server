@@ -224,14 +224,14 @@ class PlaySetSlot(Packet):
     id = 0x15
     to = 1
 
-    def __init__(self, window_id: int, slot: int, slot_data: dict):
+    def __init__(self, window_id: int, slot: int, slot_data: dict) -> None:
         super.__init__()
 
         self.win_id = window_id
         self.slot = slot
         self.slot_data = slot_data
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack('b', self.window_id) + Buffer.pack('h', self.slot) + \
             Buffer.pack_slot(self.slot_data)
 

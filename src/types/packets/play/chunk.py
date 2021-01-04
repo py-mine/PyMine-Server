@@ -10,6 +10,7 @@ __all__ = ('PlayUnloadChunk',)
 
 class PlayUnloadChunk(Packet):
     """Tells the client to unload a chunk column. Clientbound(Server => Client)"""
+    
     id = 0x1C
     to = 1
 

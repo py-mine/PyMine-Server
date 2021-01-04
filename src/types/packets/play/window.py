@@ -15,6 +15,7 @@ __all__ = (
     'PlayWindowProperty',
     'PlayWindowItems',
     'PlaySetSlot',
+    'PlayOpenHorseWindow',
 )
 
 
@@ -233,3 +234,31 @@ class PlaySetSlot(Packet):
     def encode(self):
         return Buffer.pack('b', self.window_id) + Buffer.pack('h', self.slot) + \
             Buffer.pack_slot(self.slot_data)
+
+
+class PlayOpenHorseWindow(Packet):
+    """Tells the client to open the horse GUI. (Server -> Client)
+
+    :param int window_id: Window ID of the GUI window.
+    :param int num_slots: Number of slots available for use.
+    :param int entity_id: The entity ID of the horse.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr window_id:
+    :attr num_slots:
+    :attr entity_id:
+    """
+
+    id = 0x1E
+    to = 1
+
+    def __init__(self, window_id: int, num_slots: int, entity_id: int) -> None:
+        super().__init__()
+
+        self.window_id = window_id
+        self.num_slots = num_slots
+        self.entity_id = entity_id
+
+    def encode(self) -> bytes:
+        return Buffer.pack('b', self.window_id) + Buffer.pack_varint(self.num_slots) + \
+            Buffer.pack('i', self.entity_id)

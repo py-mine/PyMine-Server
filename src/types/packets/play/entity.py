@@ -131,3 +131,31 @@ class PlayInteractEntity(Packet):
         sneaking = buf.unpack_bool()
 
         return cls(entity_id, type_, target_x, target_y, target_z, hand, sneaking)
+
+
+class PlayEntityAction(Packet):
+    """Sent by the client to indicate it has performed a certain action. (Client -> Server)
+
+    :param int entity_id: The ID of the entity.
+    :param int action_id: The action occurring, see here: https://wiki.vg/Protocol#Entity_Action.
+    :param int jump_boost: Used with jumping while riding a horse.
+    :attr type id: Description of parameter `id`.
+    :attr type to: Description of parameter `to`.
+    :attr entity_id:
+    :attr action_id:
+    :attr jump_boost:
+    """
+
+    id = 0x1C
+    to = 0
+
+    def __init__(self, entity_id: int, action_id: int, jump_boost: int) -> None:
+        super().__init__()
+
+        self.entity_id = entity_id
+        self.action_id = action_id
+        self.jump_boost = jump_boost
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayEntityAction:
+        return cls(buf.unpack_varint(), buf.unpack_varint(), buf.unpack_varint())

@@ -169,7 +169,7 @@ class PlayUpdateStructureBlock(Packet):
         self.name = name
         self.offset_x, self.offset_y, self.offset_z = offset_x, offset_y, offset_z
         self.size_x, self.size_y, self.size_z = size_x, size_y, size_z
-        self.mirror = mirrorself
+        self.mirror = mirror
         self.rotation = rotation
         self.metadata = metadata
         self.integrity = integrity

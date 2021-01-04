@@ -10,6 +10,7 @@ __all__ = (
     'PlayBlockEntityData',
     'PlayQueryEntityNBT',
     'PlayInteractEntity',
+    'PlayEntityStatus',
     'PlayEntityAction',
     'PlayEntityMovement',
     'PlayRemoveEntityEffect',
@@ -140,14 +141,38 @@ class PlayInteractEntity(Packet):
         return cls(entity_id, type_, target_x, target_y, target_z, hand, sneaking)
 
 
+class PlayEntityStatus(Packet):
+    """Usually used to trigger an animation for an entity. (Server -> Client)
+
+    :param int entity_id: The ID of the entity the status is for.
+    :param int entity_status: Depends on the type of entity, see here: https://wiki.vg/Protocol#Entity_Status.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr entity_id:
+    :attr entity_status:
+    """
+
+    id = 0x1A
+    to = 1
+
+    def __init__(self, entity_id: int, entity_status: int) -> None:
+        super().__init__()
+
+        self.entity_id = entity_id
+        self.entity_status = entity_status
+
+    def encode(self) -> bytes:
+        return Buffer.pack('i', self.entity_id) + Buffer.pack('b', self.entity_status)
+
+
 class PlayEntityAction(Packet):
     """Sent by the client to indicate it has performed a certain action. (Client -> Server)
 
     :param int entity_id: The ID of the entity.
     :param int action_id: The action occurring, see here: https://wiki.vg/Protocol#Entity_Action.
     :param int jump_boost: Used with jumping while riding a horse.
-    :attr type id: Description of parameter `id`.
-    :attr type to: Description of parameter `to`.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr entity_id:
     :attr action_id:
     :attr jump_boost:

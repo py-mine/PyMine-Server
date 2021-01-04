@@ -12,6 +12,7 @@ __all__ = (
     'PlayUpdateJigsawBlock',
 )
 
+
 class PlayUpdateCommandBlock(Packet):
     """Used when a client updates a command block. (Client -> Server)
 

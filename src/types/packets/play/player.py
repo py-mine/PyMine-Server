@@ -24,6 +24,7 @@ __all__ = (
     'PlayClientSettings',
     'PlayCreativeInventoryAction',
     'PlaySpectate',
+    'PlayCamera',
 )
 
 

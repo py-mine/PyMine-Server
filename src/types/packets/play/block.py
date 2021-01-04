@@ -132,7 +132,17 @@ class PlayBlockPlacement(Packet):
     id = 0x2E
     to = 0
 
-    def __init__(self, hand: int, x: int, y: int, z: int, face: int, cur_pos_x: float, cur_pos_y: float, cur_pos_z: float, inside_block: bool) -> None:
+    def __init__(
+            self,
+            hand: int,
+            x: int,
+            y: int,
+            z: int,
+            face: int,
+            cur_pos_x: float,
+            cur_pos_y: float,
+            cur_pos_z: float,
+            inside_block: bool) -> None:
         super().__init__()
 
         self.hand = hand

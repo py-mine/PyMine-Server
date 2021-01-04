@@ -27,7 +27,7 @@ if '--packets' in sys.argv or '-P' in sys.argv:
                     done[to].append(id)
 
             for to, done_dir in enumerate(done):
-                if len(done_dir) < max(done_dir) - 1 and max(done_dir) != 0xFF:
+                if len(done_dir) < max(done_dir) - 1 and max(done_dir) not in (0xFF, 0xFE,):
                     print(f'MISSING ({dirs[to]}): ', end='')
 
                     for i in range(max(done_dir)):

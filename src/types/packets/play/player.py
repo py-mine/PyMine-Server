@@ -25,6 +25,7 @@ __all__ = (
     'PlayCreativeInventoryAction',
     'PlaySpectate',
     'PlayCamera',
+    'PlayUpdateViewPosition',
 )
 
 
@@ -534,3 +535,19 @@ class PlayCamera(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack_varint(self.camera_id)
+
+
+class PlayUpdateViewPosition(Packet):
+    """insert fancy docstring here (server -> client)"""
+
+    id = 0x40
+    to = 1
+
+    def __init__(self, chunk_x: int, chunk_z: int) -> None:
+        super().__init__()
+
+        self.chunk_x = chunk_x
+        self.chunk_z = chunk_z
+
+    def encode(self) -> bytes:
+        Buffer.pack_varint(self.chunk_x) + Buffer.pack_varint(self.chunk_z)

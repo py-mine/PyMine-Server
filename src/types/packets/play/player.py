@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from nbt import nbt
+import uuid
 
 from src.types.packet import Packet
 from src.types.buffer import Buffer
@@ -22,6 +23,7 @@ __all__ = (
     'PlayClientStatus',
     'PlayClientSettings',
     'PlayCreativeInventoryAction',
+    'PlaySpectate',
 )
 
 
@@ -494,3 +496,25 @@ class PlayCreativeInventoryAction(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayCreativeInventoryAction:
         return cls(buf.unpack('h'), buf.unpack_slot())
+
+
+class PlaySpectate(Packet):
+    """Used by the client to spectate a given entity. (Client -> Server)
+
+    :param uuid.UUID target: The target entity/player to teleport to and spectate.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr target:
+    """
+
+    id = 0x2D
+    to = 0
+
+    def __init__(self, target: uuid.UUID) -> None:
+        super().__init__()
+
+        self.target = target
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlaySpectate:
+        return cls(buf.unpack_uuid())

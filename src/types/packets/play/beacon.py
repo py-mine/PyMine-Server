@@ -1,3 +1,5 @@
+"""Contains packets related to beacons."""
+
 from __future__ import annotations
 
 from src.types.packet import Packet

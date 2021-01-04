@@ -6,6 +6,7 @@ from src.types.buffer import Buffer
 __all__ = (
     'CraftRecipeRequest',
     'PlaySetDisplayedRecipe',
+    'PlaySetRecipeBookState',
 )
 
 
@@ -38,7 +39,7 @@ class PlayCraftRecipeRequest(Packet):
 
 
 class PlaySetDisplayedRecipe(Packet):
-    """Replaces Recipe Book Data, type 0? See here: https://wiki.vg/Protocol#Set_Displayed_Recipe
+    """Replaces Recipe Book Data, type 0. See here: https://wiki.vg/Protocol#Set_Displayed_Recipe
 
     :param str recipe_id: The identifier for the recipe.
     :attr int id: Unique packet ID.
@@ -57,3 +58,31 @@ class PlaySetDisplayedRecipe(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlaySetDisplayedRecipe:
         return cls(buf.unpack_string())
+
+
+class PlaySetRecipeBookState(Packet):
+    """Replaces Recipe Book Data, type 1. See here: https://wiki.vg/Protocol#Set_Recipe_Book_State
+
+    :param int book_id: One of the following: crafting (0), furnace (1), blast furnace (2), smoker (3).
+    :param bool book_open: Whether the crafting book is open or not.
+    :param bool filter_active: Unknown.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr book_id:
+    :attr book_open:
+    :attr filter_active:
+    """
+
+    id = 0x1F
+    to = 0
+
+    def __init__(self, book_id: int, book_open: bool, filter_active: bool) -> None:
+        super().__init__()
+
+        self.book_id = book_id
+        self.book_open = book_open
+        self.filter_active = filter_active
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlaySetRecipeBookState:
+        return cls(buf.unpack_varint(), buf.unpack_bool(), buf.unpack_bool())

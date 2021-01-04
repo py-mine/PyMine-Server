@@ -39,7 +39,13 @@ class PlayVehicleMoveServerBound(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayVehicleMoveServerBound:
-        return cls(*(buf.unpack('d') for _ in range(5)))
+        return cls(
+            buf.unpack('d'),
+            buf.unpack('d'),
+            buf.unpack('d'),
+            buf.unpack('d'),
+            buf.unpack('d')
+        )
 
 
 class PlaySteerBoat(Packet):

@@ -87,7 +87,14 @@ class PlayUpdateJigsawBlock(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayUpdateJigsawBlock:
-        return cls(*buf.unpack_pos(), *(buf.unpack_string() for _ in range(5)))
+        return cls(
+            *buf.unpack_pos(),
+            buf.unpack_string(),
+            buf.unpack_string(),
+            buf.unpack_string(),
+            buf.unpack_string(),
+            buf.unpack_string()
+        )
 
 
 class PlayUpdateStructureBlock(Packet):
@@ -176,7 +183,12 @@ class PlayUpdateStructureBlock(Packet):
             buf.unpack_varint(),
             buf.unpack_varint(),
             buf.unpack_string(),
-            *(buf.unpack('b') for _ in range(6)),
+            buf.unpack('b'),
+            buf.unpack('b'),
+            buf.unpack('b'),
+            buf.unpack('b'),
+            buf.unpack('b'),
+            buf.unpack('b'),
             buf.unpack_varint(),
             buf.unpack_varint(),
             buf.unpack_string(),

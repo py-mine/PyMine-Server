@@ -13,7 +13,14 @@ class PlayEffect(Packet):
     id = 0x21
     to = 1
 
-    def __init__(self, effect_id: int, x: int, y: int, z: int, data: int, disable_relative_volume: bool) -> None:
+    def __init__(
+            self,
+            effect_id: int,
+            x: int,
+            y: int,
+            z: int,
+            data: int,
+            disable_relative_volume: bool) -> None:
         raise NotImplementedError
 
     def encode(self) -> bytes:

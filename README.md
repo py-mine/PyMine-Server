@@ -3,6 +3,16 @@
 
 <br>
 
+## Installation / Usage
+* For now, PyMine will not be packaged as a binary, you'll have to install everything yourself.
+### Installing from source
+* First, clone the repository `git clone https://github.com/py-mine/PyMine.git` and move into that directory (`cd PyMine`)
+* Next, install the required Python packages via pip (`pip install -r requirements.txt`)
+* To run the server, you should run `server.py` from the root directory, like `python3 src/server.py`
+* It is recommended you do not use regular Python, but [PyPy3](https://www.pypy.org/)
+
+<br>
+
 ## Contributing
 * Please read [CONTRIBUTING.md](https://github.com/py-mine/PyMine/blob/main/CONTRIBUTING.md)
  

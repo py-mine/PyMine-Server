@@ -136,7 +136,26 @@ class PlayUpdateStructureBlock(Packet):
     id = 0x2A
     to = 0
 
-    def __init__(self, x: int, y: int, z: int, action: int, mode: int, name: str, offset_x: int, offset_y: int, offset_z: int, size_x: int, size_y: int, size_z: int, mirror: int, rotation: int, metadata: str, integrity: float, seed: int, flags: int) -> None:
+    def __init__(
+            self,
+            x: int,
+            y: int,
+            z: int,
+            action: int,
+            mode: int,
+            name: str,
+            offset_x: int,
+            offset_y: int,
+            offset_z: int,
+            size_x: int,
+            size_y: int,
+            size_z: int,
+            mirror: int,
+            rotation: int,
+            metadata: str,
+            integrity: float,
+            seed: int,
+            flags: int) -> None:
         self.x, self.y, self.z = x, y, z
         self.action = action
         self.mode = mode

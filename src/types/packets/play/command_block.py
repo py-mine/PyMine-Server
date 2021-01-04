@@ -134,7 +134,16 @@ class PlayUpdateJigsawBlock(Packet):
     id = 0x29  # Might be 0x28?? See here: https://wiki.vg/Protocol#Update_Jigsaw_Block
     to = 0
 
-    def __init__(self, x: int, y: int, z: int, name: str, target: str, pool: str, final_state: str, joint_type: str) -> None:
+    def __init__(
+            self,
+            x: int,
+            y: int,
+            z: int,
+            name: str,
+            target: str,
+            pool: str,
+            final_state: str,
+            joint_type: str) -> None:
         super().__init__()
 
         self.x, self.y, self.z = x, y, z

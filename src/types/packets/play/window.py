@@ -219,6 +219,8 @@ class PlayWindowProperty(Packet):
 
 class PlaySetSlot(Packet):
     """Sent by the server when an item in a slot (in a window) is added/removed."""
+    id = 0x10
+    to = 1
 
     def __init__(self, window_id: int, slot: int, slot_data: dict):
         super.__init__()

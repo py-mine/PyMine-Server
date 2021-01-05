@@ -1,4 +1,4 @@
-
+"""Contains packets that are related to particles."""
 from __future__ import annotations
 
 from src.types.packets import Packet

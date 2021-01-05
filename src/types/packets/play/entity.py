@@ -15,6 +15,7 @@ __all__ = (
     'PlayEntityMovement',
     'PlayRemoveEntityEffect',
     'PlayEntityHeadLook',
+    'PlayAttachEntity',
 )
 
 
@@ -234,3 +235,19 @@ class PlayEntityHeadLook(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack_varint(self.entity_id) + Buffer.pack('B', self.head_yaw)
+
+
+class PlayAttachEntity(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x45
+    to = 1
+
+    def __init__(self, attached_eid: int, holding_eid: int) -> None:
+        super().__init__()
+
+        self.attached_eid = attached_eid
+        self.holding_eid = holding_eid
+
+    def encode(self) -> bytes:
+        return Buffer.pack('i', self.attached_eid) + Buffer.pack('i', self.holding_eid)

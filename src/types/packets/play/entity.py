@@ -14,6 +14,7 @@ __all__ = (
     'PlayEntityAction',
     'PlayEntityMovement',
     'PlayRemoveEntityEffect',
+    'PlayEntityHeadLook',
 )
 
 
@@ -217,3 +218,19 @@ class PlayRemoveEntityEffect(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack_varint(self.entity_id) + Buffer.pack('b', self.effect_id)
+
+
+class PlayEntityHeadLook(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x3A
+    to = 1
+
+    def __init__(self, entity_id: int, head_yaw: int) -> None:
+        super().__init__()
+
+        self.entity_id = entity_id
+        self.head_yaw = head_yaw
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack('B', self.head_yaw)

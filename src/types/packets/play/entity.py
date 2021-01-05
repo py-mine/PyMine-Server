@@ -16,6 +16,7 @@ __all__ = (
     'PlayRemoveEntityEffect',
     'PlayEntityHeadLook',
     'PlayAttachEntity',
+    'PlayEntityVelocity',
 )
 
 
@@ -251,3 +252,22 @@ class PlayAttachEntity(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack('i', self.attached_eid) + Buffer.pack('i', self.holding_eid)
+
+
+class PlayEntityVelocity(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x46
+    to = 1
+
+    def __init__(self, eid: int, velocity_x: int, velocity_y: int, velocity_z: int) -> None:
+        super().__init__()
+
+        self.eid = eid
+        self.vel_x = velocity_x
+        self.vel_y = velocity_y
+        self.vel_z = velocity_z
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.eid) + Buffer.pack('h', self.vel_x) +\
+            Buffer.pack('h', self.vel_y) + Buffer.pack('h', self.vel_z)

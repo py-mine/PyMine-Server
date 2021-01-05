@@ -10,6 +10,7 @@ __all__ = (
     'PlayDisplayScoreboard',
 )
 
+
 class PlayDisplayScoreboard(Packet):
     """Insert fancy doscstring here (server -> client)"""
 

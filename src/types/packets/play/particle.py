@@ -4,6 +4,8 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
+__all__ = ('PLayParticle',)
+
 
 class PlayParticle(Packet):
     """Displays the named particle."""

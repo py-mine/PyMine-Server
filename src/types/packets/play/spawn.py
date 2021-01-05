@@ -13,6 +13,7 @@ __all__ = (
     'PlayPaintingSpawn',
     'PlaySpawnExperienceOrb',
     'PlaySpawnPlayer',
+    'PlaySpawnPosition',
 )
 
 
@@ -136,3 +137,18 @@ class PlaySpawnPlayer(Packet):
         return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.player_uuid) +\
             Buffer.pack('d', self.x) + Buffer.pack('d', self.y) + Buffer.pack('d', self.z) +\
             Buffer.pack('B', self.pitch) + Buffer.pack('B', self.yaw)
+
+
+class PlaySpawnPosition(Packet):
+    """insert fancy docstring here (server -> client)"""
+
+    id = 0x42
+    to = 1
+
+    def __init__(self, x: int, y: int, z: int) -> None:
+        super().__init__()
+
+        self.x, self.y, self.z = x, y, z
+
+    def encode(self) -> bytes:
+        return Buffer.pack('d', self.x) + Buffer.pack('d', self.y) + Buffer.pack('d', self.z)

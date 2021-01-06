@@ -5,6 +5,8 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.bufffer import Buffer
 
+__all__ = ('PlayUpdateLight',)
+
 
 class PlayUpdateLight(Packet):
     """Updates light levels for a chunk."""

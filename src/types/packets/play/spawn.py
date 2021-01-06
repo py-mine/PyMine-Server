@@ -41,9 +41,9 @@ class PlayEntitySpawn(Packet):
 
     def encode(self):
         return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.object_uuid) + \
-            Buffer.pack_varint(self.type_) + Buffer.pack('d' + self.x) +\
-            Buffer.pack('d' + self.y) + Buffer.pack('d' + self.z) + Buffer.pack('i' + self.pitch) +\
-            Buffer.pack('i' + self.yaw) + Buffer.pack('h' + self.vloc_x) +\
+            Buffer.pack_varint(self.type_) + Buffer.pack('d' + self.x) + \
+            Buffer.pack('d' + self.y) + Buffer.pack('d' + self.z) + Buffer.pack('i' + self.pitch) + \
+            Buffer.pack('i' + self.yaw) + Buffer.pack('h' + self.vloc_x) + \
             Buffer.pack('h' + self.vloc_x) + Buffer.pack('h' + self.vloc_z)
 
 
@@ -89,11 +89,11 @@ class PlayLivingEntitySpawn(Packet):
         self.vloc_z = vloc_z
 
     def encode(self):
-        return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.object_uuid) +\
-            Buffer.pack_varint(self.type_) + Buffer.pack('d' + self.x) +\
-            Buffer.pack('d' + self.y) + Buffer.pack('d' + self.z) +\
-            Buffer.pack('i' + self.pitch) + Buffer.pack('i' + self.yaw) +\
-            Buffer.pack('i', self.head_pitch) + Buffer.pack('h' + self.vloc_x) +\
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.object_uuid) + \
+            Buffer.pack_varint(self.type_) + Buffer.pack('d' + self.x) + \
+            Buffer.pack('d' + self.y) + Buffer.pack('d' + self.z) + \
+            Buffer.pack('i' + self.pitch) + Buffer.pack('i' + self.yaw) + \
+            Buffer.pack('i', self.head_pitch) + Buffer.pack('h' + self.vloc_x) + \
             Buffer.pack('h' + self.vloc_x) + Buffer.pack('h' + self.vloc_z)
 
 
@@ -134,8 +134,8 @@ class PlaySpawnPlayer(Packet):
         self.pitch, self.yaw = pitch, yaw
 
     def encode(self):
-        return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.player_uuid) +\
-            Buffer.pack('d', self.x) + Buffer.pack('d', self.y) + Buffer.pack('d', self.z) +\
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.player_uuid) + \
+            Buffer.pack('d', self.x) + Buffer.pack('d', self.y) + Buffer.pack('d', self.z) + \
             Buffer.pack('B', self.pitch) + Buffer.pack('B', self.yaw)
 
 

@@ -269,5 +269,5 @@ class PlayEntityVelocity(Packet):
         self.vel_z = velocity_z
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.eid) + Buffer.pack('h', self.vel_x) +\
+        return Buffer.pack_varint(self.eid) + Buffer.pack('h', self.vel_x) + \
             Buffer.pack('h', self.vel_y) + Buffer.pack('h', self.vel_z)

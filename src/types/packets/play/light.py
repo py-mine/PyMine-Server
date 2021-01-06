@@ -6,7 +6,7 @@ from src.types.packet import Packet
 from src.types.bufffer import Buffer
 
 
-class PlayUpdateLight(Packer):
+class PlayUpdateLight(Packet):
     """Updates light levels for a chunk."""
 
     id = 0x23

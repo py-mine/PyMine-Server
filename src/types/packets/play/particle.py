@@ -25,7 +25,7 @@ class PlayParticle(Packet):
         self.part_data, self.part_count, self.data = particle_data, particle_count, data
 
     def encode(self):
-        return Buffer.pack('i', self.part_id) + Buffer.pack('?', self.long_dist) + Buffer.pack('d', self.x) +\
-            Buffer.pack('d', self.y) + Buffer.pack('d', self.z) + Buffer.pack('d', self.off_x) +\
-            Buffer.pack('d', self.off_y) + Buffer.pack('d', self.off_z) + Buffer.pack('f', self.part_data) +\
+        return Buffer.pack('i', self.part_id) + Buffer.pack('?', self.long_dist) + Buffer.pack('d', self.x) + \
+            Buffer.pack('d', self.y) + Buffer.pack('d', self.z) + Buffer.pack('d', self.off_x) + \
+            Buffer.pack('d', self.off_y) + Buffer.pack('d', self.off_z) + Buffer.pack('f', self.part_data) + \
             Buffer.pack('i', self.part_count) + Buffer.pack_particle(self.data)

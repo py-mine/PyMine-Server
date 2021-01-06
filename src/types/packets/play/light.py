@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from src.types.packet import Packet
-from src.types.bufffer import Buffer
+from src.types.buffer import Buffer
 
 __all__ = ('PlayUpdateLight',)
 

@@ -19,7 +19,7 @@ class PlayUpdateLight(Packet):
         self.chunk_x, self.chunk_z = chunk_x, chunk_z
         self.trust_edges = trust_edges
         self.sky_lm, self.block_lm, self.esky_lm, self.eblock_lm = sky_light_mask, block_light_mask, empty_sky_light_mask, empty_block_light_mask
-        self.sklr, self.blkr = sky_light_array, block_light_array
+        self.sklr, self.blkr = sky_light_arr, block_light_arr
 
     def encode(self) -> bytes:
         return Buffer.pack('i', self.chunk_x) + Buffer.pack('i', self.chunk_z) + Buffer.pack('?', self.trust_edges) +\

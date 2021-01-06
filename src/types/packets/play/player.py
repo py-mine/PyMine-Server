@@ -28,6 +28,7 @@ __all__ = (
     'PlayUpdateViewPosition',
     'PlayUpdateViewDistance',
     'PlaySetExperience',
+    'PlayUpdateHealth',
 )
 
 
@@ -585,3 +586,20 @@ class PlaySetExperience(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack('f', self.xp_bar) + Buffer.pack_varint(self.lvl) + Buffer.pack_varint(self.total_xp)
+
+
+class PlayUpdateHealth(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x49
+    to = 1
+
+    def __init__(self, health: float, food: int, saturation: float) -> None:
+        super().__init__()
+
+        self.health = health
+        self.food = food
+        self.saturation = saturation
+
+    def encode(self) -> bytes:
+        return Buffer.pack('f', self.health) + Buffer.pack_varint(self.food) + Buffer.pack('f', self.saturation)

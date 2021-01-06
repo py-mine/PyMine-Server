@@ -10,6 +10,7 @@ __all__ = (
     'PlaySetDisplayedRecipe',
     'PlaySetRecipeBookState',
     'PlayCraftRecipeResponse',
+    'PlayDeclareRecipes',
 )
 
 
@@ -105,3 +106,24 @@ class PlayCraftRecipeResponse(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack('b', self.window_id) + Buffer.pack_string(self.recipe_identifier)
+
+
+class PlayDeclareRecipes(Packet):
+    """Sends all registered recipes to the client. (Server -> Client)
+
+    :param list recipes: The recipes to be sent, should probably be the RECIPES Map (src/data/recipes.py).
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr recipes:
+    """
+
+    id = 0x5A
+    to = 1
+
+    def __init__(self, recipes: list) -> None:
+        super().__init__()
+
+        self.recipes = recipes  # should be the RECIPE map
+
+    def encode(self) -> bytes:
+        return b''.join(Buffer.pack_recipe(rid, r) for rid, r in recipes.items())

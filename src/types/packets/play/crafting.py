@@ -126,4 +126,4 @@ class PlayDeclareRecipes(Packet):
         self.recipes = recipes  # should be the RECIPE map
 
     def encode(self) -> bytes:
-        return b''.join(Buffer.pack_recipe(rid, r) for rid, r in recipes.items())
+        return b''.join(Buffer.pack_recipe(rid, r) for rid, r in self.recipes.items())

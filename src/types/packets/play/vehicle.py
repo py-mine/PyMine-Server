@@ -9,6 +9,7 @@ __all__ = (
     'PlayVehicleMoveServerBound',
     'PlaySteerBoat',
     'PlaySteerVehicle',
+    'PlaySetPassengers',
 )
 
 

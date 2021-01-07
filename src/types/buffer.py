@@ -463,12 +463,21 @@ class Buffer:
     def pack_trade(
             cls,
             in_item_1: dict,
-            output_item: dict,
-            in_item_2: dict,
+            out_item: dict,
             disabled: bool,
             num_trade_usages: int,
+            max_trade_usages: int,
             xp: int,
             special_price: int,
             price_multi: float,
-            demand: int) -> bytes:
-        pass
+            demand: int,
+            in_item_2: dict = None) -> bytes:
+        out = Buffer.pack_slot(**in_item_1) + Buffer.pack_slot(**out_item)
+
+        if in_item_2 is not None:
+            out += Buffer.pack_bool(True) + Buffer.pack_slot(in_item_2)
+        else:
+            out += Buffer.pack_bool(False)
+
+        return out + Buffer.pack_bool(disabled) + Buffer.pack('i', num_trade_usages) + Buffer.pack('i', max_trade_usages) + \
+            Buffer.pack('i', xp) + Buffer.pack('i', special_price) + Buffer.pack('f', price_multi) + Buffer.pack('i', demand)

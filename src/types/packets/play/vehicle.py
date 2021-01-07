@@ -9,6 +9,7 @@ __all__ = (
     'PlayVehicleMoveServerBound',
     'PlaySteerBoat',
     'PlaySteerVehicle',
+    'PlaySetPassengers',
 )
 
 
@@ -101,3 +102,19 @@ class PlaySteerVehicle(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlaySteerVehicle:
         return cls(buf.unpack('f'), buf.unpack('f'), buf.unpack('B'))
+
+
+class PlaySetPassengers(Packet):
+    """Sets passengers in a vehicle."""
+
+    id = 0x4B
+    to = 1
+
+    def __init__(self, entity_id: int, passenger_count: int, passengers: list) -> None:
+        self.entity_id = entity_id
+        self.passenger_count = passenger_count
+        self.passengers = passengers
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack_varint(self.passenger_count) +\
+            b''.join(Buffer.pack_varint(passenger) for passenger in self.passengers)

@@ -5,7 +5,7 @@ import json
 import uuid
 import zlib
 
-from src.data.registry import ITEMS_BY_NAME, ITEMS_BY_ID
+from src.data.registry import ITEM_REGISTRY
 from src.types.packet import Packet
 from src.data.misc import *
 
@@ -38,8 +38,8 @@ class Buffer:
             if length is None:
                 length = len(self.buf)
                 return self.buf[self.pos:]
-            else:
-                return self.buf[self.pos:self.pos + length]
+
+            return self.buf[self.pos:self.pos + length]
         finally:
             self.pos += length
 
@@ -208,7 +208,9 @@ class Buffer:
         if tag is None:
             return b'\x00'
 
-        return tag._render_buffer(cls.buf)
+        buf = cls()
+        tag._render_buffer(buf)
+        return buf.buf
 
     def unpack_nbt(self) -> object:
         """Unpacks a NBT tag(s) from the buffer"""
@@ -272,7 +274,7 @@ class Buffer:
     def pack_slot(cls, item: str = None, count: int = 1, tag: nbt.TAG = None):
         """Packs an inventory/container slot into bytes."""
 
-        item_id = ITEMS_BY_NAME[item]  # needed to support recipes
+        item_id = ITEM_REGISTRY.encode(item)  # needed to support recipes
 
         if item_id is None:
             return cls.pack('?', False)
@@ -289,7 +291,7 @@ class Buffer:
             return {'item': None}
 
         return {
-            'item': ITEMS_BY_ID[self.unpack_varint()],
+            'item': ITEM_REGISTRY.decode(self.unpack_varint()),
             'count': self.unpack('b'),
             'tag': self.unpack_nbt()
         }
@@ -456,3 +458,26 @@ class Buffer:
             'profession': self.unpack_varint(),
             'level': self.unpack_varint()
         }
+
+    @classmethod
+    def pack_trade(
+            cls,
+            in_item_1: dict,
+            out_item: dict,
+            disabled: bool,
+            num_trade_usages: int,
+            max_trade_usages: int,
+            xp: int,
+            special_price: int,
+            price_multi: float,
+            demand: int,
+            in_item_2: dict = None) -> bytes:
+        out = Buffer.pack_slot(**in_item_1) + Buffer.pack_slot(**out_item)
+
+        if in_item_2 is not None:
+            out += Buffer.pack_bool(True) + Buffer.pack_slot(in_item_2)
+        else:
+            out += Buffer.pack_bool(False)
+
+        return out + Buffer.pack_bool(disabled) + Buffer.pack('i', num_trade_usages) + Buffer.pack('i', max_trade_usages) + \
+            Buffer.pack('i', xp) + Buffer.pack('i', special_price) + Buffer.pack('f', price_multi) + Buffer.pack('i', demand)

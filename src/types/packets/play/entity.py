@@ -14,12 +14,14 @@ __all__ = (
     'PlayEntityAction',
     'PlayEntityMovement',
     'PlayRemoveEntityEffect',
+    'PlayEntityHeadLook',
+    'PlayAttachEntity',
+    'PlayEntityVelocity',
 )
 
 
 class PlayBlockEntityData(Packet):
     """Sets the block entity associated with the block at the given location. (Server -> Client).
-
     :param int x: The x coordinate of the position.
     :param int y: The y coordinate of the position.
     :param int z: The z coordinate of the position.
@@ -51,7 +53,6 @@ class PlayBlockEntityData(Packet):
 
 class PlayQueryEntityNBT(Packet):
     """Sent by the client when Shift+F3+I is used. (Client -> Server)
-
     :param int transaction_id: Incremental ID used so the client can verify responses.
     :param int entity_id: The ID of the entity to query.
     :attr int id: Unique packet ID.
@@ -76,7 +77,6 @@ class PlayQueryEntityNBT(Packet):
 
 class PlayInteractEntity(Packet):
     """Sent when a client clicks another entity, see here: https://wiki.vg/Protocol#Interact_Entity. (Client -> Server)
-
     :param int entity_id: The ID of the entity interacted with.
     :param int type_: Either interact (0), attack (1), or interact at (2).
     :param int target_x: The x coordinate of where the target is, can be None.
@@ -143,7 +143,6 @@ class PlayInteractEntity(Packet):
 
 class PlayEntityStatus(Packet):
     """Usually used to trigger an animation for an entity. (Server -> Client)
-
     :param int entity_id: The ID of the entity the status is for.
     :param int entity_status: Depends on the type of entity, see here: https://wiki.vg/Protocol#Entity_Status.
     :attr int id: Unique packet ID.
@@ -167,7 +166,6 @@ class PlayEntityStatus(Packet):
 
 class PlayEntityAction(Packet):
     """Sent by the client to indicate it has performed a certain action. (Client -> Server)
-
     :param int entity_id: The ID of the entity.
     :param int action_id: The action occurring, see here: https://wiki.vg/Protocol#Entity_Action.
     :param int jump_boost: Used with jumping while riding a horse.
@@ -222,3 +220,54 @@ class PlayRemoveEntityEffect(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack_varint(self.entity_id) + Buffer.pack('b', self.effect_id)
+
+
+class PlayEntityHeadLook(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x3A
+    to = 1
+
+    def __init__(self, entity_id: int, head_yaw: int) -> None:
+        super().__init__()
+
+        self.entity_id = entity_id
+        self.head_yaw = head_yaw
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack('B', self.head_yaw)
+
+
+class PlayAttachEntity(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x45
+    to = 1
+
+    def __init__(self, attached_eid: int, holding_eid: int) -> None:
+        super().__init__()
+
+        self.attached_eid = attached_eid
+        self.holding_eid = holding_eid
+
+    def encode(self) -> bytes:
+        return Buffer.pack('i', self.attached_eid) + Buffer.pack('i', self.holding_eid)
+
+
+class PlayEntityVelocity(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x46
+    to = 1
+
+    def __init__(self, eid: int, velocity_x: int, velocity_y: int, velocity_z: int) -> None:
+        super().__init__()
+
+        self.eid = eid
+        self.vel_x = velocity_x
+        self.vel_y = velocity_y
+        self.vel_z = velocity_z
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.eid) + Buffer.pack('h', self.vel_x) + \
+            Buffer.pack('h', self.vel_y) + Buffer.pack('h', self.vel_z)

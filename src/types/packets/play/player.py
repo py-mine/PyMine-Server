@@ -24,6 +24,11 @@ __all__ = (
     'PlayClientSettings',
     'PlayCreativeInventoryAction',
     'PlaySpectate',
+    'PlayCamera',
+    'PlayUpdateViewPosition',
+    'PlayUpdateViewDistance',
+    'PlaySetExperience',
+    'PlayUpdateHealth',
 )
 
 
@@ -518,3 +523,83 @@ class PlaySpectate(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlaySpectate:
         return cls(buf.unpack_uuid())
+
+
+class PlayCamera(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x3E
+    to = 1
+
+    def __init__(self, camera_id: int) -> None:
+        super().__init__()
+
+        self.camera_id = camera_id
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.camera_id)
+
+
+class PlayUpdateViewPosition(Packet):
+    """insert fancy docstring here (server -> client)"""
+
+    id = 0x40
+    to = 1
+
+    def __init__(self, chunk_x: int, chunk_z: int) -> None:
+        super().__init__()
+
+        self.chunk_x = chunk_x
+        self.chunk_z = chunk_z
+
+    def encode(self) -> bytes:
+        Buffer.pack_varint(self.chunk_x) + Buffer.pack_varint(self.chunk_z)
+
+
+class PlayUpdateViewDistance(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x41
+    to = 1
+
+    def __init__(self, view_distance: int) -> None:
+        super().__init__()
+
+        self.view_distance
+
+    def encode(self) -> bytes:
+        Buffer.pack_varint(self.view_distance)
+
+
+class PlaySetExperience(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x48
+    to = 1
+
+    def __init__(self, xp_bar: float, lvl: int, total_xp: int) -> None:
+        super().__init__()
+
+        self.xp_bar = xp_bar
+        self.lvl = lvl
+        self.total_xp = total_xp
+
+    def encode(self) -> bytes:
+        return Buffer.pack('f', self.xp_bar) + Buffer.pack_varint(self.lvl) + Buffer.pack_varint(self.total_xp)
+
+
+class PlayUpdateHealth(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x49
+    to = 1
+
+    def __init__(self, health: float, food: int, saturation: float) -> None:
+        super().__init__()
+
+        self.health = health
+        self.food = food
+        self.saturation = saturation
+
+    def encode(self) -> bytes:
+        return Buffer.pack('f', self.health) + Buffer.pack_varint(self.food) + Buffer.pack('f', self.saturation)

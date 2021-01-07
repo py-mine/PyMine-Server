@@ -11,6 +11,7 @@ __all__ = (
     'PlayPickItem',
     'PlayNameItem',
     'PlayHeldItemChangeServerBound',
+    'PlayHeldItemChangeClientBound',
 )
 
 
@@ -128,3 +129,18 @@ class PlayHeldItemChangeServerBound(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayHeldItemChangeServerBound:
         return cls(buf.unpack('h'))
+
+
+class PlayHeldItemChangeClientBound(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x3F
+    to = 1
+
+    def __init__(self, slot: int) -> None:
+        super().init()
+
+        self.slot = slot
+
+    def encode(self) -> bytes:
+        return Buffer.pack('h', self.slot)

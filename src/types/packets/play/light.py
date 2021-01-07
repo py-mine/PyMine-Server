@@ -14,7 +14,7 @@ class PlayUpdateLight(Packet):
     id = 0x23
     to = 1
 
-    def __init__(self, chunk_x: int, chunk_z: int, trust_edges: bool, sky_light_mask: int, block_light_mask: int, empty_sky_light_mask: int, empty_block_light_mask: int, sky_light_arr: list, block_light_arr: list) -> None:  # nopep8
+    def __init__(self, chunk_x: int, chunk_z: int, trust_edges: bool, sky_light_mask: int, block_light_mask: int, empty_sky_light_mask: int, empty_block_light_mask: int, sky_light_arr: list, block_light_arr: list) -> None:
         super().__init__()
         self.chunk_x, self.chunk_z = chunk_x, chunk_z
         self.trust_edges = trust_edges

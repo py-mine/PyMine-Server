@@ -458,3 +458,7 @@ class Buffer:
             'profession': self.unpack_varint(),
             'level': self.unpack_varint()
         }
+
+    @classmethod
+    def pack_trade(cls, in_item_1: dict, output_item: dict, in_item_2: dict, disabled: bool, num_trade_usages: int, xp: int, special_price: int, price_multi: float, demand: int) -> bytes:
+        pass

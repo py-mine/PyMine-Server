@@ -3,6 +3,8 @@ from src.data.config import *
 
 __all__ = ('share', 'logger',)
 
+# *should* be optimized for passing around, see here: https://doc.pypy.org/en/latest/__pypy__-module.html
+# share = __pypy__.newdict('kwargs')
 share = {
     'server': None,
     'server_version': 1,
@@ -21,3 +23,6 @@ share = {
 }
 
 logger = Logger()
+
+entity_id_cache = {}  # {remote: entity_id}
+user_cache = {}  # {entity_id: {remote: tuple, uuid: str}}

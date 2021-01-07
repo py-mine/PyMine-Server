@@ -1,4 +1,4 @@
-"""Contains packets related to entitys."""
+"""Contains packets related to entities."""
 
 from __future__ import annotations
 
@@ -25,8 +25,8 @@ class PlayExplosion(Packet):
         self.pmz = pmz
 
     def encode(self):
-        return Buffer.pack('f', self.x) + Buffer.pack('f', self.y) +\
-            Buffer.pack('f', self.z) + Buffer.pack('f', self.strength) +\
-            Buffer.pack('i', self.record_count) + Buffer.pack_array('b', self.records) +\
-            Buffer.pack('f', self.pmx) + Buffer.pack('f', self.pmy) +\
+        return Buffer.pack('f', self.x) + Buffer.pack('f', self.y) + \
+            Buffer.pack('f', self.z) + Buffer.pack('f', self.strength) + \
+            Buffer.pack('i', self.record_count) + Buffer.pack_array('b', self.records) + \
+            Buffer.pack('f', self.pmx) + Buffer.pack('f', self.pmy) + \
             Buffer.pack('f', self.pmz)

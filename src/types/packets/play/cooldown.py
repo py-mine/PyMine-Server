@@ -1,4 +1,5 @@
-"""Contains the PlaySetCooldown packet"""
+"""Contains the PlaySetCooldown packet."""
+
 from __future__ import annotations
 
 from src.types.packet import Packet

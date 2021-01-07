@@ -8,6 +8,7 @@ from src.types.buffer import Buffer
 __all__ = (
     'PlayEntityAnimation',
     'PlayBlockBreakAnimation',
+    'PlayAnimationServerBound',
 )
 
 
@@ -44,6 +45,7 @@ class PlayBlockBreakAnimation(Packet):
     :param int z: The z coordinate of the location to play the animation.
     :param int stage: Stage from 0-9 in the breaking animation.
     :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr entity_id:
     :attr x:
     :attr y:
@@ -64,3 +66,25 @@ class PlayBlockBreakAnimation(Packet):
     def encode(self) -> bytes:
         return Buffer.pack_varint(self.entity_id) + Buffer.pack_pos(self.x, self.y, self.z) + \
             Buffer.pack('b', self.stage)
+
+
+class PlayAnimationServerBound(Packet):
+    """Sent when a client's arm swings. (Client -> Server)
+
+    :param int hand: Either main hand (0) or offhand (1).
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr hand:
+    """
+
+    id = 0x2C
+    to = 0
+
+    def __init__(self, hand: int) -> None:
+        super().__init__()
+
+        self.hand = hand
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayAnimationServerBound:
+        return cls(buf.unpack_varint())

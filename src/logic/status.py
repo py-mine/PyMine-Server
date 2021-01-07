@@ -1,22 +1,24 @@
-#from src.types.packets.handshaking.legacy_ping import *
+import asyncio
+
+from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingResponse
 from src.types.packets.status.status import *
 from src.types.buffer import Buffer
 
-from src.util.share import share
+from src.util.share import share, logger
 
 
 # Handles all status logic (all packets in the status state)
-async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple):
+async def status(r: 'StreamReader', w: 'StreamWriter', packet: 'Packet', remote: tuple) -> tuple:
     if packet.id == 0x00:  # StatusStatusRequest
         await send_status(r, w, packet)
     elif packet.id == 0x01:  # StatusStatusPingPong
         await pong(r, w, packet)
-        return await share['close_con'](w, remote)
+        return False, r, w
 
     return True, r, w
 
 
-async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest'):
+async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusRequest') -> None:
     data = {
         'version': {
             'name': share['version'],
@@ -52,6 +54,20 @@ async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatu
     await w.drain()
 
 
-async def pong(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusPingPong'):
+async def pong(r: 'StreamReader', w: 'StreamWriter', packet: 'StatusStatusPingPong') -> None:
     w.write(Buffer.pack_packet(packet))
     await w.drain()
+
+
+async def legacy_ping(r: 'StreamReader', w: 'StreamWriter', remote: tuple) -> None:
+    logger.debug('IN : state:legacy      | id:0xFE | packet:HandshakeLegacyPingRequest')
+
+    w.write(HandshakeLegacyPingResponse(
+        share['version'],
+        share['conf']['motd'],
+        69,  # In the future should be the actual online players
+        share['conf']['max_players']
+    ).encode())
+    await w.drain()
+
+    logger.debug('OUT: state:legacy      | id:0xFF | packet:HandshakeLegacyPingResponse')

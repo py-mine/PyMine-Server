@@ -5,7 +5,12 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayBlockAction', 'PlayBlockChange', 'PlayGenerateStructure')
+__all__ = (
+    'PlayBlockAction',
+    'PlayBlockChange',
+    'PlayQueryBlockNBT',
+    'PlayBlockPlacement',
+)
 
 
 class PlayBlockAction(Packet):
@@ -39,10 +44,8 @@ class PlayBlockAction(Packet):
         self.block_type = block_type
 
     def encode(self) -> bytes:
-        return Buffer.pack_pos(self.x, self.y, self.z) + \
-            Buffer.pack('B', self.action_id) + \
-            Buffer.pack('B', self.action_param) + \
-            Buffer.pack_varint(self.block_type)
+        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack('B', self.action_id) + \
+            Buffer.pack('B', self.action_param) + Buffer.pack_varint(self.block_type)
 
 
 class PlayBlockChange(Packet):
@@ -72,33 +75,92 @@ class PlayBlockChange(Packet):
         return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack_varint(self.block_id)
 
 
-class PlayGenerateStructure(Packet):
-    """Sent by the client when the generate button is pressed on a jigsaw block. (Client -> Server)
+class PlayQueryBlockNBT(Packet):
+    """Used when SHIFT+F3+I is used on a block. (Client -> Server)
 
-    :param int x: The x coordinate of the jigsaw block.
-    :param int y: The y coordinate of the jigsaw block.
-    :param int z: The z coordinate of the jigsaw block.
-    :param int levels: The value of the levels slider in the block interface.
-    :param bool keep_jigsaws: Unknown.
-    :attr type id: Unique packet ID.
-    :attr type to: Packet direction.
+    :param int transaction_id: Number used to verify that a response matches.
+    :param int x: The x coordinate of the block.
+    :param int y: The y coordinate of the block.
+    :param int z: The z coordinate of the block.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr transaction_id:
     :attr x:
     :attr y:
     :attr z:
-    :attr levels:
-    :attr keep_jigsaws:
     """
 
-    id = 0x0F
+    id = 0x01
     to = 0
 
-    def __init__(self, x: int, y: int, z: int, levels: int, keep_jigsaws: bool):
+    def __init__(self, transaction_id: int, x: int, y: int, z: int) -> None:
         super().__init__()
 
+        self.transaction_id = transaction_id
         self.x, self.y, self.z = x, y, z
-        self.levels = levels
-        self.keep_jigsaws = keep_jigsaws
 
     @classmethod
-    def decode(cls, buf: Buffer) -> PlayGenerateStructure:
-        return cls(*buf.unpack_pos(), buf.unpack_varint(), buf.unpack_bool())
+    def decode(cls, buf: Buffer) -> PlayQueryBlockNBT:
+        return cls(buf.unpack_varint(), *buf.unpack_pos())
+
+
+class PlayBlockPlacement(Packet):
+    """Sent by the client when it places a block. (Client -> Server)
+
+    :param int hand: The hand used, either main hand (0), or offhand (1).
+    :param int x: The x coordinate of the block.
+    :param int y: The y coordinate of the block.
+    :param int z: The z coordinate of the block.
+    :param int face: The face of the block, see here: https://wiki.vg/Protocol#Player_Block_Placement.
+    :param float cur_pos_x: The x position of the crosshair on the block.
+    :param float cur_pos_y: The y position of the crosshair on the block.
+    :param float cur_pos_z: The z position of the crosshair on the block.
+    :param bool inside_block: True if the player's head is inside the block.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr hand:
+    :attr x:
+    :attr y:
+    :attr z:
+    :attr face:
+    :attr cur_pos_x:
+    :attr cur_pos_y:
+    :attr cur_pos_z:
+    :attr inside_block:
+    """
+
+    id = 0x2E
+    to = 0
+
+    def __init__(
+            self,
+            hand: int,
+            x: int,
+            y: int,
+            z: int,
+            face: int,
+            cur_pos_x: float,
+            cur_pos_y: float,
+            cur_pos_z: float,
+            inside_block: bool) -> None:
+        super().__init__()
+
+        self.hand = hand
+        self.x, self.y, self.z = x, y, z
+        self.face = face
+        self.cur_pos_x = cur_pos_x
+        self.cur_pos_y = cur_pos_y
+        self.cur_pos_z = cur_pos_z
+        self.inside_block = inside_block
+
+    @classmethod
+    def decode(cls, buf: Buffer) -> PlayBlockPlacement:
+        return cls(
+            buf.unpack_varint(),
+            *buf.unpack_pos(),
+            buf.unpack_varint(),
+            buf.unpack('f'),
+            buf.unpack('f'),
+            buf.unpack('f'),
+            buf.unpack_bool()
+        )

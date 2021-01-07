@@ -32,6 +32,7 @@ class PlayUpdateLight(Packet):
         self.sky_light_array, self.block_light_array = sky_light_arr, block_light_arr
 
     def encode(self) -> bytes:
-        return Buffer.pack('i', self.chunk_x) + Buffer.pack('i', self.chunk_z) + Buffer.pack('?', self.trust_edges) +\
-            Buffer.pack_varint(self.sky_lm) + Buffer.pack_varint(self.block_lm) + Buffer.pack_varint(self.esky_lm) +\
-            Buffer.pack_varint(self.eblock_lm) + Buffer.pack_array('c', self.sky_light_array) + Buffer.pack_array('c', self.block_light_array)
+        return Buffer.pack('i', self.chunk_x) + Buffer.pack('i', self.chunk_z) + Buffer.pack('?', self.trust_edges) + \
+            Buffer.pack_varint(self.sky_lm) + Buffer.pack_varint(self.block_lm) + Buffer.pack_varint(self.esky_lm) + \
+            Buffer.pack_varint(self.eblock_lm) + Buffer.pack_array('c', self.sky_light_array) + \
+            Buffer.pack_array('c', self.block_light_array)

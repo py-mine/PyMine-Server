@@ -110,7 +110,7 @@ class PlaySetPassengers(Packet):
     id = 0x4B
     to = 1
 
-    def __init__(self, entity_id: int, passenger_count: int, passengers: list): -> None:
+    def __init__(self, entity_id: int, passenger_count: int, passengers: list) -> None:
         self.entity_id = entity_id
         self.passenger_count = passenger_count
         self.passengers = passengers

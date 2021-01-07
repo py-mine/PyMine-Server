@@ -1,4 +1,4 @@
-# <img src="https://i.imgur.com/LHDnix6.png" height=60>PyMine
+# <img src="https://cdn.discordapp.com/emojis/783838348695437353.gif?v=1" height=45>PyMine
 ## Contributing
 *Want to help out? This is how!*
 

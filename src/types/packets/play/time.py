@@ -7,7 +7,7 @@ from src.types.buffer import Buffer
 __all__ = ('PlayUpdateTime',)
 
 
-class PlayUpdateLight(Packet):
+class PlayUpdateTime(Packet):
     """Updates time.
 
     :param int world_age: In ticks, not changed by server commands.

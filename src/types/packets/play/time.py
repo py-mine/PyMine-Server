@@ -5,7 +5,7 @@ from src.types.packet import Packet
 from src.types.buffer import Buffer
 
 
-class UpdateLight(Packet):
+class PlayUpdateLight(Packet):
     """Updates time.
 
     :param int world_age: In ticks, not changed by server commands.

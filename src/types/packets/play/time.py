@@ -4,6 +4,8 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
+_all__ = ('PlayUpdateTime')
+
 
 class PlayUpdateLight(Packet):
     """Updates time.
@@ -18,6 +20,7 @@ class PlayUpdateLight(Packet):
     to = 1
 
     def __init__(self, world_age: int, day_time: int) -> None:
+        super().__init__()
         self.world_age = world_age
         self.day_time = day_time
 

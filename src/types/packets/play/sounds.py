@@ -14,7 +14,15 @@ class PlayNamedSoundEffect(Packet):
     id = 0x18
     to = 1
 
-    def __init__(self, name: str, category: int, effect_pos_x: int, effect_pos_y: int, effect_pos_z: int, volume: int, pitch: int):
+    def __init__(
+            self,
+            name: str,
+            category: int,
+            effect_pos_x: int,
+            effect_pos_y: int,
+            effect_pos_z: int,
+            volume: int,
+            pitch: int):
         super().__init__()
 
         self.name = name

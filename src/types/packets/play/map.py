@@ -58,7 +58,7 @@ class PlayMapData(Packet):
             Buffer.pack_optional((lambda z: Buffer.pack('b', z)), self.z)
 
         if self.data is not None:
-            out += Buffer.pack('?', True) + Buffer.pack_varint(len(self.data)) + Buffer.pack('?', True) + data
+            out += Buffer.pack('?', True) + Buffer.pack_varint(len(self.data)) + Buffer.pack('?', True) + self.data
         else:
             out += Buffer.pack('?', False) + Buffer.pack('?', False)
 

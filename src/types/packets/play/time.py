@@ -1,4 +1,5 @@
 """Contains packets related to time."""
+
 from __future__ import annotations
 
 from src.types.packet import Packet

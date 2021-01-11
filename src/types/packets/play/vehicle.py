@@ -46,8 +46,8 @@ class PlayVehicleMoveServerBound(Packet):
             buf.unpack('d'),
             buf.unpack('d'),
             buf.unpack('d'),
-            buf.unpack('d'),
-            buf.unpack('d')
+            buf.unpack('f'),
+            buf.unpack('f')
         )
 
 

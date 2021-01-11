@@ -22,7 +22,7 @@ class PlayUpdateTime(Packet):
 
     def __init__(self, world_age: int, day_time: int) -> None:
         super().__init__()
-        
+
         self.world_age = world_age
         self.day_time = day_time
 

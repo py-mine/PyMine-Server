@@ -248,9 +248,8 @@ class PlayJoinGame(Packet):
             Buffer.pack_nbt(self.dim_codec) + Buffer.pack_nbt(self.dimension) + \
             Buffer.pack_string(self.world_name) + Buffer.pack('q', self.hashed_seed) + \
             Buffer.pack_varint(self.max_players) + Buffer.pack_varint(self.view_distance) + \
-            Buffer.pack('?', self.reduced_debug_info) + \
-            Buffer.pack('?', self.enable_respawn_screen) + Buffer.pack('?', self.is_debug) + \
-            Buffer.pack('?', self.is_flat)
+            Buffer.pack('?', self.reduced_debug_info) + Buffer.pack('?', self.enable_respawn_screen) + \
+            Buffer.pack('?', self.is_debug) + Buffer.pack('?', self.is_flat)
 
 
 class PlayPlayerPosition(Packet):

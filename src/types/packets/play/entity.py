@@ -118,26 +118,15 @@ class PlayInteractEntity(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayInteractEntity:
-        entity_id = buf.unpack_varint()
-        type_ = buf.unpack_varint()
-
-        target_x, target_y, target_z = None
-
-        if buf.unpack('?'):
-            target_x = buf.unpack_varint()
-
-        if buf.unpack('?'):
-            target_y = buf.unpack_varint()
-
-        if buf.unpack('?'):
-            target_z = buf.unpack_varint()
-
-        if buf.unpack('?'):
-            hand = buf.unpack_varint()
-
-        sneaking = buf.unpack('?')
-
-        return cls(entity_id, type_, target_x, target_y, target_z, hand, sneaking)
+        return cls(
+            buf.unpack_varint(),
+            buf.unpack_varint(),
+            buf.unpack_optional(buf.unpack_varint),
+            buf.unpack_optional(buf.unpack_varint),
+            buf.unpack_optional(buf.unpack_varint),
+            buf.unpack_optional(buf.unpack_varint),
+            buf.unpack('?')
+        )
 
 
 class PlayEntityStatus(Packet):

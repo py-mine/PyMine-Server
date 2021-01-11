@@ -154,6 +154,8 @@ class PlayUpdateStructureBlock(Packet):
             integrity: float,
             seed: int,
             flags: int) -> None:
+        super().__init__()
+
         self.x, self.y, self.z = x, y, z
         self.action = action
         self.mode = mode

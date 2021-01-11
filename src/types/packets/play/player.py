@@ -95,8 +95,8 @@ class PlayAcknowledgePlayerDigging(Packet):
         self.successful = successful
 
     def encode(self) -> bytes:
-        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack_varint(self.block) + \
-            Buffer.pack_varint(self.status) + Buffer.pack('?', self.successful)
+        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack_varint(self.block) + Buffer.pack_varint(self.status) + \
+            Buffer.pack('?', self.successful)
 
 
 class PlayDisconnect(Packet):

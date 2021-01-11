@@ -38,7 +38,7 @@ class PlayCraftRecipeRequest(Packet):
         self.make_all = make_all
 
     @classmethod
-    def decode(cls, buf: Buffer):
+    def decode(cls, buf: Buffer) -> PlayCraftRecipeRequest:
         return cls(buf.unpack('b'), buf.unpack_string(), buf.unpack('?'))
 
 

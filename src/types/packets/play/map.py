@@ -15,7 +15,17 @@ class PlayMapData(Packet):
     id = 0x25
     to = 1
 
-    def __init__(map_id: int, scale: int, tracking_pos: bool, locked: bool, icons: list, cols: int, rows: int = None, x: int = None, z: int = None, data: bytes = None) -> None:
+    def __init__(
+            map_id: int,
+            scale: int,
+            tracking_pos: bool,
+            locked: bool,
+            icons: list,
+            cols: int,
+            rows: int = None,
+            x: int = None,
+            z: int = None,
+            data: bytes = None) -> None:
         super().__init__()
 
         self.map_id = map_id

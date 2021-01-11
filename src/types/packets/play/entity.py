@@ -124,19 +124,19 @@ class PlayInteractEntity(Packet):
 
         target_x, target_y, target_z = None
 
-        if buf.unpack_bool():
+        if buf.unpack('?'):
             target_x = buf.unpack_varint()
 
-        if buf.unpack_bool():
+        if buf.unpack('?'):
             target_y = buf.unpack_varint()
 
-        if buf.unpack_bool():
+        if buf.unpack('?'):
             target_z = buf.unpack_varint()
 
-        if buf.unpack_bool():
+        if buf.unpack('?'):
             hand = buf.unpack_varint()
 
-        sneaking = buf.unpack_bool()
+        sneaking = buf.unpack('?')
 
         return cls(entity_id, type_, target_x, target_y, target_z, hand, sneaking)
 

@@ -39,7 +39,7 @@ class PlayCraftRecipeRequest(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer):
-        return cls(buf.unpack('b'), buf.unpack_string(), buf.unpack_bool())
+        return cls(buf.unpack('b'), buf.unpack_string(), buf.unpack('?'))
 
 
 class PlaySetDisplayedRecipe(Packet):
@@ -89,7 +89,7 @@ class PlaySetRecipeBookState(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlaySetRecipeBookState:
-        return cls(buf.unpack_varint(), buf.unpack_bool(), buf.unpack_bool())
+        return cls(buf.unpack_varint(), buf.unpack('?'), buf.unpack('?'))
 
 
 class PlayCraftRecipeResponse(Packet):

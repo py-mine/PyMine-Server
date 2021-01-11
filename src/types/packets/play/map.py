@@ -16,6 +16,7 @@ class PlayMapData(Packet):
     to = 1
 
     def __init__(
+            self,
             map_id: int,
             scale: int,
             tracking_pos: bool,

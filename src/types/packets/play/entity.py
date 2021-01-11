@@ -249,7 +249,7 @@ class PlayEntityPositionAndRotation(Packet):
     def encode(self) -> bytes:
         return Buffer.pack_varint(self.entity_id) + Buffer.pack('h', self.dx) + Buffer.pack('h', self.dy) + \
             Buffer.pack('h', self.dz) + Buffer.pack('f', self.yaw) + Buffer.pack('f', self.pitch) + \
-            Buffer.pack('?' self.on_ground)
+            Buffer.pack('?', self.on_ground)
 
 
 class PlayEntityMovement(Packet):

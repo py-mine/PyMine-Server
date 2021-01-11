@@ -558,7 +558,7 @@ class PlayUpdateViewDistance(Packet):
     def __init__(self, view_distance: int) -> None:
         super().__init__()
 
-        self.view_distance
+        self.view_distance = view_distance
 
     def encode(self) -> bytes:
         return Buffer.pack_varint(self.view_distance)

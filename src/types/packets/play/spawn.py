@@ -59,9 +59,9 @@ class PlayEntitySpawn(Packet):
 
 class PlaySpawnExperienceOrb(Packet):
     """Spawns one or more experience orbs. Client bound(Server -> Client)."""
-    to = 1
 
     id = 0x01
+    to = 1
 
     def __init__(self, entity_id: int, x: int = 0, y: int = 0, z: int = 0, count: int = 1237) -> None:
         super().__init__()

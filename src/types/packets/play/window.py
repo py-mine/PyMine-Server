@@ -230,8 +230,7 @@ class PlaySetSlot(Packet):
         self.slot_data = slot_data
 
     def encode(self) -> bytes:
-        return Buffer.pack('b', self.window_id) + Buffer.pack('h', self.slot) + \
-            Buffer.pack_slot(self.slot_data)
+        return Buffer.pack('b', self.window_id) + Buffer.pack('h', self.slot) + Buffer.pack_slot(self.slot_data)
 
 
 class PlayOpenHorseWindow(Packet):

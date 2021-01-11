@@ -93,10 +93,13 @@ class Buffer:
         return struct.pack('>' + f, *data)
 
     @classmethod
-    def pack_optional(cls, boolean: bool) -> bytes:
-        """Packs a boolean into bytes."""
+    def pack_optional(cls, packer: object, data: object = None) -> bytes:
+        """Packs an optional field into bytes."""
 
-        return struct.pack(f'>?', boolean)
+        if data is None:
+            return cls.pack('?', False)
+
+        return cls.pack('?', True) + packer(data)
 
     def unpack_optional(self) -> bool:
         """Unpacks a boolean from the buffer."""

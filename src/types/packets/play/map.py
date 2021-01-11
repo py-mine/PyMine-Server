@@ -6,7 +6,7 @@ from src.types.packet import Packet
 from src.types.buffer import Buffer
 from src.types.chat import Chat
 
-# __all__ = ('PlayMapData',)
+__all__ = ('PlayMapData',)
 
 
 class PlayMapData(Packet):
@@ -53,6 +53,13 @@ class PlayMapData(Packet):
             else:
                 out += Buffer.pack('?', False)
 
-        out += Buffer.pack('B', self.cols)
+        out += Buffer.pack('B', self.cols) + Buffer.pack_optional((lambda x: Buffer.pack('B', x)), self.rows) + \
+            Buffer.pack_optional((lambda x: Buffer.pack('b', x)), self.x) + \
+            Buffer.pack_optional((lambda z: Buffer.pack('b', z)), self.z) + \
 
-        raise NotImplementedError
+        if self.data is not None:
+            out += Buffer.pack('?', True) + Buffer.pack_varint(len(self.data)) + Buffer.pack('?', True) + data
+        else:
+            out += Buffer.pack('?', False) + Buffer.pack('?', False)
+
+        return out

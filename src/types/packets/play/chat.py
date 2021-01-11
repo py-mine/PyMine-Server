@@ -112,8 +112,8 @@ class PlayTabCompleteClientBound(Packet):
         # ]
 
     def encode(self):
-        out = Buffer.pack_varint(self.id) + Buffer.pack_varint(self.start) + \
-            Buffer.pack_varint(self.length) + Buffer.pack_varint(len(self.matches))
+        out = Buffer.pack_varint(self.id) + Buffer.pack_varint(self.start) + Buffer.pack_varint(self.length) + \
+            Buffer.pack_varint(len(self.matches))
 
         for m in self.matches:
             out += Buffer.pack_string(m[0])

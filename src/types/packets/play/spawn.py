@@ -130,7 +130,7 @@ class PlayPaintingSpawn(Packet):
         self.location = location
         self.direction = direction
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.entity_uuid) + \
             Buffer.pack_varint(self.motive) + Buffer.pack_pos(self.location) + \
             Buffer.pack('b', self.direction)

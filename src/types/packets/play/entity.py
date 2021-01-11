@@ -13,6 +13,7 @@ __all__ = (
     'PlayEntityStatus',
     'PlayEntityAction',
     'PlayEntityPosition',
+    'PlayEntityPositionAndRotation',
     'PlayEntityMovement',
     'PlayRemoveEntityEffect',
     'PlayEntityHeadLook',
@@ -210,6 +211,45 @@ class PlayEntityPosition(Packet):
     def encode(self) -> bytes:
         return Buffer.pack_varint(self.entity_id) + Buffer.pack('h', self.dx) + Buffer.pack('h', self.dy) + \
             Buffer.pack('h', self.dz) + Buffer.pack('?', self.on_ground)
+
+
+class PlayEntityPositionAndRotation(Packet):
+    """Sent by the server when an entity rotates and moves. (Server -> Client)
+
+    :param int entity_id: The id of the entity moving/rotationing.
+    :param int dx: Delta (change in) x, -8 <-> 8.
+    :param int dy: Delta (change in) y, -8 <-> 8.
+    :param int dz: Delta (change in) z, -8 <-> 8.
+    :param float yaw: The new yaw angle.
+    :param float pitch: The new pitch angle.
+    :param bool on_ground: Whether entity is on ground or not.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr entity_id:
+    :attr dx:
+    :attr dy:
+    :attr dz:
+    :attr yaw:
+    :attr pitch:
+    :attr on_ground:
+    """
+
+    id = 0x28
+    to = 1
+
+    def __init__(self, entity_id: int, dx: int, dy: int, dz: int, yaw: float, pitch: float, on_ground: bool) -> None:
+        super().__init__()
+
+        self.entity_id = entity_id
+        self.dx, self.dy, self.dz = dx, dy, dz
+        self.yaw = yaw
+        self.pitch = pitch
+        self.on_ground = on_ground
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack('h', self.dx) + Buffer.pack('h', self.dy) + \
+            Buffer.pack('h', self.dz) + Buffer.pack('f', self.yaw) + Buffer.pack('f', self.pitch) + \
+            Buffer.pack('?' self.on_ground)
 
 
 class PlayEntityMovement(Packet):

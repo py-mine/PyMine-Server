@@ -14,18 +14,18 @@ class PlayParticle(Packet):
     to = 1
 
     def __init__(
-        self,
-        particle_id: int,
-        long_distance: bool,
-        x: int,
-        y: int,
-        z: int,
-        offset_x: float,
-        offset_y: float,
-        offset_z: float,
-        particle_data: float,
-        particle_count: int,
-        data: dict) -> None:
+            self,
+            particle_id: int,
+            long_distance: bool,
+            x: int,
+            y: int,
+            z: int,
+            offset_x: float,
+            offset_y: float,
+            offset_z: float,
+            particle_data: float,
+            particle_count: int,
+            data: dict) -> None:
         super().__init__()
 
         self.part_id = particle_id

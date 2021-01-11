@@ -213,8 +213,7 @@ class PlayWindowProperty(Packet):
         self.value = value
 
     def encode(self) -> bytes:
-        return Buffer.pack('B', self.window_id) + Buffer.pack('h', self.prop) + \
-            Buffer.pack('h', self.value)
+        return Buffer.pack('B', self.window_id) + Buffer.pack('h', self.prop) + Buffer.pack('h', self.value)
 
 
 class PlaySetSlot(Packet):

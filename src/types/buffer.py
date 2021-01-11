@@ -101,10 +101,13 @@ class Buffer:
 
         return cls.pack('?', True) + packer(data)
 
-    def unpack_optional(self) -> bool:
-        """Unpacks a boolean from the buffer."""
+    def unpack_optional(self, unpacker: object) -> bool:
+        """Unpacks an optional field from the buffer."""
 
-        return self.unpack('?')
+        present = cls.unpack('?')
+
+        if present:
+            return unpacker()
 
     @classmethod
     def pack_varint(cls, num: int, max_bits: int = 32) -> bytes:

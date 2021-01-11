@@ -257,5 +257,4 @@ class PlayOpenHorseWindow(Packet):
         self.entity_id = entity_id
 
     def encode(self) -> bytes:
-        return Buffer.pack('b', self.window_id) + Buffer.pack_varint(self.num_slots) + \
-            Buffer.pack('i', self.entity_id)
+        return Buffer.pack('b', self.window_id) + Buffer.pack_varint(self.num_slots) + Buffer.pack('i', self.entity_id)

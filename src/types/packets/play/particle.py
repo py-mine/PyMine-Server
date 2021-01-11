@@ -25,9 +25,9 @@ class PlayParticle(Packet):
         offset_z: float,
         particle_data: float,
         particle_count: int,
-        data: dict):
-
+        data: dict) -> None:
         super().__init__()
+        
         self.part_id = particle_id
         self.long_dist = long_distance
         self.x, self.y, self.z = x, y, z

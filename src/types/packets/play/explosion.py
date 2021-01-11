@@ -10,6 +10,7 @@ __all__ = ('PlayExplosion',)
 
 class PlayExplosion(Packet):
     """Sent when an explosion occurs (creepers, TNT, and ghast fireballs).                          Each block in Records is set to air. Coordinates for each axis in record is int(X) + record."""
+
     id = 0x1B
     to = 1
 

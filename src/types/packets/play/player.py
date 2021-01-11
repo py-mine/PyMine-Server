@@ -140,8 +140,7 @@ class PlayPlayerAbilitiesClientBound(Packet):
         self.fov_modifier = fov_modifier
 
     def encode(self) -> bytes:
-        return self.flags + Buffer.pack('f', self.flying_speed) + \
-            Buffer.pack('f', self.fov_modifier)
+        return self.flags + Buffer.pack('f', self.flying_speed) + Buffer.pack('f', self.fov_modifier)
 
 
 class PlayPlayerAbilitiesServerBound(Packet):

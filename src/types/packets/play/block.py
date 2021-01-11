@@ -1,6 +1,7 @@
 """Contains packets related to blocks."""
 
 from __future__ import annotations
+from nbt import nbt
 
 from src.types.packet import Packet
 from src.types.buffer import Buffer
@@ -10,6 +11,7 @@ __all__ = (
     'PlayBlockChange',
     'PlayQueryBlockNBT',
     'PlayBlockPlacement',
+    'PlayNBTQueryResponse',
 )
 
 
@@ -164,3 +166,19 @@ class PlayBlockPlacement(Packet):
             buf.unpack('f'),
             buf.unpack('?')
         )
+
+
+class PlayNBTQueryResponse(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x54
+    to = 1
+
+    def __init__(self, transaction_id: int, nbt: nbt.Tag) -> None:
+        super().__init__()
+
+        self.transaction_id = transaction_id
+        self.nbt = nbt
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.transaction_id) + Buffer.pack_nbt(self.nbt)

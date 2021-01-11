@@ -12,6 +12,7 @@ __all__ = (
     'PlayNameItem',
     'PlayHeldItemChangeServerBound',
     'PlayHeldItemChangeClientBound',
+    'PlayCollectItem',
 )
 
 
@@ -144,3 +145,21 @@ class PlayHeldItemChangeClientBound(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack('h', self.slot)
+
+
+class PlayCollectItem(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x55
+    to = 1
+
+    def __init__(self, collected_eid: int, collector_eid: int, item_count: int) -> None:
+        super().__init__()
+
+        self.collected_eid = collected_eid
+        self.collector_eid = collector_eid
+        self.item_count = item_count
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.collected_eid) + Buffer.pack_varint(self.collector_eid) + \
+            Buffer.pack_varint(self.item_count)

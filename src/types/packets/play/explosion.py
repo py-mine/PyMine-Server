@@ -14,7 +14,17 @@ class PlayExplosion(Packet):
     id = 0x1B
     to = 1
 
-    def __init__(self, x: int, y: int, z: int, strength: int, record_count: int, records: list, pmx: int, pmy: int, pmz: int) -> None:
+    def __init__(
+            self,
+            x: int,
+            y: int,
+            z: int,
+            strength: int,
+            record_count: int,
+            records: list,
+            pmx: int,
+            pmy: int,
+            pmz: int) -> None:
         super().__init__()
 
         self.x, self.y, self.z = x, y, z

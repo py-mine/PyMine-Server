@@ -486,6 +486,8 @@ class PlayCreativeInventoryAction(Packet):
     to = 0
 
     def __init__(self, slot: int, clicked_item: dict) -> None:
+        super().__init__()
+
         self.slot = slot
         self.clicked_item = clicked_item
 

@@ -28,7 +28,7 @@ class PlayGenerateStructure(Packet):
     id = 0x0F
     to = 0
 
-    def __init__(self, x: int, y: int, z: int, levels: int, keep_jigsaws: bool):
+    def __init__(self, x: int, y: int, z: int, levels: int, keep_jigsaws: bool) -> None:
         super().__init__()
 
         self.x, self.y, self.z = x, y, z

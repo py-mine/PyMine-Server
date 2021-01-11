@@ -35,7 +35,7 @@ class PlayBlockAction(Packet):
     id = 0x0A
     to = 1
 
-    def __init__(self, x: int, y: int, z: int, action_id: int, action_param: int, block_type: int) -> None:  # nopep8
+    def __init__(self, x: int, y: int, z: int, action_id: int, action_param: int, block_type: int) -> None:
         super().__init__()
 
         self.x, self.y, self.z = x, y, z

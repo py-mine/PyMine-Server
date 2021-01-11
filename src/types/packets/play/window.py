@@ -153,7 +153,7 @@ class PlayCloseWindowServerBound(Packet):
     id = 0x0A
     to = 0
 
-    def __init__(self, window_id: int):
+    def __init__(self, window_id: int) -> None:
         super().__init__()
 
         self.window_id = window_id

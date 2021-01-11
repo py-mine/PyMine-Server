@@ -151,9 +151,8 @@ class PlaySpawnPlayer(Packet):
         self.pitch, self.yaw = pitch, yaw
 
     def encode(self):
-        return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.player_uuid) + \
-            Buffer.pack('d', self.x) + Buffer.pack('d', self.y) + Buffer.pack('d', self.z) + \
-            Buffer.pack('B', self.pitch) + Buffer.pack('B', self.yaw)
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.player_uuid) + Buffer.pack('d', self.x) + \
+            Buffer.pack('d', self.y) + Buffer.pack('d', self.z) + Buffer.pack('B', self.pitch) + Buffer.pack('B', self.yaw)
 
 
 class PlaySpawnPosition(Packet):

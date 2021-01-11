@@ -5,8 +5,6 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-from src.util.share import logger
-
 __all__ = ('PlayPluginMessageClientBound', 'PlayPluginMessageServerBound')
 
 

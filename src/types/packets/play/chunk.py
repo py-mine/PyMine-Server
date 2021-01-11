@@ -104,4 +104,4 @@ class PlayUpdateLight(Packet):
         return Buffer.pack('i', self.chunk_x) + Buffer.pack('i', self.chunk_z) + Buffer.pack('?', self.trust_edges) + \
             Buffer.pack_varint(self.sky_light_mask) + Buffer.pack_varint(self.block_light_mask) + \
             Buffer.pack_varint(self.empty_sky_light_max) + Buffer.pack_varint(self.empty_block_light_mask) + \
-            Buffer.pack_array('c', self.sky_light_array) + Buffer.pack_array('c', self.block_light_array)
+            self.sky_light_array + self.block_light_array

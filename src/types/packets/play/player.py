@@ -95,8 +95,8 @@ class PlayAcknowledgePlayerDigging(Packet):
         self.successful = successful
 
     def encode(self) -> bytes:
-        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack_varint(self.block) + \
-            Buffer.pack_varint(self.status) + Buffer.pack('?', self.successful)
+        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack_varint(self.block) + Buffer.pack_varint(self.status) + \
+            Buffer.pack('?', self.successful)
 
 
 class PlayDisconnect(Packet):
@@ -140,8 +140,7 @@ class PlayPlayerAbilitiesClientBound(Packet):
         self.fov_modifier = fov_modifier
 
     def encode(self) -> bytes:
-        return self.flags + Buffer.pack('f', self.flying_speed) + \
-            Buffer.pack('f', self.fov_modifier)
+        return self.flags + Buffer.pack('f', self.flying_speed) + Buffer.pack('f', self.fov_modifier)
 
 
 class PlayPlayerAbilitiesServerBound(Packet):
@@ -249,9 +248,8 @@ class PlayJoinGame(Packet):
             Buffer.pack_nbt(self.dim_codec) + Buffer.pack_nbt(self.dimension) + \
             Buffer.pack_string(self.world_name) + Buffer.pack('q', self.hashed_seed) + \
             Buffer.pack_varint(self.max_players) + Buffer.pack_varint(self.view_distance) + \
-            Buffer.pack('?', self.reduced_debug_info) + \
-            Buffer.pack('?', self.enable_respawn_screen) + Buffer.pack('?', self.is_debug) + \
-            Buffer.pack('?', self.is_flat)
+            Buffer.pack('?', self.reduced_debug_info) + Buffer.pack('?', self.enable_respawn_screen) + \
+            Buffer.pack('?', self.is_debug) + Buffer.pack('?', self.is_flat)
 
 
 class PlayPlayerPosition(Packet):
@@ -281,7 +279,7 @@ class PlayPlayerPosition(Packet):
         self.on_ground = on_ground
 
     @classmethod
-    def decode(cls, buf: Buffer):
+    def decode(cls, buf: Buffer) -> PlayPlayerPosition:
         return cls(buf.unpack('d'), buf.unpack('d'), buf.unpack('d'), buf.unpack('?'))
 
 
@@ -307,14 +305,7 @@ class PlayPlayerPositionAndRotationServerBound(Packet):
     id = 0x13
     to = 0
 
-    def __init__(
-            self,
-            x: float,
-            feet_y: float,
-            z: float,
-            yaw: float,
-            pitch: float,
-            on_ground: bool) -> None:
+    def __init__(self, x: float, feet_y: float, z: float, yaw: float, pitch: float, on_ground: bool) -> None:
         super().__init__()
 
         self.x = x
@@ -495,6 +486,8 @@ class PlayCreativeInventoryAction(Packet):
     to = 0
 
     def __init__(self, slot: int, clicked_item: dict) -> None:
+        super().__init__()
+
         self.slot = slot
         self.clicked_item = clicked_item
 

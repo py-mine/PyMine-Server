@@ -47,8 +47,7 @@ class PlayBlockEntityData(Packet):
         self.nbt_data = nbt_data
 
     def encode(self) -> bytes:
-        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack('B', self.action) + \
-            Buffer.pack_nbt(self.nbt_data)
+        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack('B', self.action) + Buffer.pack_nbt(self.nbt_data)
 
 
 class PlayQueryEntityNBT(Packet):
@@ -119,26 +118,15 @@ class PlayInteractEntity(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayInteractEntity:
-        entity_id = buf.unpack_varint()
-        type_ = buf.unpack_varint()
-
-        target_x, target_y, target_z = None
-
-        if buf.unpack('?'):
-            target_x = buf.unpack_varint()
-
-        if buf.unpack('?'):
-            target_y = buf.unpack_varint()
-
-        if buf.unpack('?'):
-            target_z = buf.unpack_varint()
-
-        if buf.unpack('?'):
-            hand = buf.unpack_varint()
-
-        sneaking = buf.unpack('?')
-
-        return cls(entity_id, type_, target_x, target_y, target_z, hand, sneaking)
+        return cls(
+            buf.unpack_varint(),
+            buf.unpack_varint(),
+            buf.unpack_optional(buf.unpack_varint),
+            buf.unpack_optional(buf.unpack_varint),
+            buf.unpack_optional(buf.unpack_varint),
+            buf.unpack_optional(buf.unpack_varint),
+            buf.unpack('?')
+        )
 
 
 class PlayEntityStatus(Packet):
@@ -269,5 +257,5 @@ class PlayEntityVelocity(Packet):
         self.vel_z = velocity_z
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.eid) + Buffer.pack('h', self.vel_x) + \
-            Buffer.pack('h', self.vel_y) + Buffer.pack('h', self.vel_z)
+        return Buffer.pack_varint(self.eid) + Buffer.pack('h', self.vel_x) + Buffer.pack('h', self.vel_y) + \
+            Buffer.pack('h', self.vel_z)

@@ -34,8 +34,7 @@ class PlayWindowConfirmationClientBound(Packet):
         self.accepted = accepted
 
     def encode(self) -> bytes:
-        return Buffer.pack('b', self.window_id) + Buffer.pack('h', self.action_number) + \
-            Buffer.pack('?', self.accepted)
+        return Buffer.pack('b', self.window_id) + Buffer.pack('h', self.action_number) + Buffer.pack('?', self.accepted)
 
 
 class PlayWindowConfirmationServerBound(Packet):
@@ -154,7 +153,7 @@ class PlayCloseWindowServerBound(Packet):
     id = 0x0A
     to = 0
 
-    def __init__(self, window_id: int):
+    def __init__(self, window_id: int) -> None:
         super().__init__()
 
         self.window_id = window_id
@@ -214,8 +213,7 @@ class PlayWindowProperty(Packet):
         self.value = value
 
     def encode(self) -> bytes:
-        return Buffer.pack('B', self.window_id) + Buffer.pack('h', self.prop) + \
-            Buffer.pack('h', self.value)
+        return Buffer.pack('B', self.window_id) + Buffer.pack('h', self.prop) + Buffer.pack('h', self.value)
 
 
 class PlaySetSlot(Packet):
@@ -232,8 +230,7 @@ class PlaySetSlot(Packet):
         self.slot_data = slot_data
 
     def encode(self) -> bytes:
-        return Buffer.pack('b', self.window_id) + Buffer.pack('h', self.slot) + \
-            Buffer.pack_slot(self.slot_data)
+        return Buffer.pack('b', self.window_id) + Buffer.pack('h', self.slot) + Buffer.pack_slot(self.slot_data)
 
 
 class PlayOpenHorseWindow(Packet):
@@ -260,5 +257,4 @@ class PlayOpenHorseWindow(Packet):
         self.entity_id = entity_id
 
     def encode(self) -> bytes:
-        return Buffer.pack('b', self.window_id) + Buffer.pack_varint(self.num_slots) + \
-            Buffer.pack('i', self.entity_id)
+        return Buffer.pack('b', self.window_id) + Buffer.pack_varint(self.num_slots) + Buffer.pack('i', self.entity_id)

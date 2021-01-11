@@ -14,7 +14,15 @@ class PlayNamedSoundEffect(Packet):
     id = 0x18
     to = 1
 
-    def __init__(self, name: str, category: int, effect_pos_x: int, effect_pos_y: int, effect_pos_z: int, volume: int, pitch: int):  # nopep8
+    def __init__(
+            self,
+            name: str,
+            category: int,
+            effect_pos_x: int,
+            effect_pos_y: int,
+            effect_pos_z: int,
+            volume: int,
+            pitch: int):
         super().__init__()
 
         self.name = name
@@ -26,8 +34,6 @@ class PlayNamedSoundEffect(Packet):
         self.pitch = pitch
 
     def encode(self):
-        return Buffer.pack_string(self.name) + \
-            Buffer.pack_varint(self.category) + Buffer.pack('i', self.category) + \
-            Buffer.pack('i', self.effect_pos_x) + Buffer.pack('i', self.effect_pos_y) + \
-            Buffer.pack('i', self.effect_pos_z) + Buffer.pack('f', self.volume) + \
-            Buffer.pack('f', self.pitch)
+        return Buffer.pack_string(self.name) + Buffer.pack_varint(self.category) + Buffer.pack('i', self.category) + \
+            Buffer.pack('i', self.effect_pos_x) + Buffer.pack('i', self.effect_pos_y) + Buffer.pack('i', self.effect_pos_z) + \
+            Buffer.pack('f', self.volume) + Buffer.pack('f', self.pitch)

@@ -39,8 +39,7 @@ class PlayChatMessageClientBound(Packet):
         self.sender = sender
 
     def encode(self) -> bytes:
-        return Buffer.pack_chat(self.data) + Buffer.pack('b', self.position) + \
-            Buffer.pack_uuid(self.sender)
+        return Buffer.pack_chat(self.data) + Buffer.pack('b', self.position) + Buffer.pack_uuid(self.sender)
 
 
 class PlayChatMessageServerBound(Packet):
@@ -79,7 +78,7 @@ class PlayTabCompleteServerBound(Packet):
     id = 0x06
     to = 0
 
-    def __init__(self, transaction_id: int, text: str):
+    def __init__(self, transaction_id: int, text: str) -> None:
         super().__init__()
 
         self.transaction_id = transaction_id
@@ -112,9 +111,9 @@ class PlayTabCompleteClientBound(Packet):
         #     ...
         # ]
 
-    def encode(self):
-        out = Buffer.pack_varint(self.id) + Buffer.pack_varint(self.start) + \
-            Buffer.pack_varint(self.length) + Buffer.pack_varint(len(self.matches))
+    def encode(self) -> bytes:
+        out = Buffer.pack_varint(self.id) + Buffer.pack_varint(self.start) + Buffer.pack_varint(self.length) + \
+            Buffer.pack_varint(len(self.matches))
 
         for m in self.matches:
             out += Buffer.pack_string(m[0])

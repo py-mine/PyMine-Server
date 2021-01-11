@@ -121,8 +121,7 @@ class PlayPaintingSpawn(Packet):
     id = 0x03
     to = 1
 
-    def __init__(self, entity_id: int, entity_uuid: uuid.UUID, motive: int,
-                 location: int, direction: int) -> None:
+    def __init__(self, entity_id: int, entity_uuid: uuid.UUID, motive: int, location: int, direction: int) -> None:
         super().__init__()
 
         self.entity_id = entity_id

@@ -63,7 +63,7 @@ class PlaySpawnExperienceOrb(Packet):
 
     id = 0x01
 
-    def __init__(self, entity_id: int, x: int = 0, y: int = 0, z: int = 0, count: int = 1237) -> None:  # nopep8
+    def __init__(self, entity_id: int, x: int = 0, y: int = 0, z: int = 0, count: int = 1237) -> None:
         super().__init__()
 
         self.entity_id = entity_id

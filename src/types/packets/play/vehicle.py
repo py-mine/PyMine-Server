@@ -111,6 +111,8 @@ class PlaySetPassengers(Packet):
     to = 1
 
     def __init__(self, entity_id: int, passenger_count: int, passengers: list) -> None:
+        super().__init__()
+
         self.entity_id = entity_id
         self.passenger_count = passenger_count
         self.passengers = passengers

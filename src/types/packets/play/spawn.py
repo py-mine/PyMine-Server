@@ -23,9 +23,20 @@ class PlayEntitySpawn(Packet):
     id = 0x00
     to = 1
 
-    def __init__(self, entity_id: int, object_uuid: uuid.UUID, type_: int,
-                 x: int, y: int, z: int, pitch: int, yaw: int, data: int,
-                 vloc_x: int, vloc_y: int, vloc_z: int) -> None:
+    def __init__(
+        self,
+        entity_id: int,
+        object_uuid: uuid.UUID,
+        type_: int,
+        x: int,
+        y: int,
+        z: int,
+        pitch: int,
+        yaw: int,
+        data: int,
+        vloc_x: int,
+        vloc_y: int,
+        vloc_z: int) -> None:
         super().__init__()
 
         self.entity_id = entity_id

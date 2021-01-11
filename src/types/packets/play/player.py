@@ -279,7 +279,7 @@ class PlayPlayerPosition(Packet):
         self.on_ground = on_ground
 
     @classmethod
-    def decode(cls, buf: Buffer):
+    def decode(cls, buf: Buffer) -> PlayPlayerPosition:
         return cls(buf.unpack('d'), buf.unpack('d'), buf.unpack('d'), buf.unpack('?'))
 
 

@@ -70,4 +70,4 @@ class PlayLockDifficulty(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayLockDifficulty:
-        return cls(buf.unpack_bool())
+        return cls(buf.unpack('?'))

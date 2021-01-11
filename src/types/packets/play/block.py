@@ -162,5 +162,5 @@ class PlayBlockPlacement(Packet):
             buf.unpack('f'),
             buf.unpack('f'),
             buf.unpack('f'),
-            buf.unpack_bool()
+            buf.unpack('?')
         )

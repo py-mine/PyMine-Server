@@ -96,7 +96,7 @@ class PlayAcknowledgePlayerDigging(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack_varint(self.block) + \
-            Buffer.pack_varint(self.status) + Buffer.pack_bool(self.successful)
+            Buffer.pack_varint(self.status) + Buffer.pack('?', self.successful)
 
 
 class PlayDisconnect(Packet):
@@ -242,16 +242,16 @@ class PlayJoinGame(Packet):
         self.is_flat = is_flat
 
     def encode(self) -> bytes:
-        return Buffer.pack('i', self.entity_id) + Buffer.pack_bool(self.is_hardcore) + \
+        return Buffer.pack('i', self.entity_id) + Buffer.pack('?', self.is_hardcore) + \
             Buffer.pack('B', self.gamemode) + Buffer.pack('b', self.prev_gamemode) + \
             Buffer.pack_varint(len(self.world_names)) + \
             b''.join(Buffer.pack_string(w) for w in self.world_names) + \
             Buffer.pack_nbt(self.dim_codec) + Buffer.pack_nbt(self.dimension) + \
             Buffer.pack_string(self.world_name) + Buffer.pack('q', self.hashed_seed) + \
             Buffer.pack_varint(self.max_players) + Buffer.pack_varint(self.view_distance) + \
-            Buffer.pack_bool(self.reduced_debug_info) + \
-            Buffer.pack_bool(self.enable_respawn_screen) + Buffer.pack_bool(self.is_debug) + \
-            Buffer.pack_bool(self.is_flat)
+            Buffer.pack('?', self.reduced_debug_info) + \
+            Buffer.pack('?', self.enable_respawn_screen) + Buffer.pack('?', self.is_debug) + \
+            Buffer.pack('?', self.is_flat)
 
 
 class PlayPlayerPosition(Packet):
@@ -282,7 +282,7 @@ class PlayPlayerPosition(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer):
-        return cls(buf.unpack('d'), buf.unpack('d'), buf.unpack('d'), buf.unpack_bool())
+        return cls(buf.unpack('d'), buf.unpack('d'), buf.unpack('d'), buf.unpack('?'))
 
 
 class PlayPlayerPositionAndRotationServerBound(Packet):
@@ -332,7 +332,7 @@ class PlayPlayerPositionAndRotationServerBound(Packet):
             buf.unpack('d'),
             buf.unpack('d'),
             buf.unpack('d'),
-            buf.unpack_bool()
+            buf.unpack('?')
         )
 
 
@@ -360,7 +360,7 @@ class PlayPlayerRotation(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayPlayerRotation:
-        return cls(buf.unpack('d'), buf.unpack('d'), buf.unpack_bool())
+        return cls(buf.unpack('d'), buf.unpack('d'), buf.unpack('?'))
 
 
 class PlayPlayerMovement(Packet):
@@ -382,7 +382,7 @@ class PlayPlayerMovement(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayPlayerMovement:
-        return cls(buf.unpack_bool())
+        return cls(buf.unpack('?'))
 
 
 class PlayTeleportConfirm(Packet):
@@ -474,7 +474,7 @@ class PlayClientSettings(Packet):
             buf.unpack_string(),
             buf.unpack('b'),
             buf.unpack_varint(),
-            buf.unpack_bool(),
+            buf.unpack('?'),
             buf.unpack('B'),
             buf.unpack_varint()
         )

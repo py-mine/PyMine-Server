@@ -62,7 +62,7 @@ class PlayEditBook(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayEditBook:
-        return cls(buf.unpack_slot(), buf.unpack_bool(), buf.unpack_varint())
+        return cls(buf.unpack_slot(), buf.unpack('?'), buf.unpack_varint())
 
 
 class PlayPickItem(Packet):

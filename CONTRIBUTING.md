@@ -1,4 +1,4 @@
-# <img src="https://i.imgur.com/LHDnix6.png" height=60>PyMine
+# <img src="https://cdn.discordapp.com/emojis/783838348695437353.gif?v=1" height=45>PyMine
 ## Contributing
 *Want to help out? This is how!*
 
@@ -7,6 +7,7 @@
 3. Make your changes, with descriptive commit names. Remember to follow the [style guide](#style-guide)!
 4. [Create a pull request](https://github.com/py-mine/PyMine/pulls) with a detailed description of the issue resolved, link the issue you created, and request a reviewer.
 5. One of the main devs will review it and request changes if needed!
+6. *You should probably also [join our Discord server](discord.gg/dHjv7DJgb2), for news on the status and direction of the project*
 
 ## Style Guide
 ### General Guidelines

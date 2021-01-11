@@ -35,7 +35,7 @@ class PlayWindowConfirmationClientBound(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack('b', self.window_id) + Buffer.pack('h', self.action_number) + \
-            Buffer.pack_bool(self.accepted)
+            Buffer.pack('?', self.accepted)
 
 
 class PlayWindowConfirmationServerBound(Packet):
@@ -63,7 +63,7 @@ class PlayWindowConfirmationServerBound(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayWindowConfirmationServerBound:
-        return cls(buf.unpack('b'), buf.unpack('h'), buf.unpack_bool())
+        return cls(buf.unpack('b'), buf.unpack('h'), buf.unpack('?'))
 
 
 class PlayClickWindow(Packet):

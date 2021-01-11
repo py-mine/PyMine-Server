@@ -6,9 +6,7 @@ import nbt
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = (
-    'PlayDisplayScoreboard',
-)
+__all__ = ('PlayDisplayScoreboard',)
 
 
 class PlayDisplayScoreboard(Packet):

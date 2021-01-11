@@ -120,8 +120,8 @@ class PlayTabCompleteClientBound(Packet):
             out += Buffer.pack_string(m[0])
 
             if len(m) > 1:
-                out += Buffer.pack_bool(True) + Buffer.pack_chat(Chat(m[1]))
+                out += Buffer.pack('?', True) + Buffer.pack_chat(Chat(m[1]))
             else:
-                out += Buffer.pack_bool(False)
+                out += Buffer.pack('?', False)
 
         return out

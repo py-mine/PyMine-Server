@@ -73,7 +73,7 @@ class PlaySteerBoat(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlaySteerBoat:
-        return cls(buf.unpack_bool(), buf.unpack_bool())
+        return cls(buf.unpack('?'), buf.unpack('?'))
 
 
 class PlaySteerVehicle(Packet):

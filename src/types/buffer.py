@@ -93,12 +93,12 @@ class Buffer:
         return struct.pack('>' + f, *data)
 
     @classmethod
-    def pack_bool(cls, boolean: bool) -> bytes:
+    def pack_optional(cls, boolean: bool) -> bytes:
         """Packs a boolean into bytes."""
 
         return struct.pack(f'>?', boolean)
 
-    def unpack_bool(self) -> bool:
+    def unpack_optional(self) -> bool:
         """Unpacks a boolean from the buffer."""
 
         return self.unpack('?')
@@ -475,9 +475,9 @@ class Buffer:
         out = Buffer.pack_slot(**in_item_1) + Buffer.pack_slot(**out_item)
 
         if in_item_2 is not None:
-            out += Buffer.pack_bool(True) + Buffer.pack_slot(in_item_2)
+            out += Buffer.pack('?', True) + Buffer.pack_slot(in_item_2)
         else:
-            out += Buffer.pack_bool(False)
+            out += Buffer.pack('?', False)
 
-        return out + Buffer.pack_bool(disabled) + Buffer.pack('i', num_trade_usages) + Buffer.pack('i', max_trade_usages) + \
+        return out + Buffer.pack('?', disabled) + Buffer.pack('i', num_trade_usages) + Buffer.pack('i', max_trade_usages) + \
             Buffer.pack('i', xp) + Buffer.pack('i', special_price) + Buffer.pack('f', price_multi) + Buffer.pack('i', demand)

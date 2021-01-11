@@ -37,7 +37,7 @@ class PlayGenerateStructure(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayGenerateStructure:
-        return cls(*buf.unpack_pos(), buf.unpack_varint(), buf.unpack_bool())
+        return cls(*buf.unpack_pos(), buf.unpack_varint(), buf.unpack('?'))
 
 
 class PlayUpdateJigsawBlock(Packet):

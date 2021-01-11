@@ -40,8 +40,8 @@ class PlayMapData(Packet):
         self.data = data
 
     def encode(self) -> bytes:
-        out = Buffer.pack_varint(self.map_id) + Buffer.pack('b', self.scale) + Buffer.pack_bool(self.tracking_pos) + \
-            Buffer.pack_bool(self.locked) + Buffer.pack_varint(len(self.icons))
+        out = Buffer.pack_varint(self.map_id) + Buffer.pack('b', self.scale) + Buffer.pack('?', self.tracking_pos) + \
+            Buffer.pack('?', self.locked) + Buffer.pack_varint(len(self.icons))
 
         for icon in self.icons:
             out += Buffer.pack_varint(icon['type']) + Buffer.pack('b', icon['x']) + Buffer.pack('b', icon['z'])
@@ -49,9 +49,9 @@ class PlayMapData(Packet):
             display_name = icon.get('display_name')
 
             if display_name is not None:
-                out += Buffer.pack_bool(True) + Buffer.pack_chat(Chat(display_name))
+                out += Buffer.pack('?', True) + Buffer.pack_chat(Chat(display_name))
             else:
-                out += Buffer.pack_bool(False)
+                out += Buffer.pack('?', False)
 
         out += Buffer.pack('B', self.cols)
 

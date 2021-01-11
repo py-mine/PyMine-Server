@@ -142,7 +142,7 @@ class PlaySpawnPlayer(Packet):
     id = 0x04
     to = 1
 
-    def __init__(self, entity_id: int, player_uuid: uuid.UUID, x: int, y: int, z: int, pitch: int, yaw: int):
+    def __init__(self, entity_id: int, player_uuid: uuid.UUID, x: int, y: int, z: int, pitch: int, yaw: int) -> None:
         super.__init__()
 
         self.entity_id = entity_id
@@ -150,7 +150,7 @@ class PlaySpawnPlayer(Packet):
         self.x, self.y, self.z = x, y, z
         self.pitch, self.yaw = pitch, yaw
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack_varint(self.entity_id) + Buffer.pack_uuid(self.player_uuid) + Buffer.pack('d', self.x) + \
             Buffer.pack('d', self.y) + Buffer.pack('d', self.z) + Buffer.pack('B', self.pitch) + Buffer.pack('B', self.yaw)
 

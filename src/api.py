@@ -33,7 +33,9 @@ running_tasks = []
 
 
 async def init():
-    load_commands()
+    load_commands()  # load commands in src/logic/cmds/*
+
+    # start command handler task
     running_tasks.append(asyncio.create_task(handle_server_commands()))
 
 

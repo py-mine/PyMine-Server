@@ -44,6 +44,8 @@ async def login_start(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remo
 
         states[remote] = 3  # Update state to play
 
+    return True, r, w
+
 
 @handle_packet('login', 0x01)
 async def encrypted_login(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remote: tuple) -> tuple:
@@ -70,6 +72,8 @@ async def encrypted_login(r: 'StreamReader', w: 'StreamWriter', packet: Packet, 
     # Send LoginSuccess packet, tells client they've logged in succesfully
     w.write(Buffer.pack_packet(LoginSuccess(*auth), share['comp_thresh']))
     await w.drain()
+
+    return True, r, w
 
 
 # Verifies that the shared key and token are the same, and does other authentication methods

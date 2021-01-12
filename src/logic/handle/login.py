@@ -5,7 +5,7 @@ from asyncio import StreamReader, StreamWriter
 import aiohttp
 import uuid
 
-from src.api import handle_packet
+from src.api.packet import handle_packet
 
 from src.util.encryption import *
 from src.util.share import share

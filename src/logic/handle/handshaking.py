@@ -1,6 +1,6 @@
 from asyncio import StreamReader, StreamWriter
 
-from src.api import handle_packet
+from src.api.packet import handle_packet
 from src.util.share import share
 
 from src.types.packet import Packet

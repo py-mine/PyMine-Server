@@ -1,4 +1,6 @@
+import importlib
 import asyncio
+import os
 
 from src.logic.commands import on_command, handle_server_commands, load_commands
 
@@ -34,6 +36,11 @@ running_tasks = []
 
 async def init():
     load_commands()  # load commands in src/logic/cmds/*
+
+    # Load packet handlers / packet logic handlers
+    for root, dirs, files in os.walk('src/logic/handle'):
+        for file in filter((lambda f: f.endswith('.py'), files):
+            importlib.import_module(os.path.join(root, file).replace('/', .).replace('\\', '.'))
 
     # start command handler task
     running_tasks.append(asyncio.create_task(handle_server_commands()))

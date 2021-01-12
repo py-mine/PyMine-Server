@@ -22,7 +22,7 @@ from src.logic.play import play as logic_play  # nopep8
 from src.util.logging import task_exception_handler  # nopep8
 from src.util.share import share, logger  # nopep8
 
-from src.api import packet_logic_handlers  # nopep8
+from src.api import PACKET_HANDLERS  # nopep8
 
 load_commands()
 
@@ -96,7 +96,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     # if state == 'play':
     #     return await logic_play(r, w, packet, remote)
 
-    return await packet_logic_handlers[state][packet.id](r, w, packet, remote)
+    return await PACKET_HANDLERS[state][packet.id](r, w, packet, remote)
 
 
 async def handle_con(r, w):  # Handle a connection from a client

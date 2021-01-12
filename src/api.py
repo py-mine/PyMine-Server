@@ -29,11 +29,11 @@ models?
     * entity model?
  """
 
-packet_logic_handlers = {'handshaking': [], 'login': [], 'play': [], 'status': []}
+PACKET_HANDLERS = {'handshaking': [], 'login': [], 'play': [], 'status': []}
 
 def handle_packet(state: str, id_: int):
     def command_deco(func):
-        packet_logic_handlers[state][id_] = [*packet_logic_handlers.get(id_, []), func]
+        PACKET_HANDLERS[state][id_] = [*PACKET_HANDLERS.get(id_, []), func]
 
         return func
 

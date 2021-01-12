@@ -43,7 +43,7 @@ async def init():  # called when server starts up
         for file in filter((lambda f: f.endswith('.py')), files):
             importlib.import_module(os.path.join(root, file)[:-3].replace('/', '.').replace('\\', '.'))
 
-    for file in filter((lambda f: f.endswith('.py')), os.walk('plugins')):
+    for file in filter((lambda f: f.endswith('.py')), os.listdir('plugins')):
         try:
             importlib.import_module('plugins.' + file[:-3])
         except BaseException as e:

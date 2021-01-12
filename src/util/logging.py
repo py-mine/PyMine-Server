@@ -8,7 +8,7 @@ if os.name == 'nt':
 
 nice_time = (lambda: time.strftime('%x %H:%M:%S'))
 
-START = '\x1b[1m'
+BRIGHT = '\x1b[1m'
 END = '\x1b[0m'
 WHITE = '\x1b[97m'
 GREY = '\x1b[37m'
@@ -31,23 +31,23 @@ class Logger:
     def debug(self, *message):
         if self.debug_:
             message = ' '.join(str(m) for m in message)
-            print(f'{START}{WHITE}[{nice_time()} {GREY}DEBUG{WHITE}]: {GREY}{message}{END}')
+            print(f'{WHITE}[{nice_time()} {GREY}DEBUG{WHITE}]: {GREY}{message}{END}')
 
     def info(self, *message):
         message = ' '.join(str(m) for m in message)
-        print(f'{START}{WHITE}[{nice_time()} {BLUE}INFO{WHITE}]: {message}{END}')
+        print(f'{BRIGHT}{WHITE}[{nice_time()} {BLUE}INFO{WHITE}]: {message}{END}')
 
     def warn(self, *message):
         message = ' '.join(str(m) for m in message)
-        print(f'{START}{WHITE}[{nice_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{message}{END}')
+        print(f'{BRIGHT}{WHITE}[{nice_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{message}{END}')
 
     def error(self, *message):
         message = ' '.join(str(m) for m in message)
-        print(f'{START}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{message}{END}')
+        print(f'{BRIGHT}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{message}{END}')
 
     def critical(self, *message):
         message = ' '.join(str(m) for m in message)
-        print(f'{START}{WHITE}{BG_RED}[{nice_time()} CRITICAL]: {message}{END}')
+        print(f'{BRIGHT}{WHITE}{BG_RED}[{nice_time()} CRITICAL]: {message}{END}')
 
     @staticmethod
     def f_traceback(e: BaseException):

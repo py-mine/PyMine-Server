@@ -38,13 +38,16 @@ running_tasks = []
 async def init():  # called when server starts up
     load_commands()  # load commands in src/logic/cmds/*
 
-    try:
-        # Load packet handlers / packet logic handlers
-        for root, dirs, files in os.walk('src/logic/handle'):
-            for file in filter((lambda f: f.endswith('.py')), files):
-                importlib.import_module(os.path.join(root, file)[:-3].replace('/', '.').replace('\\', '.'))
-    except BaseException as e:
-        logger.critical(logger.f_traceback(e))
+    # Load packet handlers / packet logic handlers under src/logic/handle
+    for root, dirs, files in os.walk('src/logic/handle'):
+        for file in filter((lambda f: f.endswith('.py')), files):
+            importlib.import_module(os.path.join(root, file)[:-3].replace('/', '.').replace('\\', '.'))
+
+    for file in filter((lambda f: f.endswith('.py')), os.walk('plugins')):
+        try:
+            importlib.import_module('plugins.' + file[:-3])
+        except BaseException as e:
+            logger.error(f'An error occurred while loading plugin: plugins/{file} {logger.f_traceback(e)}')
 
     # start command handler task
     running_tasks.append(asyncio.create_task(handle_server_commands()))

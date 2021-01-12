@@ -11,6 +11,7 @@ from src.util.encryption import *
 from src.util.share import share
 
 from src.types.packet import Packet
+from src.types.buffer import Buffer
 
 from src.types.packets.login.set_comp import LoginSetCompression
 from src.types.packets.login.login import *

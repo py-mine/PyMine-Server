@@ -16,8 +16,6 @@ from src.data.states import STATES
 from src.util.logging import task_exception_handler
 from src.util.share import share, logger
 
-load_commands()
-
 share['rsa']['private'] = rsa.generate_private_key(65537, 1024)
 share['rsa']['public'] = share['rsa']['private'].public_key()
 

@@ -42,3 +42,59 @@ async def login_start(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remo
         await w.drain()
 
         states[remote] = 3  # Update state to play
+
+@handle_packet('login', 0x01)
+async def encrypted_login(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remote: tuple) -> tuple:
+    shared_key, auth = await server_auth(packet, remote, login_cache[remote])
+
+    del login_cache[remote]  # No longer needed
+
+    if not auth:  # If authentication failed, disconnect client
+        w.write(Buffer.pack_packet(LoginDisconnect('Failed to authenticate your connection.')))
+        await w.drain()
+        return False, r, w
+
+    # Generate a cipher for that client using the shared key from the client
+    cipher = gen_aes_cipher(shared_key)
+
+    # Replace streams with ones which auto decrypt + encrypt data when reading/writing
+    r = EncryptedStreamReader(r, cipher.decryptor())
+    w = EncryptedStreamWriter(w, cipher.encryptor())
+
+    if share['comp_thresh'] > 0:  # Send set compression packet if needed
+        w.write(Buffer.pack_packet(LoginSetCompression(share['comp_thresh'])))
+        await w.drain()
+
+    # Send LoginSuccess packet, tells client they've logged in succesfully
+    w.write(Buffer.pack_packet(LoginSuccess(*auth), share['comp_thresh']))
+    await w.drain()
+
+
+# Verifies that the shared key and token are the same, and does other authentication methods
+# Returns the decrypted shared key and the client's username and uuid
+async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: dict) -> tuple:
+    if share['rsa']['private'].decrypt(packet.verify_token, PKCS1v15()) == cache['verify']:
+        decrypted_shared_key = share['rsa']['private'].decrypt(packet.shared_key, PKCS1v15())
+
+        resp = await share['ses'].get(
+            'https://sessionserver.mojang.com/session/minecraft/hasJoined',
+            params={
+                'username': cache['username'],
+                'serverId': gen_verify_hash(
+                    decrypted_shared_key,
+                    share['rsa']['public'].public_bytes(
+                        encoding=serialization.Encoding.DER,
+                        format=serialization.PublicFormat.SubjectPublicKeyInfo
+                    )
+                )
+            }
+        )
+
+        jj = await resp.json()
+
+        if jj is not None:
+            uuid_, name = uuid.UUID(jj['id']), jj['name']
+
+            return decrypted_shared_key, (name, uuid_,)
+
+    return False, False

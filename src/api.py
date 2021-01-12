@@ -58,6 +58,8 @@ async def stop():  # called when server is stopping
 PACKET_HANDLERS = {'handshaking': {}, 'login': {}, 'play': {}, 'status': {}}
 
 # Decorator for adding a coroutine to handle a specific incoming packet
+
+
 def handle_packet(state: str, id_: int):
     def command_deco(func):
         try:

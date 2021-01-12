@@ -85,7 +85,7 @@ async def handle_con(r, w):  # Handle a connection from a client
 
     continue_ = True
 
-    while c:
+    while continue_:
         try:
             continue_, r, w = await handle_packet(r, w, remote)
         except BaseException as e:

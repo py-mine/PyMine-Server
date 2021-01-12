@@ -8,7 +8,7 @@ import os
 
 sys.path.append(os.getcwd())
 
-import src.api as pymine_api
+import src.api as pymine_api  # nopep8
 
 from src.types.buffer import Buffer  # nopep8
 

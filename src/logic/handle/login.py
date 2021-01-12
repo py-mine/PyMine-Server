@@ -70,7 +70,6 @@ async def encrypted_login(r: 'StreamReader', w: 'StreamWriter', packet: Packet, 
         await w.drain()
 
     # Send LoginSuccess packet, tells client they've logged in succesfully
-    print(*auth)
     w.write(Buffer.pack_packet(LoginSuccess(*auth), share['comp_thresh']))
     await w.drain()
 

@@ -81,19 +81,6 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     logger.debug(f'IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}')
 
-    # if state == 'handshaking':
-    #     states[remote] = packet.next_state
-    #     return True, r, w
-    #
-    # if state == 'status':
-    #     return await logic_status(r, w, packet, remote)
-    #
-    # if state == 'login':
-    #     return await logic_login(r, w, packet, remote)
-    #
-    # if state == 'play':
-    #     return await logic_play(r, w, packet, remote)
-
     return await PACKET_HANDLERS[state][packet.id](r, w, packet, remote)
 
 

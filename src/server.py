@@ -15,9 +15,6 @@ from src.types.buffer import Buffer  # nopep8
 from src.data.packet_map import PACKET_MAP  # nopep8
 from src.data.states import STATES  # nopep8
 
-from src.logic.login import login as logic_login  # nopep8
-from src.logic.play import play as logic_play  # nopep8
-
 from src.util.logging import task_exception_handler  # nopep8
 from src.util.share import share, logger  # nopep8
 

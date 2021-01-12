@@ -31,6 +31,7 @@ models?
 
 running_tasks = []
 
+
 async def init():
     load_commands()
     running_tasks.append(asyncio.create_task(handle_server_commands()))

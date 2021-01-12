@@ -1,4 +1,4 @@
-import asyncio
+from asyncio import StreamReader, StreamWriter
 
 from src.util.share import share, logger
 from src.api import handle_packet

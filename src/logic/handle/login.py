@@ -70,6 +70,7 @@ async def encrypted_login(r: 'StreamReader', w: 'StreamWriter', packet: Packet, 
         await w.drain()
 
     # Send LoginSuccess packet, tells client they've logged in succesfully
+    print(*auth)
     w.write(Buffer.pack_packet(LoginSuccess(*auth), share['comp_thresh']))
     await w.drain()
 
@@ -99,8 +100,6 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: d
         jj = await resp.json()
 
         if jj is not None:
-            uuid_, name = uuid.UUID(jj['id']), jj['name']
-
-            return decrypted_shared_key, (name, uuid_,)
+            return decrypted_shared_key, (uuid.UUID(jj['id']), jj['name'],)
 
     return False, False

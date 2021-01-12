@@ -51,8 +51,7 @@ class Logger:
 
     @staticmethod
     def f_traceback(e: BaseException):
-        return '\n' + \
-            ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4)).rstrip('\n')
+        return '\n' + ''.join(traceback.format_exception(type(e), e, e.__traceback__, 4)).rstrip('\n')
 
 
 def task_exception_handler(loop, ctx):

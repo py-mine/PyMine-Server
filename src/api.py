@@ -18,6 +18,8 @@ from src.logic.command import command as on_command
 #   set the motd: set_motd(str or Chat)
 #   set player list header: set_player_list_header(str or Chat)
 #   set player list footer: set_player_list_footer(str or Chat)
+#   send_packet()?
 
 # models?
 #   * player model
+#   * entity model?

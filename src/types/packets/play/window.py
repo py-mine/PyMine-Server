@@ -18,6 +18,7 @@ __all__ = (
     'PlayWindowItems',
     'PlaySetSlot',
     'PlayOpenHorseWindow',
+    'PlayOpenSignEditor',
 )
 
 
@@ -287,3 +288,28 @@ class PlayOpenHorseWindow(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack('b', self.window_id) + Buffer.pack_varint(self.num_slots) + Buffer.pack('i', self.entity_id)
+
+
+class PlayOpenSignEditor(Packet):
+    """Sent after a client places a sign, opens the sign editor GUI. (Server -> Client)
+
+    :param int x: The x coordinate of the position of the sign.
+    :param int y: The y coordinate of the position of the sign.
+    :param int z: The z coordinate of the position of the sign.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr x:
+    :attr y:
+    :attr z:
+    """
+
+    id = 0x2E
+    to = 1
+
+    def __init__(self, x: int, y: int, z: int) -> None:
+        super().__init__()
+
+        self.x, self.y, self.z = x, y, z
+
+    def encode(self) -> bytes:
+        return Buffer.pack_pos(self.x, self.y, self.z)

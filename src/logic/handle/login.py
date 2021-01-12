@@ -43,6 +43,7 @@ async def login_start(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remo
 
         states[remote] = 3  # Update state to play
 
+
 @handle_packet('login', 0x01)
 async def encrypted_login(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remote: tuple) -> tuple:
     shared_key, auth = await server_auth(packet, remote, login_cache[remote])

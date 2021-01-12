@@ -76,7 +76,11 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     logger.debug(f'IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}')
 
-    return await pymine_api.PACKET_HANDLERS[state][packet.id](r, w, packet, remote)
+    for handler in pymine_api.PACKET_HANDLERS[state][packet.id]:
+        continue_, r, w = await handler(r, w, packet, remote)
+
+        if not continue_:
+            return False, r, w
 
 
 async def handle_con(r, w):  # Handle a connection from a client

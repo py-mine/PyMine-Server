@@ -15,7 +15,7 @@ def load_commands():  # only loads commands inside cmds folder, not subfolders
             importlib.import_module(f'src.logic.cmds.{file[:-3]}')
 
 
-def command(name: str, node: str):
+def on_command(name: str, node: str):
     if name in registered_commands:
         raise ValueError('Command name is already in use.')
 

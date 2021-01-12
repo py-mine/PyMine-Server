@@ -1,7 +1,7 @@
-from src.logic.commands import command
+from src.logic.commands import on_command
 from src.util.share import share
 
 
-@command(name='stop', node='minecraft.cmd.stop')
+@on_command(name='stop', node='minecraft.cmd.stop')
 def stop_server(uuid: str, args: str):
     share['server'].close()

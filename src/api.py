@@ -3,6 +3,7 @@ import asyncio
 import os
 
 from src.logic.commands import on_command, handle_server_commands, load_commands
+from src.util.share import logger
 
 """
 events/decorators:
@@ -37,10 +38,13 @@ running_tasks = []
 async def init():
     load_commands()  # load commands in src/logic/cmds/*
 
-    # Load packet handlers / packet logic handlers
-    for root, dirs, files in os.walk('src/logic/handle'):
-        for file in filter((lambda f: f.endswith('.py')), files):
-            importlib.import_module(os.path.join(root, file).replace('/', '.').replace('\\', '.'))
+    try:
+        # Load packet handlers / packet logic handlers
+        for root, dirs, files in os.walk('src/logic/handle'):
+            for file in filter((lambda f: f.endswith('.py')), files):
+                importlib.import_module(os.path.join(root, file)[:-3].replace('/', '.').replace('\\', '.'))
+    except BaseException as e:
+        logger.critical(logger.f_traceback(e))
 
     # start command handler task
     running_tasks.append(asyncio.create_task(handle_server_commands()))
@@ -51,12 +55,15 @@ async def stop():
         task.cancel()
 
 
-PACKET_HANDLERS = {'handshaking': [], 'login': [], 'play': [], 'status': []}
+PACKET_HANDLERS = {'handshaking': {}, 'login': {}, 'play': {}, 'status': {}}
 
 
 def handle_packet(state: str, id_: int):
     def command_deco(func):
-        PACKET_HANDLERS[state][id_] = [*PACKET_HANDLERS.get(id_, []), func]
+        try:
+            PACKET_HANDLERS[state][id_].append(func)
+        except KeyError:
+            PACKET_HANDLERS[state][id_] = [func]
 
         return func
 

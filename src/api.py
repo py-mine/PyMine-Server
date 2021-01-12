@@ -8,4 +8,4 @@ from src.logic.command import command
 #   packets:
 #       packet logic: @packet_logic(id=0x00)
 #       after packet logic: @after_packet_logic(id=0x00)
-#   tasks: @task(ticks_per=1 or seconds_per=1 or minutes_per=1 or hours_per=1)
+#   tasks: @task(ticks_per=1 or seconds_per=1, minutes_per=1, hours_per=1)

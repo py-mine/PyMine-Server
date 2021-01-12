@@ -82,6 +82,8 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         if not continue_:
             return False, r, w
 
+    return continue_, r, w
+
 
 async def handle_con(r, w):  # Handle a connection from a client
     remote = w.get_extra_info('peername')  # (host, port,)

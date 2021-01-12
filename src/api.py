@@ -3,7 +3,7 @@ import asyncio
 import os
 
 from src.logic.commands import on_command, handle_server_commands, load_commands
-from src.util.share import logger
+from src.util.share import logger, share
 
 """
 events/decorators:

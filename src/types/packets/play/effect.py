@@ -5,7 +5,10 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlayEffect',)
+__all__ = (
+    'PlayEffect',
+    'PlayEntityEffect',
+)
 
 
 class PlayEffect(Packet):
@@ -41,3 +44,22 @@ class PlayEffect(Packet):
     def encode(self) -> bytes:
         return Buffer.pack('i', self.effect_id) + Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack('i', self.data) + \
             Buffer.pack('?', self.disable_relative_volume)
+
+
+class PlayEntityEffect(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x59
+    to = 1
+
+    def __init__(self, eid: int, effect_id: bytes, amp: bytes, duration: int, flags: bytes) -> None:
+        super().__init__()
+
+        self.eid = eid
+        self.effect_id = effect_id
+        self.amp = amp
+        self.duration = duration
+        self.flags = flags
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.eid) + self.effect_id + self.amp + Buffer.pack_varint(self.duration) + self.flags

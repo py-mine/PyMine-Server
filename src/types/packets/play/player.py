@@ -546,7 +546,7 @@ class PlayUpdateViewPosition(Packet):
         self.chunk_z = chunk_z
 
     def encode(self) -> bytes:
-        Buffer.pack_varint(self.chunk_x) + Buffer.pack_varint(self.chunk_z)
+        return Buffer.pack_varint(self.chunk_x) + Buffer.pack_varint(self.chunk_z)
 
 
 class PlayUpdateViewDistance(Packet):
@@ -558,10 +558,10 @@ class PlayUpdateViewDistance(Packet):
     def __init__(self, view_distance: int) -> None:
         super().__init__()
 
-        self.view_distance
+        self.view_distance = view_distance
 
     def encode(self) -> bytes:
-        Buffer.pack_varint(self.view_distance)
+        return Buffer.pack_varint(self.view_distance)
 
 
 class PlaySetExperience(Packet):

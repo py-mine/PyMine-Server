@@ -5,7 +5,7 @@ from __future__ import annotations
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-__all__ = ('PlaySelectTrade',)
+__all__ = ('PlaySelectTrade', 'PlayTradeList',)
 
 
 class PlaySelectTrade(Packet):
@@ -56,6 +56,8 @@ class PlayTradeList(Packet):
         super().__init__()
 
         self.window_id = window_id
+        # We assume that a trade (entry in trades list) is a dictionary that contains trade data, see here: https://wiki.vg/Protocol#Trade_List
+        # This is liable to change in the future as we decide how trades will be stored and loaded
         self.trades = trades
         self.villager_lvl = villager_lvl
         self.xp = xp
@@ -63,4 +65,6 @@ class PlayTradeList(Packet):
         self.can_restock = can_restock
 
     def encode(self) -> bytes:
-        raise NotImplementedError  # We can't do this till Buffer.pack_trade() is made
+        return Buffer.pack_varint(self.window_id) + Buffer.pack('b', len(self.trades)) + \
+            b''.join(Buffer.pack_trade(**trade) for trade in self.trades) + Buffer.pack_varint(self.villager_lvl) + \
+            Buffer.pack_varint(self.xp) + Buffer.pack('?', self.is_regular) + Buffer.pack('?', self.can_restock)

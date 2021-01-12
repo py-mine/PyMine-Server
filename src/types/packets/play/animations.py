@@ -9,6 +9,7 @@ __all__ = (
     'PlayEntityAnimation',
     'PlayBlockBreakAnimation',
     'PlayAnimationServerBound',
+    'PlayOpenBook',
 )
 
 
@@ -88,3 +89,24 @@ class PlayAnimationServerBound(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayAnimationServerBound:
         return cls(buf.unpack_varint())
+
+
+class PlayOpenBook(Packet):
+    """Sent when a player right clicks a signed book. (Server -> Client)
+
+    :param int hand: The hand used, either main (0) or offhand (1).
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr hand:
+    """
+
+    id = 0x2C
+    to = 1
+
+    def __init__(self, hand: int) -> None:
+        super().__init__()
+
+        self.hand = hand
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.hand)

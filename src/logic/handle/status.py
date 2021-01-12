@@ -1,0 +1,42 @@
+import asyncio
+
+from src.util.share import share, logger
+from src.api import handle_packet
+
+from src.types.packet import Packet
+from src.types.buffer import Buffer
+
+from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingResponse
+from src.types.packets.status.status import *
+
+@handle_packet(state='status', 0x00)
+async def send_status(r, w, packet: Packet, remote: tuple) -> tuple:
+    data = {
+        'version': {
+            'name': share['version'],
+            'protocol': share['protocol']
+        },
+        'players': {
+            'max': share['conf']['max_players'],
+            'online': len(share['states']),
+            'sample': [
+                {
+                    'name': 'Iapetus11',
+                    'id': 'cbcfa252-867d-4bda-a214-776c881cf370'
+                },
+                {
+                    'name': 'Sh_wayz',
+                    'id': 'cbcfa252-867d-4bda-a214-776c881cf370'
+                }
+            ]
+        },
+        'description': {  # a Chat
+            'text': share['conf']['motd']
+        },
+        'favicon': share['favicon']
+    }
+
+    w.write(Buffer.pack_packet(StatusStatusResponse(data)))
+    await w.drain()
+
+    return True, r, w

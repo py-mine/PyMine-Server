@@ -11,7 +11,7 @@ events/decorators:
     command: @on_command(name='name', node='plugin_name.cmds.cmd_name')
     chat message: @on_message
     incoming packets:
-        packet logic: @add_packet_logic(*id=0x00)
+        packet logic: @handle_packet(*id=0x00)
         after packet logic: @after_packet_logic(id=0x00)
     tasks: @task(ticks_per=1 or seconds_per=1, minutes_per=1, hours_per=1)
     players:
@@ -31,7 +31,7 @@ models?
 
 packet_logic_handlers = {'handshaking': [], 'login': [], 'play': [], 'status': []}
 
-def add_packet_logic(state: str, *ids: int):
+def handle_packet(state: str, *ids: int):
     def command_deco(func):
         for id_ in ids:
             # append handler to list of handlers

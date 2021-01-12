@@ -22,6 +22,8 @@ from src.logic.play import play as logic_play  # nopep8
 from src.util.logging import task_exception_handler  # nopep8
 from src.util.share import share, logger  # nopep8
 
+from src.api import packet_logic_handlers  # nopep8
+
 load_commands()
 
 share['rsa']['private'] = rsa.generate_private_key(65537, 1024)
@@ -81,18 +83,20 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     logger.debug(f'IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}')
 
-    if state == 'handshaking':
-        states[remote] = packet.next_state
-        return True, r, w
+    # if state == 'handshaking':
+    #     states[remote] = packet.next_state
+    #     return True, r, w
+    #
+    # if state == 'status':
+    #     return await logic_status(r, w, packet, remote)
+    #
+    # if state == 'login':
+    #     return await logic_login(r, w, packet, remote)
+    #
+    # if state == 'play':
+    #     return await logic_play(r, w, packet, remote)
 
-    if state == 'status':
-        return await logic_status(r, w, packet, remote)
-
-    if state == 'login':
-        return await logic_login(r, w, packet, remote)
-
-    if state == 'play':
-        return await logic_play(r, w, packet, remote)
+    return await packet_logic_handlers[state][packet.id](r, w, packet, remote)
 
 
 async def handle_con(r, w):  # Handle a connection from a client

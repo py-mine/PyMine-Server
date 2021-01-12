@@ -10,7 +10,7 @@ from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingRespons
 from src.types.packets.status.status import *
 
 
-@handle_packet(state='status', 0x00)
+@handle_packet('status', 0x00)
 async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remote: tuple) -> tuple:
     data = {
         'version': {
@@ -43,7 +43,7 @@ async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remo
     return True, r, w
 
 
-@handle_packet(state='status', 0x01)
+@handle_packet('status', 0x01)
 async def send_pong(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remote: tuple) -> tuple:
     w.write(Buffer.pack_packet(packet))
     await w.drain()

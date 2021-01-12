@@ -82,11 +82,11 @@ async def handle_con(r, w):  # Handle a connection from a client
     remote = w.get_extra_info('peername')  # (host, port,)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}.')
 
-    c = True
+    continue_ = True
 
     while c:
         try:
-            c, r, w = await handle_packet(r, w, remote)
+            continue_, r, w = await handle_packet(r, w, remote)
         except BaseException as e:
             logger.error(logger.f_traceback(e))
             break

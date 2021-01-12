@@ -9,8 +9,9 @@ from src.types.buffer import Buffer
 from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingResponse
 from src.types.packets.status.status import *
 
+
 @handle_packet(state='status', 0x00)
-async def send_status(r, w, packet: Packet, remote: tuple) -> tuple:
+async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remote: tuple) -> tuple:
     data = {
         'version': {
             'name': share['version'],
@@ -40,3 +41,11 @@ async def send_status(r, w, packet: Packet, remote: tuple) -> tuple:
     await w.drain()
 
     return True, r, w
+
+
+@handle_packet(state='status', 0x01)
+async def send_pong(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remote: tuple) -> tuple:
+    w.write(Buffer.pack_packet(packet))
+    await w.drain()
+
+    return False, r, w

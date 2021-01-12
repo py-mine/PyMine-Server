@@ -14,8 +14,6 @@ from src.data.packet_map import PACKET_MAP  # nopep8
 from src.data.states import STATES  # nopep8
 
 from src.logic.commands import handle_server_commands, load_commands  # nopep8
-from src.logic.status import legacy_ping as logic_legacy_ping  # nopep8
-from src.logic.status import status as logic_status  # nopep8
 from src.logic.login import login as logic_login  # nopep8
 from src.logic.play import play as logic_play  # nopep8
 
@@ -64,8 +62,8 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             return await close_con(w, remote)
 
         if i == 0 and read == b'\xFE':
-            await logic_legacy_ping(r, w, remote)
-            return await close_con(w, remote)
+            logger.warn('Legacy ping attempted, legacy ping is not supported.')
+            return False, r, w
 
         b = struct.unpack('B', read)[0]
         packet_length |= (b & 0x7F) << 7 * i

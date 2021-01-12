@@ -4,8 +4,10 @@ from __future__ import annotations
 
 from src.types.packet import Packet
 from src.types.buffer import Buffer
+from src.types.chat import Chat
 
 __all__ = (
+    'PlayOpenWindow',
     'PlayWindowConfirmationClientBound',
     'PlayWindowConfirmationServerBound',
     'PlayClickWindow',
@@ -17,6 +19,33 @@ __all__ = (
     'PlaySetSlot',
     'PlayOpenHorseWindow',
 )
+
+
+class PlayOpenWindow(Packet):
+    """This is sent to the client when it should open an inventory window, like a crafting table or furnace. (Server -> Client)
+
+    :param int window_id: The ID of the window being opened.
+    :param int window_type: The type of window, see here: https://wiki.vg/Inventory.
+    :param Chat title: The title of the window.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr window_id:
+    :attr window_type:
+    :attr title:
+    """
+
+    id = 0x2D
+    to = 1
+
+    def __init__(self, window_id: int, window_type: int, title: Chat) -> None:
+        super().__init__()
+
+        self.window_id = window_id
+        self.window_type = window_type
+        self.title = title
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.window_id) + Buffer.pack_varint(self.window_type) + Buffer.pack_chat(self.title)
 
 
 class PlayWindowConfirmationClientBound(Packet):

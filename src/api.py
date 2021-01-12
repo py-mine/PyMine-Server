@@ -1,5 +1,7 @@
 from src.logic.command import on_command
 
+from src.data.packet_map import PACKET_MAP
+
 """
 events/decorators:
     * For each event, there should be a list of handlers so there can be multiple handlers between plugins
@@ -8,8 +10,8 @@ events/decorators:
         shutdown: @on_server_stop
     command: @on_command(name='name', node='plugin_name.cmds.cmd_name')
     chat message: @on_message
-    packets:
-        packet logic: @packet_logic(*id=0x00)
+    incoming packets:
+        packet logic: @add_packet_logic(*id=0x00)
         after packet logic: @after_packet_logic(id=0x00)
     tasks: @task(ticks_per=1 or seconds_per=1, minutes_per=1, hours_per=1)
     players:
@@ -26,3 +28,15 @@ models?
     * player model
     * entity model?
  """
+
+packet_logic_handlers = {'handshaking': [], 'login': [], 'play': [], 'status': []}
+
+def add_packet_logic(state: str, *ids: int):
+    def command_deco(func):
+        for id_ in ids:
+            # append handler to list of handlers
+            packet_logic_handlers[state][id_] = [*packet_logic_handlers.get(id_, []), func]
+
+        return func
+
+    return command_deco

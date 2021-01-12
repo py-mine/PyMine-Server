@@ -3,20 +3,18 @@ import asyncio
 import aiohttp
 import random
 import struct
-import sys
-import os
 
-sys.path.append(os.getcwd())
+import sys; import os; sys.path.append(os.getcwd()) # nopep8
 
-import src.api as pymine_api  # nopep8
+import src.api as pymine_api
 
-from src.types.buffer import Buffer  # nopep8
+from src.types.buffer import Buffer
 
-from src.data.packet_map import PACKET_MAP  # nopep8
-from src.data.states import STATES  # nopep8
+from src.data.packet_map import PACKET_MAP
+from src.data.states import STATES
 
-from src.util.logging import task_exception_handler  # nopep8
-from src.util.share import share, logger  # nopep8
+from src.util.logging import task_exception_handler
+from src.util.share import share, logger
 
 load_commands()
 

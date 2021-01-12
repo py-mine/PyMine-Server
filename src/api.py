@@ -31,11 +31,9 @@ models?
 
 packet_logic_handlers = {'handshaking': [], 'login': [], 'play': [], 'status': []}
 
-def handle_packet(state: str, *ids: int):
+def handle_packet(state: str, id_: int):
     def command_deco(func):
-        for id_ in ids:
-            # append handler to list of handlers
-            packet_logic_handlers[state][id_] = [*packet_logic_handlers.get(id_, []), func]
+        packet_logic_handlers[state][id_] = [*packet_logic_handlers.get(id_, []), func]
 
         return func
 

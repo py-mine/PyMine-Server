@@ -1,7 +1,5 @@
 from src.logic.command import on_command
 
-from src.data.packet_map import PACKET_MAP
-
 """
 events/decorators:
     * For each event, there should be a list of handlers so there can be multiple handlers between plugins

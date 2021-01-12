@@ -1,8 +1,9 @@
 import asyncio
 
 from src.api import handle_packet
-
 from src.util.share import share
+
+from src.types.packet import Packet
 
 
 @handle_packet('handshaking', 0x00)

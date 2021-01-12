@@ -8,19 +8,18 @@ import os
 
 sys.path.append(os.getcwd())
 
+import src.api as pymine_api
+
 from src.types.buffer import Buffer  # nopep8
 
 from src.data.packet_map import PACKET_MAP  # nopep8
 from src.data.states import STATES  # nopep8
 
-from src.logic.commands import handle_server_commands, load_commands  # nopep8
 from src.logic.login import login as logic_login  # nopep8
 from src.logic.play import play as logic_play  # nopep8
 
 from src.util.logging import task_exception_handler  # nopep8
 from src.util.share import share, logger  # nopep8
-
-from src.api import PACKET_HANDLERS  # nopep8
 
 load_commands()
 
@@ -81,7 +80,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     logger.debug(f'IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}')
 
-    return await PACKET_HANDLERS[state][packet.id](r, w, packet, remote)
+    return await pymine_api.PACKET_HANDLERS[state][packet.id](r, w, packet, remote)
 
 
 async def handle_con(r, w):  # Handle a connection from a client
@@ -106,7 +105,7 @@ async def start():  # Actually start the server
 
     server = share['server'] = await asyncio.start_server(handle_con, host=addr, port=port)
 
-    cmd_task = asyncio.create_task(handle_server_commands())  # Used to handle commands
+    await pymine_api.init()
 
     try:
         async with aiohttp.ClientSession() as share['ses']:
@@ -121,7 +120,7 @@ async def start():  # Actually start the server
     except (asyncio.CancelledError, KeyboardInterrupt,):
         logger.info('Closing server...')
 
-        cmd_task.cancel()
+        await pymine_api.stop()
 
         logger.info('Server closed.')
 

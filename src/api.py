@@ -1,4 +1,6 @@
-from src.logic.command import on_command
+import asyncio
+
+from src.logic.commands import on_command, handle_server_commands, load_commands
 
 """
 events/decorators:
@@ -25,7 +27,19 @@ utility methods/functions:
 models?
     * player model
     * entity model?
- """
+"""
+
+running_tasks = []
+
+async def init():
+    load_commands()
+    running_tasks.append(asyncio.create_task(handle_server_commands()))
+
+
+async def stop():
+    for task in running_tasks:
+        task.cancel()
+
 
 PACKET_HANDLERS = {'handshaking': [], 'login': [], 'play': [], 'status': []}
 

@@ -9,7 +9,7 @@ __all__ = ('PlayUpdateSign',)
 
 
 class PlayUpdateSign(Packet):
-    """Short summary.
+    """Sent from the client when the done button is pressed in the sign GUI. (Client -> Server)
 
     :param int x: The x coordinate of the sign.
     :param int y: The y coordinate of the sign.

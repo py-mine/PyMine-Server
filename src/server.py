@@ -77,7 +77,13 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     logger.debug(f'IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}')
 
     for handler in pymine_api.PACKET_HANDLERS[state][packet.id]:
-        continue_, r, w = await handler(r, w, packet, remote)
+        resp_value = await handler(r, w, packet, remote)
+
+        try:
+            continue_, r, w = resp_value
+        except (ValueError, TypeError,):
+            logger.warn(f'Invalid return from handler {handler}')
+            continue
 
         if not continue_:
             return False, r, w

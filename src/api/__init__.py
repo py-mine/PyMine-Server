@@ -5,11 +5,6 @@ import os
 from src.logic.commands import on_command, handle_server_commands, load_commands
 from src.util.share import logger, share
 
-from src.api.packet import handle_packet
-# from src.api.server import *
-# from src.api.tasks import *
-# from src.api.chat import *
-
 """
 events/decorators:
     * For each event, there should be a list of handlers so there can be multiple handlers between plugins

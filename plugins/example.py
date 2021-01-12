@@ -1,4 +1,4 @@
-from src.api import handle_packet
+from src.api.packet import handle_packet
 
 
 @handle_packet('handshaking', 0x00)

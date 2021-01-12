@@ -2,6 +2,7 @@
 PLAYER_JOIN_HANDLERS = []
 PLAYER_LEAVE_HANDLERS = []
 
+
 def on_player_join(func):
     PLAYER_JOIN_HANDLERS.append(func)
 

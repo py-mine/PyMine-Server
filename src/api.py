@@ -39,7 +39,7 @@ async def init():
 
     # Load packet handlers / packet logic handlers
     for root, dirs, files in os.walk('src/logic/handle'):
-        for file in filter((lambda f: f.endswith('.py'), files):
+        for file in filter((lambda f: f.endswith('.py')), files):
             importlib.import_module(os.path.join(root, file).replace('/', .).replace('\\', '.'))
 
     # start command handler task

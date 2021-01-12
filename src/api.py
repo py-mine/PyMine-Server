@@ -35,7 +35,7 @@ models?
 running_tasks = []
 
 
-async def init():
+async def init():  # called when server starts up
     load_commands()  # load commands in src/logic/cmds/*
 
     try:
@@ -50,14 +50,14 @@ async def init():
     running_tasks.append(asyncio.create_task(handle_server_commands()))
 
 
-async def stop():
+async def stop():  # called when server is stopping
     for task in running_tasks:
         task.cancel()
 
 
 PACKET_HANDLERS = {'handshaking': {}, 'login': {}, 'play': {}, 'status': {}}
 
-
+# Decorator for adding a coroutine to handle a specific incoming packet
 def handle_packet(state: str, id_: int):
     def command_deco(func):
         try:

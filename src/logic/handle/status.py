@@ -6,7 +6,6 @@ from src.api import handle_packet
 from src.types.packet import Packet
 from src.types.buffer import Buffer
 
-from src.types.packets.handshaking.legacy_ping import HandshakeLegacyPingResponse
 from src.types.packets.status.status import *
 
 

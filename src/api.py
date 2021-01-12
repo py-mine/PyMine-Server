@@ -31,6 +31,7 @@ models?
 
 PACKET_HANDLERS = {'handshaking': [], 'login': [], 'play': [], 'status': []}
 
+
 def handle_packet(state: str, id_: int):
     def command_deco(func):
         PACKET_HANDLERS[state][id_] = [*PACKET_HANDLERS.get(id_, []), func]

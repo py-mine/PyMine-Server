@@ -16,7 +16,7 @@ from src.data.packet_map import PACKET_MAP
 from src.data.states import STATES
 
 from src.util.logging import task_exception_handler
-from src.util.encryption import  gen_rsa_keys
+from src.util.encryption import gen_rsa_keys
 from src.util.share import share, logger
 
 share['rsa']['private'], share['rsa']['public'] = gen_rsa_keys()

@@ -130,7 +130,7 @@ async def start():  # Actually start the server
     except (asyncio.CancelledError, KeyboardInterrupt,):
         logger.info('Closing server...')
 
-        await asyncio.gather(pymine_api.server.SERVER_STOP_HANDLERS)
+        await asyncio.gather(*(h() for h in pymine_api.server.SERVER_STOP_HANDLERS))
         await pymine_api.stop()
 
         logger.info('Server closed.')

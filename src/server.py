@@ -112,26 +112,31 @@ async def start():  # Actually start the server
     port = share['conf']['server_port']
 
     server = share['server'] = await asyncio.start_server(handle_con, host=addr, port=port)
+    share['ses'] = aiohttp.ClientSession()
 
     await pymine_api.init()
 
     try:
-        async with aiohttp.ClientSession() as share['ses']:
-            async with server:
-                if random.randint(0, 999) == 1:  # shhhhh
-                    logger.info(f'PPMine 69.0 started on port {addr}:{port}!')
-                else:
-                    logger.info(f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
+        async with server:
+            if random.randint(0, 999) == 1:  # shhhhh
+                logger.info(f'PPMine 69.0 started on port {addr}:{port}!')
+            else:
+                logger.info(f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
 
-                for handler in pymine_api.server.SERVER_READY_HANDLERS:
-                    asyncio.create_task(handler())
+            for handler in pymine_api.server.SERVER_READY_HANDLERS:
+                asyncio.create_task(handler())
 
-                await server.serve_forever()
+            await server.serve_forever()
     except (asyncio.CancelledError, KeyboardInterrupt,):
         logger.info('Closing server...')
 
+        server.close()
+
+        # call all registered on_server_stop handlers
         await asyncio.gather(*(h() for h in pymine_api.server.SERVER_STOP_HANDLERS))
-        await pymine_api.stop()
+
+        # wait for the server to be closed, and stop the api
+        await asyncio.gather(server.wait_closed(), pymine_api.stop())
 
         logger.info('Server closed.')
 

@@ -1,4 +1,3 @@
-from cryptography.hazmat.primitives.asymmetric import rsa
 import asyncio
 import aiohttp
 import random
@@ -17,11 +16,10 @@ from src.data.packet_map import PACKET_MAP
 from src.data.states import STATES
 
 from src.util.logging import task_exception_handler
+from src.util.encryption import  gen_rsa_keys
 from src.util.share import share, logger
 
-share['rsa']['private'] = rsa.generate_private_key(65537, 1024)
-share['rsa']['public'] = share['rsa']['private'].public_key()
-
+share['rsa']['private'], share['rsa']['public'] = gen_rsa_keys()
 states = share['states']
 logger.debug_ = share['conf']['debug']
 

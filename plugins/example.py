@@ -1,4 +1,4 @@
-from src.api.server import on_server_ready
+from src.api.server import on_server_ready, on_server_stop
 from src.api.packet import handle_packet
 
 

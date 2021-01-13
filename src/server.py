@@ -121,8 +121,7 @@ async def start():  # Actually start the server
                 if random.randint(0, 999) == 1:  # shhhhh
                     logger.info(f'PPMine 69.0 started on port {addr}:{port}!')
                 else:
-                    logger.info(
-                        f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
+                    logger.info(f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
 
                 await server.serve_forever()
     except (asyncio.CancelledError, KeyboardInterrupt,):

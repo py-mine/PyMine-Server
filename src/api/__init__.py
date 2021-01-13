@@ -46,7 +46,7 @@ async def init():  # called when server starts up
     # Load packet handlers / packet logic handlers under src/logic/handle
     for root, dirs, files in os.walk('src/logic/handle'):
         for file in filter((lambda f: f.endswith('.py')), files):
-            importlib.import_module(os.path.join(root, file)[:-3].replace('/', '.').replace('\\', '.'))
+            importlib.import_module(os.path.join(root, file)[:-3].replace(os.sep, '.'))
 
     # for file in filter((lambda f: f.endswith('.py')), os.listdir('plugins')):
     #     try:

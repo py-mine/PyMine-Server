@@ -12,3 +12,8 @@ async def example_handle_handshake(r, w, packet, remote):
 @on_server_ready
 async def on_server_ready():
     print('AYYY SERVER DO BE WORKING THO NGL')
+
+
+@on_server_stop
+async def on_server_stop():
+    print('*sad server stopping noises*')

@@ -5,7 +5,7 @@ import os
 from src.logic.commands import on_command, handle_server_commands, load_commands
 from src.util.share import logger, share
 
-from src.data.config import PLUGIN_LIST
+from src.data.config import PLUGIN_LIST as PLUGINS_TO_LOAD
 
 import src.api.packet
 import src.api.player
@@ -51,7 +51,7 @@ async def init():  # called when server starts up
         for file in filter((lambda f: f.endswith('.py')), files):
             importlib.import_module(os.path.join(root, file)[:-3].replace(os.sep, '.'))
 
-    for plugin in PLUGIN_LIST:
+    for plugin in PLUGINS_TO_LOAD:
         try:
             PLUGINS.append(importlib.import_module(f'plugins.{plugin}'))
         except BaseException as e:

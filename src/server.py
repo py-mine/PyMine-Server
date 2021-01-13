@@ -123,7 +123,8 @@ async def start():  # Actually start the server
                 else:
                     logger.info(f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
 
-                asyncio.create_task(asyncio.gather(pymine_api.server.SERVER_READY_HANDLERS))
+                for handler in pymine_api.server.SERVER_READY_HANDLERS:
+                    asyncio.create_task(handler())
 
                 await server.serve_forever()
     except (asyncio.CancelledError, KeyboardInterrupt,):

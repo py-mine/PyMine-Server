@@ -1,9 +1,16 @@
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.ciphers.base import _CipherContext
+from cryptography.hazmat.primitives.asymmetric import rsa
 import hashlib
 import asyncio
 
 __all__ = ('gen_verify_hash', 'gen_aes_cipher', 'EncryptedStreamReader', 'EncryptedStreamWriter',)
+
+
+def gen_rsa_keys():
+    private_key = rsa.generate_private_key(65537, 1024)
+
+    return private_key, private_key.public_key()
 
 
 def gen_verify_hash(shared_key: bytes, public_key: bytes):

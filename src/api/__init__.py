@@ -57,7 +57,10 @@ async def init():  # called when server starts up
     for root, dirs, files in os.walk('plugins'):
         for directory in dirs:
             if not directory.startswith('__'):
-                importlib.import_module(os.path.join(root, directory).replace(os.sep, '.'))
+                try:
+                    importlib.import_module(os.path.join(root, directory).replace(os.sep, '.'))
+                except BaseException as e:
+                    logger.error(f'An error occurred while loading plugin: plugins/{file} {logger.f_traceback(e)}')
 
         break
 

@@ -39,8 +39,8 @@ models?
     * entity model?
 """
 
-PLUGINS = []
-RUNNING_TASKS = []
+plugins = []
+running_tasks = []
 
 
 async def init():  # called when server starts up
@@ -53,14 +53,14 @@ async def init():  # called when server starts up
 
     for plugin in PLUGINS_TO_LOAD:
         try:
-            PLUGINS.append(importlib.import_module(f'plugins.{plugin}'))
+            plugins.append(importlib.import_module(f'plugins.{plugin}'))
         except BaseException as e:
             logger.error(f'An error occurred while loading plugin: plugins.{plugin} {logger.f_traceback(e)}')
 
     # start command handler task
-    RUNNING_TASKS.append(asyncio.create_task(handle_server_commands()))
+    running_tasks.append(asyncio.create_task(handle_server_commands()))
 
 
 async def stop():  # called when server is stopping
-    for task in RUNNING_TASKS:
+    for task in running_tasks:
         task.cancel()

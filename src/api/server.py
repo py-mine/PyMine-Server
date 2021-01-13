@@ -3,8 +3,8 @@ SERVER_READY_HANDLERS = []
 SERVER_STOP_HANDLERS = []
 
 
-def on_server_ready(func):
-    SERVER_READY_HANDLERS.append(func)
+def on_player_join(func):
+    PLAYER_JOIN_HANDLERS.append(func)
 
     return func
 

@@ -5,6 +5,12 @@ import os
 from src.logic.commands import on_command, handle_server_commands, load_commands
 from src.util.share import logger, share
 
+import src.api.packet
+import src.api.player
+import src.api.server
+import src.api.tasks
+import src.api.chat
+
 """
 events/decorators:
     * For each event, there should be a list of handlers so there can be multiple handlers between plugins
@@ -42,11 +48,18 @@ async def init():  # called when server starts up
         for file in filter((lambda f: f.endswith('.py')), files):
             importlib.import_module(os.path.join(root, file)[:-3].replace('/', '.').replace('\\', '.'))
 
-    for file in filter((lambda f: f.endswith('.py')), os.listdir('plugins')):
-        try:
-            importlib.import_module('plugins.' + file[:-3])
-        except BaseException as e:
-            logger.error(f'An error occurred while loading plugin: plugins/{file} {logger.f_traceback(e)}')
+    # for file in filter((lambda f: f.endswith('.py')), os.listdir('plugins')):
+    #     try:
+    #         importlib.import_module('plugins.' + file[:-3])
+    #     except BaseException as e:
+    #         logger.error(f'An error occurred while loading plugin: plugins/{file} {logger.f_traceback(e)}')
+
+    for root, dirs, files in os.walk('plugins'):
+        for directory in dirs:
+            if not directory.startswith('__'):
+                importlib.import_module(os.path.join(root, directory))
+
+        break
 
     # start command handler task
     running_tasks.append(asyncio.create_task(handle_server_commands()))

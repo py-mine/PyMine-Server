@@ -4,7 +4,7 @@ import yaml
 
 from src.util.seeds import string_hash_code, gen_seed
 
-__all__ = ('SERVER_PROPERTIES_DEFAULT', 'SERVER_PROPERTIES', 'FAVICON',)
+__all__ = ('SERVER_PROPERTIES_DEFAULT', 'SERVER_PROPERTIES', 'FAVICON', 'PLUGIN_LIST',)
 
 SERVER_PROPERTIES_DEFAULT = Map({
     'debug': True,
@@ -67,5 +67,23 @@ def load_favicon():
         return None
 
 
+def load_plugin_list():
+    try:
+        with open('plugins.yml', 'r') as f:
+            plugin_list = yaml.safe_load(f.read())
+    except FileNotFoundError:
+        with open('plugins.yml', 'w+') as f:
+            f.write(yaml.dump([]))
+
+    if not isinstance(plugin_list, list):
+        with open('plugins.yml', 'w+') as f:
+            f.write(yaml.dump([]))
+
+        plugin_list = []
+
+    return tuple(plugin_list)
+
+
 SERVER_PROPERTIES = load_properties()
 FAVICON = load_favicon()
+PLUGIN_LIST = load_plugin_list()

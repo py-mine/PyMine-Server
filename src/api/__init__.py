@@ -5,6 +5,8 @@ import os
 from src.logic.commands import on_command, handle_server_commands, load_commands
 from src.util.share import logger, share
 
+from src.data.config import PLUGIN_LIST
+
 import src.api.packet
 import src.api.player
 import src.api.server
@@ -49,21 +51,11 @@ async def init():  # called when server starts up
         for file in filter((lambda f: f.endswith('.py')), files):
             importlib.import_module(os.path.join(root, file)[:-3].replace(os.sep, '.'))
 
-    # for file in filter((lambda f: f.endswith('.py')), os.listdir('plugins')):
-    #     try:
-    #         importlib.import_module('plugins.' + file[:-3])
-    #     except BaseException as e:
-    #         logger.error(f'An error occurred while loading plugin: plugins/{file} {logger.f_traceback(e)}')
-
-    for root, dirs, files in os.walk('plugins'):
-        for directory in dirs:
-            if not directory.startswith('__'):
-                try:
-                    PLUGINS.append(importlib.import_module(os.path.join(root, directory).replace(os.sep, '.')))
-                except BaseException as e:
-                    logger.error(f'An error occurred while loading plugin: plugins/{file} {logger.f_traceback(e)}')
-
-        break
+    for plugin in PLUGIN_LIST:
+        try:
+            PLUGINS.append(importlib.import_module(f'plugins.{plugin}'))
+        except BaseException as e:
+            logger.error(f'An error occurred while loading plugin: plugins.{plugin} {logger.f_traceback(e)}')
 
     # start command handler task
     RUNNING_TASKS.append(asyncio.create_task(handle_server_commands()))

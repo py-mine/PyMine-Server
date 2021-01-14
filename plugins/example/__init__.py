@@ -1,5 +1,5 @@
-from src.api.server import on_server_ready, on_server_stop
-from src.api.packet import handle_packet
+from pymine.api.server import on_server_ready, on_server_stop
+from pymine.api.packet import handle_packet
 
 
 @handle_packet('handshaking', 0x00)

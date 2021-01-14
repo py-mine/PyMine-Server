@@ -16,7 +16,8 @@ class PlayPlayerListHeaderAndFooter(Packet):
     def __init__(self, header: Chat, footer: Chat) -> None:
         super().__init__()
 
-        self.header, self.footer = header, footer
+        self.header = header
+        self.footer = footer
 
     def encode(self) -> bytes:
         return Buffer.pack_chat(self.header) + Buffer.pack_chat(self.footer)

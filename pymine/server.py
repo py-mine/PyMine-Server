@@ -8,16 +8,16 @@ import os
 
 sys.path.append(os.getcwd())  # nopep8
 
-import src.api as pymine_api
+import pymine.api as pymine_api
 
-from src.types.buffer import Buffer
+from pymine.types.buffer import Buffer
 
-from src.data.packet_map import PACKET_MAP
-from src.data.states import STATES
+from pymine.data.packet_map import PACKET_MAP
+from pymine.data.states import STATES
 
-from src.util.logging import task_exception_handler
-from src.util.encryption import gen_rsa_keys
-from src.util.share import share, logger
+from pymine.util.logging import task_exception_handler
+from pymine.util.encryption import gen_rsa_keys
+from pymine.util.share import share, logger
 
 share['rsa']['private'], share['rsa']['public'] = gen_rsa_keys()
 states = share['states']

@@ -3,7 +3,7 @@ import os
 
 sys.path.append(os.getcwd())
 
-from src.data.packet_map import PACKET_MAP  # nopep8
+from pymine.data.packet_map import PACKET_MAP  # nopep8
 
 if '--packets' in sys.argv or '-P' in sys.argv:
     dirs = ('serverbound', 'clientbound', 'both',)

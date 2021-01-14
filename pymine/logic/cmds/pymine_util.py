@@ -1,5 +1,5 @@
-from src.logic.commands import on_command, handle_server_command
-from src.util.share import logger
+from pymine.logic.commands import on_command, handle_server_command
+from pymine.util.share import logger
 
 
 @on_command(name='exec', node='pymine.cmds.exec')

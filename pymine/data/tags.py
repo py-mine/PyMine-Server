@@ -1,7 +1,7 @@
 import json
 import os
 
-from src.util.immutable import make_immutable
+from pymine.util.immutable import make_immutable
 
 __all__ = ('TAGS',)
 

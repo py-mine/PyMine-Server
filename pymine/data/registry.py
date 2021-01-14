@@ -1,7 +1,7 @@
 import json
 
-from src.util.immutable import make_immutable
-from src.types.registry import Registry
+from pymine.util.immutable import make_immutable
+from pymine.types.registry import Registry
 
 __all__ = (
     'ITEM_REGISTRY',

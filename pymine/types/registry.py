@@ -1,6 +1,6 @@
 from immutables import Map
 
-from src.util.immutable import make_immutable
+from pymine.util.immutable import make_immutable
 
 
 class Registry:

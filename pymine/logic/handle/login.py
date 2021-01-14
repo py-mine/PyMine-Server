@@ -5,16 +5,16 @@ from asyncio import StreamReader, StreamWriter
 import aiohttp
 import uuid
 
-from src.api.packet import handle_packet
+from pymine.api.packet import handle_packet
 
-from src.util.encryption import *
-from src.util.share import share
+from pymine.util.encryption import *
+from pymine.util.share import share
 
-from src.types.packet import Packet
-from src.types.buffer import Buffer
+from pymine.types.packet import Packet
+from pymine.types.buffer import Buffer
 
-from src.types.packets.login.set_comp import LoginSetCompression
-from src.types.packets.login.login import *
+from pymine.types.packets.login.set_comp import LoginSetCompression
+from pymine.types.packets.login.login import *
 
 login_cache = {}
 states = share['states']

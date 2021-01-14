@@ -4,9 +4,9 @@ from __future__ import annotations
 from nbt import nbt
 import uuid
 
-from src.types.packet import Packet
-from src.types.buffer import Buffer
-from src.types.chat import Chat
+from pymine.types.packet import Packet
+from pymine.types.buffer import Buffer
+from pymine.types.chat import Chat
 
 __all__ = (
     'PlayPlayerDigging',

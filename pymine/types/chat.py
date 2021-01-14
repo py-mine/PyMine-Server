@@ -1,8 +1,8 @@
 from __future__ import annotations
 import re
 
-from src.types.buffer import Buffer
-from src.data.formats import *
+from pymine.types.buffer import Buffer
+from pymine.data.formats import *
 
 
 class Chat:

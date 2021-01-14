@@ -5,11 +5,11 @@ import json
 import uuid
 import zlib
 
-from src.data.registry import ITEM_REGISTRY
-from src.types.packet import Packet
-from src.data.misc import *
+from pymine.data.registry import ITEM_REGISTRY
+from pymine.types.packet import Packet
+from pymine.data.misc import *
 
-from src.util.share import logger
+from pymine.util.share import logger
 
 
 class Buffer:

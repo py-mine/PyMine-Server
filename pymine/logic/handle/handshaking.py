@@ -1,9 +1,9 @@
 from asyncio import StreamReader, StreamWriter
 
-from src.api.packet import handle_packet
-from src.util.share import share
+from pymine.api.packet import handle_packet
+from pymine.util.share import share
 
-from src.types.packet import Packet
+from pymine.types.packet import Packet
 
 
 @handle_packet('handshaking', 0x00)

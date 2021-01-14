@@ -1,4 +1,4 @@
-from src.types.registry import Registry
+from pymine.types.registry import Registry
 
 STATES = Registry((
     'handshaking',

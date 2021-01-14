@@ -3,7 +3,7 @@ import importlib
 import asyncio
 import os
 
-from src.util.share import share, logger
+from pymine.util.share import share, logger
 
 registered_commands = {}  # {name: (function, permission_node),..}
 
@@ -12,7 +12,7 @@ registered_commands = {}  # {name: (function, permission_node),..}
 def load_commands():  # only loads commands inside cmds folder, not subfolders
     for file in os.listdir('src/logic/cmds'):
         if file.endswith('.py'):
-            importlib.import_module(f'src.logic.cmds.{file[:-3]}')
+            importlib.import_module(f'pymine.logic.cmds.{file[:-3]}')
 
 
 def on_command(name: str, node: str):

@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-from src.types.packet import Packet
-from src.types.buffer import Buffer
+from pymine.types.packet import Packet
+from pymine.types.buffer import Buffer
 
-from src.data.registry import BLOCK_REGISTRY, ITEM_REGISTRY, FLUID_REGISTRY, ENTITY_REGISTRY
+from pymine.data.registry import BLOCK_REGISTRY, ITEM_REGISTRY, FLUID_REGISTRY, ENTITY_REGISTRY
 
 __all__ = ('PlayTags',)
 

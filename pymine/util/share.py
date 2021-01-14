@@ -1,5 +1,5 @@
-from src.util.logging import Logger
-from src.data.config import *
+from pymine.util.logging import Logger
+from pymine.data.config import *
 
 __all__ = ('share', 'logger',)
 

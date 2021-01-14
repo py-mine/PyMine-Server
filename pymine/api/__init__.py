@@ -2,16 +2,16 @@ import importlib
 import asyncio
 import os
 
-from src.logic.commands import on_command, handle_server_commands, load_commands
-from src.util.share import logger, share
+from pymine.logic.commands import on_command, handle_server_commands, load_commands
+from pymine.util.share import logger, share
 
-from src.data.config import PLUGIN_LIST as PLUGINS_TO_LOAD
+from pymine.data.config import PLUGIN_LIST as PLUGINS_TO_LOAD
 
-import src.api.packet
-import src.api.player
-import src.api.server
-import src.api.tasks
-import src.api.chat
+import pymine.api.packet
+import pymine.api.player
+import pymine.api.server
+import pymine.api.tasks
+import pymine.api.chat
 
 """
 events/decorators:

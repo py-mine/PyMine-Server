@@ -3,8 +3,8 @@
 from __future__ import annotations
 from nbt import nbt
 
-from src.types.packet import Packet
-from src.types.buffer import Buffer
+from pymine.types.packet import Packet
+from pymine.types.buffer import Buffer
 
 __all__ = (
     'PlayBlockAction',

@@ -136,11 +136,12 @@ async def start():  # Actually start the server
         logger.info('Server closed.')
 
 
-loop = asyncio.get_event_loop()
-loop.set_debug(True)
-loop.set_exception_handler(task_exception_handler)
+if __name__ == '__main__':
+    loop = asyncio.get_event_loop()
+    loop.set_debug(True)
+    loop.set_exception_handler(task_exception_handler)
 
-try:
-    loop.run_until_complete(start())
-except BaseException as e:
-    logger.critical(logger.f_traceback(e))
+    try:
+        loop.run_until_complete(start())
+    except BaseException as e:
+        logger.critical(logger.f_traceback(e))

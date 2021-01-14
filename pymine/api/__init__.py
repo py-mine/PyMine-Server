@@ -38,3 +38,6 @@ async def init():  # called when server starts up
 async def stop():  # called when server is stopping
     for task in running_tasks:
         task.cancel()
+
+    # call all registered on_server_stop handlers
+    await asyncio.gather(*(h() for h in pymine_api.server.SERVER_STOP_HANDLERS))

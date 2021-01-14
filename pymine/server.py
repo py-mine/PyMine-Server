@@ -130,9 +130,6 @@ async def start():  # Actually start the server
 
         server.close()
 
-        # call all registered on_server_stop handlers
-        await asyncio.gather(*(h() for h in pymine_api.server.SERVER_STOP_HANDLERS))
-
         # wait for the server to be closed, stop the api, and stop the aiohttp.ClientSession
         await asyncio.gather(server.wait_closed(), pymine_api.stop(), share['ses'].close())
 

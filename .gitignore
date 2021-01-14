@@ -1,3 +1,6 @@
+server.yml
+plugins.yml
+plugins/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

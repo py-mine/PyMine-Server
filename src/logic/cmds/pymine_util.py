@@ -1,8 +1,8 @@
-from src.logic.commands import command, handle_server_command
+from src.logic.commands import on_command, handle_server_command
 from src.util.share import logger
 
 
-@command(name='exec', node='pymine.cmds.exec')
+@on_command(name='exec', node='pymine.cmds.exec')
 async def exec_(uuid: str, args: list):
     file_name = ''.join(args)
 
@@ -17,6 +17,6 @@ async def exec_(uuid: str, args: list):
         logger.warn('Can\'t find that file...')
 
 
-@command(name='echo', node='pymine.cmds.echo')
+@on_command(name='echo', node='pymine.cmds.echo')
 def echo(uuid: str, text: str):
     logger.info(f'{uuid}: {text}')

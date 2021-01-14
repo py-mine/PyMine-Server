@@ -1,32 +1,25 @@
-from cryptography.hazmat.primitives.asymmetric import rsa
 import asyncio
 import aiohttp
 import random
 import struct
+
 import sys
 import os
 
-sys.path.append(os.getcwd())
+sys.path.append(os.getcwd())  # nopep8
 
-from src.types.buffer import Buffer  # nopep8
+import src.api as pymine_api
 
-from src.data.packet_map import PACKET_MAP  # nopep8
-from src.data.states import STATES  # nopep8
+from src.types.buffer import Buffer
 
-from src.logic.commands import handle_server_commands, load_commands  # nopep8
-from src.logic.status import legacy_ping as logic_legacy_ping  # nopep8
-from src.logic.status import status as logic_status  # nopep8
-from src.logic.login import login as logic_login  # nopep8
-from src.logic.play import play as logic_play  # nopep8
+from src.data.packet_map import PACKET_MAP
+from src.data.states import STATES
 
-from src.util.logging import task_exception_handler  # nopep8
-from src.util.share import share, logger  # nopep8
+from src.util.logging import task_exception_handler
+from src.util.encryption import gen_rsa_keys
+from src.util.share import share, logger
 
-load_commands()
-
-share['rsa']['private'] = rsa.generate_private_key(65537, 1024)
-share['rsa']['public'] = share['rsa']['private'].public_key()
-
+share['rsa']['private'], share['rsa']['public'] = gen_rsa_keys()
 states = share['states']
 logger.debug_ = share['conf']['debug']
 
@@ -62,8 +55,8 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
             return await close_con(w, remote)
 
         if i == 0 and read == b'\xFE':
-            await logic_legacy_ping(r, w, remote)
-            return await close_con(w, remote)
+            logger.warn('Legacy ping attempted, legacy ping is not supported.')
+            return False, r, w
 
         b = struct.unpack('B', read)[0]
         packet_length |= (b & 0x7F) << 7 * i
@@ -81,29 +74,30 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
     logger.debug(f'IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}')
 
-    if state == 'handshaking':
-        states[remote] = packet.next_state
-        return True, r, w
+    for handler in pymine_api.packet.PACKET_HANDLERS[state][packet.id]:
+        resp_value = await handler(r, w, packet, remote)
 
-    if state == 'status':
-        return await logic_status(r, w, packet, remote)
+        try:
+            continue_, r, w = resp_value
+        except (ValueError, TypeError,):
+            logger.warn(f'Invalid return from handler: {handler.__module__}.{handler.__qualname__}')
+            continue
 
-    if state == 'login':
-        return await logic_login(r, w, packet, remote)
+        if not continue_:
+            return False, r, w
 
-    if state == 'play':
-        return await logic_play(r, w, packet, remote)
+    return continue_, r, w
 
 
 async def handle_con(r, w):  # Handle a connection from a client
     remote = w.get_extra_info('peername')  # (host, port,)
     logger.debug(f'connection received from {remote[0]}:{remote[1]}.')
 
-    c = True
+    continue_ = True
 
-    while c:
+    while continue_:
         try:
-            c, r, w = await handle_packet(r, w, remote)
+            continue_, r, w = await handle_packet(r, w, remote)
         except BaseException as e:
             logger.error(logger.f_traceback(e))
             break
@@ -116,23 +110,31 @@ async def start():  # Actually start the server
     port = share['conf']['server_port']
 
     server = share['server'] = await asyncio.start_server(handle_con, host=addr, port=port)
+    share['ses'] = aiohttp.ClientSession()
 
-    cmd_task = asyncio.create_task(handle_server_commands())  # Used to handle commands
+    await pymine_api.init()
 
     try:
-        async with aiohttp.ClientSession() as share['ses']:
-            async with server:
-                if random.randint(0, 999) == 1:  # shhhhh
-                    logger.info(f'PPMine 69.0 started on port {addr}:{port}!')
-                else:
-                    logger.info(
-                        f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
+        async with server:
+            if random.randint(0, 999) == 1:  # shhhhh
+                logger.info(f'PPMine 69.0 started on port {addr}:{port}!')
+            else:
+                logger.info(f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
 
-                await server.serve_forever()
+            for handler in pymine_api.server.SERVER_READY_HANDLERS:
+                asyncio.create_task(handler())
+
+            await server.serve_forever()
     except (asyncio.CancelledError, KeyboardInterrupt,):
         logger.info('Closing server...')
 
-        cmd_task.cancel()
+        server.close()
+
+        # call all registered on_server_stop handlers
+        await asyncio.gather(*(h() for h in pymine_api.server.SERVER_STOP_HANDLERS))
+
+        # wait for the server to be closed, and stop the api
+        await asyncio.gather(server.wait_closed(), pymine_api.stop(), share['ses'].close())
 
         logger.info('Server closed.')
 

@@ -46,4 +46,4 @@ async def stop():  # called when server is stopping
             await teardown_function()
 
     # call all registered on_server_stop handlers
-    await asyncio.gather(*(h() for h in pymine_api.server.SERVER_STOP_HANDLERS))
+    await asyncio.gather(*(h() for h in pymine.api.server.SERVER_STOP_HANDLERS))

@@ -29,6 +29,7 @@ __all__ = (
     'PlayUpdateViewDistance',
     'PlaySetExperience',
     'PlayUpdateHealth',
+    'PlayCombatEvent',
 )
 
 
@@ -596,3 +597,36 @@ class PlayUpdateHealth(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack('f', self.health) + Buffer.pack_varint(self.food) + Buffer.pack('f', self.saturation)
+
+
+class PlayCombatEvent(Packet):
+    """Sent by the server to display the game over screen. (Server -> Client)
+
+    :param int event: The event that occurred, either enter combat (0), end combat (1), or entity dead (2).
+    :param dict data: Depends on what event occurred.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr event:
+    :attr data:
+    """
+
+    id = 0x31
+    to = 1
+
+    def __init__(self, event: int, data: dict = None) -> None:
+        super().__init__()
+
+        self.event = event
+        self.data = data
+
+    def encode(self) -> bytes:
+        # if self.event == 0:  # start combat
+        #     return Buffer.pack_varint(self.event)
+        #
+        # if self.event == 1:  # end combat
+        #     return Buffer.pack_varint(self.event) + Buffer.pack_varint(self.data['duration']) + \
+        #         Buffer.pack('i', self.data['opponent'])
+
+        if self.event == 2:  # entity dead, only one actually used
+            return Buffer.pack_varint(self.event) + Buffer.pack_varint(self.data['player_id']) + \
+                Buffer.pack('i', self.data['entity_id']) + Buffer.pack_chat(self.data['message'])

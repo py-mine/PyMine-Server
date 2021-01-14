@@ -20,11 +20,11 @@ TAGS = {}
 #     ...
 # }
 
-for tag_type in os.listdir('src/data/tags'):
+for tag_type in os.listdir('pymine/data/tags'):
     TAGS[tag_type] = {}
 
-    for tag_file in os.listdir(f'src/data/tags/{tag_type}'):
-        with open(f'src/data/tags/{tag_type}/{tag_file}') as f:
+    for tag_file in os.listdir(f'pymine/data/tags/{tag_type}'):
+        with open(f'pymine/data/tags/{tag_type}/{tag_file}') as f:
             TAGS[tag_type][tag_file[:-5]] = json.load(f)['values']
 
 

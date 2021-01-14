@@ -111,7 +111,7 @@ class PlayCraftRecipeResponse(Packet):
 class PlayDeclareRecipes(Packet):
     """Sends all registered recipes to the client. (Server -> Client)
 
-    :param list recipes: The recipes to be sent, should probably be the RECIPES Map (src/data/recipes.py).
+    :param list recipes: The recipes to be sent, should probably be the RECIPES Map (pymine/data/recipes.py).
     :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr recipes:

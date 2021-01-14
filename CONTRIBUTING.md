@@ -38,4 +38,4 @@
 
 ### Imports
 * Imports should be sorted by size descending
-* Imports from `src/*` should be separated from the rest of the imports by a newline
+* Imports from `pymine/*` should be separated from the rest of the imports by a newline

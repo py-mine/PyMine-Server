@@ -9,10 +9,10 @@ __all__ = ('PACKET_MAP',)
 def load_packets():
     packet_map = {}
 
-    for state in os.listdir('src/types/packets'):
+    for state in os.listdir('pymine/types/packets'):
         packet_map[state] = {}
 
-        for file in os.listdir(f'src/types/packets/{state}'):
+        for file in os.listdir(f'pymine/types/packets/{state}'):
             if file.endswith('.py'):
                 module = importlib.import_module(f'pymine.types.packets.{state}.{file[:-3]}')
 

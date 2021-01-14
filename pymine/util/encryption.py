@@ -24,10 +24,7 @@ def gen_verify_hash(shared_key: bytes, public_key: bytes):
 
 
 def gen_aes_cipher(shared_key: bytes):
-    return Cipher(
-        algorithms.AES(shared_key),
-        modes.CFB8(shared_key)
-    )
+    return Cipher(algorithms.AES(shared_key), modes.CFB8(shared_key))
 
 
 class EncryptedStreamReader:  # Used to encrypt data read via a StreamReader

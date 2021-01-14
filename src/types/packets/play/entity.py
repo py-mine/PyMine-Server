@@ -20,6 +20,7 @@ __all__ = (
     'PlayEntityHeadLook',
     'PlayAttachEntity',
     'PlayEntityVelocity',
+    'PlayEntityTeleport',
 )
 
 
@@ -363,3 +364,26 @@ class PlayEntityVelocity(Packet):
     def encode(self) -> bytes:
         return Buffer.pack_varint(self.eid) + Buffer.pack('h', self.vel_x) + Buffer.pack('h', self.vel_y) + \
             Buffer.pack('h', self.vel_z)
+
+
+class PlayEntityTeleport(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x56
+    to = 1
+
+    def __init__(self, eid: int, x: int, y: int, z: int, yaw: int, pitch: int, on_ground: bool) -> None:
+        super().__init__()
+
+        self.eid = eid
+        self.x = x
+        self.y = y
+        self.z = z
+        self.yaw = yaw
+        self.pitch = pitch
+        self.on_ground = on_ground
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.eid) + Buffer.pack('d', self.x) + Buffer.pack('d', self.y) + \
+            Buffer.pack('d', self.z) + Buffer.pack('i', self.yaw) + Buffer.pack('i', self.pitch) + \
+            Buffer.pack('?', self.on_ground)

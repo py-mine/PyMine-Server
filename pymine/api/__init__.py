@@ -39,5 +39,11 @@ async def stop():  # called when server is stopping
     for task in running_tasks:
         task.cancel()
 
+    for plugin in plugins:
+        teardown_function = plugin.__dict__.get('teardown')
+
+        if teardown_function:
+            await teardown_function()
+
     # call all registered on_server_stop handlers
     await asyncio.gather(*(h() for h in pymine_api.server.SERVER_STOP_HANDLERS))

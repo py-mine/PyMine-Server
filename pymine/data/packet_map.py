@@ -19,8 +19,7 @@ def load_packets():
                 for name in module.__all__:
                     packet = module.__dict__.get(name)
                     if packet.to == 2:
-                        packet_map[state][(packet.id, 0,)] = packet
-                        packet_map[state][(packet.id, 1,)] = packet
+                        packet_map[state][(packet.id, 0,)] = packet_map[state][(packet.id, 1,)] = packet
                     else:
                         packet_map[state][(packet.id, packet.to,)] = packet
 

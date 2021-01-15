@@ -74,7 +74,7 @@ class Buffer:
         if comp_thresh >= 0:
             uncomp_len = self.unpack_varint()
 
-            if uncom_len > 0:
+            if uncomp_len > 0:
                 data = zlib.decompress(self.read())
 
         packet = PACKET_MAP[state][(self.unpack_varint(), to,)].decode(self)

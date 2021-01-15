@@ -7,14 +7,14 @@ import uuid
 
 from pymine.api.packet import handle_packet
 
-from pymine.util.encryption import *
+import pymine.util.encryption as encryption
 from pymine.util.share import share
 
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
 from pymine.types.packets.login.set_comp import LoginSetCompression
-from pymine.types.packets.login.login import *
+import pymine.types.packets.login.login as login_packets
 
 login_cache = {}
 states = share['states']
@@ -25,7 +25,7 @@ async def login_start(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remo
     if share['conf']['online_mode']:  # Online mode is enabled, so we request encryption
         lc = login_cache[remote] = {'username': packet.username, 'verify': None}
 
-        packet = LoginEncryptionRequest(
+        packet = login_packets.LoginEncryptionRequest(
             share['rsa']['public'].public_bytes(
                 encoding=serialization.Encoding.DER,
                 format=serialization.PublicFormat.SubjectPublicKeyInfo
@@ -39,7 +39,7 @@ async def login_start(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remo
     else:  # No need for encryption since online mode is off, just send login success
         uuid_ = uuid.uuid4()  # This should be only generated if the player name isn't found in the world data, but no way to do that rn
 
-        w.write(Buffer.pack_packet(LoginSuccess(uuid_, packet.username), share['comp_thresh']))
+        w.write(Buffer.pack_packet(login_packets.LoginSuccess(uuid_, packet.username), share['comp_thresh']))
         await w.drain()
 
         states[remote] = 3  # Update state to play
@@ -54,23 +54,23 @@ async def encrypted_login(r: 'StreamReader', w: 'StreamWriter', packet: Packet, 
     del login_cache[remote]  # No longer needed
 
     if not auth:  # If authentication failed, disconnect client
-        w.write(Buffer.pack_packet(LoginDisconnect('Failed to authenticate your connection.')))
+        w.write(Buffer.pack_packet(login_packets.LoginDisconnect('Failed to authenticate your connection.')))
         await w.drain()
         return False, r, w
 
     # Generate a cipher for that client using the shared key from the client
-    cipher = gen_aes_cipher(shared_key)
+    cipher = encryption.gen_aes_cipher(shared_key)
 
     # Replace streams with ones which auto decrypt + encrypt data when reading/writing
-    r = EncryptedStreamReader(r, cipher.decryptor())
-    w = EncryptedStreamWriter(w, cipher.encryptor())
+    r = encryption.EncryptedStreamReader(r, cipher.decryptor())
+    w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
 
     if share['comp_thresh'] > 0:  # Send set compression packet if needed
-        w.write(Buffer.pack_packet(LoginSetCompression(share['comp_thresh'])))
+        w.write(Buffer.pack_packet(login_packets.LoginSetCompression(share['comp_thresh'])))
         await w.drain()
 
     # Send LoginSuccess packet, tells client they've logged in succesfully
-    w.write(Buffer.pack_packet(LoginSuccess(*auth), share['comp_thresh']))
+    w.write(Buffer.pack_packet(login_packets.LoginSuccess(*auth), share['comp_thresh']))
     await w.drain()
 
     return True, r, w
@@ -86,7 +86,7 @@ async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: d
             'https://sessionserver.mojang.com/session/minecraft/hasJoined',
             params={
                 'username': cache['username'],
-                'serverId': gen_verify_hash(
+                'serverId': encryption.gen_verify_hash(
                     decrypted_shared_key,
                     share['rsa']['public'].public_bytes(
                         encoding=serialization.Encoding.DER,

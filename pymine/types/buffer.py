@@ -7,6 +7,7 @@ import zlib
 
 from pymine.data.registry import ITEM_REGISTRY
 from pymine.types.packet import Packet
+from pymine.types.chat import Chat
 import pymine.data.misc as misc_data
 
 from pymine.util.share import logger

@@ -403,10 +403,7 @@ class Buffer:
         if recipe_type == 'minecraft:crafting_shapeless':
             out += cls.pack_string(recipe['group'])
             out += cls.pack_varint(len(recipe['ingredients']))  # Length of ingredient array
-
-            for ingredient in recipe['ingredients']:
-                out += self.pack_ingredient(ingredient)
-
+            out += b''.join(cls.pack_ingredient(ingredient) for ingredient in recipe['ingredients'])
             out += cls.pack_slot(**recipe['result'])
         elif recipe_type == 'minecraft:crafting_shaped':
             width = len(recipe['pattern'][0])  # Width of pattern

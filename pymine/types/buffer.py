@@ -7,7 +7,6 @@ import zlib
 
 from pymine.data.registry import ITEM_REGISTRY
 from pymine.types.packet import Packet
-from pymine.types.chat import Chat
 import pymine.data.misc as misc_data
 
 from pymine.util.share import logger
@@ -237,12 +236,12 @@ class Buffer:
         return uuid.UUID(bytes=self.read(16))
 
     @classmethod
-    def pack_chat(cls, msg: 'Chat') -> bytes:
+    def pack_chat(cls, msg: 'Chat') -> bytes:  # nopep8
         """Packs a Minecraft chat message into bytes."""
 
         return cls.pack_json(msg.msg)
 
-    def unpack_chat(self) -> 'Chat':
+    def unpack_chat(self) -> 'Chat':  # nopep8
         """Unpacks a Minecraft chat message from the buffer."""
 
         return Chat.from_buf(self)

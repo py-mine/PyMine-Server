@@ -14,7 +14,7 @@
 * Use `'string'` not `"string"`
 * Use f-strings (`f'{thing}'`) instead of `.format()` where possible
 * Use concatenation for uncomplicated things instead of f-strings, as concatenation is faster
-* After indentation changes there should be a new line
+* If indentation changes such so there's less indentation afterwards, there should be a newline following sed change.
 * Unless there's a good reason, lines shouldn't be longer than 100 characters
 * Use `snake_case` for variables
 * Constants should either be loaded from a config file or be in `UPPER_SNAKE_CASE`

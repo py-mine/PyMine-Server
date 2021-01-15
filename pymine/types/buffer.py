@@ -349,8 +349,7 @@ class Buffer:
             out += cls.pack_varint(1)
             out += cls.pack_slot(**ingredient)
         else:
-            raise TypeError(
-                f'Ingredient should be of type list or dict but was instead of type {type(ingredient)}')
+            raise TypeError(f'Ingredient should be of type list or dict but was instead of type {type(ingredient)}')
 
         return out
 

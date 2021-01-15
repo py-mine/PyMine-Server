@@ -78,7 +78,7 @@ async def encrypted_login(r: 'StreamReader', w: 'StreamWriter', packet: Packet, 
 
 # Verifies that the shared key and token are the same, and does other authentication methods
 # Returns the decrypted shared key and the client's username and uuid
-async def server_auth(packet: 'LoginEncryptionResponse', remote: tuple, cache: dict) -> tuple:
+async def server_auth(packet: login_packets.LoginEncryptionResponse, remote: tuple, cache: dict) -> tuple:
     if share['rsa']['private'].decrypt(packet.verify_token, PKCS1v15()) == cache['verify']:
         decrypted_shared_key = share['rsa']['private'].decrypt(packet.shared_key, PKCS1v15())
 

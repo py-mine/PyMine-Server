@@ -339,19 +339,13 @@ class Buffer:
     def pack_ingredient(cls, ingredient: object) -> bytes:
         """Packs a recipe ingredient into bytes."""
 
-        out = b''
-
         if isinstance(ingredient, list):
-            out += cls.pack_varint(len(ingredient))
-            for slot in ingredient:
-                out += cls.pack_slot(**slot)
-        elif isinstance(ingredient, dict):
-            out += cls.pack_varint(1)
-            out += cls.pack_slot(**ingredient)
-        else:
-            raise TypeError(f'Ingredient should be of type list or dict but was instead of type {type(ingredient)}')
+            return cls.pack_varint(len(ingredient)) + b''.join(cls.pack_slot(**slot) for slot in ingredient)
 
-        return out
+        if isinstance(ingredient, dict):
+            return cls.pack_varint(1) + cls.pack_slot(**ingredient)
+
+        raise TypeError(f'Ingredient should be of type list or dict but was instead of type {type(ingredient)}')
 
     # def unpack_ingredient(self):
     #     """Unpacks a recipe ingredient from the buffer."""

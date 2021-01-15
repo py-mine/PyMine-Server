@@ -53,6 +53,11 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         try:
             read = await asyncio.wait_for(r.read(1), 5)
         except asyncio.TimeoutError:
+            logger.debug('Closing due to timeout on read...')
+            return await close_con(w, remote)
+
+        if read == b'':
+            logger.debug('Closing due to invalid read....')
             return await close_con(w, remote)
 
         if i == 0 and read == b'\xFE':

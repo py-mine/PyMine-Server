@@ -8,7 +8,7 @@ __all__ = ('SERVER_PROPERTIES_DEFAULT', 'SERVER_PROPERTIES', 'FAVICON', 'PLUGIN_
 
 SERVER_PROPERTIES_DEFAULT = Map({
     'debug': True,
-    'server_ip': '0.0.0.0',
+    'server_ip': None,
     'server_port': 25565,
     'level_name': 'world',
     'seed': gen_seed(),

@@ -105,7 +105,7 @@ class Buffer:
     def unpack_optional(self, unpacker: object) -> bool:
         """Unpacks an optional field from the buffer."""
 
-        present = cls.unpack('?')
+        present = self.unpack('?')
 
         if present:
             return unpacker()

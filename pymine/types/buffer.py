@@ -7,7 +7,7 @@ import zlib
 
 from pymine.data.registry import ITEM_REGISTRY
 from pymine.types.packet import Packet
-from pymine.data.misc import *
+import pymine.data.misc as misc_data
 
 from pymine.util.share import logger
 
@@ -317,23 +317,23 @@ class Buffer:
     def pack_direction(cls, direction: str) -> bytes:
         """Packs a direction into bytes."""
 
-        return cls.pack_varint(DIRECTIONS.index(direction))
+        return cls.pack_varint(misc_data.DIRECTIONS.index(direction))
 
     def unpack_direction(self) -> str:
         """Unpacks a direction from the buffer."""
 
-        return DIRECTIONS[self.unpack_varint()]
+        return misc_data.DIRECTIONS[self.unpack_varint()]
 
     @classmethod
     def pack_pose(cls, pose: str) -> bytes:
         """Packs a pose into bytes."""
 
-        return cls.pack_varint(POSES.index(pose))
+        return cls.pack_varint(misc_data.POSES.index(pose))
 
     def unpack_pose(self) -> str:
         """Unpacks a pose from the buffer."""
 
-        return POSES[self.unpack_varint()]
+        return misc_data.POSES[self.unpack_varint()]
 
     @classmethod
     def pack_ingredient(cls, ingredient: object) -> bytes:
@@ -421,7 +421,7 @@ class Buffer:
                         out += cls.pack_ingredient(recipe['key'][key])
 
             out += cls.pack_slot(**recipe['result'])
-        elif recipe_type in SMELT_TYPES:  # SMELT_TYPES imported from misc.py
+        elif recipe_type in misc_data.SMELT_TYPES:  # SMELT_TYPES imported from misc.py
             out += cls.pack_string(recipe['group'])
             out += cls.pack_ingredient(recipe['ingredient'])
             out += cls.pack_slot(**recipe['result'])

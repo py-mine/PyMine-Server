@@ -15,12 +15,6 @@ class Chat:
         self.msg = msg
 
     @classmethod
-    def from_buf(cls, buf: 'Buffer') -> Chat:  # nopep8
-        """Creates a Minecraft chat message from a buffer."""
-
-        return cls(buf.unpack_json())
-
-    @classmethod
     def from_string(cls, text: str) -> Chat:
         """Creates a Minecraft chat message from json."""
 

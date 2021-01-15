@@ -246,7 +246,7 @@ class Buffer:
     def unpack_chat(self) -> Chat:
         """Unpacks a Minecraft chat message from the buffer."""
 
-        return Chat.from_buf(self)
+        return Chat(self.unpack_json())
 
     @classmethod
     def pack_pos(cls, x, y, z) -> bytes:

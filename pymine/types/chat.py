@@ -1,8 +1,8 @@
 from __future__ import annotations
 import re
 
+from pymine.data.formats import TERMINAL_CODES, FORMAT_BY_NAME
 from pymine.types.buffer import Buffer
-from pymine.data.formats import *
 
 
 class Chat:

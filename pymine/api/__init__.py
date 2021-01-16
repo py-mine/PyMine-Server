@@ -31,7 +31,7 @@ async def init():  # called when server starts up
 
     to_be_loaded = ['plugins.' + p for p in os.listdir('plugins')]
 
-    if 'FAP' in to_be_loaded:
+    if 'plugins.FAP' in to_be_loaded:
         fap = register_plugin('plugins.FAP')
         await fap.setup(logger)
 

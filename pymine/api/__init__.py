@@ -17,6 +17,10 @@ plugins = []
 running_tasks = []
 
 
+def register_plugin(plugin):
+    plugins.append(importlib.import_module(plugin))
+
+
 async def init():  # called when server starts up
     load_commands()  # load commands in pymine/logic/cmds/*
 
@@ -27,7 +31,7 @@ async def init():  # called when server starts up
 
     for plugin in PLUGINS_TO_LOAD:
         try:
-            plugins.append(importlib.import_module(f'plugins.{plugin}'))
+            register_plugin('plugins.' + plugin)
         except BaseException as e:
             logger.error(f'An error occurred while loading plugin: plugins.{plugin} {logger.f_traceback(e)}')
 

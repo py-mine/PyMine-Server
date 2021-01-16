@@ -1,6 +1,9 @@
 server.yml
 plugins.yml
 
+plugins/*
+!plugins/example
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -8,9 +11,6 @@ __pycache__/
 
 # Sphinx documentation
 docs/_build/
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-__pypackages__/
 
 # Sh-wayz's shit
 /tags

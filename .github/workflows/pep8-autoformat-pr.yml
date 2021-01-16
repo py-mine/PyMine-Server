@@ -18,7 +18,7 @@ jobs:
       - name: Commit autopep8 changes
         if: steps.autopep8.outputs.exit-code == 2
         run: |
-          git config --global user.name 'Sh-awyz'
+          git config --global user.name 'Sh-wayz'
           git config --global user.email 'shwayz@protonmail.com'
           git commit -am "Automated autopep8 fixes"
           git push

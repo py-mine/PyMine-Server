@@ -27,7 +27,7 @@ def load_plugin_list():
     return tuple(plugin_list)
 
 valid_url_regex = re.compile(
-    r'^(?:http|ftp)s?://' # http:// or https://
+    r'^(?:http)s?://' # http:// or https://
     r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
     r'localhost|' #localhost...
     r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
@@ -39,7 +39,6 @@ valid_url_regex = re.compile(
 plugin_dir = os.listdir('plugins')
 
 for plugin in load_plugin_list():
-    if re.match(valid_url_regex, plugin) is not None:
-        print('valid')
-    else:
-        logger.warn(f'Entry in plugins.yml "{plugin}" is not a valid url.')
+    if re.match(valid_url_regex, plugin) is None:
+        logger.warn(f'Entry in plugins.yml "{plugin}" is not a valid git clone/repository url.')
+        continue

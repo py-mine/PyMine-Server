@@ -44,6 +44,16 @@ def load_plugin_list():
     return plugin_list
 
 
+async def reload_self(logger, plugin_root, plugin_dir):
+    logger.debug('Updating FAP...')
+    self_path = os.path.normpath(os.path.join(plugin_root, plugin_dir)).replace('/', '.')
+
+    self = importlib.import_module(self_path)
+    importlib.reload(self)
+
+    return await self.setup(logger)
+
+
 async def setup(logger):
     plugins_dir = git.Git('plugins')
 
@@ -51,7 +61,7 @@ async def setup(logger):
         if re.match(VALID_URL_REGEX, plugin_url) is None:
             raise ValueError(f'Entry in plugins.yml "{plugin_url}" is not a valid git clone/repository url.')
 
-        plugin_root = os.path.join('plugins', plugin_root)
+        plugin_root = os.path.normpath(os.path.join('plugins', plugin_root))
 
         if not os.path.isdir(os.path.join(plugin_root, '.git')):
             try:
@@ -73,17 +83,14 @@ async def setup(logger):
 
                 logger.debug(f'Cloning {plugin_url} to plugins folder...')
                 plugins_dir.clone(plugin_url)  # clone plugin repository to plugins directory
+
+                if plugin_root == 'plugins/FAP':
+                    return await reload_self(logger, plugin_root, plugin_dir)
+
                 continue
 
-            if res != 'Already up to date.' and os.path.normpath(plugin_root) == 'plugins/FAP':  # there were changes
-                logger.debug('Updating FAP...')
-                self_path = os.path.normpath(os.path.join(plugin_root, plugin_dir)).replace('/', '.')
-
-                self = importlib.import_module(self_path)
-                importlib.reload(self)
-
-                await self.setup(logger)
-                return
+            if res != 'Already up to date.' and plugin_root == 'plugins/FAP':  # there were changes
+                return await reload_self(logger, plugin_root, plugin_dir)
 
         managed_plugins.append(os.path.join(plugin_root, plugin_dir).replace('/', '.'))
 

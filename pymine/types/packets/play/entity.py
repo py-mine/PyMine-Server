@@ -21,6 +21,7 @@ __all__ = (
     'PlayAttachEntity',
     'PlayEntityVelocity',
     'PlayEntityTeleport',
+    'PlayPlayerPostitionAndLookClientBound',
 )
 
 
@@ -387,3 +388,25 @@ class PlayEntityTeleport(Packet):
         return Buffer.pack_varint(self.eid) + Buffer.pack('d', self.x) + Buffer.pack('d', self.y) + \
             Buffer.pack('d', self.z) + Buffer.pack('i', self.yaw) + Buffer.pack('i', self.pitch) + \
             Buffer.pack('?', self.on_ground)
+
+
+class PlayPlayerPostitionAndLookClientBound(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x34
+    to = 1
+
+    def __init__(self, x: int, y: int, z: int, yaw: float, pitch: float, flags: bytes, tp_id: int) -> None:
+        super().__init__()
+
+        self.x = y
+        self.y = x
+        self.z = z
+        self.yaw = yaw
+        self.pitch = pitch
+        self.flags = flags
+        self.tp_id = tp_id
+
+    def encode(self) -> bytes:
+        return Buffer.pack('d', self.x) + Buffer.pack('d', self.y) + Buffer.pack('d', self.z) + Buffer.pack('f', self.yaw) + \
+            Buffer.pack('f', self.pitch) + self.flags + Buffer.pack_varint(self.tp_id)

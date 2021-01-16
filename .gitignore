@@ -3,7 +3,8 @@ plugins.yml
 
 plugins/*
 !plugins/example
-!plugins/FAP
+plugins/FAP
+!plugins/FAP/__init__.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

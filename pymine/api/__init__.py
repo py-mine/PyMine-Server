@@ -33,7 +33,7 @@ async def init():  # called when server starts up
         register_plugin('plugins.plugman')
         plugins_to_be_loaded.remove('plugman')
 
-    for plugin in filter((lambda f: (os.path.isfile(f) and f.startswith('.py') or os.isdir(f)), plugins_to_be_loaded):
+    for plugin in filter((lambda f: os.path.isfile(f) and f.startswith('.py') or os.isdir(f)), plugins_to_be_loaded):
         try:
             register_plugin(plugin)
         except BaseException as e:

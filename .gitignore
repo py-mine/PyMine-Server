@@ -3,7 +3,7 @@ plugins.yml
 
 plugins/*
 !plugins/example
-!plugins/plugman
+!plugins/FAP
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

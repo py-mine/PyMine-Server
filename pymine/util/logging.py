@@ -41,6 +41,8 @@ class Logger:
         message = ' '.join(str(m) for m in message)
         print(f'{BRIGHT}{WHITE}[{nice_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{message}{END}')
 
+    warning = warn
+
     def error(self, *message):
         message = ' '.join(str(m) for m in message)
         print(f'{BRIGHT}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{message}{END}')

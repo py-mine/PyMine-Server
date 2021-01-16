@@ -29,11 +29,21 @@ async def init():  # called when server starts up
         for file in filter((lambda f: f.endswith('.py')), files):
             importlib.import_module(os.path.join(root, file)[:-3].replace(os.sep, '.'))
 
-    plugins_to_be_loaded = os.listdir('plugins')
+    plugin_folder_list = os.listdir('plugins')
 
     if 'FAP' in plugins_to_be_loaded:
-        await register_plugin('plugins.FAP').setup()
-        plugins_to_be_loaded.remove('FAP')
+        fap = register_plugin('plugins.FAP')
+        await fap.setup()
+
+        managed_plugins = fap.managed_plugins
+        plugin_folder_list.remove('FAP')
+
+    def valid_to_be_loaded(obj):
+        if os.path.isfile(obj) and obj.endswith('.py'):
+            return True
+
+        if os.path.isdir(obj) and obj not in managed_plugins:
+            return
 
     for plugin in filter((lambda f: os.path.isfile(f) and f.startswith('.py') or os.path.isdir(f)), plugins_to_be_loaded):
         try:
@@ -42,11 +52,14 @@ async def init():  # called when server starts up
             logger.error(f'An error occurred while loading plugin: plugins.{plugin} {logger.f_traceback(e)}')
             share['server'].close()
 
-        try:
-            await plugin_module.setup()
-        except BaseException as e:
-            logger.error(f'An error occurred while setting up plugin: plugins.{plugin} {logger.f_traceback(e)}')
-            share['server'].close()
+        plugin_setup = plugin_module.__dict__.get('setup')
+
+        if plugin_setup:
+            try:
+                await plugin_setup()
+            except BaseException as e:
+                logger.error(f'An error occurred while setting up plugin: plugins.{plugin} {logger.f_traceback(e)}')
+                share['server'].close()
 
     # start command handler task
     running_tasks.append(asyncio.create_task(handle_server_commands()))
@@ -56,8 +69,8 @@ async def stop():  # called when server is stopping
     for task in running_tasks:
         task.cancel()
 
-    for plugin in plugins:
-        teardown_function = plugin.__dict__.get('teardown')
+    for plugin_module in plugins:
+        teardown_function = plugin_module.__dict__.get('teardown')
 
         if teardown_function:
             await teardown_function()

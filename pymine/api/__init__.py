@@ -33,7 +33,7 @@ async def init():  # called when server starts up
 
     if 'FAP' in to_be_loaded:
         fap = register_plugin('plugins.FAP')
-        await fap.setup()
+        await fap.setup(logger)
 
         to_be_loaded = fap.unmanaged_plugins
 

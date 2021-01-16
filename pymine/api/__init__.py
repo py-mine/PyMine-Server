@@ -42,6 +42,7 @@ async def init():  # called when server starts up
             plugin_module = register_plugin(plugin)
         except BaseException as e:
             logger.warn(f'An error occurred while loading plugin: plugins.{plugin} {logger.f_traceback(e)}')
+            continue
 
         plugin_setup = plugin_module.__dict__.get('setup')
 

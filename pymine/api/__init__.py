@@ -38,6 +38,8 @@ async def init():  # called when server starts up
         to_be_loaded = fap.unmanaged_plugins
 
     for plugin in filter((lambda f: os.path.isfile(f) and f.endswith('.py') or os.path.isdir(f)), to_be_loaded):
+        logger.info('Loading plugin: ' + plugin)
+
         try:
             plugin_module = register_plugin(plugin)
         except BaseException as e:

@@ -29,7 +29,7 @@ async def init():  # called when server starts up
         for file in filter((lambda f: f.endswith('.py')), files):
             importlib.import_module(os.path.join(root, file)[:-3].replace(os.sep, '.'))
 
-    to_be_loaded = os.listdir('plugins')
+    to_be_loaded = ['plugins.' + p for p in os.listdir('plugins')]
 
     if 'FAP' in to_be_loaded:
         fap = register_plugin('plugins.FAP')

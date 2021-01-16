@@ -22,6 +22,7 @@ __all__ = (
     'PlayEntityVelocity',
     'PlayEntityTeleport',
     'PlayPlayerPostitionAndLookClientBound',
+    'PlayDestroyEntities',
 )
 
 
@@ -292,7 +293,7 @@ class PlayEntityMovement(Packet):
     to = 1
 
     def __init__(self, entity_id: int) -> None:
-        super().__init_()
+        super().__init__()
 
         self.entity_id = entity_id
 
@@ -410,3 +411,19 @@ class PlayPlayerPostitionAndLookClientBound(Packet):
     def encode(self) -> bytes:
         return Buffer.pack('d', self.x) + Buffer.pack('d', self.y) + Buffer.pack('d', self.z) + Buffer.pack('f', self.yaw) + \
             Buffer.pack('f', self.pitch) + self.flags + Buffer.pack_varint(self.tp_id)
+
+
+class PlayDestroyEntities(Packet):
+    """Insert fancy docstring here (server -> client)"""
+
+    id = 0x36
+    to = 1
+
+    def __init__(self, count: int, eids: list) -> None:
+        super().__init__()
+
+        self.count = count
+        self.eids = eids
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.count) + b''.join(Buffer.pack_varint(eid) for eid in self.eids)

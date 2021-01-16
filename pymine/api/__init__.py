@@ -29,23 +29,16 @@ async def init():  # called when server starts up
         for file in filter((lambda f: f.endswith('.py')), files):
             importlib.import_module(os.path.join(root, file)[:-3].replace(os.sep, '.'))
 
-    plugin_folder_list = os.listdir('plugins')
+    to_be_loaded = os.listdir('plugins')
 
     if 'FAP' in plugins_to_be_loaded:
         fap = register_plugin('plugins.FAP')
         await fap.setup()
 
-        managed_plugins = fap.managed_plugins
+        to_be_loaded = fap.unmanaged_plugins
         plugin_folder_list.remove('FAP')
 
-    def valid_to_be_loaded(obj):
-        if os.path.isfile(obj) and obj.endswith('.py'):
-            return True
-
-        if os.path.isdir(obj) and obj not in managed_plugins:
-            return
-
-    for plugin in filter((lambda f: os.path.isfile(f) and f.startswith('.py') or os.path.isdir(f)), plugins_to_be_loaded):
+    for plugin in filter((lambda f: os.path.isfile(f) and f.endswith('.py') or os.path.isdir(f)), to_be_loaded):
         try:
             plugin_module = register_plugin(plugin)
         except BaseException as e:

@@ -29,9 +29,9 @@ async def init():  # called when server starts up
 
     plugins_to_be_loaded = os.listdir('plugins')
 
-    if 'plugman' in plugins_to_be_loaded:
-        register_plugin('plugins.plugman')
-        plugins_to_be_loaded.remove('plugman')
+    if 'FAP' in plugins_to_be_loaded:
+        register_plugin('plugins.FAP')
+        plugins_to_be_loaded.remove('FAP')
 
     for plugin in filter((lambda f: os.path.isfile(f) and f.startswith('.py') or os.path.isdir(f)), plugins_to_be_loaded):
         try:

@@ -144,7 +144,6 @@ async def start():  # Actually start the server
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
-    loop.set_debug(True)
     loop.set_exception_handler(task_exception_handler)
 
     try:

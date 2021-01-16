@@ -94,7 +94,8 @@ async def setup(logger):
         if any([plugin in m_plugin for m_plugin in managed_plugins]):
             unmanaged_plugins.remove(plugin)
 
-    try:
-        unmanaged_plugins.remove('plugins.__pycache__')
-    except ValueError:
-        pass
+    for to_remove in ('plugins.__pycache__', 'plugins.FAP',):
+        try:
+            unmanaged_plugins.remove(to_remove)
+        except ValueError:
+            pass

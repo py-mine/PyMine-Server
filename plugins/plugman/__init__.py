@@ -10,7 +10,7 @@ def load_plugin_list():
         with open('plugins.yml', 'r') as f:
             plugin_list = yaml.safe_load(f.read())
     except FileNotFoundError:
-        plugin_list = ['example']
+        plugin_list = ['example', 'plugman']
 
         with open('plugins.yml', 'w+') as f:
             f.write(yaml.dump(plugin_list))

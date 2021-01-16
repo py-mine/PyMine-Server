@@ -36,7 +36,6 @@ async def init():  # called when server starts up
         await fap.setup()
 
         to_be_loaded = fap.unmanaged_plugins
-        plugin_folder_list.remove('FAP')
 
     for plugin in filter((lambda f: os.path.isfile(f) and f.endswith('.py') or os.path.isdir(f)), to_be_loaded):
         try:

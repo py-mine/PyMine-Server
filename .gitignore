@@ -3,6 +3,7 @@ plugins.yml
 
 plugins/*
 !plugins/example
+!plugins/plugman
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

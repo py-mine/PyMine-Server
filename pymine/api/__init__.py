@@ -37,14 +37,11 @@ async def init():  # called when server starts up
 
         to_be_loaded = fap.unmanaged_plugins
 
-    for plugin in filter((lambda f: os.path.isfile(f) and f.endswith('.py') or os.path.isdir(f)), to_be_loaded):
-        logger.info('Loading plugin: ' + plugin)
-
+    for plugin in to_be_loaded:
         try:
             plugin_module = register_plugin(plugin)
         except BaseException as e:
-            logger.error(f'An error occurred while loading plugin: plugins.{plugin} {logger.f_traceback(e)}')
-            share['server'].close()
+            logger.warn(f'An error occurred while loading plugin: plugins.{plugin} {logger.f_traceback(e)}')
 
         plugin_setup = plugin_module.__dict__.get('setup')
 

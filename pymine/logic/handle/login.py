@@ -66,7 +66,7 @@ async def encrypted_login(r: 'StreamReader', w: 'StreamWriter', packet: Packet, 
     w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
 
     if share['comp_thresh'] > 0:  # Send set compression packet if needed
-        w.write(Buffer.pack_packet(login_packets.LoginSetCompression(share['comp_thresh'])))
+        w.write(Buffer.pack_packet(LoginSetCompression(share['comp_thresh'])))
         await w.drain()
 
     # Send LoginSuccess packet, tells client they've logged in succesfully

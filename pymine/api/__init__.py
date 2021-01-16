@@ -16,7 +16,9 @@ running_tasks = []
 
 
 def register_plugin(plugin):
-    plugins.append(importlib.import_module(plugin))
+    plugin_module = importlib.import_module(plugin)
+    plugins.append(plugin_module)
+    return plugin_module
 
 
 async def init():  # called when server starts up
@@ -30,14 +32,20 @@ async def init():  # called when server starts up
     plugins_to_be_loaded = os.listdir('plugins')
 
     if 'FAP' in plugins_to_be_loaded:
-        register_plugin('plugins.FAP')
+        await register_plugin('plugins.FAP').setup()
         plugins_to_be_loaded.remove('FAP')
 
     for plugin in filter((lambda f: os.path.isfile(f) and f.startswith('.py') or os.path.isdir(f)), plugins_to_be_loaded):
         try:
-            register_plugin(plugin)
+            plugin_module = register_plugin(plugin)
         except BaseException as e:
             logger.error(f'An error occurred while loading plugin: plugins.{plugin} {logger.f_traceback(e)}')
+            share['server'].close()
+
+        try:
+            await plugin_module.setup()
+        except BaseException as e:
+            logger.error(f'An error occurred while setting up plugin: plugins.{plugin} {logger.f_traceback(e)}')
             share['server'].close()
 
     # start command handler task

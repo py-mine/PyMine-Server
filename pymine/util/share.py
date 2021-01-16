@@ -1,5 +1,5 @@
+from pymine.data.config import SERVER_PROPERTIES, FAVICON
 from pymine.util.logging import Logger
-from pymine.data.config import *
 
 __all__ = ('share', 'logger',)
 

@@ -38,6 +38,7 @@ async def close_con(w, remote):  # Close a connection to a client
     logger.debug(f'Disconnected nicely from {remote[0]}:{remote[1]}.')
     return False, None, w
 
+
 share['close_con'] = close_con
 
 
@@ -52,6 +53,11 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         try:
             read = await asyncio.wait_for(r.read(1), 5)
         except asyncio.TimeoutError:
+            logger.debug('Closing due to timeout on read...')
+            return await close_con(w, remote)
+
+        if read == b'':
+            logger.debug('Closing due to invalid read....')
             return await close_con(w, remote)
 
         if i == 0 and read == b'\xFE':
@@ -91,7 +97,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
 
 async def handle_con(r, w):  # Handle a connection from a client
     remote = w.get_extra_info('peername')  # (host, port,)
-    logger.debug(f'connection received from {remote[0]}:{remote[1]}.')
+    logger.debug(f'Connection received from {remote[0]}:{remote[1]}.')
 
     continue_ = True
 
@@ -130,20 +136,18 @@ async def start():  # Actually start the server
 
         server.close()
 
-        # call all registered on_server_stop handlers
-        await asyncio.gather(*(h() for h in pymine_api.server.SERVER_STOP_HANDLERS))
-
         # wait for the server to be closed, stop the api, and stop the aiohttp.ClientSession
         await asyncio.gather(server.wait_closed(), pymine_api.stop(), share['ses'].close())
 
         logger.info('Server closed.')
 
 
-loop = asyncio.get_event_loop()
-loop.set_debug(True)
-loop.set_exception_handler(task_exception_handler)
+if __name__ == '__main__':
+    loop = asyncio.get_event_loop()
+    loop.set_debug(True)
+    loop.set_exception_handler(task_exception_handler)
 
-try:
-    loop.run_until_complete(start())
-except BaseException as e:
-    logger.critical(logger.f_traceback(e))
+    try:
+        loop.run_until_complete(start())
+    except BaseException as e:
+        logger.critical(logger.f_traceback(e))

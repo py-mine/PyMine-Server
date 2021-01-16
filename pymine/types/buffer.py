@@ -5,9 +5,11 @@ import json
 import uuid
 import zlib
 
-from pymine.data.registry import ITEM_REGISTRY
 from pymine.types.packet import Packet
-from pymine.data.misc import *
+from pymine.types.chat import Chat
+
+from pymine.data.registry import ITEM_REGISTRY
+import pymine.data.misc as misc_data
 
 from pymine.util.share import logger
 
@@ -74,7 +76,7 @@ class Buffer:
         if comp_thresh >= 0:
             uncomp_len = self.unpack_varint()
 
-            if uncom_len > 0:
+            if uncomp_len > 0:
                 data = zlib.decompress(self.read())
 
         packet = PACKET_MAP[state][(self.unpack_varint(), to,)].decode(self)
@@ -104,7 +106,7 @@ class Buffer:
     def unpack_optional(self, unpacker: object) -> bool:
         """Unpacks an optional field from the buffer."""
 
-        present = cls.unpack('?')
+        present = self.unpack('?')
 
         if present:
             return unpacker()
@@ -236,15 +238,15 @@ class Buffer:
         return uuid.UUID(bytes=self.read(16))
 
     @classmethod
-    def pack_chat(cls, msg: 'Chat') -> bytes:
+    def pack_chat(cls, msg: Chat) -> bytes:
         """Packs a Minecraft chat message into bytes."""
 
         return cls.pack_json(msg.msg)
 
-    def unpack_chat(self) -> 'Chat':
+    def unpack_chat(self) -> Chat:
         """Unpacks a Minecraft chat message from the buffer."""
 
-        return Chat.from_buf(self)
+        return Chat(self.unpack_json())
 
     @classmethod
     def pack_pos(cls, x, y, z) -> bytes:
@@ -317,42 +319,35 @@ class Buffer:
     def pack_direction(cls, direction: str) -> bytes:
         """Packs a direction into bytes."""
 
-        return cls.pack_varint(DIRECTIONS.index(direction))
+        return cls.pack_varint(misc_data.DIRECTIONS.index(direction))
 
     def unpack_direction(self) -> str:
         """Unpacks a direction from the buffer."""
 
-        return DIRECTIONS[self.unpack_varint()]
+        return misc_data.DIRECTIONS[self.unpack_varint()]
 
     @classmethod
     def pack_pose(cls, pose: str) -> bytes:
         """Packs a pose into bytes."""
 
-        return cls.pack_varint(POSES.index(pose))
+        return cls.pack_varint(misc_data.POSES.index(pose))
 
     def unpack_pose(self) -> str:
         """Unpacks a pose from the buffer."""
 
-        return POSES[self.unpack_varint()]
+        return misc_data.POSES[self.unpack_varint()]
 
     @classmethod
     def pack_ingredient(cls, ingredient: object) -> bytes:
         """Packs a recipe ingredient into bytes."""
 
-        out = b''
-
         if isinstance(ingredient, list):
-            out += cls.pack_varint(len(ingredient))
-            for slot in ingredient:
-                out += cls.pack_slot(**slot)
-        elif isinstance(ingredient, dict):
-            out += cls.pack_varint(1)
-            out += cls.pack_slot(**ingredient)
-        else:
-            raise TypeError(
-                f'Ingredient should be of type list or dict but was instead of type {type(ingredient)}')
+            return cls.pack_varint(len(ingredient)) + b''.join(cls.pack_slot(**slot) for slot in ingredient)
 
-        return out
+        if isinstance(ingredient, dict):
+            return cls.pack_varint(1) + cls.pack_slot(**ingredient)
+
+        raise TypeError(f'Ingredient should be of type list or dict but was instead of type {type(ingredient)}')
 
     # def unpack_ingredient(self):
     #     """Unpacks a recipe ingredient from the buffer."""
@@ -410,10 +405,7 @@ class Buffer:
         if recipe_type == 'minecraft:crafting_shapeless':
             out += cls.pack_string(recipe['group'])
             out += cls.pack_varint(len(recipe['ingredients']))  # Length of ingredient array
-
-            for ingredient in recipe['ingredients']:
-                out += self.pack_ingredient(ingredient)
-
+            out += b''.join(cls.pack_ingredient(ingredient) for ingredient in recipe['ingredients'])
             out += cls.pack_slot(**recipe['result'])
         elif recipe_type == 'minecraft:crafting_shaped':
             width = len(recipe['pattern'][0])  # Width of pattern
@@ -431,7 +423,7 @@ class Buffer:
                         out += cls.pack_ingredient(recipe['key'][key])
 
             out += cls.pack_slot(**recipe['result'])
-        elif recipe_type in SMELT_TYPES:  # SMELT_TYPES imported from misc.py
+        elif recipe_type in misc_data.SMELT_TYPES:  # SMELT_TYPES imported from misc.py
             out += cls.pack_string(recipe['group'])
             out += cls.pack_ingredient(recipe['ingredient'])
             out += cls.pack_slot(**recipe['result'])

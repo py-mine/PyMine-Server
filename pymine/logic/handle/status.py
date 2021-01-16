@@ -6,7 +6,7 @@ from pymine.api.packet import handle_packet
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-from pymine.types.packets.status.status import *
+import pymine.types.packets.status.status as status_packets
 
 
 @handle_packet('status', 0x00)
@@ -36,7 +36,7 @@ async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remo
         'favicon': share['favicon']
     }
 
-    w.write(Buffer.pack_packet(StatusStatusResponse(data)))
+    w.write(Buffer.pack_packet(status_packets.StatusStatusResponse(data)))
     await w.drain()
 
     return True, r, w

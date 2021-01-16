@@ -1,8 +1,7 @@
 from __future__ import annotations
 import re
 
-from pymine.types.buffer import Buffer
-from pymine.data.formats import *
+from pymine.data.formats import TERMINAL_CODES, FORMAT_BY_NAME
 
 
 class Chat:
@@ -14,12 +13,6 @@ class Chat:
 
     def __init__(self, msg: object) -> None:
         self.msg = msg
-
-    @classmethod
-    def from_buf(cls, buf: 'Buffer') -> Chat:
-        """Creates a Minecraft chat message from a buffer."""
-
-        return cls(buf.unpack_json())
 
     @classmethod
     def from_string(cls, text: str) -> Chat:

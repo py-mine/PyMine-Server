@@ -123,7 +123,7 @@ async def start():  # Actually start the server
     try:
         async with server:
             if random.randint(0, 999) == 1:  # shhhhh
-                logger.info(f'PPMine 69.0 started on port {addr}:{port}!')
+                logger.info(f'PPMine 69.420 started on port {addr}:{port}!')
             else:
                 logger.info(f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
 
@@ -144,7 +144,6 @@ async def start():  # Actually start the server
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
-    loop.set_debug(True)
     loop.set_exception_handler(task_exception_handler)
 
     try:

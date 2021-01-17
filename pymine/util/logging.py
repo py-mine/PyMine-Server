@@ -41,6 +41,8 @@ class Logger:
         message = ' '.join(str(m) for m in message)
         print(f'{BRIGHT}{WHITE}[{nice_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{message}{END}')
 
+    warning = warn
+
     def error(self, *message):
         message = ' '.join(str(m) for m in message)
         print(f'{BRIGHT}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{message}{END}')
@@ -56,8 +58,7 @@ class Logger:
 
 def task_exception_handler(loop, ctx):
     if ctx['exception']:
-        print(
-            f'{BRIGHT}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{Logger.f_traceback(ctx["exception"])}{END}')
+        print(f'{BRIGHT}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{Logger.f_traceback(ctx["exception"])}{END}')
     else:
         print(f'{BRIGHT}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{ctx["message"]}{END}')
 

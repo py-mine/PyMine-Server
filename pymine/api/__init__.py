@@ -5,8 +5,6 @@ import os
 from pymine.logic.commands import on_command, handle_server_commands, load_commands
 from pymine.util.share import logger, share
 
-from pymine.data.config import PLUGIN_LIST as PLUGINS_TO_LOAD
-
 import pymine.api.packet
 import pymine.api.player
 import pymine.api.server
@@ -17,6 +15,12 @@ plugins = []
 running_tasks = []
 
 
+def register_plugin(plugin):
+    plugin_module = importlib.import_module(plugin)
+    plugins.append(plugin_module)
+    return plugin_module
+
+
 async def init():  # called when server starts up
     load_commands()  # load commands in pymine/logic/cmds/*
 
@@ -25,11 +29,29 @@ async def init():  # called when server starts up
         for file in filter((lambda f: f.endswith('.py')), files):
             importlib.import_module(os.path.join(root, file)[:-3].replace(os.sep, '.'))
 
-    for plugin in PLUGINS_TO_LOAD:
+    to_be_loaded = ['plugins.' + p for p in os.listdir('plugins')]
+
+    if 'plugins.FAP' in to_be_loaded:
+        fap = register_plugin('plugins.FAP')
+        await fap.setup(logger)
+
+        to_be_loaded = fap.plugins
+
+    for plugin in to_be_loaded:
         try:
-            plugins.append(importlib.import_module(f'plugins.{plugin}'))
+            plugin_module = register_plugin(plugin)
         except BaseException as e:
-            logger.error(f'An error occurred while loading plugin: plugins.{plugin} {logger.f_traceback(e)}')
+            logger.warn(f'An error occurred while loading plugin: {plugin} {logger.f_traceback(e)}')
+            continue
+
+        plugin_setup = plugin_module.__dict__.get('setup')
+
+        if plugin_setup:
+            try:
+                await plugin_setup()
+            except BaseException as e:
+                logger.warn(f'An error occurred while setting up plugin: {plugin} {logger.f_traceback(e)}')
+                continue
 
     # start command handler task
     running_tasks.append(asyncio.create_task(handle_server_commands()))
@@ -39,8 +61,8 @@ async def stop():  # called when server is stopping
     for task in running_tasks:
         task.cancel()
 
-    for plugin in plugins:
-        teardown_function = plugin.__dict__.get('teardown')
+    for plugin_module in plugins:
+        teardown_function = plugin_module.__dict__.get('teardown')
 
         if teardown_function:
             await teardown_function()

@@ -41,7 +41,7 @@ async def init():  # called when server starts up
         try:
             plugin_module = register_plugin(plugin)
         except BaseException as e:
-            logger.warn(f'An error occurred while loading plugin: {plugin} {logger.f_traceback(e)}')
+            logger.error(f'An error occurred while loading plugin: {plugin} {logger.f_traceback(e)}')
             continue
 
         plugin_setup = plugin_module.__dict__.get('setup')
@@ -50,7 +50,7 @@ async def init():  # called when server starts up
             try:
                 await plugin_setup()
             except BaseException as e:
-                logger.warn(f'An error occurred while setting up plugin: {plugin} {logger.f_traceback(e)}')
+                logger.error(f'An error occurred while setting up plugin: {plugin} {logger.f_traceback(e)}')
                 continue
 
     # start command handler task

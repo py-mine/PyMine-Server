@@ -31,6 +31,7 @@ __all__ = (
     'PlayUpdateHealth',
     'PlayCombatEvent',
     'PlayFacePlayer',
+    'PlayPlayerInfo',
 )
 
 
@@ -634,6 +635,15 @@ class PlayCombatEvent(Packet):
 
 
 class PlayPlayerInfo(Packet):
+    """Sent by the server to update the user list under the tab menu. (Server -> Client)
+
+    :param int action: The action to be taken, either add player (0), update gamemode (1), update latency (2), update display name (3), or remove player (4).
+    :param list players: A list of dictionaries, content varies depending on action, see here: https://wiki.vg/Protocol#Player_Info.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr action:
+    :attr players:
+    """
 
     id = 0x32
     to = 1
@@ -664,6 +674,8 @@ class PlayPlayerInfo(Packet):
             out += b''.join(Buffer.pack_uuid(p['uuid']) + Buffer.pack_varint(p['ping']) for p in self.players)
         elif self.action == 3:  # update display name
             out += b''.join(Buffer.pack_uuid(p['uuid']) + Buffer.pack_optional(p.get('display_name')) for p in self.players)
+        elif self.action == 4:
+            out += b''.join(Buffer.pack_uuid(p['uuid']) for p in self.players)
 
         return out
 

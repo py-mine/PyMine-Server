@@ -2,7 +2,6 @@ server.yml
 plugins.yml
 
 plugins/*
-!plugins/example
 plugins/FAP
 !plugins/FAP/__init__.py
 

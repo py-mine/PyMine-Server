@@ -1,6 +1,0 @@
-- clone_url: https://github.com/py-mine/FAP.git
-  module_folder: ''
-  root_folder: FAP
-- clone_url: https://github.com/py-mine/example-plugin.git
-  module_folder: example_plugin
-  root_folder: example-plugin

@@ -50,8 +50,8 @@ async def init():  # called when server starts up
             try:
                 await plugin_setup()
             except BaseException as e:
-                logger.error(f'An error occurred while setting up plugin: {plugin} {logger.f_traceback(e)}')
-                share['server'].close()
+                logger.warn(f'An error occurred while setting up plugin: {plugin} {logger.f_traceback(e)}')
+                continue
 
     # start command handler task
     running_tasks.append(asyncio.create_task(handle_server_commands()))

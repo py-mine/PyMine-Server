@@ -633,6 +633,42 @@ class PlayCombatEvent(Packet):
                 Buffer.pack('i', self.data['entity_id']) + Buffer.pack_chat(self.data['message'])
 
 
+class PlayPlayerInfo(Packet):
+
+    id = 0x32
+    to = 1
+
+    def __init__(self, action: int, players: list) -> None:
+        super().__init__()
+
+        self.action = action
+        self.players = players
+
+    def encode(self) -> bytes:
+        out = Buffer.pack_varint(self.action) + len(self.players)
+
+        if self.action == 0:  # add player
+            for player in self.players:
+                out += Buffer.pack_uuid(player['uuid']) + Buffer.pack_string(player['name']) + \
+                    Buffer.pack_varint(len(player['properties']))
+
+                for prop in player['properties']:
+                    out += Buffer.pack_string(prop['name']) + Buffer.pack_string(prop['value']) + \
+                        Buffer.pack_optional(Buffer.pack_string, prop.get('signature'))
+
+                out += Buffer.pack_varint(player['gamemode']) + Buffer.pack_varint(player['ping']) + \
+                    Buffer.pack_optional(Buffer.pack_chat, player['display_name'])
+        elif self.action == 1:  # update gamemode
+            out += b''.join(Buffer.pack_uuid(p['uuid']) + Buffer.pack_varint(p['gamemode']) for p in self.players)
+        elif self.action == 2:  # update latency
+            out += b''.join(Buffer.pack_uuid(p['uuid']) + Buffer.pack_varint(p['ping']) for p in self.players)
+        elif self.action == 3:  # update display name
+            out += b''.join(Buffer.pack_uuid(p['uuid']) + Buffer.pack_optional(p.get('display_name')) for p in self.players)
+
+        return out
+
+
+
 class PlayFacePlayer(Packet):
     """Used by the server to rotate the client player to face the given location or entity. (Server -> Client)
 

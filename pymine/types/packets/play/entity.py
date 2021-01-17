@@ -419,10 +419,10 @@ class PlayDestroyEntities(Packet):
     id = 0x36
     to = 1
 
-    def __init__(self, eids: list) -> None:
+    def __init__(self, entity_ids: list) -> None:
         super().__init__()
 
-        self.eids = eids
+        self.entity_ids = entity_ids
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(len(self.entity_ids)) + b''.join(Buffer.pack_varint(eid) for eid in self.eids)
+        return Buffer.pack_varint(len(self.entity_ids)) + b''.join(Buffer.pack_varint(eid) for eid in self.entity_ids)

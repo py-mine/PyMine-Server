@@ -680,7 +680,6 @@ class PlayPlayerInfo(Packet):
         return out
 
 
-
 class PlayFacePlayer(Packet):
     """Used by the server to rotate the client player to face the given location or entity. (Server -> Client)
 

@@ -35,7 +35,7 @@ async def init():  # called when server starts up
         fap = register_plugin('plugins.FAP')
         await fap.setup(logger)
 
-        to_be_loaded = fap.unmanaged_plugins
+        to_be_loaded = fap.plugins
 
     for plugin in to_be_loaded:
         try:

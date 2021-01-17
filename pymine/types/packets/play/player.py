@@ -656,7 +656,15 @@ class PlayFacePlayer(Packet):
     id = 0x33
     to = 1
 
-    def __init__(self, feet_or_eyes: int, tx: float, ty: float, tz: float, is_entity: bool, entity_id: int = None, entity_feet_or_eyes: int = None) -> None:
+    def __init__(
+            self,
+            feet_or_eyes: int,
+            tx: float,
+            ty: float,
+            tz: float,
+            is_entity: bool,
+            entity_id: int = None,
+            entity_feet_or_eyes: int = None) -> None:
         super().__init__()
 
         self.feet_or_eyes = feet_or_eyes

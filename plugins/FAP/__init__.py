@@ -5,7 +5,14 @@ import git
 import os
 import re
 
-DEFAULT = [['https://github.com/py-mine/FAP.git', 'FAP', '']]
+DEFAULT = [
+    {
+        'clone_url': 'https://github.com/py-mine/FAP.git',
+        'root_folder': 'FAP',
+        'module_folder': ''
+    }
+]
+
 VALID_URL_REGEX = re.compile(
     r'^(?:http)s?://'  # http:// or https://
     # domain...
@@ -57,7 +64,7 @@ async def reload_self(logger, plugin_root, plugin_dir):
 async def setup(logger):
     plugins_dir = git.Git('plugins')
 
-    for plugin_url, plugin_root, plugin_dir in load_plugin_list():
+    for plugin_url, plugin_root, plugin_dir in load_plugin_list().items():
         if re.match(VALID_URL_REGEX, plugin_url) is None:
             raise ValueError(f'Entry in plugins.yml "{plugin_url}" is not a valid git clone/repository url.')
 

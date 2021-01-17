@@ -24,8 +24,7 @@ VALID_URL_REGEX = re.compile(
     re.IGNORECASE
 )
 
-managed_plugins = []
-unmanaged_plugins = []
+plugins = []
 
 
 def dump_default():
@@ -72,10 +71,7 @@ async def setup(logger):
             logger.warn(f'Entry {index} in plugins.yml isn\'t formatted correctly, skipping entry...')
             continue
 
-        module_folder = plugin_entry.get('module_folder', '')
-
-        if module_folder is None:
-            module_folder = ''
+        module_folder = plugin_entry.get('module_folder')
 
         if re.match(VALID_URL_REGEX, clone_url) is None:
             logger.warn(f'Entry in plugins.yml "{clone_url}" is not a valid git clone/repository url, skipping...')
@@ -112,17 +108,24 @@ async def setup(logger):
             if res != 'Already up to date.' and root_folder == 'plugins/FAP':  # there were changes
                 return await reload_self(logger, root_folder, module_folder)
 
-        managed_plugins.append(os.path.join(root_folder, module_folder).replace('/', '.'))
+        module_path = root_folder
+
+        if module_folder:
+            module_path = os.path.join(module_path, module_folder)
+
+        plugins.append(module_path.replace('/', '.'))
 
     # used by PyMine to load other plugins
-    unmanaged_plugins.extend([os.path.normpath(os.path.join('plugins', p)).replace('/', '.') for p in os.listdir('plugins')])
+    folder_plugins = [os.path.join('plugins', p).replace(os.sep, '.') for p in os.listdir('plugins')]
 
-    for plugin in unmanaged_plugins:
-        if any([plugin in m_plugin for m_plugin in managed_plugins]):
-            unmanaged_plugins.remove(plugin)
+    plugins_nice = list(set(plugins + folder_plugins))  # remove duplicates
 
-    for to_remove in ('plugins.__pycache__', 'plugins.FAP',):
+    for to_remove in ('plugins.__pycache__', 'plugins.FAP',):  # remove plugins which shouldn't be loaded again
         try:
-            unmanaged_plugins.remove(to_remove)
+            plugins_nice.remove(to_remove)
         except ValueError:
             pass
+
+    # update official list
+    plugins.clear()
+    plugins.extend(plugins_nice)

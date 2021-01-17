@@ -10,6 +10,11 @@ DEFAULT = [
         'clone_url': 'https://github.com/py-mine/FAP.git',
         'root_folder': 'FAP',
         'module_folder': ''
+    },
+    {
+        'clone_url': 'https://github.com/py-mine/example-plugin.git',
+        'root_folder': 'example-plugin',
+        'module_folder': 'example_plugin'
     }
 ]
 

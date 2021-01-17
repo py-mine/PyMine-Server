@@ -51,9 +51,9 @@ def load_plugin_list():
     return plugin_list
 
 
-async def reload_self(logger, plugin_root, plugin_dir):
+async def reload_self(logger, root_folder, module_folder):
     logger.debug('Updating FAP...')
-    self_path = os.path.normpath(os.path.join(plugin_root, plugin_dir)).replace('/', '.')
+    self_path = os.path.normpath(os.path.join(root_folder, module_folder)).replace('/', '.')
 
     self = importlib.import_module(self_path)
     importlib.reload(self)
@@ -64,42 +64,55 @@ async def reload_self(logger, plugin_root, plugin_dir):
 async def setup(logger):
     plugins_dir = git.Git('plugins')
 
-    for plugin_url, plugin_root, plugin_dir in load_plugin_list().items():
-        if re.match(VALID_URL_REGEX, plugin_url) is None:
-            raise ValueError(f'Entry in plugins.yml "{plugin_url}" is not a valid git clone/repository url.')
+    for index, plugin_entry in enumerate(load_plugin_list()):
+        try:
+            clone_url = plugin_entry['clone_url']
+            root_folder = plugin_entry['root_folder']
+        except KeyError:
+            logger.warn(f'Entry {index} in plugins.yml isn\'t formatted correctly, skipping entry...')
+            continue
 
-        plugin_root = os.path.normpath(os.path.join('plugins', plugin_root))
+        module_folder = plugin_entry.get('module_folder', '')
 
-        if not os.path.isdir(os.path.join(plugin_root, '.git')):
+        if module_folder is None:
+            module_folder = ''
+
+        if re.match(VALID_URL_REGEX, clone_url) is None:
+            logger.warn(f'Entry in plugins.yml "{clone_url}" is not a valid git clone/repository url, skipping...')
+            continue
+
+        root_folder = os.path.normpath(os.path.join('plugins', root_folder))
+
+        if not os.path.isdir(os.path.join(root_folder, '.git')):
             try:
-                shutil.rmtree(plugin_root)
+                shutil.rmtree(root_folder)
             except FileNotFoundError:
                 pass
 
-            logger.debug(f'Cloning {plugin_url} to plugins folder...')
-            plugins_dir.clone(plugin_url)  # clone plugin repository to plugins directory
+            logger.debug(f'Cloning {clone_url} to plugins folder...')
+            plugins_dir.clone(clone_url)  # clone plugin repository to plugins directory
         else:
             try:  # try to pull, if error just delete repo and re-clone
-                logger.debug(f'Pulling latest from {plugin_url}')
-                res = git.Git(plugin_root).pull()  # update plugin repository
+                logger.debug(f'Pulling latest from {clone_url}')
+                res = git.Git(root_folder).pull()  # update plugin repository
             except BaseException:
                 try:
-                    shutil.rmtree(plugin_root)
+                    shutil.rmtree(root_folder)
                 except FileNotFoundError:
                     pass
 
-                logger.debug(f'Cloning {plugin_url} to plugins folder...')
-                plugins_dir.clone(plugin_url)  # clone plugin repository to plugins directory
+                logger.debug(f'Cloning {clone_url} to plugins folder...')
+                plugins_dir.clone(clone_url)  # clone plugin repository to plugins directory
 
-                if plugin_root == 'plugins/FAP':
-                    return await reload_self(logger, plugin_root, plugin_dir)
+                if root_folder == 'plugins/FAP':
+                    return await reload_self(logger, root_folder, module_folder)
 
                 continue
 
-            if res != 'Already up to date.' and plugin_root == 'plugins/FAP':  # there were changes
-                return await reload_self(logger, plugin_root, plugin_dir)
+            if res != 'Already up to date.' and root_folder == 'plugins/FAP':  # there were changes
+                return await reload_self(logger, root_folder, module_folder)
 
-        managed_plugins.append(os.path.join(plugin_root, plugin_dir).replace('/', '.'))
+        managed_plugins.append(os.path.join(root_folder, module_folder).replace('/', '.'))
 
     # used by PyMine to load other plugins
     unmanaged_plugins.extend([os.path.normpath(os.path.join('plugins', p)).replace('/', '.') for p in os.listdir('plugins')])

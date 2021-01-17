@@ -66,6 +66,11 @@ async def reload_self(logger, root_folder, module_folder):
 
 
 async def setup(logger):
+    try:
+        os.mkdir('plugins')
+    except FileExistsError:
+        pass
+
     plugins_dir = git.Git('plugins')
 
     for index, plugin_entry in enumerate(load_plugin_list()):

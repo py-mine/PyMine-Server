@@ -104,21 +104,24 @@ async def setup(logger):
             git_url = plugin_entry['git_url']
             root_folder = plugin_entry['root_folder']
         except KeyError:
-            logger.warn(f'Entry {index} in plugins.yml isn\'t formatted correctly, skipping entry...')
+            logger.warn(f'Entry {index} in plugins.yml isn\'t formatted correctly, skipping...')
             continue
 
         module_folder = plugin_entry.get('module_folder')
 
         if re.match(VALID_git_url_REGEX, git_url) is None:
-            logger.warn(f'Entry in plugins.yml "{git_url}" is not a valid git Git URL, skipping...')
+            logger.warn(f'Entry in plugins.yml "{git_url}" is not a valid git URL, skipping...')
             continue
 
         root_folder = os.path.normpath(os.path.join('plugins', root_folder))
 
-        if not os.path.isdir(os.path.join(root_folder, '.git')):  # If already a git repository
-            await clone_repo(logger, plugins_dir, git_url, root_folder)
-        else:
-            await pull_latest(logger, plugins_dir, git_url, root_folder)
+        try:
+            if not os.path.isdir(os.path.join(root_folder, '.git')):  # If already a git repository
+                await clone_repo(logger, plugins_dir, git_url, root_folder)
+            else:
+                await pull_latest(logger, plugins_dir, git_url, root_folder)
+        except BaseException as e:
+            logger.error(f'Failed to update plugin "{root_folder}" due to: {logger.f_traceback(e)}')
 
         module_path = root_folder
 

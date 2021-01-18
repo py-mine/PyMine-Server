@@ -32,6 +32,7 @@ __all__ = (
     'PlayCombatEvent',
     'PlayFacePlayer',
     'PlayPlayerInfo',
+    'PlayRespawn',
 )
 
 
@@ -728,3 +729,47 @@ class PlayFacePlayer(Packet):
             out += Buffer.pack_varint(self.entity_id) + Buffer.pack_varint(self.entity_feet_or_eyes)
 
         return out
+
+
+class PlayRespawn(Packet):
+    """Sent to change a player's dimension. (Server -> Client)
+
+    :param nbt.TAG dimension: A dimension defined via the dimension registry.
+    :param str world_name: Name of the world the player entity is being spawned into.
+    :param int hashed_seed: First 8 bytes of the sha-256 hash of the seed.
+    :param int gamemode: The current gamemode of the player entity.
+    :param int prev_gamemode: The previous gamemode of the player entity.
+    :param bool is_debug: True if the world is a debug world.
+    :param bool is_flat: Whether the new world/dimension is a superflat one or not.
+    :param bool copy_metadata: If false, metadata is reset on the spawned player entity. Should be True for dimension changes.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr dimension:
+    :attr world_name:
+    :attr hashed_seed:
+    :attr gamemode:
+    :attr prev_gamemode:
+    :attr is_debug:
+    :attr is_flat:
+    :attr copy_metadata:
+    """
+
+    id = 0x39
+    to = 1
+
+    def __init__(self, dimension: nbt.TAG, world_name: str, hashed_seed: int, gamemode: int, prev_gamemode: int, is_debug: bool, is_flat: bool, copy_metadata: bool) -> None:
+        super().__init__()
+
+        self.dimension = dimension
+        self.world_name = world_name
+        self.hashed_seed = hashed_seed
+        self.gamemode = gamemode
+        self.prev_gamemode = prev_gamemode
+        self.is_debug = is_debug
+        self.is_flat = is_flat
+        self.copy_metadata = copy_metadata
+
+    def encode(self) -> bytes:
+        return Buffer.pack_nbt(self.dimension) + Buffer.pack_string(self.world_name) + Buffer.pack('l', self.hashed_seed) + \
+            Buffer.pack('B', self.gamemode) + Buffer.pack('B', self.prev_gamemode) + Buffer.pack('?', self.is_debug) + \
+            Buffer.pack('?', self.is_flat) + Buffer.pack('?', self.copy_metadata)

@@ -218,8 +218,7 @@ class PlayMultiBlockChange(Packet):
         out = Buffer.pack_varint(
             ((self.chunk_sect_x & 0x3FFFFF) << 42) |
             (self.chunk_sect_y & 0xFFFFF) |
-            ((self.chunk_sect_z & 0x3FFFFF) << 20)
-        ) + Buffer.pack('?', self.trust_edges) + Buffer.pack_varint(len(self.blocks))
+            ((self.chunk_sect_z & 0x3FFFFF) << 20)) + Buffer.pack('?', self.trust_edges) + Buffer.pack_varint(len(self.blocks))
 
         for block_id, local_x, local_y, local_z in self.blocks:
             out += Buffer.pack_varint(block_id << 12 | (local_x << 8 | local_z << 4 | local_y))

@@ -757,7 +757,16 @@ class PlayRespawn(Packet):
     id = 0x39
     to = 1
 
-    def __init__(self, dimension: nbt.TAG, world_name: str, hashed_seed: int, gamemode: int, prev_gamemode: int, is_debug: bool, is_flat: bool, copy_metadata: bool) -> None:
+    def __init__(
+            self,
+            dimension: nbt.TAG,
+            world_name: str,
+            hashed_seed: int,
+            gamemode: int,
+            prev_gamemode: int,
+            is_debug: bool,
+            is_flat: bool,
+            copy_metadata: bool) -> None:
         super().__init__()
 
         self.dimension = dimension

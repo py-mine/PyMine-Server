@@ -182,3 +182,26 @@ class PlayNBTQueryResponse(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack_varint(self.transaction_id) + Buffer.pack_nbt(self.nbt)
+
+
+class PlayMultiBlockChange(Packet):
+
+    id = 0x3B
+    to = 1
+
+    def __init__(self, chunk_sect_x: int, chunk_sect_y: int, chunk_sect_z: int, trust_edges: bool, blocks: list) -> None:
+        super().__init__()
+
+        self.chunk_sect_x = chunk_sect_x
+        self.chunk_sect_y = chunk_sect_y
+        self.chunk_sect_z = chunk_sect_z
+        self.trust_edges = trust_edges
+        self.blocks = blocks
+
+    def encode(self) -> bytes:
+        # out = b''
+        #
+        # for block in self.blocks:
+        #     out += Buffer.pack_varint(block_id << 12 | (local_x << 8 | local_z << 4 | local_y))
+
+        raise NotImplementedError

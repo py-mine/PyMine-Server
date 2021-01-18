@@ -7,18 +7,18 @@ import re
 
 DEFAULT = [
     {
-        'clone_url': 'https://github.com/py-mine/FAP.git',
+        'git_url': 'https://github.com/py-mine/FAP.git',
         'root_folder': 'FAP',
         'module_folder': ''
     },
     {
-        'clone_url': 'https://github.com/py-mine/example-plugin.git',
+        'git_url': 'https://github.com/py-mine/example-plugin.git',
         'root_folder': 'example-plugin',
         'module_folder': 'example_plugin'
     }
 ]
 
-VALID_URL_REGEX = re.compile(
+VALID_git_url_REGEX = re.compile(
     r'^(?:http)s?://'  # http:// or https://
     # domain...
     r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
@@ -55,14 +55,40 @@ def load_plugin_list():
     return plugin_list
 
 
-async def reload_self(logger, root_folder, module_folder):
+async def update_self(logger, root_folder):
     logger.debug('Updating FAP...')
-    self_path = os.path.normpath(os.path.join(root_folder, module_folder)).replace('/', '.')
 
-    self = importlib.import_module(self_path)
+    self = importlib.import_module(root_folder.replace(os.sep, '.'))
     importlib.reload(self)
 
     return await self.setup(logger)
+
+
+async def clone_repo(logger, plugins_dir, git_url, root_folder):
+    logger.debug(f'Cloning {git_url} to plugins folder...')
+
+    try:
+        shutil.rmtree(root_folder)
+    except FileNotFoundError:
+        pass
+
+    plugins_dir.clone(git_url)
+
+    if root_folder == 'plugins/FAP':
+        await update_self(logger, root_folder)
+
+
+async def pull_latest(logger, plugins_dir, git_url, root_folder):
+    logger.debug(f'Pulling latest from {git_url}...')
+
+    try:
+        res = git.Git(root_folder).pull()  # pull latest from remote
+    except BaseException:
+        logger.warn(f'Failed to pull from {git_url}, attempting to clone...')
+        return await clone_repo(plugins_dir, git_url, root_folder)
+
+    if root_folder == 'plugins/FAP' and res != 'Already up to date.':
+        await update_self(logger, root_folder)
 
 
 async def setup(logger):
@@ -75,7 +101,7 @@ async def setup(logger):
 
     for index, plugin_entry in enumerate(load_plugin_list()):
         try:
-            clone_url = plugin_entry['clone_url']
+            git_url = plugin_entry['git_url']
             root_folder = plugin_entry['root_folder']
         except KeyError:
             logger.warn(f'Entry {index} in plugins.yml isn\'t formatted correctly, skipping entry...')
@@ -83,40 +109,16 @@ async def setup(logger):
 
         module_folder = plugin_entry.get('module_folder')
 
-        if re.match(VALID_URL_REGEX, clone_url) is None:
-            logger.warn(f'Entry in plugins.yml "{clone_url}" is not a valid git clone/repository url, skipping...')
+        if re.match(VALID_git_url_REGEX, git_url) is None:
+            logger.warn(f'Entry in plugins.yml "{git_url}" is not a valid git Git URL, skipping...')
             continue
 
         root_folder = os.path.normpath(os.path.join('plugins', root_folder))
 
-        if not os.path.isdir(os.path.join(root_folder, '.git')):
-            try:
-                shutil.rmtree(root_folder)
-            except FileNotFoundError:
-                pass
-
-            logger.debug(f'Cloning {clone_url} to plugins folder...')
-            plugins_dir.clone(clone_url)  # clone plugin repository to plugins directory
+        if not os.path.isdir(os.path.join(root_folder, '.git')):  # If already a git repository
+            await clone_repo(logger, plugins_dir, git_url, root_folder)
         else:
-            try:  # try to pull, if error just delete repo and re-clone
-                logger.debug(f'Pulling latest from {clone_url}')
-                res = git.Git(root_folder).pull()  # update plugin repository
-            except BaseException:
-                try:
-                    shutil.rmtree(root_folder)
-                except FileNotFoundError:
-                    pass
-
-                logger.debug(f'Cloning {clone_url} to plugins folder...')
-                plugins_dir.clone(clone_url)  # clone plugin repository to plugins directory
-
-                if root_folder == 'plugins/FAP':
-                    return await reload_self(logger, root_folder, module_folder)
-
-                continue
-
-            if res != 'Already up to date.' and root_folder == 'plugins/FAP':  # there were changes
-                return await reload_self(logger, root_folder, module_folder)
+            await pull_latest(logger, plugins_dir, git_url, root_folder)
 
         module_path = root_folder
 

@@ -12,6 +12,7 @@ __all__ = (
     'PlayQueryBlockNBT',
     'PlayBlockPlacement',
     'PlayNBTQueryResponse',
+    'PlayMultiBlockChange',
 )
 
 
@@ -185,6 +186,21 @@ class PlayNBTQueryResponse(Packet):
 
 
 class PlayMultiBlockChange(Packet):
+    """Sent whenever 2 or more blocks change in the same chunk on the same tick. (Server -> Client)
+
+    :param int chunk_sect_x: The x coordinate of the chunk section.
+    :param int chunk_sect_y: The y coordinate of the chunk section.
+    :param int chunk_sect_z: The z coordinate of the chunk section.
+    :param bool trust_edges: The inverse of preceding PlayUpdateLight packet's trust_edges bool
+    :param list blocks: The changed blocks, formatted like [block_id, local_x, local_y, local_z].
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr chunk_sect_x:
+    :attr chunk_sect_y:
+    :attr chunk_sect_z:
+    :attr trust_edges:
+    :attr blocks:
+    """
 
     id = 0x3B
     to = 1
@@ -199,9 +215,13 @@ class PlayMultiBlockChange(Packet):
         self.blocks = blocks
 
     def encode(self) -> bytes:
-        # out = b''
-        #
-        # for block in self.blocks:
-        #     out += Buffer.pack_varint(block_id << 12 | (local_x << 8 | local_z << 4 | local_y))
+        out = Buffer.pack_varint(
+            ((self.chunk_sect_x & 0x3FFFFF) << 42) |
+            (self.chunk_sect_y & 0xFFFFF) |
+            ((self.chunk_sect_z & 0x3FFFFF) << 20)
+        ) + Buffer.pack('?', self.trust_edges) + Buffer.pack_varint(len(self.blocks))
 
-        raise NotImplementedError
+        for block_id, local_x, local_y, local_z in self.blocks:
+            out += Buffer.pack_varint(block_id << 12 | (local_x << 8 | local_z << 4 | local_y))
+
+        return out

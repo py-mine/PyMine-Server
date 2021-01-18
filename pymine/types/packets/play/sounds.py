@@ -5,7 +5,10 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlayNamedSoundEffect',)
+__all__ = (
+    'PlayNamedSoundEffect',
+    'PlayEntitySoundEffect',
+    )
 
 
 class PlayNamedSoundEffect(Packet):
@@ -22,7 +25,7 @@ class PlayNamedSoundEffect(Packet):
             effect_pos_y: int,
             effect_pos_z: int,
             volume: int,
-            pitch: int):
+            pitch: int) -> None:
         super().__init__()
 
         self.name = name
@@ -33,7 +36,27 @@ class PlayNamedSoundEffect(Packet):
         self.volume = volume
         self.pitch = pitch
 
-    def encode(self):
+    def encode(self) -> bytes:
         return Buffer.pack_string(self.name) + Buffer.pack_varint(self.category) + Buffer.pack('i', self.category) + \
             Buffer.pack('i', self.effect_pos_x) + Buffer.pack('i', self.effect_pos_y) + Buffer.pack('i', self.effect_pos_z) + \
+            Buffer.pack('f', self.volume) + Buffer.pack('f', self.pitch)
+
+
+class PlayEntitySoundEffect(Packet):
+    """Insert fancy Docstring here (server -> client)"""
+
+    id = 0x50
+    to = 1
+
+    def __init__(self, sound_id: int, category: int, eid: int, volume: float, pitch: float) -> None:
+        super().__init__()
+
+        self.sound_id = sound_id
+        self.category = category
+        self.eid = eid
+        self.volume = volume
+        self.pitch = pitch
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.sound_id) + Buffer.pack_varint(self.category) + Buffer.pack_varint(self.eid) + \
             Buffer.pack('f', self.volume) + Buffer.pack('f', self.pitch)

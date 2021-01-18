@@ -56,8 +56,6 @@ def load_plugin_list():
 
 
 async def update_self(logger, root_folder):
-    logger.debug('Updating FAP...')
-
     self = importlib.import_module(root_folder.replace(os.sep, '.'))
     importlib.reload(self)
 
@@ -79,16 +77,20 @@ async def clone_repo(logger, plugins_dir, git_url, root_folder):
 
 
 async def pull_latest(logger, plugins_dir, git_url, root_folder):
-    logger.debug(f'Pulling latest from {git_url}...')
+    logger.debug(f'Pulling from {git_url}...')
 
     try:
         res = git.Git(root_folder).pull()  # pull latest from remote
     except BaseException:
         logger.warn(f'Failed to pull from {git_url}, attempting to clone...')
-        return await clone_repo(plugins_dir, git_url, root_folder)
+        await clone_repo(plugins_dir, git_url, root_folder)
 
-    if root_folder == 'plugins/FAP' and res != 'Already up to date.':
+    did_update = (res != 'Already up to date.')
+
+    if root_folder == 'plugins/FAP' and did_update:
         await update_self(logger, root_folder)
+
+    return did_update
 
 
 async def setup(logger):
@@ -102,9 +104,9 @@ async def setup(logger):
     for index, plugin_entry in enumerate(load_plugin_list()):
         try:
             git_url = plugin_entry['git_url']
-            root_folder = plugin_entry['root_folder']
+            plugin_name = root_folder = plugin_entry['root_folder']
         except KeyError:
-            logger.warn(f'Entry {index} in plugins.yml isn\'t formatted correctly, skipping...')
+            logger.warn(f'Entry {index + 1} in plugins.yml isn\'t formatted correctly, skipping...')
             continue
 
         module_folder = plugin_entry.get('module_folder')
@@ -115,13 +117,18 @@ async def setup(logger):
 
         root_folder = os.path.normpath(os.path.join('plugins', root_folder))
 
+        logger.info(f'Checking for updates for {plugin_name}...')
+
         try:
-            if not os.path.isdir(os.path.join(root_folder, '.git')):  # If already a git repository
-                await clone_repo(logger, plugins_dir, git_url, root_folder)
-            else:
-                await pull_latest(logger, plugins_dir, git_url, root_folder)
+            did_update = await pull_latest(logger, plugins_dir, git_url, root_folder)
         except BaseException as e:
-            logger.error(f'Failed to update plugin "{root_folder}" due to: {logger.f_traceback(e)}')
+            logger.error(f'Failed to update plugin "{plugin_name}" due to: {logger.f_traceback(e)}')
+            continue
+
+        if did_update:
+            logger.info(f'Updated {plugin_name}!')
+        else:
+            logger.info(f'No updates found for {plugin_name}.')
 
         module_path = root_folder
 

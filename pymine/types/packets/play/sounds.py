@@ -8,7 +8,7 @@ from pymine.types.buffer import Buffer
 __all__ = (
     'PlayNamedSoundEffect',
     'PlayEntitySoundEffect',
-    )
+)
 
 
 class PlayNamedSoundEffect(Packet):

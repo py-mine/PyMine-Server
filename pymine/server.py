@@ -132,14 +132,18 @@ async def start():  # Actually start the server
 
             await server.serve_forever()
     except (asyncio.CancelledError, KeyboardInterrupt,):
-        logger.info('Closing server...')
+        pass
 
-        server.close()
 
-        # wait for the server to be closed, stop the api, and stop the aiohttp.ClientSession
-        await asyncio.gather(server.wait_closed(), pymine_api.stop(), share['ses'].close())
+async def shutdown():  # Stop the server properly
+    logger.info('Closing server...')
 
-        logger.info('Server closed.')
+    share['server'].close()
+
+    # wait for the server to be closed, stop the api, and stop the aiohttp.ClientSession
+    await asyncio.gather(share['server'].wait_closed(), pymine_api.stop(), share['ses'].close())
+
+    logger.info('Server closed.')
 
 
 if __name__ == '__main__':
@@ -150,3 +154,11 @@ if __name__ == '__main__':
         loop.run_until_complete(start())
     except BaseException as e:
         logger.critical(logger.f_traceback(e))
+
+    try:
+        loop.run_until_complete(shutdown())
+    except BaseException as e:
+        logger.critical(logger.f_traceback(e))
+
+    loop.stop()
+    loop.close()

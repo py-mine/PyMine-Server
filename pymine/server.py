@@ -134,7 +134,7 @@ async def start():  # Actually start the server
         pass
 
 
-async def shutdown():  # Stop the server properly
+async def stop():  # Stop the server properly
     logger.info('Closing server...')
 
     share['server'].close()
@@ -155,7 +155,7 @@ if __name__ == '__main__':
         logger.critical(logger.f_traceback(e))
 
     try:
-        loop.run_until_complete(shutdown())
+        loop.run_until_complete(stop())
     except BaseException as e:
         logger.critical(logger.f_traceback(e))
 

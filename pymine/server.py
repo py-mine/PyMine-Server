@@ -76,7 +76,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     buf = Buffer(await r.read(packet_length))
 
     state = STATES.encode(states.get(remote, 0))
-    packet = buf.unpack_packet(state, 0, PACKET_MAP)
+    packet = buf.unpack_packet(state, PACKET_MAP)
 
     logger.debug(f'IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}')
 

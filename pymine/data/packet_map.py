@@ -12,7 +12,7 @@ def load_packets():
 
     for state in os.listdir('pymine/types/packets'):
         packet_map[state] = {}
-        packet_map_clientbound = {}
+        packet_map_clientbound[state] = {}
 
         for file in filter((lambda f: f.endswith('.py')), os.listdir(f'pymine/types/packets/{state}')):
             module = importlib.import_module(f'pymine.types.packets.{state}.{file[:-3]}')

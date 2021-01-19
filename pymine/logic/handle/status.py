@@ -32,9 +32,11 @@ async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remo
         },
         'description': {  # a Chat
             'text': share['conf']['motd']
-        },
-        'favicon': share['favicon']
+        }
     }
+
+    if share['favicon']:
+        data['favicon'] = share['favicon']
 
     w.write(Buffer.pack_packet(status_packets.StatusStatusResponse(data)))
     await w.drain()

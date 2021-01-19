@@ -9,7 +9,7 @@
 - [x] Status + Login Logic
 - [ ] Play Logic
 - [ ] World Generation
-- [ ] Entities
+- [ ] Entities/Entity AI
 - [x] Plugin API
 
 

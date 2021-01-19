@@ -37,12 +37,12 @@ class PlayWorldBorder(Packet):
             out += Buffer.pack('d', self.data['old_diameter']) + Buffer.pack('d', self.data['new_diameter']) + \
                 Buffer.pack_varint(self.data['speed'])
         elif self.action == 2:  # set center
-            out += Buffer.pack('d', data['x']) + Buffer.pack('d', data['z'])
+            out += Buffer.pack('d', self.data['x']) + Buffer.pack('d', self.data['z'])
         elif self.action == 3:  # initialize
-            out += Buffer.pack('d', data['x']) + Buffer.pack('d', data['z']) + Buffer.pack('d', self.data['old_diameter']) + \
-                Buffer.pack('d', self.data['new_diameter']) + Buffer.pack_varint(self.data['speed']) + \
-                Buffer.pack_varint(self.data['portal_teleport_boundary']) + Buffer.pack_varint(self.data['warning_blocks']) + \
-                Buffer.pack_varint(self.data['warning_time'])
+            out += Buffer.pack('d', self.data['x']) + Buffer.pack('d', self.data['z']) + \
+                Buffer.pack('d', self.data['old_diameter']) + Buffer.pack('d', self.data['new_diameter']) + \
+                Buffer.pack_varint(self.data['speed']) + Buffer.pack_varint(self.data['portal_teleport_boundary']) + \
+                Buffer.pack_varint(self.data['warning_blocks']) + Buffer.pack_varint(self.data['warning_time'])
         elif self.action == 4:  # set warning time
             out += Buffer.pack_varint(self.data['warning_time'])
         elif self.action == 5:  # set warning blocks

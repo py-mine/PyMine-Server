@@ -2,7 +2,6 @@ import asyncio
 import aiohttp
 import random
 import struct
-
 import sys
 import os
 

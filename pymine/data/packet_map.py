@@ -31,4 +31,4 @@ def load_packets():
     return make_immutable(packet_map), make_immutable(packet_map_clientbound)
 
 
-PACKET_MAP, PACKET_mAP_CLIENTBOUND = load_packets()
+PACKET_MAP, PACKET_MAP_CLIENTBOUND = load_packets()

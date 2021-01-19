@@ -5,7 +5,7 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlayResourcePackStatus',)
+__all__ = ('PlayResourcePackStatus', 'PlayResourcePackSend',)
 
 
 class PlayResourcePackStatus(Packet):
@@ -28,3 +28,27 @@ class PlayResourcePackStatus(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayResourcePackStatus:
         return cls(buf.unpack_varint())
+
+
+class PlayResourcePackSend(Packet):
+    """Sends the url of the resource pack and hash of the resource pack file to the client. (Server -> Client)
+
+    :param str url: The URL for the resource pack download.
+    :param str hash_: 40 char, hexadecimal, lowercase, sha1 hash of the resource pack file.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr url:
+    :attr hash_:
+    """
+
+    id = 0x38
+    to = 1
+
+    def __init__(self, url: str, hash_: str) -> None:
+        super().__init__()
+
+        self.url = url
+        self.hash_ = hash_
+
+    def encode(self) -> bytes:
+        return Buffer.pack_string(self.url) + Buffer.pack_string(self.hash_)

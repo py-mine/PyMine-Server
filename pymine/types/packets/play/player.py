@@ -30,6 +30,9 @@ __all__ = (
     'PlaySetExperience',
     'PlayUpdateHealth',
     'PlayCombatEvent',
+    'PlayFacePlayer',
+    'PlayPlayerInfo',
+    'PlayRespawn',
 )
 
 
@@ -630,3 +633,152 @@ class PlayCombatEvent(Packet):
         if self.event == 2:  # entity dead, only one actually used
             return Buffer.pack_varint(self.event) + Buffer.pack_varint(self.data['player_id']) + \
                 Buffer.pack('i', self.data['entity_id']) + Buffer.pack_chat(self.data['message'])
+
+
+class PlayPlayerInfo(Packet):
+    """Sent by the server to update the user list under the tab menu. (Server -> Client)
+
+    :param int action: The action to be taken, either add player (0), update gamemode (1), update latency (2), update display name (3), or remove player (4).
+    :param list players: A list of dictionaries, content varies depending on action, see here: https://wiki.vg/Protocol#Player_Info.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr action:
+    :attr players:
+    """
+
+    id = 0x32
+    to = 1
+
+    def __init__(self, action: int, players: list) -> None:
+        super().__init__()
+
+        self.action = action
+        self.players = players
+
+    def encode(self) -> bytes:
+        out = Buffer.pack_varint(self.action) + len(self.players)
+
+        if self.action == 0:  # add player
+            for player in self.players:
+                out += Buffer.pack_uuid(player['uuid']) + Buffer.pack_string(player['name']) + \
+                    Buffer.pack_varint(len(player['properties']))
+
+                for prop in player['properties']:
+                    out += Buffer.pack_string(prop['name']) + Buffer.pack_string(prop['value']) + \
+                        Buffer.pack_optional(Buffer.pack_string, prop.get('signature'))
+
+                out += Buffer.pack_varint(player['gamemode']) + Buffer.pack_varint(player['ping']) + \
+                    Buffer.pack_optional(Buffer.pack_chat, player['display_name'])
+        elif self.action == 1:  # update gamemode
+            out += b''.join(Buffer.pack_uuid(p['uuid']) + Buffer.pack_varint(p['gamemode']) for p in self.players)
+        elif self.action == 2:  # update latency
+            out += b''.join(Buffer.pack_uuid(p['uuid']) + Buffer.pack_varint(p['ping']) for p in self.players)
+        elif self.action == 3:  # update display name
+            out += b''.join(Buffer.pack_uuid(p['uuid']) + Buffer.pack_optional(p.get('display_name')) for p in self.players)
+        elif self.action == 4:
+            out += b''.join(Buffer.pack_uuid(p['uuid']) for p in self.players)
+
+        return out
+
+
+class PlayFacePlayer(Packet):
+    """Used by the server to rotate the client player to face the given location or entity. (Server -> Client)
+
+    :param int feet_or_eyes: Whether to aim using the head position (1) or feet (0)
+    :param float tx: The x coordinate of the point to face towards.
+    :param float ty: The y coordinate of the point to face towards.
+    :param float tz: The z coordinate of the point to face towards.
+    :param bool is_entity: If true, additional info is provided.
+    :param int entity_id: The entity ID.
+    :param int entity_feet_or_eyes: Same as regular feet_or_eyes.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr feet_or_eyes:
+    :attr tx:
+    :attr ty:
+    :attr tz:
+    :attr entity_id:
+    :attr entity_feet_or_eyes:
+    """
+
+    id = 0x33
+    to = 1
+
+    def __init__(
+            self,
+            feet_or_eyes: int,
+            tx: float,
+            ty: float,
+            tz: float,
+            is_entity: bool,
+            entity_id: int = None,
+            entity_feet_or_eyes: int = None) -> None:
+        super().__init__()
+
+        self.feet_or_eyes = feet_or_eyes
+        self.tx, self.ty, self.tz = tx, ty, tz
+        self.is_entity = is_entity
+        self.entity_id = entity_id
+        self.entity_feet_or_eyes = entity_feet_or_eyes
+
+    def encode(self) -> bytes:
+        out = Buffer.pack_varint(self.feet_or_eyes) + Buffer.pack('d', self.tx) + Buffer.pack('d', self.ty) + \
+            Buffer.pack('d', self.tz)
+
+        if self.is_entity:
+            out += Buffer.pack_varint(self.entity_id) + Buffer.pack_varint(self.entity_feet_or_eyes)
+
+        return out
+
+
+class PlayRespawn(Packet):
+    """Sent to change a player's dimension. (Server -> Client)
+
+    :param nbt.TAG dimension: A dimension defined via the dimension registry.
+    :param str world_name: Name of the world the player entity is being spawned into.
+    :param int hashed_seed: First 8 bytes of the sha-256 hash of the seed.
+    :param int gamemode: The current gamemode of the player entity.
+    :param int prev_gamemode: The previous gamemode of the player entity.
+    :param bool is_debug: True if the world is a debug world.
+    :param bool is_flat: Whether the new world/dimension is a superflat one or not.
+    :param bool copy_metadata: If false, metadata is reset on the spawned player entity. Should be True for dimension changes.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr dimension:
+    :attr world_name:
+    :attr hashed_seed:
+    :attr gamemode:
+    :attr prev_gamemode:
+    :attr is_debug:
+    :attr is_flat:
+    :attr copy_metadata:
+    """
+
+    id = 0x39
+    to = 1
+
+    def __init__(
+            self,
+            dimension: nbt.TAG,
+            world_name: str,
+            hashed_seed: int,
+            gamemode: int,
+            prev_gamemode: int,
+            is_debug: bool,
+            is_flat: bool,
+            copy_metadata: bool) -> None:
+        super().__init__()
+
+        self.dimension = dimension
+        self.world_name = world_name
+        self.hashed_seed = hashed_seed
+        self.gamemode = gamemode
+        self.prev_gamemode = prev_gamemode
+        self.is_debug = is_debug
+        self.is_flat = is_flat
+        self.copy_metadata = copy_metadata
+
+    def encode(self) -> bytes:
+        return Buffer.pack_nbt(self.dimension) + Buffer.pack_string(self.world_name) + Buffer.pack('l', self.hashed_seed) + \
+            Buffer.pack('B', self.gamemode) + Buffer.pack('B', self.prev_gamemode) + Buffer.pack('?', self.is_debug) + \
+            Buffer.pack('?', self.is_flat) + Buffer.pack('?', self.copy_metadata)

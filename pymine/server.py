@@ -86,7 +86,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         try:
             continue_, r, w = resp_value
         except (ValueError, TypeError,):
-            logger.warn(f'Invalid return from handler: {handler.__module__}.{handler.__qualname__}')
+            logger.warn(f'Invalid return from packet handler: {handler.__module__}.{handler.__qualname__}')
             continue
 
         if not continue_:

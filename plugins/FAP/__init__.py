@@ -84,6 +84,7 @@ async def pull_latest(logger, plugins_dir, git_url, root_folder):
     except BaseException:
         logger.warn(f'Failed to pull from {git_url}, attempting to clone...')
         await clone_repo(plugins_dir, git_url, root_folder)
+        res = True
 
     did_update = (res != 'Already up to date.')
 
@@ -125,7 +126,9 @@ async def setup(logger):
             logger.error(f'Failed to update plugin "{plugin_name}" due to: {logger.f_traceback(e)}')
             continue
 
-        if did_update:
+        if did_update is None:
+            return
+        elif did_update:
             logger.info(f'Updated {plugin_name}!')
         else:
             logger.info(f'No updates found for {plugin_name}.')

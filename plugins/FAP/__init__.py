@@ -32,6 +32,10 @@ VALID_URL_REGEX = re.compile(
 plugins = []
 
 
+def dot_path(path: str) -> str:
+    return path.replace('\\', '/').replace('/', '.')
+
+
 def dump_default():
     with open('plugins.yml', 'w+') as f:
         f.write(yaml.dump(DEFAULT))
@@ -127,7 +131,7 @@ async def setup(logger):
                 logger.warn(f'In entry {index + 1}, "{git_url}" is not a valid git URL, skipping...')
                 continue
 
-            root_folder = os.path.normpath(os.path.join('plugins', root_folder))
+            root_folder = os.path.join('plugins', root_folder)
 
             logger.info(f'Checking for updates for {plugin_name}...')
 
@@ -148,13 +152,13 @@ async def setup(logger):
             module_path = root_folder
 
             if module_folder:
-                module_path = os.path.normpath(os.path.join(module_path, module_folder))
+                module_path = os.path.join(module_path, module_folder)
 
-            plugin_list.append(module_path.replace('/', '.'))
+            plugin_list.append(dot_path(module_path))
 
     # should be all managed plugins + plugins in the plugins folder, with no duplicates
     plugin_list = list(set(
-        plugin_list + [os.path.normpath(os.path.join('plugins', p)).replace('/', '.') for p in os.listdir('plugins')]
+        plugin_list + [dot_path(os.path.join('plugins', p)) for p in os.listdir('plugins')]
     ))
 
     for to_remove in ('plugins.__pycache__', 'plugins.FAP',):  # remove plugins which shouldn't be loaded again / at all

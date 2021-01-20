@@ -553,3 +553,11 @@ class Buffer:
                 out += cls.pack_nbt(value)
             elif type_ == 15:  # particle
                 out += cls.pack_particle(value)
+            elif type_ == 16:  # villager data
+                out += cls.pack_villager(*value)
+            elif type_ == 17:  # optional varint
+                out += cls.pack_optional_varint(value)
+            elif type_ == 18:  # pose
+                out += cls.pack_pose(value)
+
+        return out + b'\xFE'

@@ -1,16 +1,15 @@
-from asyncio import StreamReader, StreamWriter
-
 from pymine.util.share import share, logger
 from pymine.api.packet import handle_packet
 
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
+from pymine.types.stream import Stream
 
 import pymine.types.packets.status.status as status_packets
 
 
 @handle_packet('status', 0x00)
-async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remote: tuple) -> tuple:
+async def send_status(stream: Stream, packet: Packet) -> tuple:
     data = {
         'version': {
             'name': share['version'],
@@ -38,15 +37,15 @@ async def send_status(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remo
     if share['favicon']:
         data['favicon'] = share['favicon']
 
-    w.write(Buffer.pack_packet(status_packets.StatusStatusResponse(data)))
-    await w.drain()
+    stream.write(Buffer.pack_packet(status_packets.StatusStatusResponse(data)))
+    await stream.drain()
 
-    return True, r, w
+    return True, stream
 
 
 @handle_packet('status', 0x01)
-async def send_pong(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remote: tuple) -> tuple:
-    w.write(Buffer.pack_packet(packet))
-    await w.drain()
+async def send_pong(stream: Stream, packet: Packet) -> tuple:
+    stream.write(Buffer.pack_packet(packet))
+    await stream.drain()
 
-    return False, r, w
+    return False, stream

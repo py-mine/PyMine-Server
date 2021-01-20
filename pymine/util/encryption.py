@@ -4,7 +4,9 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 import hashlib
 import asyncio
 
-__all__ = ('gen_verify_hash', 'gen_aes_cipher', 'EncryptedStreamReader', 'EncryptedStreamWriter',)
+from pymine.types.stream import Stream
+
+__all__ = ('gen_verify_hash', 'gen_aes_cipher', 'EncryptedStream',)
 
 
 def gen_rsa_keys():
@@ -27,31 +29,27 @@ def gen_aes_cipher(shared_key: bytes):
     return Cipher(algorithms.AES(shared_key), modes.CFB8(shared_key))
 
 
-class EncryptedStreamReader:  # Used to encrypt data read via a StreamReader
-    def __init__(self, reader: asyncio.StreamReader, decryptor: '_CipherContext'):
-        self.reader = reader
+class EncryptedStream(Stream):
+    def __init__(self, stream: Stream, decryptor: _CipherContext, encryptor: _CipherContext):
+        super().__init__(stream._reader, stream)
+
         self.decryptor = decryptor
-
-    async def read(self, n: int = -1):
-        return self.decryptor.update(await self.reader.read(n))
-
-
-class EncryptedStreamWriter:  # Used to encrypt data sent via a StreamWriter
-    def __init__(self, writer: asyncio.StreamWriter, encryptor: '_CipherContext'):
-        self.writer = writer
         self.encryptor = encryptor
 
+    async def read(self, n: int = -1):
+        return self.decryptor.update(await super().read(n))
+
+    async def readline(self):
+        return self.decryptor.update(await super().readline())
+
+    async def readexactly(self, n: int):
+        return self.decryptor.update(await super().readexactly(n))
+
+    async def readuntil(self, separator=b'\n'):
+        return self.decryptor.update(await super().readuntil(separator))
+
     def write(self, data: bytes):
-        return self.writer.write(self.encryptor.update(data))
+        return super().write(self.encryptor.update(data))
 
-    def close(self):
-        return self.writer.close()
-
-    def get_extra_info(self, name: str, default: object = None):
-        return self.writer.get_extra_info(name, default)
-
-    async def drain(self):
-        return await self.writer.drain()
-
-    async def wait_closed(self):
-        return await self.writer.wait_closed()
+    def writelines(self, data: bytes):
+        return super().writelines(self.encryptor.update(data))

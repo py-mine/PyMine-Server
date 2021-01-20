@@ -27,8 +27,8 @@ class EncryptedStream(Stream):
     def __init__(self, stream: Stream, cipher: Cipher):
         super().__init__(stream._reader, stream)
 
-        self.decryptor = decryptor
-        self.encryptor = encryptor
+        self.decryptor = cipher.decryptor()
+        self.encryptor = cipher.encryptor()
 
     async def read(self, n: int = -1):
         return self.decryptor.update(await super().read(n))

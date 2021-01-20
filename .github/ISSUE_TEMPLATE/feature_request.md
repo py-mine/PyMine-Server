@@ -7,9 +7,9 @@ assignees: ''
 
 ---
 
-## What Do?
+### What Do?
 * Basic description of what this idea / new feature would entail
 * List out all features of the idea / new feature
 
-## Benefits / Reason?
+### Benefits / Reason?
 * Reasoning / benefits behind this feature / idea.

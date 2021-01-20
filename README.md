@@ -25,3 +25,8 @@
 
 ## Contributing
 - Please read [CONTRIBUTING.md](https://github.com/py-mine/PyMine/blob/main/CONTRIBUTING.md)
+
+
+## API/Plugin Examples
+- [example-plugin](https://github.com/py-mine/example-plugin) - *the official example plugin*
+- [FAP](https://github.com/py-mine/FAP) - *a plugin that auto-updates/manages other plugins*

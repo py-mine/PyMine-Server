@@ -6,7 +6,7 @@ import asyncio
 
 from pymine.types.stream import Stream
 
-__all__ = ('gen_verify_hash', 'gen_aes_cipher', 'EncryptedStreamReader', 'EncryptedStreamWriter',)
+__all__ = ('gen_verify_hash', 'gen_aes_cipher', 'EncryptedStream',)
 
 
 def gen_rsa_keys():

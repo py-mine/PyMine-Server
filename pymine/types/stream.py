@@ -10,7 +10,7 @@ class Stream(StreamReader, StreamWriter):
         self.original_reader = reader
         self.original_writer = writer
 
-        self.__dict__.extend(reader.__dict__)
-        self.__dict__.extend(writer.__dict__)
+        self.__dict__.update(reader.__dict__)
+        self.__dict__.update(writer.__dict__)
 
         self.remote = self.get_extra_info('peername')

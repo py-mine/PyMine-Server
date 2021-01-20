@@ -4,6 +4,7 @@ import os
 
 from pymine.logic.commands import on_command, handle_server_commands, load_commands
 from pymine.util.share import logger, share
+from pymine.util.path import dot_path
 
 import pymine.api.packet
 import pymine.api.player
@@ -27,9 +28,9 @@ async def init():  # called when server starts up
     # Load packet handlers / packet logic handlers under pymine/logic/handle
     for root, dirs, files in os.walk(os.path.join('pymine', 'logic', 'handle')):
         for file in filter((lambda f: f.endswith('.py')), files):
-            importlib.import_module(os.path.normpath(os.path.join(root, file))[:-3].replace('/', '.'))
+            importlib.import_module(dot_path(os.path.join(root, file)[:-3]))
 
-    to_be_loaded = [os.path.normpath(os.path.join('plugins', p)).replace('/', '.') for p in os.listdir('plugins')]
+    to_be_loaded = [dot_path(os.path.join('plugins', p)) for p in os.listdir('plugins')]
 
     if 'plugins.FAP' in to_be_loaded:
         fap = register_plugin('plugins.FAP')

@@ -1,6 +1,7 @@
 import asyncio
 import aiohttp
 import random
+import socket
 import struct
 import sys
 import os
@@ -114,6 +115,9 @@ async def handle_con(reader, writer):  # Handle a connection from a client
 async def start():  # Actually start the server
     addr = share['conf']['server_ip']
     port = share['conf']['server_port']
+
+    if addr is None:
+        addr = socket.gethostbyname(socket.gethostname())
 
     server = share['server'] = await asyncio.start_server(handle_con, host=addr, port=port)
     share['ses'] = aiohttp.ClientSession()

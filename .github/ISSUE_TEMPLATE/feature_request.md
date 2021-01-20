@@ -2,7 +2,7 @@
 name: Feature request
 about: Suggest an idea or an addition to PyMine!
 title: ''
-labels: ''
+labels: Enhancement
 assignees: ''
 
 ---

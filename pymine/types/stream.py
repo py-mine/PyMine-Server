@@ -7,8 +7,7 @@ class Stream(StreamWriter):
     def __init__(self, reader: StreamReader, writer: StreamWriter) -> None:
         StreamWriter.__init__(self, writer._transport, writer._protocol, writer._reader, writer._loop)
 
-        self.reader = reader
-        self.writer = writer
+        self.reader = self._reader
 
         self.remote = self.get_extra_info('peername')
 

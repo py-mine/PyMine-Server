@@ -1,12 +1,9 @@
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from cryptography.hazmat.primitives.ciphers.base import _CipherContext
 from cryptography.hazmat.primitives.asymmetric import rsa
 import hashlib
 import asyncio
 
-from pymine.types.stream import Stream
-
-__all__ = ('gen_verify_hash', 'gen_aes_cipher', 'EncryptedStream',)
+__all__ = ('gen_verify_hash', 'gen_aes_cipher',)
 
 
 def gen_rsa_keys():
@@ -27,29 +24,3 @@ def gen_verify_hash(shared_key: bytes, public_key: bytes):
 
 def gen_aes_cipher(shared_key: bytes):
     return Cipher(algorithms.AES(shared_key), modes.CFB8(shared_key))
-
-
-class EncryptedStream(Stream):
-    def __init__(self, stream: Stream, decryptor: _CipherContext, encryptor: _CipherContext):
-        super().__init__(stream._reader, stream)
-
-        self.decryptor = decryptor
-        self.encryptor = encryptor
-
-    async def read(self, n: int = -1):
-        return self.decryptor.update(await super().read(n))
-
-    async def readline(self):
-        return self.decryptor.update(await super().readline())
-
-    async def readexactly(self, n: int):
-        return self.decryptor.update(await super().readexactly(n))
-
-    async def readuntil(self, separator=b'\n'):
-        return self.decryptor.update(await super().readuntil(separator))
-
-    def write(self, data: bytes):
-        return super().write(self.encryptor.update(data))
-
-    def writelines(self, data: bytes):
-        return super().writelines(self.encryptor.update(data))

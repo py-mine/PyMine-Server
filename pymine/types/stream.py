@@ -1,3 +1,4 @@
+from cryptography.hazmat.primitives.ciphers import Cipher
 from asyncio import StreamReader, StreamWriter
 
 
@@ -20,3 +21,29 @@ class Stream(StreamWriter):
 
     async def readuntil(self, separator: bytes = b'\n') -> bytes:
         return await self._reader.readuntil(separator)
+
+
+class EncryptedStream(Stream):
+    def __init__(self, stream: Stream, cipher: Cipher):
+        super().__init__(stream._reader, stream)
+
+        self.decryptor = decryptor
+        self.encryptor = encryptor
+
+    async def read(self, n: int = -1):
+        return self.decryptor.update(await super().read(n))
+
+    async def readline(self):
+        return self.decryptor.update(await super().readline())
+
+    async def readexactly(self, n: int):
+        return self.decryptor.update(await super().readexactly(n))
+
+    async def readuntil(self, separator=b'\n'):
+        return self.decryptor.update(await super().readuntil(separator))
+
+    def write(self, data: bytes):
+        return super().write(self.encryptor.update(data))
+
+    def writelines(self, data: bytes):
+        return super().writelines(self.encryptor.update(data))

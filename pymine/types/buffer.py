@@ -498,14 +498,14 @@ class Buffer:
         particle_id = particle['id'] = self.unpack_varint()
 
         if particle_id in (3, 23,):
-            particle['BlockState'] = cls.unpack_varint()
+            particle['block_state'] = self.unpack_varint()
         elif particle_id == 14:
-            particle['Red'] = cls.unpack('f')
-            particle['Green'] = cls.unpack('f')
-            particle['Blue'] = cls.unpack('f')
-            particle['Scale'] = cls.unpack('f')
+            particle['red'] = self.unpack('f')
+            particle['green'] = self.unpack('f')
+            particle['blue'] = self.unpack('f')
+            particle['scale'] = self.unpack('f')
         elif particle_id == 32:
-            particle['Item'] = cls.unpack_slot()
+            particle['item'] = self.unpack_slot()
 
         return particle
 

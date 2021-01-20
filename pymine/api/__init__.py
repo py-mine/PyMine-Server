@@ -25,7 +25,7 @@ async def init():  # called when server starts up
     load_commands()  # load commands in pymine/logic/cmds/*
 
     # Load packet handlers / packet logic handlers under pymine/logic/handle
-    for root, dirs, files in os.walk('pymine/logic/handle'):
+    for root, dirs, files in os.path.join('pymine', 'logic', 'handle'):
         for file in filter((lambda f: f.endswith('.py')), files):
             importlib.import_module(os.path.join(root, file)[:-3].replace(os.sep, '.'))
 

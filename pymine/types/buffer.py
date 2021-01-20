@@ -248,7 +248,7 @@ class Buffer:
         return Chat(self.unpack_json())
 
     @classmethod
-    def pack_pos(cls, x, y, z) -> bytes:
+    def pack_pos(cls, x: int, y: int, z: int) -> bytes:
         """Packs a Minecraft position (x, y, z) into bytes."""
 
         def to_twos_complement(num, bits):
@@ -472,9 +472,92 @@ class Buffer:
         out = Buffer.pack_slot(**in_item_1) + Buffer.pack_slot(**out_item)
 
         if in_item_2 is not None:
-            out += Buffer.pack('?', True) + Buffer.pack_slot(in_item_2)
+            out += Buffer.pack('?', True) + Buffer.pack_slot(**in_item_2)
         else:
             out += Buffer.pack('?', False)
 
         return out + Buffer.pack('?', disabled) + Buffer.pack('i', num_trade_usages) + Buffer.pack('i', max_trade_usages) + \
             Buffer.pack('i', xp) + Buffer.pack('i', special_price) + Buffer.pack('f', price_multi) + Buffer.pack('i', demand)
+
+    @classmethod
+    def pack_particle(cls, **particle):
+        particle_id = particle['id']
+        out = cls.pack_varint(particle_id)
+
+        if particle_id in (3, 23,):
+            out += cls.pack_varint(particle['block_state'])
+        elif particle_id == 14:
+            out += cls.pack('ffff', particle['red'], particle['green'], particle['blue'], particle['scale'])
+        elif particle_id == 32:
+            out += cls.pack_slot(**particle['item'])
+
+        return out
+
+    def unpack_particle(self):
+        particle = {}
+        particle_id = particle['id'] = self.unpack_varint()
+
+        if particle_id in (3, 23,):
+            particle['block_state'] = self.unpack_varint()
+        elif particle_id == 14:
+            particle['red'] = self.unpack('f')
+            particle['green'] = self.unpack('f')
+            particle['blue'] = self.unpack('f')
+            particle['scale'] = self.unpack('f')
+        elif particle_id == 32:
+            particle['item'] = self.unpack_slot()
+
+        return particle
+
+    @classmethod
+    def pack_entity_metadata(cls, metadata: dict) -> bytes:
+        out = b''
+
+        for index_and_type, value in metadata.items():
+            index, type_ = index_and_type
+
+            out += cls.pack('B', index) + cls.pack_varint(type_)
+
+            if type_ == 0:  # byte
+                out += cls.pack('b', value)
+            elif type_ == 1:  # varint
+                out += cls.pack_varint(value)
+            elif type_ == 2:  # float
+                out += cls.pack('f', value)
+            elif type_ == 3:  # string
+                out += cls.pack_string(value)
+            elif type_ == 4:  # Chat
+                out += cls.pack_chat(value)
+            elif type_ == 5:  # optional Chat
+                out += cls.pack_optional(cls.pack_chat, value)
+            elif type_ == 6:  # Slot
+                out += cls.pack_slot(**value)
+            elif type_ == 7:  # bool
+                out += cls.pack('?', value)
+            elif type_ == 8:  # rotation
+                out += cls.pack_rotation(*value)
+            elif type_ == 9:  # position
+                out += cls.pack_pos(*value)
+            elif type_ == 10:  # optional position
+                if value is not None:
+                    out += cls.pack_bool('?', True) + cls.pack_pos(*value)
+                else:
+                    out += cls.pack_bool('?', False)
+            elif type_ == 11:  # direction
+                out += cls.pack_direction(value)
+            elif type_ == 12:  # optional uuid
+                out += cls.pack_optional(cls.pack_uuid, value)
+            elif type_ == 13:  # optional block id
+                out += cls.pack_optional(cls.pack_optional, value)
+            elif type_ == 14:  # NBT
+                out += cls.pack_nbt(value)
+            elif type_ == 15:  # particle
+                out += cls.pack_particle(value)
+            elif type_ == 16:  # villager data
+                out += cls.pack_villager(*value)
+            elif type_ == 17:  # optional varint
+                out += cls.pack_optional_varint(value)
+            elif type_ == 18:  # pose
+                out += cls.pack_pose(value)
+
+        return out + b'\xFE'

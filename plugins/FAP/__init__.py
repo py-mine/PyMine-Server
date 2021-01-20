@@ -107,6 +107,7 @@ async def setup(logger):
         pass
 
     plugins_dir = git.Git('plugins')
+    plugin_list = []
 
     for index, plugin_entry in enumerate(load_plugin_list()):
         try:
@@ -145,19 +146,18 @@ async def setup(logger):
         if module_folder:
             module_path = os.path.join(module_path, module_folder)
 
-        plugins.append(module_path.replace('/', '.'))
+        plugin_list.append(module_path.replace(os.sep, '.'))
 
-    # used by PyMine to load other plugins
-    folder_plugins = [os.path.join('plugins', p).replace(os.sep, '.') for p in os.listdir('plugins')]
+    # should be all managed plugins + plugins in the plugins folder, with no duplicates
+    plugin_list = list(set(
+        plugin_list + [os.path.join('plugins', p).replace(os.sep, '.') for p in os.listdir('plugins')]
+    ))
 
-    plugins_nice = list(set(plugins + folder_plugins))  # remove duplicates
-
-    for to_remove in ('plugins.__pycache__', 'plugins.FAP',):  # remove plugins which shouldn't be loaded again
+    for to_remove in ('plugins.__pycache__', 'plugins.FAP',):  # remove plugins which shouldn't be loaded again / at all
         try:
-            plugins_nice.remove(to_remove)
+            plugin_list.remove(to_remove)
         except ValueError:
             pass
 
     # update official list
-    plugins.clear()
-    plugins.extend(plugins_nice)
+    plugins.extend(plugin_list)

@@ -15,13 +15,13 @@ class Stream(StreamWriter):
         self.remote = self.get_extra_info('peername')
 
     async def read(self, n: int = -1) -> bytes:
-        return self.reader.read(n)
+        return await self.reader.read(n)
 
     async def readline(self) -> bytes:
-        return self.reader.readline()
+        return await self.reader.readline()
 
     async def readexactly(self, n: int) -> bytes:
-        return self.reader.readexactly(n)
+        return await self.reader.readexactly(n)
 
     async def readuntil(self, separator=b'\n') -> bytes:
-        return self.reader.readuntil(separator)
+        return await self.reader.readuntil(separator)

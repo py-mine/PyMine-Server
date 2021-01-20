@@ -248,7 +248,7 @@ class Buffer:
         return Chat(self.unpack_json())
 
     @classmethod
-    def pack_pos(cls, x, y, z) -> bytes:
+    def pack_pos(cls, x: int, y: int, z: int) -> bytes:
         """Packs a Minecraft position (x, y, z) into bytes."""
 
         def to_twos_complement(num, bits):

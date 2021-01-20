@@ -26,6 +26,10 @@ async def send_status(stream: Stream, packet: Packet) -> tuple:
                 {
                     'name': 'Sh_wayz',
                     'id': 'cbcfa252-867d-4bda-a214-776c881cf370'
+                },
+                {
+                    'name': 'emeralddragonmc',
+                    'id': 'eb86dc19-c3f5-4aef-a50e-a4bf435a7528'
                 }
             ]
         },

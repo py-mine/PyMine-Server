@@ -5,13 +5,13 @@
 ## Features
 *Note: This list is not always up to date, and doesn't contain all the features that PyMine offers*
 <!--☐☒-->
-- ☐ Joinable
-- ☐ Packet Models
+- ☐ Joinable - *the login process is complete, but users can not yet join the world*
+- ☐ Packet Models - *missing some clientbound packets*
 - ☒ Status + Login Logic
-- ☐ Play Logic
-- ☐ World Generation
-- ☐ Entities/Entity AI
-- ☒ Plugin API
+- ☐ Play Logic - *not started yet*
+- ☐ World Generation - *not started yet*
+- ☐ Entities/Entity AI - *not started yet*
+- ☒ Plugin API - *completed, but more and more will be added as the server development progresses*
 
 
 ## Installation / Usage

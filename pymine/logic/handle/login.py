@@ -62,7 +62,7 @@ async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
     cipher = encryption.gen_aes_cipher(shared_key)
 
     # Replace stream with one which auto decrypts + encrypts data when reading/writing
-    stream = encryption.EncryptedStream(stream, cipher.decryptor(), cipher.encryptor())
+    stream = encryption.EncryptedStream(stream, cipher)
 
     if share['comp_thresh'] > 0:  # Send set compression packet if needed
         stream.write(Buffer.pack_packet(LoginSetCompression(share['comp_thresh'])))

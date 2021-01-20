@@ -1,4 +1,4 @@
-# <img src="https://cdn.discordapp.com/emojis/783838348695437353.gif?v=1" height=45> PyMine
+# <img src="https://i.imgur.com/peuHISs.png" height=100> PyMine
 [![discord](https://img.shields.io/discord/789623993547227147.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/eeyEcwR9EM)
 ![views](https://api.ghprofile.me/view?username=py-mine/PyMine&color=0FAE6E&style=flat&label=views)
 ![quality](https://www.codefactor.io/repository/github/py-mine/pymine/badge)

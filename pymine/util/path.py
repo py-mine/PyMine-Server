@@ -1,3 +1,3 @@
 
-def dotpath(path: str):
+def dot_path(path: str):
     return path.replace('\\', '/').replace('/', '.')

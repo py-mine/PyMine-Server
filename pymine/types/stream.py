@@ -7,3 +7,5 @@ class Stream(StreamReader, StreamWriter):
     def __init__(self, reader: StreamReader, writer: StreamWriter) -> None:
         self.__dict__.extend(reader.__dict__)
         self.__dict__.extend(writer.__dict__)
+
+        self.remote = self.get_extra_info('peername')

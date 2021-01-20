@@ -11,7 +11,7 @@
 - **☐ Play Logic** - *not started yet*
 - **☐ World Generation** - *not started yet*
 - **☐ Entities/Entity AI** - *not started yet*
-- **☒ Plugin API** - *completed, but more and more will be added as the server development progresses*
+- **☒ Plugin API** - *completed, but more will be added as the development continues*
 
 
 ## Installation / Usage

@@ -31,7 +31,7 @@ def gen_aes_cipher(shared_key: bytes):
 
 class EncryptedStream(Stream):
     def __init__(self, stream: Stream, decryptor: _CipherContext, encryptor: _CipherContext):
-        super().__init__(stream.original_reader, stream.original_writer)
+        super().__init__(stream.reader, stream.writer)
 
         self.decryptor = decryptor
         self.encryptor = encryptor

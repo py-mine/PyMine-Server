@@ -4,11 +4,12 @@
 
 ## Features
 *Note: This list is not always up to date, and doesn't contain all the features that PyMine offers*
+- [ ] Joinable
 - [ ] Packet Models
 - [x] Status + Login Logic
 - [ ] Play Logic
 - [ ] World Generation
-- [ ] Entities
+- [ ] Entities/Entity AI
 - [x] Plugin API
 
 

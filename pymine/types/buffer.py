@@ -70,7 +70,7 @@ class Buffer:
 
         return cls.pack_varint(len(data)) + data
 
-    def unpack_packet(self, state: str, to: int, PACKET_MAP: object, comp_thresh: int = -1) -> Packet:  # nopepe8
+    def unpack_packet(self, state: str, PACKET_MAP: object, comp_thresh: int = -1) -> Packet:
         data = self.buf
 
         if comp_thresh >= 0:
@@ -79,8 +79,7 @@ class Buffer:
             if uncomp_len > 0:
                 data = zlib.decompress(self.read())
 
-        packet = PACKET_MAP[state][(self.unpack_varint(), to,)].decode(self)
-        return packet
+        return PACKET_MAP[state][self.unpack_varint()].decode(self)
 
     def unpack(self, f: str) -> object:
         unpacked = struct.unpack('>' + f, self.read(struct.calcsize(f)))

@@ -2,7 +2,6 @@ import asyncio
 import aiohttp
 import random
 import struct
-
 import sys
 import os
 
@@ -76,7 +75,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
     buf = Buffer(await r.read(packet_length))
 
     state = STATES.encode(states.get(remote, 0))
-    packet = buf.unpack_packet(state, 0, PACKET_MAP)
+    packet = buf.unpack_packet(state, PACKET_MAP)
 
     logger.debug(f'IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}')
 
@@ -86,7 +85,7 @@ async def handle_packet(r: asyncio.StreamReader, w: asyncio.StreamWriter, remote
         try:
             continue_, r, w = resp_value
         except (ValueError, TypeError,):
-            logger.warn(f'Invalid return from handler: {handler.__module__}.{handler.__qualname__}')
+            logger.warn(f'Invalid return from packet handler: {handler.__module__}.{handler.__qualname__}')
             continue
 
         if not continue_:
@@ -132,14 +131,18 @@ async def start():  # Actually start the server
 
             await server.serve_forever()
     except (asyncio.CancelledError, KeyboardInterrupt,):
-        logger.info('Closing server...')
+        pass
 
-        server.close()
 
-        # wait for the server to be closed, stop the api, and stop the aiohttp.ClientSession
-        await asyncio.gather(server.wait_closed(), pymine_api.stop(), share['ses'].close())
+async def stop():  # Stop the server properly
+    logger.info('Closing server...')
 
-        logger.info('Server closed.')
+    share['server'].close()
+
+    # wait for the server to be closed, stop the api, and stop the aiohttp.ClientSession
+    await asyncio.gather(share['server'].wait_closed(), pymine_api.stop(), share['ses'].close())
+
+    logger.info('Server closed.')
 
 
 if __name__ == '__main__':
@@ -150,3 +153,11 @@ if __name__ == '__main__':
         loop.run_until_complete(start())
     except BaseException as e:
         logger.critical(logger.f_traceback(e))
+
+    try:
+        loop.run_until_complete(stop())
+    except BaseException as e:
+        logger.critical(logger.f_traceback(e))
+
+    loop.stop()
+    loop.close()

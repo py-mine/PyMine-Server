@@ -48,15 +48,15 @@ async def login_start(stream: Stream, packet: Packet) -> tuple:
 
 
 @handle_packet('login', 0x01)
-async def encrypted_login(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remote: tuple) -> tuple:
-    shared_key, auth = await server_auth(packet, remote, login_cache[remote])
+async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
+    shared_key, auth = await server_auth(packet, stream.remote, login_cache[stream.remote])
 
     del login_cache[remote]  # No longer needed
 
     if not auth:  # If authentication failed, disconnect client
-        w.write(Buffer.pack_packet(login_packets.LoginDisconnect('Failed to authenticate your connection.')))
-        await w.drain()
-        return False, r, w
+        stream.write(Buffer.pack_packet(login_packets.LoginDisconnect('Failed to authenticate your connection.')))
+        await stream.drain()
+        return False, stream
 
     # Generate a cipher for that client using the shared key from the client
     cipher = encryption.gen_aes_cipher(shared_key)
@@ -66,14 +66,14 @@ async def encrypted_login(r: 'StreamReader', w: 'StreamWriter', packet: Packet, 
     w = encryption.EncryptedStreamWriter(w, cipher.encryptor())
 
     if share['comp_thresh'] > 0:  # Send set compression packet if needed
-        w.write(Buffer.pack_packet(LoginSetCompression(share['comp_thresh'])))
-        await w.drain()
+        stream.write(Buffer.pack_packet(LoginSetCompression(share['comp_thresh'])))
+        await stream.drain()
 
     # Send LoginSuccess packet, tells client they've logged in succesfully
-    w.write(Buffer.pack_packet(login_packets.LoginSuccess(*auth), share['comp_thresh']))
-    await w.drain()
+    stream.write(Buffer.pack_packet(login_packets.LoginSuccess(*auth), share['comp_thresh']))
+    await stream.drain()
 
-    return True, r, w
+    return True, stream
 
 
 # Verifies that the shared key and token are the same, and does other authentication methods

@@ -472,7 +472,7 @@ class Buffer:
         out = Buffer.pack_slot(**in_item_1) + Buffer.pack_slot(**out_item)
 
         if in_item_2 is not None:
-            out += Buffer.pack('?', True) + Buffer.pack_slot(in_item_2)
+            out += Buffer.pack('?', True) + Buffer.pack_slot(**in_item_2)
         else:
             out += Buffer.pack('?', False)
 

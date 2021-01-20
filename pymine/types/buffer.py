@@ -492,3 +492,19 @@ class Buffer:
             out += cls.pack_slot(**particle['Item'])
 
         return out
+
+    def unpack_particle(self):
+        particle = {}
+        particle_id = particle['id'] = self.unpack_varint()
+
+        if particle_id in (3, 23,):
+            particle['BlockState'] = cls.unpack_varint()
+        elif particle_id == 14:
+            particle['Red'] = cls.unpack('f')
+            particle['Green'] = cls.unpack('f')
+            particle['Blue'] = cls.unpack('f')
+            particle['Scale'] = cls.unpack('f')
+        elif particle_id == 32:
+            particle['Item'] = cls.unpack_slot()
+
+        return particle

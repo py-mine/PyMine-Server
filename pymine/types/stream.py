@@ -5,7 +5,7 @@ class Stream(StreamWriter):
     """Used for reading and writing from/to a connected client, merges a StreamReader and StreamWriter."""
 
     def __init__(self, reader: StreamReader, writer: StreamWriter) -> None:
-        StreamWriter.__init__(self, writer._transport, writer._protocol, writer._reader, writer._loop)
+        super().__init__(writer._transport, writer._protocol, writer._reader, writer._loop)
 
         self.remote = self.get_extra_info('peername')
 

@@ -107,57 +107,61 @@ async def setup(logger):
         pass
 
     plugins_dir = git.Git('plugins')
+    plugin_list = []
+    to_be_loaded = load_plugin_list()
 
-    for index, plugin_entry in enumerate(load_plugin_list()):
+    if not isinstance(to_be_loaded, list) or not all(isinstance(e, dict) for e in to_be_loaded):
+        logger.error(f'The plugins.yml isn\'t formatted correctly (delete file to reset).')
+    else:
+        for index, plugin_entry in enumerate(to_be_loaded):
+            try:
+                git_url = plugin_entry['git_url']
+                plugin_name = root_folder = plugin_entry['root_folder']
+            except KeyError:
+                logger.warn(f'Entry {index + 1} in plugins.yml isn\'t formatted correctly, skipping...')
+                continue
+
+            module_folder = plugin_entry.get('module_folder')
+
+            if re.match(VALID_URL_REGEX, git_url) is None:
+                logger.warn(f'In entry {index + 1}, "{git_url}" is not a valid git URL, skipping...')
+                continue
+
+            root_folder = os.path.normpath(os.path.join('plugins', root_folder))
+
+            logger.info(f'Checking for updates for {plugin_name}...')
+
+            try:
+                did_update = await get_latest(logger, plugins_dir, git_url, root_folder)
+            except BaseException as e:
+                logger.error(f'Failed to update plugin "{plugin_name}" due to: {logger.f_traceback(e)}')
+                continue
+
+            if did_update is None:
+                return
+
+            if did_update:
+                logger.info(f'Updated {plugin_name}!')
+            else:
+                logger.info(f'No updates found for {plugin_name}.')
+
+            module_path = root_folder
+
+            if module_folder:
+                module_path = os.path.normpath(os.path.join(module_path, module_folder))
+
+            plugin_list.append(module_path.replace('/', '.'))
+
+    # should be all managed plugins + plugins in the plugins folder, with no duplicates
+    plugin_list = list(set(
+        plugin_list + [os.path.normpath(os.path.join('plugins', p)).replace('/', '.') for p in os.listdir('plugins')]
+    ))
+
+    for to_remove in ('plugins.__pycache__', 'plugins.FAP',):  # remove plugins which shouldn't be loaded again / at all
         try:
-            git_url = plugin_entry['git_url']
-            plugin_name = root_folder = plugin_entry['root_folder']
-        except KeyError:
-            logger.warn(f'Entry {index + 1} in plugins.yml isn\'t formatted correctly, skipping...')
-            continue
-
-        module_folder = plugin_entry.get('module_folder')
-
-        if re.match(VALID_URL_REGEX, git_url) is None:
-            logger.warn(f'In entry {index + 1}, "{git_url}" is not a valid git URL, skipping...')
-            continue
-
-        root_folder = os.path.normpath(os.path.join('plugins', root_folder))
-
-        logger.info(f'Checking for updates for {plugin_name}...')
-
-        try:
-            did_update = await get_latest(logger, plugins_dir, git_url, root_folder)
-        except BaseException as e:
-            logger.error(f'Failed to update plugin "{plugin_name}" due to: {logger.f_traceback(e)}')
-            continue
-
-        if did_update is None:
-            return
-
-        if did_update:
-            logger.info(f'Updated {plugin_name}!')
-        else:
-            logger.info(f'No updates found for {plugin_name}.')
-
-        module_path = root_folder
-
-        if module_folder:
-            module_path = os.path.join(module_path, module_folder)
-
-        plugins.append(module_path.replace('/', '.'))
-
-    # used by PyMine to load other plugins
-    folder_plugins = [os.path.join('plugins', p).replace(os.sep, '.') for p in os.listdir('plugins')]
-
-    plugins_nice = list(set(plugins + folder_plugins))  # remove duplicates
-
-    for to_remove in ('plugins.__pycache__', 'plugins.FAP',):  # remove plugins which shouldn't be loaded again
-        try:
-            plugins_nice.remove(to_remove)
+            plugin_list.remove(to_remove)
         except ValueError:
             pass
 
     # update official list
-    plugins.clear()
-    plugins.extend(plugins_nice)
+    plugins.extend(plugin_list)

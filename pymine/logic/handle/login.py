@@ -9,9 +9,9 @@ from pymine.api.packet import handle_packet
 import pymine.util.encryption as encryption
 from pymine.util.share import share
 
+from pymine.types.stream import Stream, EncryptedStream
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
-from pymine.types.stream import Stream
 
 from pymine.types.packets.login.set_comp import LoginSetCompression
 import pymine.types.packets.login.login as login_packets
@@ -62,7 +62,7 @@ async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
     cipher = encryption.gen_aes_cipher(shared_key)
 
     # Replace stream with one which auto decrypts + encrypts data when reading/writing
-    stream = encryption.EncryptedStream(stream, cipher)
+    stream = EncryptedStream(stream, cipher)
 
     if share['comp_thresh'] > 0:  # Send set compression packet if needed
         stream.write(Buffer.pack_packet(LoginSetCompression(share['comp_thresh'])))

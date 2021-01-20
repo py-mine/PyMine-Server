@@ -1,7 +1,6 @@
 from cryptography.hazmat.primitives.asymmetric.padding import PKCS1v15
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
-from asyncio import StreamReader, StreamWriter
 import aiohttp
 import uuid
 
@@ -12,6 +11,7 @@ from pymine.util.share import share
 
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
+from pymine.types.stream import Stream
 
 from pymine.types.packets.login.set_comp import LoginSetCompression
 import pymine.types.packets.login.login as login_packets
@@ -21,9 +21,9 @@ states = share['states']
 
 
 @handle_packet('login', 0x00)
-async def login_start(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remote: tuple) -> tuple:
+async def login_start(stream: Stream, packet: Packet) -> tuple:
     if share['conf']['online_mode']:  # Online mode is enabled, so we request encryption
-        lc = login_cache[remote] = {'username': packet.username, 'verify': None}
+        lc = login_cache[stream.remote] = {'username': packet.username, 'verify': None}
 
         packet = login_packets.LoginEncryptionRequest(
             share['rsa']['public'].public_bytes(
@@ -34,17 +34,17 @@ async def login_start(r: 'StreamReader', w: 'StreamWriter', packet: Packet, remo
 
         lc['verify'] = packet.verify_token
 
-        w.write(Buffer.pack_packet(packet))
-        await w.drain()
+        stream.write(Buffer.pack_packet(packet))
+        await stream.drain()
     else:  # No need for encryption since online mode is off, just send login success
         uuid_ = uuid.uuid4()  # This should be only generated if the player name isn't found in the world data, but no way to do that rn
 
-        w.write(Buffer.pack_packet(login_packets.LoginSuccess(uuid_, packet.username), share['comp_thresh']))
-        await w.drain()
+        stream.write(Buffer.pack_packet(login_packets.LoginSuccess(uuid_, packet.username), share['comp_thresh']))
+        await stream.drain()
 
-        states[remote] = 3  # Update state to play
+        states[stream.remote] = 3  # Update state to play
 
-    return True, r, w
+    return True, stream
 
 
 @handle_packet('login', 0x01)

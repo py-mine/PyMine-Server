@@ -4,6 +4,7 @@
 ![quality](https://www.codefactor.io/repository/github/py-mine/pymine/badge)
 ![code size](https://img.shields.io/github/languages/code-size/py-mine/PyMine?color=0FAE6E)
 ![build status](https://img.shields.io/github/workflow/status/py-mine/PyMine/Python%20application?event=push)
+
 *PyMine - The fastest, easiest to use, Python-based Minecraft Server!*
 
 

@@ -37,19 +37,19 @@ class EncryptedStream(Stream):
         self.encryptor = encryptor
 
     async def read(self, n: int = -1):
-        return self.decryptor.update(await self.stream.read(n))
+        return self.decryptor.update(await Stream.read(self, n))
 
     async def readline(self):
-        return self.decryptor.update(await self.stream.readline())
+        return self.decryptor.update(await Stream.readline(self))
 
     async def readexactly(self, n: int):
-        return self.decryptor.update(await self.stream.readexactly(n))
+        return self.decryptor.update(await Stream.readexactly(self, n))
 
     async def readuntil(self, separator=b'\n'):
-        return self.decryptor.update(await self.stream.readuntil(separator))
+        return self.decryptor.update(await Stream.readuntil(self, separator))
 
     def write(self, data: bytes):
-        return self.stream.write(self.encryptor.update(data))
+        return Stream.write(self, self.encryptor.update(data))
 
     def writelines(self, data: bytes):
-        return self.stream.writelines(self.encryptor.update(data))
+        return Stream.writelines(self, self.encryptor.update(data))

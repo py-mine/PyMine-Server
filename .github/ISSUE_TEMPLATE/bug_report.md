@@ -7,22 +7,20 @@ assignees: ''
 
 ---
 
-**Describe the bug**
+### Describe Bug
 A clear and concise description of what the bug is.
 
-**To Reproduce**
-Steps to reproduce the behavior:
+### To Reproduce
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
+### Expected Behavior
 A clear and concise description of what you expected to happen.
 
-**Screenshots / Proof**
+### Screenshots / Proof
 If applicable, add screenshots to help explain your problem.
 
-
-**Additional context**
+### Additional Context
 Add any other context about the problem here, including OS, build, and other important contextual information.

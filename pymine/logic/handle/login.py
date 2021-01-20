@@ -51,7 +51,7 @@ async def login_start(stream: Stream, packet: Packet) -> tuple:
 async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
     shared_key, auth = await server_auth(packet, stream.remote, login_cache[stream.remote])
 
-    del login_cache[remote]  # No longer needed
+    del login_cache[stream.remote]  # No longer needed
 
     if not auth:  # If authentication failed, disconnect client
         stream.write(Buffer.pack_packet(login_packets.LoginDisconnect('Failed to authenticate your connection.')))

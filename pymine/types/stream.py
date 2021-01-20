@@ -9,9 +9,14 @@ class Stream(StreamWriter):
 
         self.remote = self.get_extra_info('peername')
 
-        self.reader = self._reader
+    async def read(self, n: int = -1) -> bytes:
+        return await self._reader.read(n)
 
-        self.read = self.reader.read
-        self.readline = self.reader.readline
-        self.readexactly = self.reader.readactly
-        self.readuntil = self.reader.readuntil
+    async def readline(self) -> bytes:
+        return await self._reader.readline()
+
+    async def readexactly(self, n: int) -> bytes:
+        return await self._reader.readexactly(n)
+
+    async def readuntil(self, separator=b'\n') -> bytes:
+        return await self._reader.readuntil(separator)

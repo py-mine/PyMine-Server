@@ -18,5 +18,5 @@ class Stream(StreamWriter):
     async def readexactly(self, n: int) -> bytes:
         return await self._reader.readexactly(n)
 
-    async def readuntil(self, separator=b'\n') -> bytes:
+    async def readuntil(self, separator: bytes = b'\n') -> bytes:
         return await self._reader.readuntil(separator)

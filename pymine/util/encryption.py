@@ -3,7 +3,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 import hashlib
 import asyncio
 
-__all__ = ('gen_verify_hash', 'gen_aes_cipher',)
+__all__ = ('gen_rsa_keys', 'gen_verify_hash', 'gen_aes_cipher',)
 
 
 def gen_rsa_keys():

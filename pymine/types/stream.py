@@ -1,5 +1,6 @@
-from asyncio import StreamReader, StreamWriter
 from __future__ import annotations
+
+from asyncio import StreamReader, StreamWriter
 
 
 class Stream(StreamReader, StreamWriter):

@@ -478,3 +478,17 @@ class Buffer:
 
         return out + Buffer.pack('?', disabled) + Buffer.pack('i', num_trade_usages) + Buffer.pack('i', max_trade_usages) + \
             Buffer.pack('i', xp) + Buffer.pack('i', special_price) + Buffer.pack('f', price_multi) + Buffer.pack('i', demand)
+
+    @classmethod
+    def pack_particle(cls, **particle):
+        particle_id = particle['id']
+        out = cls.pack_varint(particle_id)
+
+        if particle_id in (3, 23,):
+            out += cls.pack_varint(particle['BlockState'])
+        elif particle_id == 14:
+            out += cls.pack('ffff', particle['Red'], particle['Green'], particle['Blue'], particle['Scale'])
+        elif particle_id == 32:
+            out += cls.pack_slot(**particle['Item'])
+
+        return out

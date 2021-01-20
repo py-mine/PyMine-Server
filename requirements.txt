@@ -4,3 +4,4 @@ cryptography
 immutables
 nbt
 PyYAML
+gitpython

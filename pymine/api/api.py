@@ -25,6 +25,9 @@ def update_repo(git_dir, git_url, root_folder, plugin_name, do_clone=False):
         git_dir.clone(git_url)
         logger.info(f'Updated plugin {plugin_name}!')
 
+    if not os.path.isdir(os.path.join(root_folder, '.git')):
+        return update_repo(git_dir, git_url, root_folder, plugin_name, True)
+
     try:
         logger.debug(f'Pulling from {git_url}...')
         res = git.Git(root_folder).pull()  # pull latest from remote

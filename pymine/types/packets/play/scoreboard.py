@@ -80,7 +80,7 @@ class PlayScoreboardObjective(Packet):
         self.type_ = type_
 
     def encode(self) -> bytes:
-        out = (
+        return (
             Buffer.pack_string(self.objective_name)
             + Buffer.pack("b", self.mode)
             + Buffer.pack_optional(Buffer.pack_chat, Chat(self.objective_value))

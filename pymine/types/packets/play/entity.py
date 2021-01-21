@@ -477,3 +477,11 @@ class PlayEntityMetadata(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack_varint(self.entity_id) + Buffer.pack_entity_metadata(self.metadata)
+
+
+class PlayEntityEquipment(Packet):
+
+    id = 0x47
+    to = 1
+
+    def __init__(self, )

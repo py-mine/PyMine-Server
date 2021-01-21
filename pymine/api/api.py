@@ -15,8 +15,6 @@ running_tasks = []
 
 
 def update_repo(git_dir, git_url, root_folder, plugin_name, do_clone=False):
-    print(root_folder)
-
     if do_clone:
         try:
             os.rename(root_folder, f'{root_folder}_backup_{int(time.time())}')

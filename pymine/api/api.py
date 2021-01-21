@@ -45,6 +45,18 @@ def update_repo(git_dir, git_url, root, plugin_name, do_clone=False):
         logger.info(f'Updated plugin {plugin_name}!')
 
 
+def plugin_conf_valid(conf):
+    if not isinstance(conf, dict):
+        return False
+
+    if not isinstance(conf.get('git_url'), str):
+        return False
+
+    if not isinstance(conf.get('module_folder'), (str, type(None),)):
+        return False
+
+    return True
+
 def load_plugin(git_dir, plugin_name):
     root = os.path.join('plugins', plugin_name)
 
@@ -55,7 +67,7 @@ def load_plugin(git_dir, plugin_name):
                 plugin_module = importlib.import_module(plugin_path)
                 plugins[plugin_path] = plugin_module
             except BaseException as e:
-                logger.error(f'Failed to load plugin {plugin_name}.py due to: {logger.f_traceback(e)}')
+                logger.error(f'Failed to load plugin {root} due to: {logger.f_traceback(e)}')
 
         return
 
@@ -68,12 +80,8 @@ def load_plugin(git_dir, plugin_name):
     with open(plugin_config_file) as conf:
         conf = yaml.safe_load(conf.read())
 
-    if not isinstance(conf, dict):
-        logger.error(f'Failed to load plugin {plugin_name} due to invalid plugin.yml format.')
-        return
-
-    if not isinstance(conf.get('git_url'), str) or not isinstance(conf.get('module_folder'), (str, type(None),)):
-        logger.error(f'Failed to load plugin {plugin_name} due to invalid plugin.yml format.')
+    if not plugin_conf_valid(conf):
+        logger.error(f'Failed to load plugin {plugin_name} due to invalid plugin.yml.')
         return
 
     if conf['module_folder'] == '':

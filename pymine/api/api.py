@@ -54,6 +54,8 @@ def load_plugin(git_dir, plugin_name):
                 plugin_path = root.rstrip('.py').replace('\\', '/').replace('/', '.')
                 plugin_module = importlib.import_module(plugin_path)
                 plugins[plugin_path] = plugin_module
+            except BaseException as e:
+                logger.error(f'Failed to load plugin {plugin_name}.py due to: {logger.f_traceback(e)}')
 
         return
 

@@ -48,7 +48,7 @@ def load_plugin(git_dir, plugin_name):
         logger.error(f'Failed to load plugin {plugin_name} due to invalid plugin.yml format.')
         return
 
-    if isinstance(conf.get('git_url'), str) and isinstance(conf.get('module_folder'), (str, None,)):
+    if isinstance(conf.get('git_url'), str) and isinstance(conf.get('module_folder'), (str, type(None),)):
         logger.error(f'Failed to load plugin {plugin_name} due to invalid plugin.yml format.')
         return
 

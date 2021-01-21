@@ -1,7 +1,7 @@
-aioconsole>=2.0.2
-aiohttp>=3.7.3
-cryptography>=3.3.1
-immutables>=0.14
-nbt>=1.5.0
-PyYAML>=5.4.1
-gitpython>=3.1.12
+aioconsole
+aiohttp
+cryptography
+immutables
+nbt
+PyYAML
+gitpython

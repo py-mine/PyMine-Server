@@ -1,6 +1,5 @@
 import importlib
 import asyncio
-import shutil
 import time
 import yaml
 import git
@@ -17,7 +16,6 @@ def update_repo(logger, git_dir, git_url, root_folder, plugin_name, do_clone=Fal
     if do_clone:
         try:
             os.rename(root_folder, f'{root_folder}_backup_{int(time.time())}')
-            shutil.rmtree(root_folder)
         except FileNotFoundError:
             pass
 

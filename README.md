@@ -33,3 +33,5 @@
 
 ## API/Plugin Examples
 - [example-plugin](https://github.com/py-mine/example-plugin) - *the official example plugin*
+
+<!--test-->

@@ -109,7 +109,7 @@ async def stop():  # called when server is stopping
     for task in running_tasks:
         task.cancel()
 
-    for plugin_module in plugins:
+    for plugin_module in plugins.values():
         teardown_function = plugin_module.__dict__.get('teardown')
 
         if teardown_function:

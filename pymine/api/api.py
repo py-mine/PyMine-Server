@@ -15,7 +15,7 @@ running_tasks = []
 def update_repo(logger, git_dir, git_url, root_folder, plugin_name, do_clone=False):
     if do_clone:
         try:
-            shutil.rmtree(root_folder)
+            shutil.rmtree(os.path.join(root_folder, '.git'))
         except FileNotFoundError:
             pass
 

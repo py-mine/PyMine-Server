@@ -1,11 +1,8 @@
 server.yml
-plugins.yml
 
 server-icon.png
 
 plugins/*
-plugins/FAP
-!plugins/FAP/__init__.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

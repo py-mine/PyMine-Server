@@ -1,8 +1,5 @@
 name: autoblack
-on:
-  push: null
-  pull_request:
-    types: [created]
+on: [push]
 jobs:
   autoblack:
     runs-on: ubuntu-latest

@@ -57,14 +57,14 @@ def load_plugin_config(root):
     if not isinstance(conf, dict):
         raise ValueError("plugin.yml must contain a dict")
 
-    if conf.get('git_url') is not None and not isinstance(conf['git_url'], str):
+    if conf.get("git_url") is not None and not isinstance(conf["git_url"], str):
         raise ValueError('Value "git_url" must be of type "str"')
 
-    if conf.get('module_folder') is not None and not isinstance(conf['module_folder'], str):
+    if conf.get("module_folder") is not None and not isinstance(conf["module_folder"], str):
         raise ValueError('Value "module_folder" must be of type "str"')
 
     for key, value in conf.items():
-        if value == '':
+        if value == "":
             conf[key] = None
 
     return conf
@@ -99,7 +99,7 @@ async def load_plugin(git_dir, plugin_name):
         logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. Error: {logger.f_traceback(e)}")
         return
 
-    if conf.get('git_url'):
+    if conf.get("git_url"):
         logger.info(f"Checking for updates for {plugin_name}...")
 
         try:

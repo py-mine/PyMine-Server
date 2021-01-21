@@ -156,7 +156,7 @@ async def stop():  # Stop the server properly
     logger.info("Server closed.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.set_exception_handler(task_exception_handler)
 

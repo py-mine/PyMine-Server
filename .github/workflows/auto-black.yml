@@ -1,5 +1,8 @@
-name: autoblack_push
-on: [push]
+name: autoblack
+on:
+  push: null
+  pull_request:
+    types: [created]
 jobs:
   autoblack:
     runs-on: ubuntu-latest
@@ -17,7 +20,7 @@ jobs:
         continue-on-error: true
         run: black --check -l 127 .
 
-      - name: autoblack_push
+      - name: autoblack
         if: steps.black-check.outcome != 'success'
         run: |
           black -l 127 .

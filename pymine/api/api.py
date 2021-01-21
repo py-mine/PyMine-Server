@@ -12,12 +12,22 @@ plugins = {}
 running_tasks = []
 
 
-def clone_repo(logger, git_dir, git_url, root_folder):
-    pass
+def update_repo(logger, git_dir, git_url, root_folder, do_clone=False):
+    if do_clone:
+        try:
+            shutil.rmtree(root_folder)
+        except FileNotFoundError:
+            pass
 
+        git_dir.clone(git_url)
+        return True
 
-def update_repo(logger, git_dir, git_url, root_folder):
-    if not os.path.isdir(os.path.join(root_folder, '.git'))
+    try:
+        res = git.Git(root_folder).pull()  # pull latest from remote
+    except BaseException as e:
+        return update_repo(logger, git_dir, git_url, root_folder, True)
+
+    return (res != 'Already up to date.')
 
 
 def load_plugin(logger, git_dir, plugin_name):

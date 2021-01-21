@@ -45,17 +45,28 @@ def update_repo(git_dir, git_url, root, plugin_name, do_clone=False):
         logger.info(f'Updated {plugin_name}!')
 
 
-def plugin_conf_valid(conf):
+def load_plugin_config(root):
+    plugin_config_file = os.path.join(root, 'plugin.yml')
+
+    try:
+        with open(plugin_config_file) as conf:
+            conf = yaml.safe_load(conf.read())
+    except yaml.YAMLError:
+        raise ValueError('Failed to parse plugin.yml')
+
     if not isinstance(conf, dict):
-        return False
+        raise ValueError('plugin.yml must contain a dict')
 
     if not isinstance(conf.get('git_url'), str):
-        return False
+        raise ValueError('Value "git_url" must be present and of type "str"')
 
     if not isinstance(conf.get('module_folder'), (str, type(None),)):
-        return False
+        raise ValueError('Value "module_folder" is not of type "str" or "None"')
 
-    return True
+    if conf['module_folder'] == '':
+        conf['module_folder'] = None
+
+    return conf
 
 
 async def load_plugin(git_dir, plugin_name):
@@ -78,15 +89,14 @@ async def load_plugin(git_dir, plugin_name):
         logger.error(f'Failed to load {plugin_name} due to missing plugin.yml.')
         return
 
-    with open(plugin_config_file) as conf:
-        conf = yaml.safe_load(conf.read())
-
-    if not plugin_conf_valid(conf):
-        logger.error(f'Failed to load {plugin_name} due to invalid plugin.yml.')
+    try:
+        conf = load_plugin_config(root)
+    except ValueError as e:
+        logger.error(f'Failed to load {plugin_name} due to invalid plugin.yml. ({str(e)})')
         return
-
-    if conf['module_folder'] == '':
-        conf['module_folder'] = None
+    except BaseException as e:
+        logger.error(f'Failed to load {plugin_name} due to invalid plugin.yml. Error: {logger.f_traceback(e)}')
+        return
 
     logger.info(f'Checking for updates for {plugin_name}...')
 

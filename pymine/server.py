@@ -22,7 +22,7 @@ from pymine.util.share import share, logger
 
 share["rsa"]["private"], share["rsa"]["public"] = gen_rsa_keys()
 states = share["states"]
-logger.debug_ = share["conf"]["debug"]
+logger.debug_ = share["conf"]['debug']
 
 
 async def close_con(stream):  # Close a connection to a client

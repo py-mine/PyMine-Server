@@ -26,9 +26,10 @@ def update_repo(git_dir, git_url, root_folder, plugin_name, do_clone=False):
         logger.info(f'Updated plugin {plugin_name}!')
 
     try:
+        logger.debug(f'Pulling from {git_url}...')
         res = git.Git(root_folder).pull()  # pull latest from remote
     except BaseException as e:
-        logger.debug(f'Failed to pull latest for plugin {plugin_name}, attempting to clone...')
+        logger.debug(f'Failed to pull from {git_url}, attempting to clone...')
         return update_repo(git_dir, git_url, root_folder, plugin_name, True)
 
     if res == 'Already up to date.':

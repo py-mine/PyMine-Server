@@ -87,12 +87,14 @@ async def init():  # called when server starts up
         for file in filter((lambda f: f.endswith('.py')), files):
             importlib.import_module(dot_path(os.path.join(root, file)[:-3]))
 
-    plugins_dir = [(os.path.join('plugins', p) for p in os.listdir('plugins')]
+    plugins_dir = os.listdir('plugins')
     git_dir = git.Git('plugins')
 
     for plugin in plugins_dir:
-        load_plugin(logger, )
-
+        try:
+            load_plugin(git_dir, plugin)
+        except BaseException as e:
+            logger.error(f'Failed to load plugin {plugin} due to: {logger.f_traceback(e)}')
 
     # start command handler task
     running_tasks.append(asyncio.create_task(cmds.handle_server_commands()))

@@ -28,7 +28,7 @@
 
 
 ## Contributing
-- Please read [CONTRIBUTING.md](https://github.com/py-mine/PyMine/blob/main/CONTRIBUTING.md)
+- We'd love to have your help! Please read [CONTRIBUTING.md](https://github.com/py-mine/PyMine/blob/main/CONTRIBUTING.md) to get started!
 
 
 ## API/Plugin Examples

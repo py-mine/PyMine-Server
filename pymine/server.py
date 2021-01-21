@@ -36,7 +36,7 @@ async def close_con(stream):  # Close a connection to a client
     except BaseException:
         pass
 
-    logger.debug(f'Disconnected nicely from {stream.remote[0]}:{stream.remote[1]}.')
+    logger.debug(f"Disconnected nicely from {stream.remote[0]}:{stream.remote[1]}.")
     return False, stream
 
 

@@ -57,6 +57,7 @@ def plugin_conf_valid(conf):
 
     return True
 
+
 def load_plugin(git_dir, plugin_name):
     root = os.path.join('plugins', plugin_name)
 

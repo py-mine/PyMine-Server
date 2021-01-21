@@ -24,7 +24,7 @@ __all__ = (
     "PlayPlayerPostitionAndLookClientBound",
     "PlayDestroyEntities",
     "PlayEntityMetadata",
-    'PlayEntityEquipment',
+    "PlayEntityEquipment",
 )
 
 
@@ -501,4 +501,8 @@ class PlayEntityEquipment(Packet):
         self.equipment = equipment
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.entity_id) + Buffer.pack_varint(len(self.equipment)) + b''.join(Buffer.pack('b', e[0]) + Buffer.pack_slot(**e[1]) for e in self.equipment)
+        return (
+            Buffer.pack_varint(self.entity_id)
+            + Buffer.pack_varint(len(self.equipment))
+            + b"".join(Buffer.pack("b", e[0]) + Buffer.pack_slot(**e[1]) for e in self.equipment)
+        )

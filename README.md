@@ -3,7 +3,7 @@
 ![views](https://api.ghprofile.me/view?username=py-mine/PyMine&color=0FAE6E&style=flat&label=views)
 ![quality](https://www.codefactor.io/repository/github/py-mine/pymine/badge)
 ![code size](https://img.shields.io/github/languages/code-size/py-mine/PyMine?color=0FAE6E)
-![build status](https://img.shields.io/github/workflow/status/py-mine/PyMine/Python%20application?event=push)
+![build status](https://img.shields.io/github/workflow/status/py-mine/PyMine/Python%20App?event=push)
 
 *PyMine - The fastest, easiest to use, Python-based Minecraft Server!*
 

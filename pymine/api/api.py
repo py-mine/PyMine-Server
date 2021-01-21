@@ -22,8 +22,10 @@ def update_repo(git_dir, git_url, root_folder, plugin_name, do_clone=False):
         except FileNotFoundError:
             pass
 
+        logger.debug(f'Cloning from {git_url}...')
         git_dir.clone(git_url)
         logger.info(f'Updated plugin {plugin_name}!')
+        
         return
 
     if not os.path.isdir(os.path.join(root_folder, '.git')):

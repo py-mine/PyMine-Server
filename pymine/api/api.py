@@ -15,9 +15,12 @@ running_tasks = []
 
 
 def update_repo(git_dir, git_url, root_folder, plugin_name, do_clone=False):
+    print(root_folder)
+
     if do_clone:
         try:
             os.rename(root_folder, f'{root_folder}_backup_{int(time.time())}')
+            logger.debug(f'Renamed {root_folder} for clone.')
         except FileNotFoundError:
             pass
 
@@ -27,6 +30,7 @@ def update_repo(git_dir, git_url, root_folder, plugin_name, do_clone=False):
     try:
         res = git.Git(root_folder).pull()  # pull latest from remote
     except BaseException as e:
+        logger.debug(f'Failed to pull latest for plugin {plugin_name}, attempting to clone...')
         return update_repo(git_dir, git_url, root_folder, plugin_name, True)
 
     if res == 'Already up to date.':

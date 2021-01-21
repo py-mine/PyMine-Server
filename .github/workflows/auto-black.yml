@@ -1,19 +1,20 @@
-name: Auto Black
-on: push
+name: autoblack_push
+on: [push]
 jobs:
-  autoblack:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: autoblack
-        uses: psf/black@stable
         with:
-          args: "-l 127 ."
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          commit-message: autoblack action fixes
-          title: Fixes by autoblack
-          body: This is an auto-generated PR with fixes by autoblack.
-          labels: Auto Black
-          branch: autoblack-patches
+            ref: ${{ github.head_ref }}
+      - uses: actions/setup-python@v1
+      - run: pip install black
+      - run: black --check -l 127 .
+      - name: autoblack_push
+        if: failure()
+        run: |
+          black -l 127 .
+          git config --global user.name github-actions
+          git config --global user.email '${GITHUB_ACTOR}@users.noreply.github.com'
+          git commit -am "Use Black."
+          git push

@@ -8,6 +8,8 @@ import os
 from pymine.util.share import logger, share
 import pymine.logic.commands as cmds
 
+from pymine import api
+
 plugins = {}
 running_tasks = []
 
@@ -47,6 +49,8 @@ def load_plugin(git_dir, plugin_name):
     if not isinstance(conf, dict):
         logger.error(f'Failed to load plugin {plugin_name} due to invalid plugin.yml format.')
         return
+
+    print(conf)
 
     if isinstance(conf.get('git_url'), str) and isinstance(conf.get('module_folder'), (str, type(None),)):
         logger.error(f'Failed to load plugin {plugin_name} due to invalid plugin.yml format.')
@@ -111,4 +115,4 @@ async def stop():  # called when server is stopping
             await teardown_function()
 
     # call all registered on_server_stop handlers
-    await asyncio.gather(*(h() for h in pymine.api.server.SERVER_STOP_HANDLERS))
+    await asyncio.gather(*(h() for h in api.server.SERVER_STOP_HANDLERS))

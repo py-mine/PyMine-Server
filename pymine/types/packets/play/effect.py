@@ -6,8 +6,8 @@ from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
 __all__ = (
-    'PlayEffect',
-    'PlayEntityEffect',
+    "PlayEffect",
+    "PlayEntityEffect",
 )
 
 
@@ -42,8 +42,12 @@ class PlayEffect(Packet):
         self.disable_relative_volume = disable_relative_volume
 
     def encode(self) -> bytes:
-        return Buffer.pack('i', self.effect_id) + Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack('i', self.data) + \
-            Buffer.pack('?', self.disable_relative_volume)
+        return (
+            Buffer.pack("i", self.effect_id)
+            + Buffer.pack_pos(self.x, self.y, self.z)
+            + Buffer.pack("i", self.data)
+            + Buffer.pack("?", self.disable_relative_volume)
+        )
 
 
 class PlayEntityEffect(Packet):

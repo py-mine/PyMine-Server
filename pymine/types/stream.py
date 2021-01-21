@@ -8,7 +8,7 @@ class Stream(StreamWriter):
     def __init__(self, reader: StreamReader, writer: StreamWriter) -> None:
         super().__init__(writer._transport, writer._protocol, writer._reader, writer._loop)
 
-        self.remote = self.get_extra_info('peername')
+        self.remote = self.get_extra_info("peername")
 
     async def read(self, n: int = -1) -> bytes:
         return await self._reader.read(n)
@@ -19,7 +19,7 @@ class Stream(StreamWriter):
     async def readexactly(self, n: int) -> bytes:
         return await self._reader.readexactly(n)
 
-    async def readuntil(self, separator: bytes = b'\n') -> bytes:
+    async def readuntil(self, separator: bytes = b"\n") -> bytes:
         return await self._reader.readuntil(separator)
 
 
@@ -39,7 +39,7 @@ class EncryptedStream(Stream):
     async def readexactly(self, n: int):
         return self.decryptor.update(await super().readexactly(n))
 
-    async def readuntil(self, separator=b'\n'):
+    async def readuntil(self, separator=b"\n"):
         return self.decryptor.update(await super().readuntil(separator))
 
     def write(self, data: bytes):

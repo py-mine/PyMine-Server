@@ -18,111 +18,117 @@ running_tasks = []
 def update_repo(git_dir, git_url, root, plugin_name, do_clone=False):
     if do_clone:
         try:
-            os.rename(root, f'{root}_backup_{int(time.time())}')
-            logger.debug(f'Renamed {root} for clone.')
+            os.rename(root, f"{root}_backup_{int(time.time())}")
+            logger.debug(f"Renamed {root} for clone.")
         except FileNotFoundError:
             pass
 
-        logger.debug(f'Cloning from {git_url}...')
+        logger.debug(f"Cloning from {git_url}...")
         git_dir.clone(git_url)
-        logger.info(f'Updated {plugin_name}!')
+        logger.info(f"Updated {plugin_name}!")
 
         return
 
-    if not os.path.isdir(os.path.join(root, '.git')):
+    if not os.path.isdir(os.path.join(root, ".git")):
         return update_repo(git_dir, git_url, root, plugin_name, True)
 
     try:
-        logger.debug(f'Pulling from {git_url}...')
+        logger.debug(f"Pulling from {git_url}...")
         res = git.Git(root).pull()  # pull latest from remote
     except BaseException as e:
-        logger.debug(f'Failed to pull from {git_url}, attempting to clone...')
+        logger.debug(f"Failed to pull from {git_url}, attempting to clone...")
         return update_repo(git_dir, git_url, root, plugin_name, True)
 
-    if res == 'Already up to date.':
-        logger.info(f'No updates found for {plugin_name}.')
+    if res == "Already up to date.":
+        logger.info(f"No updates found for {plugin_name}.")
     else:
-        logger.info(f'Updated {plugin_name}!')
+        logger.info(f"Updated {plugin_name}!")
 
 
 def load_plugin_config(root):
-    plugin_config_file = os.path.join(root, 'plugin.yml')
+    plugin_config_file = os.path.join(root, "plugin.yml")
 
     try:
         with open(plugin_config_file) as conf:
             conf = yaml.safe_load(conf.read())
     except yaml.YAMLError:
-        raise ValueError('Failed to parse plugin.yml')
+        raise ValueError("Failed to parse plugin.yml")
 
     if not isinstance(conf, dict):
-        raise ValueError('plugin.yml must contain a dict')
+        raise ValueError("plugin.yml must contain a dict")
 
-    if not isinstance(conf.get('git_url'), str):
+    if not isinstance(conf.get("git_url"), str):
         raise ValueError('Value "git_url" must be present and of type "str"')
 
-    if not isinstance(conf.get('module_folder'), (str, type(None),)):
+    if not isinstance(
+        conf.get("module_folder"),
+        (
+            str,
+            type(None),
+        ),
+    ):
         raise ValueError('Value "module_folder" is not of type "str" or "None"')
 
-    if conf['module_folder'] == '':
-        conf['module_folder'] = None
+    if conf["module_folder"] == "":
+        conf["module_folder"] = None
 
     return conf
 
 
 async def load_plugin(git_dir, plugin_name):
-    root = os.path.join('plugins', plugin_name)
+    root = os.path.join("plugins", plugin_name)
 
     if os.path.isfile(root):
-        if root.endswith('.py'):  # .py file (so try to import)
+        if root.endswith(".py"):  # .py file (so try to import)
             try:
-                plugin_path = root.rstrip('.py').replace('\\', '/').replace('/', '.')
+                plugin_path = root.rstrip(".py").replace("\\", "/").replace("/", ".")
                 plugin_module = importlib.import_module(plugin_path)
                 plugins[plugin_path] = plugin_module
             except BaseException as e:
-                logger.error(f'Failed to load {plugin_name} due to: {logger.f_traceback(e)}')
+                logger.error(f"Failed to load {plugin_name} due to: {logger.f_traceback(e)}")
 
         return
 
-    plugin_config_file = os.path.join(root, 'plugin.yml')
+    plugin_config_file = os.path.join(root, "plugin.yml")
 
     if not os.path.isfile(plugin_config_file):
-        logger.error(f'Failed to load {plugin_name} due to missing plugin.yml.')
+        logger.error(f"Failed to load {plugin_name} due to missing plugin.yml.")
         return
 
     try:
         conf = load_plugin_config(root)
     except ValueError as e:
-        logger.error(f'Failed to load {plugin_name} due to invalid plugin.yml. ({str(e)})')
+        logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. ({str(e)})")
         return
     except BaseException as e:
-        logger.error(f'Failed to load {plugin_name} due to invalid plugin.yml. Error: {logger.f_traceback(e)}')
+        logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. Error: {logger.f_traceback(e)}")
         return
 
-    logger.info(f'Checking for updates for {plugin_name}...')
+    logger.info(f"Checking for updates for {plugin_name}...")
 
     try:
-        update_repo(git_dir, conf['git_url'], root, plugin_name)
+        update_repo(git_dir, conf["git_url"], root, plugin_name)
     except BaseException as e:
-        logger.error(f'Failed to update {plugin_name} due to: {logger.f_traceback(e)}')
+        logger.error(f"Failed to update {plugin_name} due to: {logger.f_traceback(e)}")
         return
 
     plugin_path = root
 
-    if conf.get('module_folder'):
-        plugin_path = os.path.join(plugin_path, conf['module_folder'])
+    if conf.get("module_folder"):
+        plugin_path = os.path.join(plugin_path, conf["module_folder"])
 
-    plugin_path = plugin_path.replace('\\', '/').replace('/', '.')
+    plugin_path = plugin_path.replace("\\", "/").replace("/", ".")
 
     try:
         plugin_module = importlib.import_module(plugin_path)
     except BaseException as e:
-        logger.error(f'Failed to import {plugin_name} due to: {logger.f_traceback(e)}')
+        logger.error(f"Failed to import {plugin_name} due to: {logger.f_traceback(e)}")
         return
 
     try:
         await plugin_module.setup()
     except BaseException as e:
-        logger.error(f'Failed to setup {plugin_name} due to: {logger.f_traceback(e)}')
+        logger.error(f"Failed to setup {plugin_name} due to: {logger.f_traceback(e)}")
         return
 
     plugins[plugin_path] = plugin_module
@@ -132,23 +138,23 @@ async def init():  # called when server starts up
     cmds.load_commands()  # load commands in pymine/logic/cmds/*
 
     # Load packet handlers / packet logic handlers under pymine/logic/handle
-    for root, dirs, files in os.walk(os.path.join('pymine', 'logic', 'handle')):
-        for file in filter((lambda f: f.endswith('.py')), files):
-            importlib.import_module(os.path.join(root, file)[:-3].replace('\\', '/').replace('/', '.'))
+    for root, dirs, files in os.walk(os.path.join("pymine", "logic", "handle")):
+        for file in filter((lambda f: f.endswith(".py")), files):
+            importlib.import_module(os.path.join(root, file)[:-3].replace("\\", "/").replace("/", "."))
 
     try:
-        os.mkdir('plugins')
+        os.mkdir("plugins")
     except FileExistsError:
         pass
 
-    plugins_dir = os.listdir('plugins')
-    git_dir = git.Git('plugins')
+    plugins_dir = os.listdir("plugins")
+    git_dir = git.Git("plugins")
 
     for plugin in plugins_dir:
         try:
             await load_plugin(git_dir, plugin)
         except BaseException as e:
-            logger.error(f'Failed to load {plugin} due to: {logger.f_traceback(e)}')
+            logger.error(f"Failed to load {plugin} due to: {logger.f_traceback(e)}")
 
     # start command handler task
     running_tasks.append(asyncio.create_task(cmds.handle_server_commands()))
@@ -159,7 +165,7 @@ async def stop():  # called when server is stopping
         task.cancel()
 
     for plugin_module in plugins.values():
-        teardown_function = plugin_module.__dict__.get('teardown')
+        teardown_function = plugin_module.__dict__.get("teardown")
 
         if teardown_function:
             await teardown_function()

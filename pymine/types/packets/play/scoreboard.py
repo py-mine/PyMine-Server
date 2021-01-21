@@ -7,8 +7,8 @@ from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
 __all__ = (
-    'PlayDisplayScoreboard',
-    'PlayUpdateScore',
+    "PlayDisplayScoreboard",
+    "PlayUpdateScore",
 )
 
 
@@ -25,7 +25,7 @@ class PlayDisplayScoreboard(Packet):
         self.score = score_name
 
     def encode(self) -> bytes:
-        return Buffer.pack('b', self.pos) + Buffer.pack_string(self.score)
+        return Buffer.pack("b", self.pos) + Buffer.pack_string(self.score)
 
 
 class PlayUpdateScore(Packet):
@@ -43,5 +43,9 @@ class PlayUpdateScore(Packet):
         self.value = value
 
     def encode(self) -> bytes:
-        return Buffer.pack_string(self.entity_name) + self.action + Buffer.pack_string(self.objective_name) + \
-            Buffer.pack_optional_varint(self.value)
+        return (
+            Buffer.pack_string(self.entity_name)
+            + self.action
+            + Buffer.pack_string(self.objective_name)
+            + Buffer.pack_optional_varint(self.value)
+        )

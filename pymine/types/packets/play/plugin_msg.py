@@ -5,7 +5,7 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlayPluginMessageClientBound', 'PlayPluginMessageServerBound')
+__all__ = ("PlayPluginMessageClientBound", "PlayPluginMessageServerBound")
 
 
 class PlayPluginMessageClientBound(Packet):

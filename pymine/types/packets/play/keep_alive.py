@@ -5,7 +5,10 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlayKeepAliveClientBound', 'PlayKeepAliveServerBound',)
+__all__ = (
+    "PlayKeepAliveClientBound",
+    "PlayKeepAliveServerBound",
+)
 
 
 class PlayKeepAliveClientBound(Packet):
@@ -26,7 +29,7 @@ class PlayKeepAliveClientBound(Packet):
         self.keep_alive_id = keep_alive_id
 
     def encode(self) -> bytes:
-        return Buffer.pack('q', self.keep_alive_id)
+        return Buffer.pack("q", self.keep_alive_id)
 
 
 class PlayKeepAliveServerBound(Packet):
@@ -48,4 +51,4 @@ class PlayKeepAliveServerBound(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayKeepAliveServerBound:
-        return cls(buf.unpack('q'))
+        return cls(buf.unpack("q"))

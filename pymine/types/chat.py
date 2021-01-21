@@ -18,7 +18,7 @@ class Chat:
     def from_string(cls, text: str) -> Chat:
         """Creates a Minecraft chat message from json."""
 
-        return cls({'text': text})
+        return cls({"text": text})
 
     # For mode arg
     # 'plain' = plain text, no formatting
@@ -29,38 +29,38 @@ class Chat:
 
         def parse(msg):
             if isinstance(msg, str):
-                if mode == 'plain':
-                    return re.sub('§.', '', msg)
+                if mode == "plain":
+                    return re.sub("§.", "", msg)
 
-                if mode == 'normal':
+                if mode == "normal":
                     return self.msg
 
-                if mode == 'color':
-                    colored = ''
+                if mode == "color":
+                    colored = ""
 
                     for i, c in enumerate(msg):
-                        if c == '§':
+                        if c == "§":
                             colored += TERMINAL_CODES[msg[i + 1]]
                             continue
 
                     return colored
             elif isinstance(msg, list):
-                return ''.join(parse(e) for e in msg)
+                return "".join(parse(e) for e in msg)
             elif isinstance(msg, dict):
-                text = ''
+                text = ""
 
-                if mode != 'plain':
+                if mode != "plain":
                     for name, code in FORMAT_BY_NAME.items():
                         if msg.get(name):
-                            text += '§' + code
+                            text += "§" + code
 
-                if 'text' in msg:
-                    text += parse(msg['text'])
+                if "text" in msg:
+                    text += parse(msg["text"])
 
-                if 'extra' in msg:
-                    text += parse(msg['extra'])
+                if "extra" in msg:
+                    text += parse(msg["extra"])
             elif msg is None:
-                return ''
+                return ""
             else:
                 return str(self.msg)
 

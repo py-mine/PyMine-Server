@@ -7,22 +7,22 @@ from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
 __all__ = (
-    'PlayBlockEntityData',
-    'PlayQueryEntityNBT',
-    'PlayInteractEntity',
-    'PlayEntityStatus',
-    'PlayEntityAction',
-    'PlayEntityPosition',
-    'PlayEntityPositionAndRotation',
-    'PlayEntityRotation',
-    'PlayEntityMovement',
-    'PlayRemoveEntityEffect',
-    'PlayEntityHeadLook',
-    'PlayAttachEntity',
-    'PlayEntityVelocity',
-    'PlayEntityTeleport',
-    'PlayPlayerPostitionAndLookClientBound',
-    'PlayDestroyEntities',
+    "PlayBlockEntityData",
+    "PlayQueryEntityNBT",
+    "PlayInteractEntity",
+    "PlayEntityStatus",
+    "PlayEntityAction",
+    "PlayEntityPosition",
+    "PlayEntityPositionAndRotation",
+    "PlayEntityRotation",
+    "PlayEntityMovement",
+    "PlayRemoveEntityEffect",
+    "PlayEntityHeadLook",
+    "PlayAttachEntity",
+    "PlayEntityVelocity",
+    "PlayEntityTeleport",
+    "PlayPlayerPostitionAndLookClientBound",
+    "PlayDestroyEntities",
 )
 
 
@@ -53,7 +53,7 @@ class PlayBlockEntityData(Packet):
         self.nbt_data = nbt_data
 
     def encode(self) -> bytes:
-        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack('B', self.action) + Buffer.pack_nbt(self.nbt_data)
+        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack("B", self.action) + Buffer.pack_nbt(self.nbt_data)
 
 
 class PlayQueryEntityNBT(Packet):
@@ -104,14 +104,8 @@ class PlayInteractEntity(Packet):
     to = 0
 
     def __init__(
-            self,
-            entity_id: int,
-            type_: int,
-            target_x: int,
-            target_y: int,
-            target_z: int,
-            hand: int,
-            sneaking: bool) -> None:
+        self, entity_id: int, type_: int, target_x: int, target_y: int, target_z: int, hand: int, sneaking: bool
+    ) -> None:
         super().__init__()
 
         self.entity_id = entity_id
@@ -131,7 +125,7 @@ class PlayInteractEntity(Packet):
             buf.unpack_optional(buf.unpack_varint),
             buf.unpack_optional(buf.unpack_varint),
             buf.unpack_optional(buf.unpack_varint),
-            buf.unpack('?')
+            buf.unpack("?"),
         )
 
 
@@ -155,7 +149,7 @@ class PlayEntityStatus(Packet):
         self.entity_status = entity_status
 
     def encode(self) -> bytes:
-        return Buffer.pack('i', self.entity_id) + Buffer.pack('b', self.entity_status)
+        return Buffer.pack("i", self.entity_id) + Buffer.pack("b", self.entity_status)
 
 
 class PlayEntityAction(Packet):
@@ -213,8 +207,13 @@ class PlayEntityPosition(Packet):
         self.on_ground = on_ground
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.entity_id) + Buffer.pack('h', self.dx) + Buffer.pack('h', self.dy) + \
-            Buffer.pack('h', self.dz) + Buffer.pack('?', self.on_ground)
+        return (
+            Buffer.pack_varint(self.entity_id)
+            + Buffer.pack("h", self.dx)
+            + Buffer.pack("h", self.dy)
+            + Buffer.pack("h", self.dz)
+            + Buffer.pack("?", self.on_ground)
+        )
 
 
 class PlayEntityPositionAndRotation(Packet):
@@ -251,9 +250,15 @@ class PlayEntityPositionAndRotation(Packet):
         self.on_ground = on_ground
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.entity_id) + Buffer.pack('h', self.dx) + Buffer.pack('h', self.dy) + \
-            Buffer.pack('h', self.dz) + Buffer.pack('f', self.yaw) + Buffer.pack('f', self.pitch) + \
-            Buffer.pack('?', self.on_ground)
+        return (
+            Buffer.pack_varint(self.entity_id)
+            + Buffer.pack("h", self.dx)
+            + Buffer.pack("h", self.dy)
+            + Buffer.pack("h", self.dz)
+            + Buffer.pack("f", self.yaw)
+            + Buffer.pack("f", self.pitch)
+            + Buffer.pack("?", self.on_ground)
+        )
 
 
 class PlayEntityRotation(Packet):
@@ -282,8 +287,12 @@ class PlayEntityRotation(Packet):
         self.on_ground = on_ground
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.entity_id) + Buffer.pack('f', self.yaw) + Buffer.pack('f', self.pitch) + \
-            Buffer.pack('?', self.on_ground)
+        return (
+            Buffer.pack_varint(self.entity_id)
+            + Buffer.pack("f", self.yaw)
+            + Buffer.pack("f", self.pitch)
+            + Buffer.pack("?", self.on_ground)
+        )
 
 
 class PlayEntityMovement(Packet):
@@ -314,7 +323,7 @@ class PlayRemoveEntityEffect(Packet):
         self.effect_id = effect_id
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.entity_id) + Buffer.pack('b', self.effect_id)
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack("b", self.effect_id)
 
 
 class PlayEntityHeadLook(Packet):
@@ -330,7 +339,7 @@ class PlayEntityHeadLook(Packet):
         self.head_yaw = head_yaw
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.entity_id) + Buffer.pack('B', self.head_yaw)
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack("B", self.head_yaw)
 
 
 class PlayAttachEntity(Packet):
@@ -346,7 +355,7 @@ class PlayAttachEntity(Packet):
         self.holding_eid = holding_eid
 
     def encode(self) -> bytes:
-        return Buffer.pack('i', self.attached_eid) + Buffer.pack('i', self.holding_eid)
+        return Buffer.pack("i", self.attached_eid) + Buffer.pack("i", self.holding_eid)
 
 
 class PlayEntityVelocity(Packet):
@@ -364,8 +373,12 @@ class PlayEntityVelocity(Packet):
         self.vel_z = velocity_z
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.eid) + Buffer.pack('h', self.vel_x) + Buffer.pack('h', self.vel_y) + \
-            Buffer.pack('h', self.vel_z)
+        return (
+            Buffer.pack_varint(self.eid)
+            + Buffer.pack("h", self.vel_x)
+            + Buffer.pack("h", self.vel_y)
+            + Buffer.pack("h", self.vel_z)
+        )
 
 
 class PlayEntityTeleport(Packet):
@@ -386,9 +399,15 @@ class PlayEntityTeleport(Packet):
         self.on_ground = on_ground
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.eid) + Buffer.pack('d', self.x) + Buffer.pack('d', self.y) + \
-            Buffer.pack('d', self.z) + Buffer.pack('i', self.yaw) + Buffer.pack('i', self.pitch) + \
-            Buffer.pack('?', self.on_ground)
+        return (
+            Buffer.pack_varint(self.eid)
+            + Buffer.pack("d", self.x)
+            + Buffer.pack("d", self.y)
+            + Buffer.pack("d", self.z)
+            + Buffer.pack("i", self.yaw)
+            + Buffer.pack("i", self.pitch)
+            + Buffer.pack("?", self.on_ground)
+        )
 
 
 class PlayPlayerPostitionAndLookClientBound(Packet):
@@ -409,8 +428,15 @@ class PlayPlayerPostitionAndLookClientBound(Packet):
         self.tp_id = tp_id
 
     def encode(self) -> bytes:
-        return Buffer.pack('d', self.x) + Buffer.pack('d', self.y) + Buffer.pack('d', self.z) + Buffer.pack('f', self.yaw) + \
-            Buffer.pack('f', self.pitch) + self.flags + Buffer.pack_varint(self.tp_id)
+        return (
+            Buffer.pack("d", self.x)
+            + Buffer.pack("d", self.y)
+            + Buffer.pack("d", self.z)
+            + Buffer.pack("f", self.yaw)
+            + Buffer.pack("f", self.pitch)
+            + self.flags
+            + Buffer.pack_varint(self.tp_id)
+        )
 
 
 class PlayDestroyEntities(Packet):
@@ -425,4 +451,4 @@ class PlayDestroyEntities(Packet):
         self.entity_ids = entity_ids
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(len(self.entity_ids)) + b''.join(Buffer.pack_varint(eid) for eid in self.entity_ids)
+        return Buffer.pack_varint(len(self.entity_ids)) + b"".join(Buffer.pack_varint(eid) for eid in self.entity_ids)

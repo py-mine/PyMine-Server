@@ -5,7 +5,10 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlayResourcePackStatus', 'PlayResourcePackSend',)
+__all__ = (
+    "PlayResourcePackStatus",
+    "PlayResourcePackSend",
+)
 
 
 class PlayResourcePackStatus(Packet):

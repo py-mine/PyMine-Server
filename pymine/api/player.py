@@ -6,7 +6,7 @@ PLAYER_LEAVE_HANDLERS = []
 
 def on_player_join(func):
     if not asyncio.iscoroutinefunction(func):
-        raise ValueError('Decorated object must be a coroutine function')
+        raise ValueError("Decorated object must be a coroutine function")
 
     PLAYER_JOIN_HANDLERS.append(func)
 
@@ -15,7 +15,7 @@ def on_player_join(func):
 
 def on_player_leave(func):
     if not asyncio.iscoroutinefunction(func):
-        raise ValueError('Decorated object must be a coroutine function')
+        raise ValueError("Decorated object must be a coroutine function")
 
     PLAYER_LEAVE_HANDLERS.append(func)
 

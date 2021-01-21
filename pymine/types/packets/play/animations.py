@@ -6,10 +6,10 @@ from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
 __all__ = (
-    'PlayEntityAnimation',
-    'PlayBlockBreakAnimation',
-    'PlayAnimationServerBound',
-    'PlayOpenBook',
+    "PlayEntityAnimation",
+    "PlayBlockBreakAnimation",
+    "PlayAnimationServerBound",
+    "PlayOpenBook",
 )
 
 
@@ -34,7 +34,7 @@ class PlayEntityAnimation(Packet):
         self.animation = animation
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.entity_id) + Buffer.pack('B', self.animation)
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack("B", self.animation)
 
 
 class PlayBlockBreakAnimation(Packet):
@@ -65,8 +65,7 @@ class PlayBlockBreakAnimation(Packet):
         self.stage = stage
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.entity_id) + Buffer.pack_pos(self.x, self.y, self.z) + \
-            Buffer.pack('b', self.stage)
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack("b", self.stage)
 
 
 class PlayAnimationServerBound(Packet):

@@ -5,7 +5,7 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlayUnlockRecipes',)
+__all__ = ("PlayUnlockRecipes",)
 
 
 class PlayUnlockRecipes(Packet):
@@ -41,18 +41,19 @@ class PlayUnlockRecipes(Packet):
     to = 1
 
     def __init__(
-            self,
-            action: int,
-            crafting_book_open: bool,
-            crafting_book_filter_active: bool,
-            smelting_book_open: bool,
-            smelting_book_filter_active: bool,
-            blast_furnace_book_open: bool,
-            blast_furnace_book_filter_active: bool,
-            smoker_book_open: bool,
-            smoker_book_filter_active: bool,
-            recipe_ids_1: list,
-            recipe_ids_2: list = None) -> None:
+        self,
+        action: int,
+        crafting_book_open: bool,
+        crafting_book_filter_active: bool,
+        smelting_book_open: bool,
+        smelting_book_filter_active: bool,
+        blast_furnace_book_open: bool,
+        blast_furnace_book_filter_active: bool,
+        smoker_book_open: bool,
+        smoker_book_filter_active: bool,
+        recipe_ids_1: list,
+        recipe_ids_2: list = None,
+    ) -> None:
         super().__init__()
 
         self.action = action
@@ -68,16 +69,23 @@ class PlayUnlockRecipes(Packet):
         self.recipe_ids_2 = recipe_ids_2
 
     def encode(self) -> bytes:
-        out = Buffer.pack_varint(self.action) + Buffer.pack('?', self.crafting_book_open) + \
-            Buffer.pack('?', self.crafting_book_filter_active) + Buffer.pack('?', self.smelting_book_open) + \
-            Buffer.pack('?', self.smelting_book_filter_active) + Buffer.pack('?', self.blast_furnace_book_open) + \
-            Buffer.pack('?', self.blast_furnace_book_filter_active) + Buffer.pack('?', self.smoker_book_open) + \
-            Buffer.pack('?', self.smoker_book_filter_active) + Buffer.pack_varint(len(self.recipe_ids_1)) + \
-            b''.join(Buffer.pack_string(rid) for rid in self.recipe_ids_1)
+        out = (
+            Buffer.pack_varint(self.action)
+            + Buffer.pack("?", self.crafting_book_open)
+            + Buffer.pack("?", self.crafting_book_filter_active)
+            + Buffer.pack("?", self.smelting_book_open)
+            + Buffer.pack("?", self.smelting_book_filter_active)
+            + Buffer.pack("?", self.blast_furnace_book_open)
+            + Buffer.pack("?", self.blast_furnace_book_filter_active)
+            + Buffer.pack("?", self.smoker_book_open)
+            + Buffer.pack("?", self.smoker_book_filter_active)
+            + Buffer.pack_varint(len(self.recipe_ids_1))
+            + b"".join(Buffer.pack_string(rid) for rid in self.recipe_ids_1)
+        )
 
         if self.recipe_ids_2:
-            out += Buffer.pack('?', True) + b''.join(Buffer.pack_string(rid) for rid in self.recipe_ids_2)
+            out += Buffer.pack("?", True) + b"".join(Buffer.pack_string(rid) for rid in self.recipe_ids_2)
         else:
-            out += Buffer.pack('?', False)
+            out += Buffer.pack("?", False)
 
         return out

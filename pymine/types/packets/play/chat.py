@@ -8,10 +8,10 @@ from pymine.types.buffer import Buffer
 from pymine.types.chat import Chat
 
 __all__ = (
-    'PlayChatMessageClientBound',
-    'PlayChatMessageServerBound',
-    'PlayTabCompleteClientBound',
-    'PlayTabCompleteServerBound',
+    "PlayChatMessageClientBound",
+    "PlayChatMessageServerBound",
+    "PlayTabCompleteClientBound",
+    "PlayTabCompleteServerBound",
 )
 
 
@@ -39,7 +39,7 @@ class PlayChatMessageClientBound(Packet):
         self.sender = sender
 
     def encode(self) -> bytes:
-        return Buffer.pack_chat(self.data) + Buffer.pack('b', self.position) + Buffer.pack_uuid(self.sender)
+        return Buffer.pack_chat(self.data) + Buffer.pack("b", self.position) + Buffer.pack_uuid(self.sender)
 
 
 class PlayChatMessageServerBound(Packet):
@@ -112,15 +112,19 @@ class PlayTabCompleteClientBound(Packet):
         # ]
 
     def encode(self) -> bytes:
-        out = Buffer.pack_varint(self.id) + Buffer.pack_varint(self.start) + Buffer.pack_varint(self.length) + \
-            Buffer.pack_varint(len(self.matches))
+        out = (
+            Buffer.pack_varint(self.id)
+            + Buffer.pack_varint(self.start)
+            + Buffer.pack_varint(self.length)
+            + Buffer.pack_varint(len(self.matches))
+        )
 
         for m in self.matches:
             out += Buffer.pack_string(m[0])
 
             if len(m) > 1:
-                out += Buffer.pack('?', True) + Buffer.pack_chat(Chat(m[1]))
+                out += Buffer.pack("?", True) + Buffer.pack_chat(Chat(m[1]))
             else:
-                out += Buffer.pack('?', False)
+                out += Buffer.pack("?", False)
 
         return out

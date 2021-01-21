@@ -5,7 +5,10 @@ from __future__ import annotations
 from pymine.types.buffer import Buffer
 from pymine.types.packet import Packet
 
-__all__ = ('HandshakeLegacyPingRequest', 'HandshakeLegacyPingResponse',)
+__all__ = (
+    "HandshakeLegacyPingRequest",
+    "HandshakeLegacyPingResponse",
+)
 
 
 class HandshakeLegacyPingRequest(Packet):
@@ -34,7 +37,7 @@ class HandshakeLegacyPingRequest(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> HandshakeLegacyPingRequest:
         buf.read(15)
-        return cls(buf.read(1), buf.read(buf.unpack('h')).decode('UTF-16BE'), buf.unpack('i'))
+        return cls(buf.read(1), buf.read(buf.unpack("h")).decode("UTF-16BE"), buf.unpack("i"))
 
 
 class HandshakeLegacyPingResponse(Packet):
@@ -69,5 +72,5 @@ class HandshakeLegacyPingResponse(Packet):
         # b'\x72\x00\x61\x00\x66\x00\x74\x00\x20\x00\x53\x00\x65\x00\x72\x00\x76\x00\x65\x00\x72' \
         # b'\x00\x00\x00\x30\x00\x00\x00\x32\x00\x30'
 
-        out_string = f'§1\x00127\x00{self.motd}\x00{self.players_online}\x00{self.players_max}'
-        return b'\xff' + Buffer.pack('h', len(out_string)) + out_string.encode('UTF-16BE')
+        out_string = f"§1\x00127\x00{self.motd}\x00{self.players_online}\x00{self.players_max}"
+        return b"\xff" + Buffer.pack("h", len(out_string)) + out_string.encode("UTF-16BE")

@@ -7,12 +7,12 @@ from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
 __all__ = (
-    'PlayBlockAction',
-    'PlayBlockChange',
-    'PlayQueryBlockNBT',
-    'PlayBlockPlacement',
-    'PlayNBTQueryResponse',
-    'PlayMultiBlockChange',
+    "PlayBlockAction",
+    "PlayBlockChange",
+    "PlayQueryBlockNBT",
+    "PlayBlockPlacement",
+    "PlayNBTQueryResponse",
+    "PlayMultiBlockChange",
 )
 
 
@@ -47,8 +47,12 @@ class PlayBlockAction(Packet):
         self.block_type = block_type
 
     def encode(self) -> bytes:
-        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack('B', self.action_id) + \
-            Buffer.pack('B', self.action_param) + Buffer.pack_varint(self.block_type)
+        return (
+            Buffer.pack_pos(self.x, self.y, self.z)
+            + Buffer.pack("B", self.action_id)
+            + Buffer.pack("B", self.action_param)
+            + Buffer.pack_varint(self.block_type)
+        )
 
 
 class PlayBlockChange(Packet):
@@ -136,16 +140,17 @@ class PlayBlockPlacement(Packet):
     to = 0
 
     def __init__(
-            self,
-            hand: int,
-            x: int,
-            y: int,
-            z: int,
-            face: int,
-            cur_pos_x: float,
-            cur_pos_y: float,
-            cur_pos_z: float,
-            inside_block: bool) -> None:
+        self,
+        hand: int,
+        x: int,
+        y: int,
+        z: int,
+        face: int,
+        cur_pos_x: float,
+        cur_pos_y: float,
+        cur_pos_z: float,
+        inside_block: bool,
+    ) -> None:
         super().__init__()
 
         self.hand = hand
@@ -162,10 +167,10 @@ class PlayBlockPlacement(Packet):
             buf.unpack_varint(),
             *buf.unpack_pos(),
             buf.unpack_varint(),
-            buf.unpack('f'),
-            buf.unpack('f'),
-            buf.unpack('f'),
-            buf.unpack('?')
+            buf.unpack("f"),
+            buf.unpack("f"),
+            buf.unpack("f"),
+            buf.unpack("?"),
         )
 
 
@@ -215,10 +220,13 @@ class PlayMultiBlockChange(Packet):
         self.blocks = blocks
 
     def encode(self) -> bytes:
-        out = Buffer.pack_varint(
-            ((self.chunk_sect_x & 0x3FFFFF) << 42) |
-            (self.chunk_sect_y & 0xFFFFF) |
-            ((self.chunk_sect_z & 0x3FFFFF) << 20)) + Buffer.pack('?', self.trust_edges) + Buffer.pack_varint(len(self.blocks))
+        out = (
+            Buffer.pack_varint(
+                ((self.chunk_sect_x & 0x3FFFFF) << 42) | (self.chunk_sect_y & 0xFFFFF) | ((self.chunk_sect_z & 0x3FFFFF) << 20)
+            )
+            + Buffer.pack("?", self.trust_edges)
+            + Buffer.pack_varint(len(self.blocks))
+        )
 
         for block_id, local_x, local_y, local_z in self.blocks:
             out += Buffer.pack_varint(block_id << 12 | (local_x << 8 | local_z << 4 | local_y))

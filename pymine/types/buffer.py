@@ -22,7 +22,7 @@ class Buffer:
     """
 
     def __init__(self, buf: bytes = None) -> None:
-        self.buf = b'' if buf is None else buf
+        self.buf = b"" if buf is None else buf
         self.pos = 0
 
     def write(self, data: bytes) -> None:
@@ -39,9 +39,9 @@ class Buffer:
         try:
             if length is None:
                 length = len(self.buf)
-                return self.buf[self.pos:]
+                return self.buf[self.pos :]
 
-            return self.buf[self.pos:self.pos + length]
+            return self.buf[self.pos : self.pos + length]
         finally:
             self.pos += length
 
@@ -57,7 +57,7 @@ class Buffer:
         """
 
         logger.debug(  # We log this here for consistency and not having to implement it everywhere
-            f'OUT: state:unknown     | id:0x{packet.id:02X} | packet:{type(packet).__name__}'
+            f"OUT: state:unknown     | id:0x{packet.id:02X} | packet:{type(packet).__name__}"
         )
 
         data = cls.pack_varint(packet.id) + packet.encode()
@@ -82,7 +82,7 @@ class Buffer:
         return PACKET_MAP[state][self.unpack_varint()].decode(self)
 
     def unpack(self, f: str) -> object:
-        unpacked = struct.unpack('>' + f, self.read(struct.calcsize(f)))
+        unpacked = struct.unpack(">" + f, self.read(struct.calcsize(f)))
 
         if len(unpacked) == 1:
             return unpacked[0]
@@ -91,21 +91,21 @@ class Buffer:
 
     @classmethod
     def pack(self, f: str, *data: object) -> bytes:
-        return struct.pack('>' + f, *data)
+        return struct.pack(">" + f, *data)
 
     @classmethod
     def pack_optional(cls, packer: object, data: object = None) -> bytes:
         """Packs an optional field into bytes."""
 
         if data is None:
-            return cls.pack('?', False)
+            return cls.pack("?", False)
 
-        return cls.pack('?', True) + packer(data)
+        return cls.pack("?", True) + packer(data)
 
     def unpack_optional(self, unpacker: object) -> bool:
         """Unpacks an optional field from the buffer."""
 
-        present = self.unpack('?')
+        present = self.unpack("?")
 
         if present:
             return unpacker()
@@ -117,19 +117,18 @@ class Buffer:
         num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
 
         if not (num_min <= num < num_max):
-            raise ValueError(
-                f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
+            raise ValueError(f"num doesn't fit in given range: {num_min} <= {num} < {num_max}")
 
         if num < 0:
             num += 1 + 1 << 32
 
-        out = b''
+        out = b""
 
         for i in range(10):
             b = num & 0x7F
             num >>= 7
 
-            out += cls.pack('B', (b | (0x80 if num > 0 else 0)))
+            out += cls.pack("B", (b | (0x80 if num > 0 else 0)))
 
             if num == 0:
                 break
@@ -142,7 +141,7 @@ class Buffer:
         num = 0
 
         for i in range(10):
-            b = self.unpack('B')
+            b = self.unpack("B")
             num |= (b & 0x7F) << 7 * i
 
             if not b & 0x80:
@@ -154,7 +153,7 @@ class Buffer:
         num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
 
         if not (num_min <= num < num_max):
-            raise ValueError(f'num doesn\'t fit in given range: {num_min} <= {num} < {num_max}')
+            raise ValueError(f"num doesn't fit in given range: {num_min} <= {num} < {num_max}")
 
         return num
 
@@ -176,26 +175,26 @@ class Buffer:
     def pack_array(cls, f: str, array: list) -> bytes:
         """Packs an array/list into bytes."""
 
-        return struct.pack(f'>{f*len(array)}', *array)
+        return struct.pack(f">{f*len(array)}", *array)
 
     @classmethod
     def pack_string(cls, text: str) -> bytes:
         """Packs a string into bytes."""
 
-        text = text.encode('utf-8')
+        text = text.encode("utf-8")
         return cls.pack_varint(len(text), max_bits=16) + text
 
     def unpack_string(self) -> str:
         """Unpacks a string from the buffer."""
 
         length = self.unpack_varint(max_bits=16)
-        return self.read(length).decode('utf-8')
+        return self.read(length).decode("utf-8")
 
     def unpack_array(self, f: str, length: int) -> list:
         """Unpacks an array/list from the buffer."""
 
-        data = self.read(struct.calcsize(f'>{f}') * length)
-        return list(struct.unpack(f'>{f*length}', data))
+        data = self.read(struct.calcsize(f">{f}") * length)
+        return list(struct.unpack(f">{f*length}", data))
 
     @classmethod
     def pack_json(cls, obj: object) -> bytes:
@@ -213,7 +212,7 @@ class Buffer:
         """Packs an NBT tag into bytes."""
 
         if tag is None:
-            return b'\x00'
+            return b"\x00"
 
         buf = cls()
         tag._render_buffer(buf)
@@ -254,22 +253,20 @@ class Buffer:
         def to_twos_complement(num, bits):
             return num + (1 << bits) if num < 0 else num
 
-        return struct.pack('>Q', sum((
-            to_twos_complement(x, 26) << 38,
-            to_twos_complement(z, 26) << 12,
-            to_twos_complement(y, 12)
-        )))
+        return struct.pack(
+            ">Q", sum((to_twos_complement(x, 26) << 38, to_twos_complement(z, 26) << 12, to_twos_complement(y, 12)))
+        )
 
     def unpack_pos(self) -> tuple:
         """Unpacks a Minecraft position (x, y, z) from the buffer."""
 
         def from_twos_complement(num, bits):
             if num & (1 << (bits - 1)) != 0:
-                num -= (1 << bits)
+                num -= 1 << bits
 
             return num
 
-        data = self.unpack('Q')
+        data = self.unpack("Q")
 
         x = from_twos_complement(data >> 38, 26)
         z = from_twos_complement(data >> 12 & 0x3FFFFFF, 26)
@@ -284,10 +281,9 @@ class Buffer:
         item_id = ITEM_REGISTRY.encode(item)  # needed to support recipes
 
         if item_id is None:
-            return cls.pack('?', False)
+            return cls.pack("?", False)
 
-        return cls.pack('?', True) + cls.pack_varint(item_id) + \
-            cls.pack('b', count) + cls.pack_nbt(tag)
+        return cls.pack("?", True) + cls.pack_varint(item_id) + cls.pack("b", count) + cls.pack_nbt(tag)
 
     def unpack_slot(self):
         """Unpacks an inventory/container slot from the buffer."""
@@ -295,24 +291,20 @@ class Buffer:
         has_item_id = self.unpack_optional()
 
         if not has_item_id:
-            return {'item': None}
+            return {"item": None}
 
-        return {
-            'item': ITEM_REGISTRY.decode(self.unpack_varint()),
-            'count': self.unpack('b'),
-            'tag': self.unpack_nbt()
-        }
+        return {"item": ITEM_REGISTRY.decode(self.unpack_varint()), "count": self.unpack("b"), "tag": self.unpack_nbt()}
 
     @classmethod
     def pack_rotation(cls, x: float, y: float, z: float) -> bytes:
         """Packs a rotation (of an entity) into bytes."""
 
-        return cls.pack('fff', x, y, z)
+        return cls.pack("fff", x, y, z)
 
     def unpack_rotation(self):
         """Unpacks a rotation (of an entity) from the buffer."""
 
-        return self.unpack('fff')
+        return self.unpack("fff")
 
     @classmethod
     def pack_direction(cls, direction: str) -> bytes:
@@ -341,12 +333,12 @@ class Buffer:
         """Packs a recipe ingredient into bytes."""
 
         if isinstance(ingredient, list):
-            return cls.pack_varint(len(ingredient)) + b''.join(cls.pack_slot(**slot) for slot in ingredient)
+            return cls.pack_varint(len(ingredient)) + b"".join(cls.pack_slot(**slot) for slot in ingredient)
 
         if isinstance(ingredient, dict):
             return cls.pack_varint(1) + cls.pack_slot(**ingredient)
 
-        raise TypeError(f'Ingredient should be of type list or dict but was instead of type {type(ingredient)}')
+        raise TypeError(f"Ingredient should be of type list or dict but was instead of type {type(ingredient)}")
 
     # def unpack_ingredient(self):
     #     """Unpacks a recipe ingredient from the buffer."""
@@ -397,47 +389,47 @@ class Buffer:
         #   }
         # }
 
-        recipe_type = recipe['type']
+        recipe_type = recipe["type"]
 
         out = cls.pack_string(recipe_type) + cls.pack_string(recipe_id)
 
-        if recipe_type == 'minecraft:crafting_shapeless':
-            out += cls.pack_string(recipe['group'])
-            out += cls.pack_varint(len(recipe['ingredients']))  # Length of ingredient array
-            out += b''.join(cls.pack_ingredient(ingredient) for ingredient in recipe['ingredients'])
-            out += cls.pack_slot(**recipe['result'])
-        elif recipe_type == 'minecraft:crafting_shaped':
-            width = len(recipe['pattern'][0])  # Width of pattern
-            height = len(recipe['pattern'])  # Height of pattern
+        if recipe_type == "minecraft:crafting_shapeless":
+            out += cls.pack_string(recipe["group"])
+            out += cls.pack_varint(len(recipe["ingredients"]))  # Length of ingredient array
+            out += b"".join(cls.pack_ingredient(ingredient) for ingredient in recipe["ingredients"])
+            out += cls.pack_slot(**recipe["result"])
+        elif recipe_type == "minecraft:crafting_shaped":
+            width = len(recipe["pattern"][0])  # Width of pattern
+            height = len(recipe["pattern"])  # Height of pattern
 
             out += cls.pack_varint(width)
             out += cls.pack_varint(height)
-            out += cls.pack_string(recipe['group'])
+            out += cls.pack_string(recipe["group"])
 
             out += cls.pack_varint(width * height)  # pack length of ingredients array
 
-            for row in recipe['pattern']:
+            for row in recipe["pattern"]:
                 for key in row:
-                    if recipe['key'][key].get('item'):
-                        out += cls.pack_ingredient(recipe['key'][key])
+                    if recipe["key"][key].get("item"):
+                        out += cls.pack_ingredient(recipe["key"][key])
 
-            out += cls.pack_slot(**recipe['result'])
+            out += cls.pack_slot(**recipe["result"])
         elif recipe_type in misc_data.SMELT_TYPES:  # SMELT_TYPES imported from misc.py
-            out += cls.pack_string(recipe['group'])
-            out += cls.pack_ingredient(recipe['ingredient'])
-            out += cls.pack_slot(**recipe['result'])
-            out += cls.pack('f', recipe['experience'])
-            out += cls.pack_varint(recipe['cookingtime'])
-        elif recipe_type == 'minecraft:stonecutting':  # Stone cutter recipes are fucky wucky, so we have to do some jank here
+            out += cls.pack_string(recipe["group"])
+            out += cls.pack_ingredient(recipe["ingredient"])
+            out += cls.pack_slot(**recipe["result"])
+            out += cls.pack("f", recipe["experience"])
+            out += cls.pack_varint(recipe["cookingtime"])
+        elif recipe_type == "minecraft:stonecutting":  # Stone cutter recipes are fucky wucky, so we have to do some jank here
             # For some reason some recipes don't include the group?
-            out += cls.pack_string(recipe.get('group', ''))
-            out += cls.pack_ingredient(recipe['ingredient'])
+            out += cls.pack_string(recipe.get("group", ""))
+            out += cls.pack_ingredient(recipe["ingredient"])
             # again, stone cutter recipes are fucky wucky
-            out += cls.pack_slot(item=recipe['result'], count=recipe['count'])
-        elif recipe_type == 'minecraft:smithing':
-            out += cls.pack_ingredient(recipe['base'])
-            out += cls.pack_ingredient(recipe['addition'])
-            out += cls.pack_slot(**recipe['result'])
+            out += cls.pack_slot(item=recipe["result"], count=recipe["count"])
+        elif recipe_type == "minecraft:smithing":
+            out += cls.pack_ingredient(recipe["base"])
+            out += cls.pack_ingredient(recipe["addition"])
+            out += cls.pack_slot(**recipe["result"])
 
         return out
 
@@ -450,80 +442,91 @@ class Buffer:
     def unpack_villager(self) -> dict:
         """Unpacks villager data from the buffer."""
 
-        return {
-            'kind': self.unpack_varint(),
-            'profession': self.unpack_varint(),
-            'level': self.unpack_varint()
-        }
+        return {"kind": self.unpack_varint(), "profession": self.unpack_varint(), "level": self.unpack_varint()}
 
     @classmethod
     def pack_trade(
-            cls,
-            in_item_1: dict,
-            out_item: dict,
-            disabled: bool,
-            num_trade_usages: int,
-            max_trade_usages: int,
-            xp: int,
-            special_price: int,
-            price_multi: float,
-            demand: int,
-            in_item_2: dict = None) -> bytes:
+        cls,
+        in_item_1: dict,
+        out_item: dict,
+        disabled: bool,
+        num_trade_usages: int,
+        max_trade_usages: int,
+        xp: int,
+        special_price: int,
+        price_multi: float,
+        demand: int,
+        in_item_2: dict = None,
+    ) -> bytes:
         out = Buffer.pack_slot(**in_item_1) + Buffer.pack_slot(**out_item)
 
         if in_item_2 is not None:
-            out += Buffer.pack('?', True) + Buffer.pack_slot(**in_item_2)
+            out += Buffer.pack("?", True) + Buffer.pack_slot(**in_item_2)
         else:
-            out += Buffer.pack('?', False)
+            out += Buffer.pack("?", False)
 
-        return out + Buffer.pack('?', disabled) + Buffer.pack('i', num_trade_usages) + Buffer.pack('i', max_trade_usages) + \
-            Buffer.pack('i', xp) + Buffer.pack('i', special_price) + Buffer.pack('f', price_multi) + Buffer.pack('i', demand)
+        return (
+            out
+            + Buffer.pack("?", disabled)
+            + Buffer.pack("i", num_trade_usages)
+            + Buffer.pack("i", max_trade_usages)
+            + Buffer.pack("i", xp)
+            + Buffer.pack("i", special_price)
+            + Buffer.pack("f", price_multi)
+            + Buffer.pack("i", demand)
+        )
 
     @classmethod
     def pack_particle(cls, **particle):
-        particle_id = particle['id']
+        particle_id = particle["id"]
         out = cls.pack_varint(particle_id)
 
-        if particle_id in (3, 23,):
-            out += cls.pack_varint(particle['block_state'])
+        if particle_id in (
+            3,
+            23,
+        ):
+            out += cls.pack_varint(particle["block_state"])
         elif particle_id == 14:
-            out += cls.pack('ffff', particle['red'], particle['green'], particle['blue'], particle['scale'])
+            out += cls.pack("ffff", particle["red"], particle["green"], particle["blue"], particle["scale"])
         elif particle_id == 32:
-            out += cls.pack_slot(**particle['item'])
+            out += cls.pack_slot(**particle["item"])
 
         return out
 
     def unpack_particle(self):
         particle = {}
-        particle_id = particle['id'] = self.unpack_varint()
+        particle_id = particle["id"] = self.unpack_varint()
 
-        if particle_id in (3, 23,):
-            particle['block_state'] = self.unpack_varint()
+        if particle_id in (
+            3,
+            23,
+        ):
+            particle["block_state"] = self.unpack_varint()
         elif particle_id == 14:
-            particle['red'] = self.unpack('f')
-            particle['green'] = self.unpack('f')
-            particle['blue'] = self.unpack('f')
-            particle['scale'] = self.unpack('f')
+            particle["red"] = self.unpack("f")
+            particle["green"] = self.unpack("f")
+            particle["blue"] = self.unpack("f")
+            particle["scale"] = self.unpack("f")
         elif particle_id == 32:
-            particle['item'] = self.unpack_slot()
+            particle["item"] = self.unpack_slot()
 
         return particle
 
     @classmethod
     def pack_entity_metadata(cls, metadata: dict) -> bytes:
-        out = b''
+        out = b""
 
         for index_and_type, value in metadata.items():
             index, type_ = index_and_type
 
-            out += cls.pack('B', index) + cls.pack_varint(type_)
+            out += cls.pack("B", index) + cls.pack_varint(type_)
 
             if type_ == 0:  # byte
-                out += cls.pack('b', value)
+                out += cls.pack("b", value)
             elif type_ == 1:  # varint
                 out += cls.pack_varint(value)
             elif type_ == 2:  # float
-                out += cls.pack('f', value)
+                out += cls.pack("f", value)
             elif type_ == 3:  # string
                 out += cls.pack_string(value)
             elif type_ == 4:  # Chat
@@ -533,16 +536,16 @@ class Buffer:
             elif type_ == 6:  # Slot
                 out += cls.pack_slot(**value)
             elif type_ == 7:  # bool
-                out += cls.pack('?', value)
+                out += cls.pack("?", value)
             elif type_ == 8:  # rotation
                 out += cls.pack_rotation(*value)
             elif type_ == 9:  # position
                 out += cls.pack_pos(*value)
             elif type_ == 10:  # optional position
                 if value is not None:
-                    out += cls.pack_bool('?', True) + cls.pack_pos(*value)
+                    out += cls.pack_bool("?", True) + cls.pack_pos(*value)
                 else:
-                    out += cls.pack_bool('?', False)
+                    out += cls.pack_bool("?", False)
             elif type_ == 11:  # direction
                 out += cls.pack_direction(value)
             elif type_ == 12:  # optional uuid
@@ -560,4 +563,4 @@ class Buffer:
             elif type_ == 18:  # pose
                 out += cls.pack_pose(value)
 
-        return out + b'\xFE'
+        return out + b"\xFE"

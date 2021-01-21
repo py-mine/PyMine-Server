@@ -10,17 +10,17 @@ registered_commands = {}  # {name: (function, permission_node),..}
 
 # loads default built in commands
 def load_commands():  # only loads commands inside cmds folder, not subfolders
-    for file in os.listdir('pymine/logic/cmds'):
-        if file.endswith('.py'):
-            importlib.import_module(f'pymine.logic.cmds.{file[:-3]}')
+    for file in os.listdir("pymine/logic/cmds"):
+        if file.endswith(".py"):
+            importlib.import_module(f"pymine.logic.cmds.{file[:-3]}")
 
 
 def on_command(name: str, node: str):
     if name in registered_commands:
-        raise ValueError('Command name is already in use.')
+        raise ValueError("Command name is already in use.")
 
-    if ' ' in name:
-        raise ValueError('Command name may not contain spaces.')
+    if " " in name:
+        raise ValueError("Command name may not contain spaces.")
 
     def command_deco(func):
         registered_commands[name] = func, node
@@ -30,10 +30,10 @@ def on_command(name: str, node: str):
 
 
 async def handle_server_command(in_text: str):
-    in_split = in_text.split(' ')
+    in_split = in_text.split(" ")
     cmd = in_split.pop(0)
 
-    args = ' '.join(in_split)
+    args = " ".join(in_split)
 
     reg_cmd = registered_commands.get(cmd)
 
@@ -42,19 +42,19 @@ async def handle_server_command(in_text: str):
 
         try:
             if asyncio.iscoroutinefunction(cmd_func):
-                await cmd_func('server', args)
+                await cmd_func("server", args)
             else:
-                cmd_func('server', args)
+                cmd_func("server", args)
         except BaseException as e:
             logger.error(logger.f_traceback(e))
     else:
-        logger.warn(f'Invalid/unknown command: {cmd}')
+        logger.warn(f"Invalid/unknown command: {cmd}")
 
 
 async def handle_server_commands():
     try:
         while True:
-            in_text = await aioconsole.ainput('>')
+            in_text = await aioconsole.ainput(">")
 
             # In the future, commands *should* be handled async,
             # however, due to the way the console works rn we can't

@@ -5,7 +5,7 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlayGenerateStructure', 'PlayUpdateJigsawBlock', 'PlayUpdateStructureBlock')
+__all__ = ("PlayGenerateStructure", "PlayUpdateJigsawBlock", "PlayUpdateStructureBlock")
 
 
 class PlayGenerateStructure(Packet):
@@ -37,7 +37,7 @@ class PlayGenerateStructure(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayGenerateStructure:
-        return cls(*buf.unpack_pos(), buf.unpack_varint(), buf.unpack('?'))
+        return cls(*buf.unpack_pos(), buf.unpack_varint(), buf.unpack("?"))
 
 
 class PlayUpdateJigsawBlock(Packet):
@@ -84,7 +84,7 @@ class PlayUpdateJigsawBlock(Packet):
             buf.unpack_string(),
             buf.unpack_string(),
             buf.unpack_string(),
-            buf.unpack_string()
+            buf.unpack_string(),
         )
 
 
@@ -135,25 +135,26 @@ class PlayUpdateStructureBlock(Packet):
     to = 0
 
     def __init__(
-            self,
-            x: int,
-            y: int,
-            z: int,
-            action: int,
-            mode: int,
-            name: str,
-            offset_x: int,
-            offset_y: int,
-            offset_z: int,
-            size_x: int,
-            size_y: int,
-            size_z: int,
-            mirror: int,
-            rotation: int,
-            metadata: str,
-            integrity: float,
-            seed: int,
-            flags: int) -> None:
+        self,
+        x: int,
+        y: int,
+        z: int,
+        action: int,
+        mode: int,
+        name: str,
+        offset_x: int,
+        offset_y: int,
+        offset_z: int,
+        size_x: int,
+        size_y: int,
+        size_z: int,
+        mirror: int,
+        rotation: int,
+        metadata: str,
+        integrity: float,
+        seed: int,
+        flags: int,
+    ) -> None:
         super().__init__()
 
         self.x, self.y, self.z = x, y, z
@@ -176,16 +177,16 @@ class PlayUpdateStructureBlock(Packet):
             buf.unpack_varint(),
             buf.unpack_varint(),
             buf.unpack_string(),
-            buf.unpack('b'),
-            buf.unpack('b'),
-            buf.unpack('b'),
-            buf.unpack('b'),
-            buf.unpack('b'),
-            buf.unpack('b'),
+            buf.unpack("b"),
+            buf.unpack("b"),
+            buf.unpack("b"),
+            buf.unpack("b"),
+            buf.unpack("b"),
+            buf.unpack("b"),
             buf.unpack_varint(),
             buf.unpack_varint(),
             buf.unpack_string(),
-            buf.unpack('f'),
+            buf.unpack("f"),
             buf.unpack_varint(),
-            buf.unpack('b')
+            buf.unpack("b"),
         )

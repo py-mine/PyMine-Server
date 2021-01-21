@@ -5,7 +5,10 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlaySelectTrade', 'PlayTradeList',)
+__all__ = (
+    "PlaySelectTrade",
+    "PlayTradeList",
+)
 
 
 class PlaySelectTrade(Packet):
@@ -65,6 +68,12 @@ class PlayTradeList(Packet):
         self.can_restock = can_restock
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.window_id) + Buffer.pack('b', len(self.trades)) + \
-            b''.join(Buffer.pack_trade(**trade) for trade in self.trades) + Buffer.pack_varint(self.villager_lvl) + \
-            Buffer.pack_varint(self.xp) + Buffer.pack('?', self.is_regular) + Buffer.pack('?', self.can_restock)
+        return (
+            Buffer.pack_varint(self.window_id)
+            + Buffer.pack("b", len(self.trades))
+            + b"".join(Buffer.pack_trade(**trade) for trade in self.trades)
+            + Buffer.pack_varint(self.villager_lvl)
+            + Buffer.pack_varint(self.xp)
+            + Buffer.pack("?", self.is_regular)
+            + Buffer.pack("?", self.can_restock)
+        )

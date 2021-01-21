@@ -5,7 +5,7 @@ from __future__ import annotations
 from pymine.types.buffer import Buffer
 from pymine.types.packet import Packet
 
-__all__ = ('HandshakeHandshake',)
+__all__ = ("HandshakeHandshake",)
 
 
 class HandshakeHandshake(Packet):
@@ -36,4 +36,4 @@ class HandshakeHandshake(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> HandshakeHandshake:
-        return cls(buf.unpack_varint(), buf.unpack_string(), buf.unpack('H'), buf.unpack_varint())
+        return cls(buf.unpack_varint(), buf.unpack_string(), buf.unpack("H"), buf.unpack_varint())

@@ -5,7 +5,7 @@ from __future__ import annotations
 from pymine.types.buffer import Buffer
 from pymine.types.packet import Packet
 
-__all__ = ('LoginSetCompression',)
+__all__ = ("LoginSetCompression",)
 
 
 class LoginSetCompression(Packet):

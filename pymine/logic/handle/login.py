@@ -17,29 +17,30 @@ from pymine.types.packets.login.set_comp import LoginSetCompression
 import pymine.types.packets.login.login as login_packets
 
 login_cache = {}
-states = share['states']
+states = share["states"]
 
 
-@handle_packet('login', 0x00)
+@handle_packet("login", 0x00)
 async def login_start(stream: Stream, packet: Packet) -> tuple:
-    if share['conf']['online_mode']:  # Online mode is enabled, so we request encryption
-        lc = login_cache[stream.remote] = {'username': packet.username, 'verify': None}
+    if share["conf"]["online_mode"]:  # Online mode is enabled, so we request encryption
+        lc = login_cache[stream.remote] = {"username": packet.username, "verify": None}
 
         packet = login_packets.LoginEncryptionRequest(
-            share['rsa']['public'].public_bytes(
-                encoding=serialization.Encoding.DER,
-                format=serialization.PublicFormat.SubjectPublicKeyInfo
+            share["rsa"]["public"].public_bytes(
+                encoding=serialization.Encoding.DER, format=serialization.PublicFormat.SubjectPublicKeyInfo
             )
         )
 
-        lc['verify'] = packet.verify_token
+        lc["verify"] = packet.verify_token
 
         stream.write(Buffer.pack_packet(packet))
         await stream.drain()
     else:  # No need for encryption since online mode is off, just send login success
-        uuid_ = uuid.uuid4()  # This should be only generated if the player name isn't found in the world data, but no way to do that rn
+        uuid_ = (
+            uuid.uuid4()
+        )  # This should be only generated if the player name isn't found in the world data, but no way to do that rn
 
-        stream.write(Buffer.pack_packet(login_packets.LoginSuccess(uuid_, packet.username), share['comp_thresh']))
+        stream.write(Buffer.pack_packet(login_packets.LoginSuccess(uuid_, packet.username), share["comp_thresh"]))
         await stream.drain()
 
         states[stream.remote] = 3  # Update state to play
@@ -47,14 +48,14 @@ async def login_start(stream: Stream, packet: Packet) -> tuple:
     return True, stream
 
 
-@handle_packet('login', 0x01)
+@handle_packet("login", 0x01)
 async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
     shared_key, auth = await server_auth(packet, stream.remote, login_cache[stream.remote])
 
     del login_cache[stream.remote]  # No longer needed
 
     if not auth:  # If authentication failed, disconnect client
-        stream.write(Buffer.pack_packet(login_packets.LoginDisconnect('Failed to authenticate your connection.')))
+        stream.write(Buffer.pack_packet(login_packets.LoginDisconnect("Failed to authenticate your connection.")))
         await stream.drain()
         return False, stream
 
@@ -64,12 +65,12 @@ async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
     # Replace stream with one which auto decrypts + encrypts data when reading/writing
     stream = EncryptedStream(stream, cipher)
 
-    if share['comp_thresh'] > 0:  # Send set compression packet if needed
-        stream.write(Buffer.pack_packet(LoginSetCompression(share['comp_thresh'])))
+    if share["comp_thresh"] > 0:  # Send set compression packet if needed
+        stream.write(Buffer.pack_packet(LoginSetCompression(share["comp_thresh"])))
         await stream.drain()
 
     # Send LoginSuccess packet, tells client they've logged in succesfully
-    stream.write(Buffer.pack_packet(login_packets.LoginSuccess(*auth), share['comp_thresh']))
+    stream.write(Buffer.pack_packet(login_packets.LoginSuccess(*auth), share["comp_thresh"]))
     await stream.drain()
 
     return True, stream
@@ -78,26 +79,28 @@ async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
 # Verifies that the shared key and token are the same, and does other authentication methods
 # Returns the decrypted shared key and the client's username and uuid
 async def server_auth(packet: login_packets.LoginEncryptionResponse, remote: tuple, cache: dict) -> tuple:
-    if share['rsa']['private'].decrypt(packet.verify_token, PKCS1v15()) == cache['verify']:
-        decrypted_shared_key = share['rsa']['private'].decrypt(packet.shared_key, PKCS1v15())
+    if share["rsa"]["private"].decrypt(packet.verify_token, PKCS1v15()) == cache["verify"]:
+        decrypted_shared_key = share["rsa"]["private"].decrypt(packet.shared_key, PKCS1v15())
 
-        resp = await share['ses'].get(
-            'https://sessionserver.mojang.com/session/minecraft/hasJoined',
+        resp = await share["ses"].get(
+            "https://sessionserver.mojang.com/session/minecraft/hasJoined",
             params={
-                'username': cache['username'],
-                'serverId': encryption.gen_verify_hash(
+                "username": cache["username"],
+                "serverId": encryption.gen_verify_hash(
                     decrypted_shared_key,
-                    share['rsa']['public'].public_bytes(
-                        encoding=serialization.Encoding.DER,
-                        format=serialization.PublicFormat.SubjectPublicKeyInfo
-                    )
-                )
-            }
+                    share["rsa"]["public"].public_bytes(
+                        encoding=serialization.Encoding.DER, format=serialization.PublicFormat.SubjectPublicKeyInfo
+                    ),
+                ),
+            },
         )
 
         jj = await resp.json()
 
         if jj is not None:
-            return decrypted_shared_key, (uuid.UUID(jj['id']), jj['name'],)
+            return decrypted_shared_key, (
+                uuid.UUID(jj["id"]),
+                jj["name"],
+            )
 
     return False, False

@@ -4,7 +4,7 @@ from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 from pymine.types.chat import Chat
 
-__all__ = ('PlayPlayerListHeaderAndFooter',)
+__all__ = ("PlayPlayerListHeaderAndFooter",)
 
 
 class PlayPlayerListHeaderAndFooter(Packet):

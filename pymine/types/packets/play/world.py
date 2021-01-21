@@ -5,7 +5,7 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlayWorldBorder',)
+__all__ = ("PlayWorldBorder",)
 
 
 class PlayWorldBorder(Packet):
@@ -32,20 +32,29 @@ class PlayWorldBorder(Packet):
         out = Buffer.pack_varint(self.action)
 
         if self.action == 0:  # set size
-            out += Buffer.pack('d', self.data['diameter'])
+            out += Buffer.pack("d", self.data["diameter"])
         elif self.action == 1:  # lerp size
-            out += Buffer.pack('d', self.data['old_diameter']) + Buffer.pack('d', self.data['new_diameter']) + \
-                Buffer.pack_varint(self.data['speed'])
+            out += (
+                Buffer.pack("d", self.data["old_diameter"])
+                + Buffer.pack("d", self.data["new_diameter"])
+                + Buffer.pack_varint(self.data["speed"])
+            )
         elif self.action == 2:  # set center
-            out += Buffer.pack('d', self.data['x']) + Buffer.pack('d', self.data['z'])
+            out += Buffer.pack("d", self.data["x"]) + Buffer.pack("d", self.data["z"])
         elif self.action == 3:  # initialize
-            out += Buffer.pack('d', self.data['x']) + Buffer.pack('d', self.data['z']) + \
-                Buffer.pack('d', self.data['old_diameter']) + Buffer.pack('d', self.data['new_diameter']) + \
-                Buffer.pack_varint(self.data['speed']) + Buffer.pack_varint(self.data['portal_teleport_boundary']) + \
-                Buffer.pack_varint(self.data['warning_blocks']) + Buffer.pack_varint(self.data['warning_time'])
+            out += (
+                Buffer.pack("d", self.data["x"])
+                + Buffer.pack("d", self.data["z"])
+                + Buffer.pack("d", self.data["old_diameter"])
+                + Buffer.pack("d", self.data["new_diameter"])
+                + Buffer.pack_varint(self.data["speed"])
+                + Buffer.pack_varint(self.data["portal_teleport_boundary"])
+                + Buffer.pack_varint(self.data["warning_blocks"])
+                + Buffer.pack_varint(self.data["warning_time"])
+            )
         elif self.action == 4:  # set warning time
-            out += Buffer.pack_varint(self.data['warning_time'])
+            out += Buffer.pack_varint(self.data["warning_time"])
         elif self.action == 5:  # set warning blocks
-            out += Buffer.pack_varint(self.data['warning_blocks'])
+            out += Buffer.pack_varint(self.data["warning_blocks"])
 
         return out

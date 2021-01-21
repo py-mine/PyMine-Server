@@ -5,7 +5,7 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlayUpdateTime',)
+__all__ = ("PlayUpdateTime",)
 
 
 class PlayUpdateTime(Packet):
@@ -27,4 +27,4 @@ class PlayUpdateTime(Packet):
         self.day_time = day_time
 
     def encode(self) -> bytes:
-        return Buffer.pack('l', self.world_age) + Buffer.pack('l', self.day_time)
+        return Buffer.pack("l", self.world_age) + Buffer.pack("l", self.day_time)

@@ -3,7 +3,11 @@ from __future__ import annotations
 from pymine.types.buffer import Buffer
 from pymine.types.packet import Packet
 
-__all__ = ('StatusStatusRequest', 'StatusStatusResponse', 'StatusStatusPingPong',)
+__all__ = (
+    "StatusStatusRequest",
+    "StatusStatusResponse",
+    "StatusStatusPingPong",
+)
 
 
 class StatusStatusRequest(Packet):
@@ -85,7 +89,7 @@ class StatusStatusPingPong(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> StatusStatusPingPong:
-        return cls(buf.unpack('q'))
+        return cls(buf.unpack("q"))
 
     def encode(self) -> bytes:
-        return Buffer.pack('q', self.payload)
+        return Buffer.pack("q", self.payload)

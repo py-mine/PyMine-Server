@@ -6,8 +6,8 @@ from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
 __all__ = (
-    'PlayNamedSoundEffect',
-    'PlayEntitySoundEffect',
+    "PlayNamedSoundEffect",
+    "PlayEntitySoundEffect",
 )
 
 
@@ -18,14 +18,8 @@ class PlayNamedSoundEffect(Packet):
     to = 1
 
     def __init__(
-            self,
-            name: str,
-            category: int,
-            effect_pos_x: int,
-            effect_pos_y: int,
-            effect_pos_z: int,
-            volume: int,
-            pitch: int) -> None:
+        self, name: str, category: int, effect_pos_x: int, effect_pos_y: int, effect_pos_z: int, volume: int, pitch: int
+    ) -> None:
         super().__init__()
 
         self.name = name
@@ -37,9 +31,16 @@ class PlayNamedSoundEffect(Packet):
         self.pitch = pitch
 
     def encode(self) -> bytes:
-        return Buffer.pack_string(self.name) + Buffer.pack_varint(self.category) + Buffer.pack('i', self.category) + \
-            Buffer.pack('i', self.effect_pos_x) + Buffer.pack('i', self.effect_pos_y) + Buffer.pack('i', self.effect_pos_z) + \
-            Buffer.pack('f', self.volume) + Buffer.pack('f', self.pitch)
+        return (
+            Buffer.pack_string(self.name)
+            + Buffer.pack_varint(self.category)
+            + Buffer.pack("i", self.category)
+            + Buffer.pack("i", self.effect_pos_x)
+            + Buffer.pack("i", self.effect_pos_y)
+            + Buffer.pack("i", self.effect_pos_z)
+            + Buffer.pack("f", self.volume)
+            + Buffer.pack("f", self.pitch)
+        )
 
 
 class PlayEntitySoundEffect(Packet):
@@ -58,5 +59,10 @@ class PlayEntitySoundEffect(Packet):
         self.pitch = pitch
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.sound_id) + Buffer.pack_varint(self.category) + Buffer.pack_varint(self.eid) + \
-            Buffer.pack('f', self.volume) + Buffer.pack('f', self.pitch)
+        return (
+            Buffer.pack_varint(self.sound_id)
+            + Buffer.pack_varint(self.category)
+            + Buffer.pack_varint(self.eid)
+            + Buffer.pack("f", self.volume)
+            + Buffer.pack("f", self.pitch)
+        )

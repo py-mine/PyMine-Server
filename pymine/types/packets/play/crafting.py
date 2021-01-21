@@ -6,11 +6,11 @@ from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
 __all__ = (
-    'PlayCraftRecipeRequest',
-    'PlaySetDisplayedRecipe',
-    'PlaySetRecipeBookState',
-    'PlayCraftRecipeResponse',
-    'PlayDeclareRecipes',
+    "PlayCraftRecipeRequest",
+    "PlaySetDisplayedRecipe",
+    "PlaySetRecipeBookState",
+    "PlayCraftRecipeResponse",
+    "PlayDeclareRecipes",
 )
 
 
@@ -39,7 +39,7 @@ class PlayCraftRecipeRequest(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayCraftRecipeRequest:
-        return cls(buf.unpack('b'), buf.unpack_string(), buf.unpack('?'))
+        return cls(buf.unpack("b"), buf.unpack_string(), buf.unpack("?"))
 
 
 class PlaySetDisplayedRecipe(Packet):
@@ -89,7 +89,7 @@ class PlaySetRecipeBookState(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlaySetRecipeBookState:
-        return cls(buf.unpack_varint(), buf.unpack('?'), buf.unpack('?'))
+        return cls(buf.unpack_varint(), buf.unpack("?"), buf.unpack("?"))
 
 
 class PlayCraftRecipeResponse(Packet):
@@ -105,7 +105,7 @@ class PlayCraftRecipeResponse(Packet):
         self.recipe_identifier = recipe_identifier
 
     def encode(self) -> bytes:
-        return Buffer.pack('b', self.window_id) + Buffer.pack_string(self.recipe_identifier)
+        return Buffer.pack("b", self.window_id) + Buffer.pack_string(self.recipe_identifier)
 
 
 class PlayDeclareRecipes(Packet):
@@ -126,4 +126,4 @@ class PlayDeclareRecipes(Packet):
         self.recipes = recipes  # should be the RECIPE map
 
     def encode(self) -> bytes:
-        return b''.join(Buffer.pack_recipe(rid, r) for rid, r in self.recipes.items())
+        return b"".join(Buffer.pack_recipe(rid, r) for rid, r in self.recipes.items())

@@ -18,5 +18,5 @@ def gen_seed() -> int:
 
 def seed_hash(seed: int):
     m = hashlib.sha256()
-    m.update(seed.to_bytes(8, 'big'))
-    return int.from_bytes(m.digest()[:8], 'big')
+    m.update(seed.to_bytes(8, "big"))
+    return int.from_bytes(m.digest()[:8], "big")

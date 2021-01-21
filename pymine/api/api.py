@@ -58,7 +58,7 @@ def load_plugin(git_dir, plugin_name):
     logger.info(f'Checking for updates for plugin {plugin_name}...')
 
     try:
-        update_repo(git_dir, conf['git_url'], conf['root_folder'], plugin_name)
+        update_repo(git_dir, conf['git_url'], root_folder, plugin_name)
     except BaseException as e:
         logger.error(f'Failed to update plugin {plugin_name} due to: {logger.f_traceback(e)}')
         return

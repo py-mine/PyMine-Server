@@ -58,7 +58,7 @@ def plugin_conf_valid(conf):
     return True
 
 
-def load_plugin(git_dir, plugin_name):
+async def load_plugin(git_dir, plugin_name):
     root = os.path.join('plugins', plugin_name)
 
     if os.path.isfile(root):
@@ -109,6 +109,12 @@ def load_plugin(git_dir, plugin_name):
         logger.error(f'Failed to import plugin {root} due to: {logger.f_traceback(e)}')
         return
 
+    try:
+        await plugin_module.setup()
+    except BaseException as e:
+        logger.error(f'Failed to setup plugin {root} due to: {logger.f_traceback(e)}')
+        return
+
     plugins[plugin_path] = plugin_module
 
 
@@ -130,7 +136,7 @@ async def init():  # called when server starts up
 
     for plugin in plugins_dir:
         try:
-            load_plugin(git_dir, plugin)
+            await load_plugin(git_dir, plugin)
         except BaseException as e:
             logger.error(f'Failed to load plugin {plugin} due to: {logger.f_traceback(e)}')
 

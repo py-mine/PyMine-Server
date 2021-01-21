@@ -7,9 +7,18 @@ jobs:
       - uses: actions/checkout@v2
         with:
             ref: ${{ github.head_ref }}
+
       - uses: actions/setup-python@v1
+
       - run: pip install black
+
+      - name: autoblack_check
+        id: black-check
+        continue-on-error: true
+        run: black --check -l 127 .
+
       - name: autoblack_push
+        if: steps.black-check.outcome != 'success'
         run: |
           black -l 127 .
           git config --global user.name github-actions

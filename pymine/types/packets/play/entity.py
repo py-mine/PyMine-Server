@@ -24,6 +24,7 @@ __all__ = (
     "PlayPlayerPostitionAndLookClientBound",
     "PlayDestroyEntities",
     "PlayEntityMetadata",
+    'PlayEntityEquipment',
 )
 
 
@@ -469,7 +470,7 @@ class PlayEntityMetadata(Packet):
     id = 0x44
     to = 1
 
-    def __init__(self, entity_id: int, metadata: dict):
+    def __init__(self, entity_id: int, metadata: dict) -> None:
         super().__init__()
 
         self.entity_id = entity_id
@@ -480,8 +481,24 @@ class PlayEntityMetadata(Packet):
 
 
 class PlayEntityEquipment(Packet):
+    """Sends data about the entity's equipped equipment
+
+    :param int entity_id: The ID of the entity the equipment data is for.
+    :param list equipment: An array of equipment, see here: https://wiki.vg/Protocol#Entity_Equipment`.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr entity_id:
+    :attr equipment:
+    """
 
     id = 0x47
     to = 1
 
-    def __init__(self, )
+    def __init__(self, entity_id: int, equipment: list) -> None:
+        super().__init__()
+
+        self.entity_id = entity_id
+        self.equipment = equipment
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack_varint(len(self.equipment)) + b''.join(Buffer.pack('b', e[0]) + Buffer.pack_slot(**e[1]) for e in self.equipment)

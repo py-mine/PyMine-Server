@@ -476,4 +476,4 @@ class PlayEntityMetadata(Packet):
         self.metadata = metadata
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.entity_id) + Buffer.pack_entity_metadata(metadata)
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack_entity_metadata(self.metadata)

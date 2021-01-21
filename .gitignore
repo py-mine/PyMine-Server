@@ -1,9 +1,11 @@
+# PyMine config / unnecessary files
 server.yml
-
 server-icon.png
-
 plugins/*
 !plugins/example-plugin/
+
+# VirtualEnv
+venv/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -23,6 +23,7 @@ __all__ = (
     "PlayEntityTeleport",
     "PlayPlayerPostitionAndLookClientBound",
     "PlayDestroyEntities",
+    "PlayEntityMetadata",
 )
 
 
@@ -452,3 +453,27 @@ class PlayDestroyEntities(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack_varint(len(self.entity_ids)) + b"".join(Buffer.pack_varint(eid) for eid in self.entity_ids)
+
+
+class PlayEntityMetadata(Packet):
+    """Updates one or more metadata properties for an existing entity. (Server -> Client)
+
+    :param int entity_id: The ID of the entity the data is for.
+    :param dict metadata: The entity metadata, see here: https://wiki.vg/Protocol#Entity_Metadata.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr entity_id:
+    :attr metadata:
+    """
+
+    id = 0x44
+    to = 1
+
+    def __init__(self, entity_id: int, metadata: dict):
+        super().__init__()
+
+        self.entity_id = entity_id
+        self.metadata = metadata
+
+    def encode(self) -> bytes:
+        return Buffer.pack_varint(self.entity_id) + Buffer.pack_entity_metadata(self.metadata)

@@ -12,7 +12,7 @@ plugins = {}
 running_tasks = []
 
 
-def update_repo(logger, git_dir, git_url, root_folder, plugin_name, do_clone=False):
+def update_repo(git_dir, git_url, root_folder, plugin_name, do_clone=False):
     if do_clone:
         try:
             os.rename(root_folder, f'{root_folder}_backup_{int(time.time())}')
@@ -25,7 +25,7 @@ def update_repo(logger, git_dir, git_url, root_folder, plugin_name, do_clone=Fal
     try:
         res = git.Git(root_folder).pull()  # pull latest from remote
     except BaseException as e:
-        return update_repo(logger, git_dir, git_url, root_folder, plugin_name, True)
+        return update_repo(git_dir, git_url, root_folder, plugin_name, True)
 
     if res == 'Already up to date.':
         logger.info(f'No updates found for plugin {plugin_name}.')
@@ -33,7 +33,7 @@ def update_repo(logger, git_dir, git_url, root_folder, plugin_name, do_clone=Fal
         logger.info(f'Updated plugin {plugin_name}!')
 
 
-def load_plugin(logger, git_dir, plugin_name):
+def load_plugin(git_dir, plugin_name):
     root_folder = os.path.join('plugins', plugin_name)
     plugin_config_file = os.path.join(root_folder, 'plugin.yml')
 
@@ -58,7 +58,7 @@ def load_plugin(logger, git_dir, plugin_name):
     logger.info(f'Checking for updates for plugin {plugin_name}...')
 
     try:
-        update_repo(logger, git_dir, conf['git_url'], conf['root_folder'], plugin_name)
+        update_repo(git_dir, conf['git_url'], conf['root_folder'], plugin_name)
     except BaseException as e:
         logger.error(f'Failed to update plugin {plugin_name} due to: {logger.f_traceback(e)}')
         return
@@ -87,8 +87,11 @@ async def init():  # called when server starts up
         for file in filter((lambda f: f.endswith('.py')), files):
             importlib.import_module(dot_path(os.path.join(root, file)[:-3]))
 
-    to_be_loaded = [dot_path(os.path.join('plugins', p)) for p in os.listdir('plugins')]
+    plugins_dir = [(os.path.join('plugins', p) for p in os.listdir('plugins')]
+    git_dir = git.Git('plugins')
 
+    for plugin in plugins_dir:
+        load_plugin(logger, )
 
 
     # start command handler task

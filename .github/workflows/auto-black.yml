@@ -9,9 +9,7 @@ jobs:
             ref: ${{ github.head_ref }}
       - uses: actions/setup-python@v1
       - run: pip install black
-      - run: black --check -l 127 .
       - name: autoblack_push
-        if: failure()
         run: |
           black -l 127 .
           git config --global user.name github-actions

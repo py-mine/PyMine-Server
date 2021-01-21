@@ -6,7 +6,7 @@ import struct
 import sys
 import os
 
-sys.path.append(os.getcwd())  # nopep8
+sys.path.append(os.getcwd())
 
 import pymine.api as pymine_api
 

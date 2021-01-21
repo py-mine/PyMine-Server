@@ -1,7 +1,7 @@
 import sys
 import os
 
-sys.path.append(os.getcwd())  # nopep8
+sys.path.append(os.getcwd())
 
 from pymine.data.packet_map import PACKET_MAP, PACKET_MAP_CLIENTBOUND
 

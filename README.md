@@ -19,16 +19,16 @@
 - [x] **Plugin API** - *completed, but more will be added as the development continues*
 
 
+## Contributing
+- We'd love to have your help! Please read [CONTRIBUTING.md](https://github.com/py-mine/PyMine/blob/main/CONTRIBUTING.md) to get started!
+
+
 ## Installation / Usage
 ### Installing from source
 - First, clone the repository `git clone https://github.com/py-mine/PyMine.git` and move into that directory (`cd PyMine`)
 - Next, install the required Python packages via pip (`python3 -m pip install -r requirements.txt`)
 - To run the server, you should run `server.py` from the root directory, like `python3 pymine/server.py`
 - It is recommended you do not use regular Python, but [PyPy3](https://www.pypy.org/)
-
-
-## Contributing
-- We'd love to have your help! Please read [CONTRIBUTING.md](https://github.com/py-mine/PyMine/blob/main/CONTRIBUTING.md) to get started!
 
 
 ## API/Plugin Examples

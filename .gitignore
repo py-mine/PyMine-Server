@@ -3,6 +3,7 @@ server.yml
 server-icon.png
 
 plugins/*
+!plugins/example-plugin/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -6,12 +6,6 @@ from pymine.logic.commands import on_command, handle_server_commands, load_comma
 from pymine.util.share import logger, share
 from pymine.util.path import dot_path
 
-import pymine.api.packet
-import pymine.api.player
-import pymine.api.server
-import pymine.api.tasks
-import pymine.api.chat
-
 plugins = []
 running_tasks = []
 

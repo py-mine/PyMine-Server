@@ -8,7 +8,7 @@ import os
 from pymine.util.share import logger, share
 import pymine.logic.commands as cmds
 
-plugins = []
+plugins = {}
 running_tasks = []
 
 
@@ -17,48 +17,48 @@ def clone_repo(logger, git_dir, git_url, root_folder):
 
 
 def update_repo(logger, git_dir, git_url, root_folder):
-    pass
+    if not os.path.isdir(os.path.join(root_folder, '.git'))
 
 
-def load_plugin(logger, git_dir, root_folder):
-    plugin_config_file = os.path.join('plugins', root_folder, 'plugin.yml')
+def load_plugin(logger, git_dir, plugin_name):
+    root_folder = os.path.join('plugins', plugin_name)
+    plugin_config_file = os.path.join(root_folder, 'plugin.yml')
 
     if not os.path.isfile(plugin_config_file):
-        logger.error(f'Failed to load plugin {root_folder} due to missing plugin.yml.')
+        logger.error(f'Failed to load plugin {plugin_name} due to missing plugin.yml.')
         return
 
     with open(plugin_config_file) as conf:
         conf = yaml.safe_load(conf.read())
 
     if not isinstance(conf, dict):
-        logger.error(f'Failed to load plugin {root_folder} due to invalid plugin.yml format.')
+        logger.error(f'Failed to load plugin {plugin_name} due to invalid plugin.yml format.')
         return
 
     if not all(
         isinstance(conf.get('git_url'), str),
-        isinstance(conf.get('root_folder'), str),
         isinstance(conf.get('module_folder'), (str, None,))
     ):
-        logger.error(f'Failed to load plugin {root_folder} due to invalid plugin.yml format.')
+        logger.error(f'Failed to load plugin {plugin_name} due to invalid plugin.yml format.')
         return
 
-    logger.info(f'Checking for updates for plugin {root_folder}...')
+    logger.info(f'Checking for updates for plugin {plugin_name}...')
 
     try:
         did_update = update_repo(logger, git_dir, conf['git_url'], conf['root_folder'])
     except BaseException as e:
-        logger.error(f'Failed to update plugin {root_folder} due to: {logger.f_traceback(e)}')
+        logger.error(f'Failed to update plugin {plugin_name} due to: {logger.f_traceback(e)}')
         return
 
     if did_update:
-        logger.info(f'Updated plugin {root_folder}!')
+        logger.info(f'Updated plugin {plugin_name}!')
     else:
-        logger.info(f'No updates found for plugin {root_folder}.')
+        logger.info(f'No updates found for plugin {plugin_name}.')
 
-    plugin_path = conf['root_folder']
+    plugin_path = root_folder
 
     if conf.get('module_folder'):
-        plugin_path = os.path.join(plugin_module, conf.get('module_folder'))
+        plugin_path = os.path.join(plugin_path, conf['module_folder'])
 
     plugin_path = plugin_path.replace('\\', '/').replace('/', '.')
 
@@ -68,7 +68,7 @@ def load_plugin(logger, git_dir, root_folder):
         logger.error(f'Failed to import plugin {root_folder} due to: {logger.f_traceback(e)}')
         return
 
-    plugins.append(plugin_path)
+    plugins[plugin_path] = plugin_module
 
 
 async def init():  # called when server starts up

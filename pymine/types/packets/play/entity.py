@@ -23,7 +23,7 @@ __all__ = (
     "PlayEntityTeleport",
     "PlayPlayerPostitionAndLookClientBound",
     "PlayDestroyEntities",
-    'PlayEntityMetadata',
+    "PlayEntityMetadata",
 )
 
 

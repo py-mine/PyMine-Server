@@ -1,5 +1,6 @@
 import importlib
 import asyncio
+import zipfile
 import time
 import yaml
 import git
@@ -14,29 +15,29 @@ plugins = {}
 running_tasks = []
 
 
-def update_repo(git_dir, git_url, root_folder, plugin_name, do_clone=False):
+def update_repo(git_dir, git_url, root, plugin_name, do_clone=False):
     if do_clone:
         try:
-            os.rename(root_folder, f'{root_folder}_backup_{int(time.time())}')
-            logger.debug(f'Renamed {root_folder} for clone.')
+            os.rename(root, f'{root}_backup_{int(time.time())}')
+            logger.debug(f'Renamed {root} for clone.')
         except FileNotFoundError:
             pass
 
         logger.debug(f'Cloning from {git_url}...')
         git_dir.clone(git_url)
         logger.info(f'Updated plugin {plugin_name}!')
-        
+
         return
 
-    if not os.path.isdir(os.path.join(root_folder, '.git')):
-        return update_repo(git_dir, git_url, root_folder, plugin_name, True)
+    if not os.path.isdir(os.path.join(root, '.git')):
+        return update_repo(git_dir, git_url, root, plugin_name, True)
 
     try:
         logger.debug(f'Pulling from {git_url}...')
-        res = git.Git(root_folder).pull()  # pull latest from remote
+        res = git.Git(root).pull()  # pull latest from remote
     except BaseException as e:
         logger.debug(f'Failed to pull from {git_url}, attempting to clone...')
-        return update_repo(git_dir, git_url, root_folder, plugin_name, True)
+        return update_repo(git_dir, git_url, root, plugin_name, True)
 
     if res == 'Already up to date.':
         logger.info(f'No updates found for plugin {plugin_name}.')
@@ -45,8 +46,18 @@ def update_repo(git_dir, git_url, root_folder, plugin_name, do_clone=False):
 
 
 def load_plugin(git_dir, plugin_name):
-    root_folder = os.path.join('plugins', plugin_name)
-    plugin_config_file = os.path.join(root_folder, 'plugin.yml')
+    root = os.path.join('plugins', plugin_name)
+
+    if os.path.isfile(root):
+        if root.endswith('.py'):  # .py file (so try to import)
+            try:
+                plugin_path = root.rstrip('.py').replace('\\', '/').replace('/', '.')
+                plugin_module = importlib.import_module(plugin_path)
+                plugins[plugin_path] = plugin_module
+
+        return
+
+    plugin_config_file = os.path.join(root, 'plugin.yml')
 
     if not os.path.isfile(plugin_config_file):
         logger.error(f'Failed to load plugin {plugin_name} due to missing plugin.yml.')
@@ -69,12 +80,12 @@ def load_plugin(git_dir, plugin_name):
     logger.info(f'Checking for updates for plugin {plugin_name}...')
 
     try:
-        update_repo(git_dir, conf['git_url'], root_folder, plugin_name)
+        update_repo(git_dir, conf['git_url'], root, plugin_name)
     except BaseException as e:
         logger.error(f'Failed to update plugin {plugin_name} due to: {logger.f_traceback(e)}')
         return
 
-    plugin_path = root_folder
+    plugin_path = root
 
     if conf.get('module_folder'):
         plugin_path = os.path.join(plugin_path, conf['module_folder'])
@@ -84,7 +95,7 @@ def load_plugin(git_dir, plugin_name):
     try:
         plugin_module = importlib.import_module(plugin_path)
     except BaseException as e:
-        logger.error(f'Failed to import plugin {root_folder} due to: {logger.f_traceback(e)}')
+        logger.error(f'Failed to import plugin {root} due to: {logger.f_traceback(e)}')
         return
 
     plugins[plugin_path] = plugin_module

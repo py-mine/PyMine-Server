@@ -12,7 +12,7 @@ plugins = {}
 running_tasks = []
 
 
-def update_repo(logger, git_dir, git_url, root_folder, do_clone=False):
+def update_repo(logger, git_dir, git_url, root_folder, plugin_name, do_clone=False):
     if do_clone:
         try:
             shutil.rmtree(root_folder)
@@ -25,9 +25,12 @@ def update_repo(logger, git_dir, git_url, root_folder, do_clone=False):
     try:
         res = git.Git(root_folder).pull()  # pull latest from remote
     except BaseException as e:
-        return update_repo(logger, git_dir, git_url, root_folder, True)
+        return update_repo(logger, git_dir, git_url, root_folder, plugin_name, True)
 
-    return (res != 'Already up to date.')
+    if res == 'Already up to date.':
+        logger.info(f'No updates found for plugin {plugin_name}.')
+    else:
+        logger.info(f'Updated plugin {plugin_name}!')
 
 
 def load_plugin(logger, git_dir, plugin_name):
@@ -55,15 +58,10 @@ def load_plugin(logger, git_dir, plugin_name):
     logger.info(f'Checking for updates for plugin {plugin_name}...')
 
     try:
-        did_update = update_repo(logger, git_dir, conf['git_url'], conf['root_folder'])
+        update_repo(logger, git_dir, conf['git_url'], conf['root_folder'], plugin_name)
     except BaseException as e:
         logger.error(f'Failed to update plugin {plugin_name} due to: {logger.f_traceback(e)}')
         return
-
-    if did_update:
-        logger.info(f'Updated plugin {plugin_name}!')
-    else:
-        logger.info(f'No updates found for plugin {plugin_name}.')
 
     plugin_path = root_folder
 

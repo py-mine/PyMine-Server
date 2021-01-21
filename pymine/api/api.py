@@ -85,7 +85,7 @@ async def init():  # called when server starts up
     # Load packet handlers / packet logic handlers under pymine/logic/handle
     for root, dirs, files in os.walk(os.path.join('pymine', 'logic', 'handle')):
         for file in filter((lambda f: f.endswith('.py')), files):
-            importlib.import_module(dot_path(os.path.join(root, file)[:-3]))
+            importlib.import_module(os.path.join(root, file)[:-3].replace('\\', '/').replace('/', '.'))
 
     plugins_dir = os.listdir('plugins')
     git_dir = git.Git('plugins')

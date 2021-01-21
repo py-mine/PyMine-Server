@@ -1,0 +1,19 @@
+name: Auto Black
+on: push
+jobs:
+  autoblack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: autoblack
+        uses: psf/black@stable
+        with:
+          args: "-l 127 ."
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: autoblack action fixes
+          title: Fixes by autoblack
+          body: This is an auto-generated PR with fixes by autoblack.
+          labels: Auto Black
+          branch: autoblack-patches

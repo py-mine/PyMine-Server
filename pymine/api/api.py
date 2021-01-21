@@ -25,7 +25,7 @@ def update_repo(git_dir, git_url, root, plugin_name, do_clone=False):
 
         logger.debug(f'Cloning from {git_url}...')
         git_dir.clone(git_url)
-        logger.info(f'Updated plugin {plugin_name}!')
+        logger.info(f'Updated {plugin_name}!')
 
         return
 
@@ -40,9 +40,9 @@ def update_repo(git_dir, git_url, root, plugin_name, do_clone=False):
         return update_repo(git_dir, git_url, root, plugin_name, True)
 
     if res == 'Already up to date.':
-        logger.info(f'No updates found for plugin {plugin_name}.')
+        logger.info(f'No updates found for {plugin_name}.')
     else:
-        logger.info(f'Updated plugin {plugin_name}!')
+        logger.info(f'Updated {plugin_name}!')
 
 
 def plugin_conf_valid(conf):
@@ -68,32 +68,32 @@ async def load_plugin(git_dir, plugin_name):
                 plugin_module = importlib.import_module(plugin_path)
                 plugins[plugin_path] = plugin_module
             except BaseException as e:
-                logger.error(f'Failed to load plugin {root} due to: {logger.f_traceback(e)}')
+                logger.error(f'Failed to load {plugin_name} due to: {logger.f_traceback(e)}')
 
         return
 
     plugin_config_file = os.path.join(root, 'plugin.yml')
 
     if not os.path.isfile(plugin_config_file):
-        logger.error(f'Failed to load plugin {plugin_name} due to missing plugin.yml.')
+        logger.error(f'Failed to load {plugin_name} due to missing plugin.yml.')
         return
 
     with open(plugin_config_file) as conf:
         conf = yaml.safe_load(conf.read())
 
     if not plugin_conf_valid(conf):
-        logger.error(f'Failed to load plugin {plugin_name} due to invalid plugin.yml.')
+        logger.error(f'Failed to load {plugin_name} due to invalid plugin.yml.')
         return
 
     if conf['module_folder'] == '':
         conf['module_folder'] = None
 
-    logger.info(f'Checking for updates for plugin {plugin_name}...')
+    logger.info(f'Checking for updates for {plugin_name}...')
 
     try:
         update_repo(git_dir, conf['git_url'], root, plugin_name)
     except BaseException as e:
-        logger.error(f'Failed to update plugin {plugin_name} due to: {logger.f_traceback(e)}')
+        logger.error(f'Failed to update {plugin_name} due to: {logger.f_traceback(e)}')
         return
 
     plugin_path = root
@@ -106,13 +106,13 @@ async def load_plugin(git_dir, plugin_name):
     try:
         plugin_module = importlib.import_module(plugin_path)
     except BaseException as e:
-        logger.error(f'Failed to import plugin {root} due to: {logger.f_traceback(e)}')
+        logger.error(f'Failed to import {plugin_name} due to: {logger.f_traceback(e)}')
         return
 
     try:
         await plugin_module.setup()
     except BaseException as e:
-        logger.error(f'Failed to setup plugin {root} due to: {logger.f_traceback(e)}')
+        logger.error(f'Failed to setup {plugin_name} due to: {logger.f_traceback(e)}')
         return
 
     plugins[plugin_path] = plugin_module
@@ -138,7 +138,7 @@ async def init():  # called when server starts up
         try:
             await load_plugin(git_dir, plugin)
         except BaseException as e:
-            logger.error(f'Failed to load plugin {plugin} due to: {logger.f_traceback(e)}')
+            logger.error(f'Failed to load {plugin} due to: {logger.f_traceback(e)}')
 
     # start command handler task
     running_tasks.append(asyncio.create_task(cmds.handle_server_commands()))

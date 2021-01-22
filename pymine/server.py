@@ -80,7 +80,7 @@ class Server:
     async def stop(self):
         pass
 
-    async def close_connection(self, stream):  # Close a connection to a client
+    async def close_connection(self, stream: Stream):  # Close a connection to a client
         await stream.drain()
 
         stream.close()

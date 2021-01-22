@@ -150,19 +150,19 @@ class Server:
         return do_continue, stream
 
 
-async def handle_con(reader, writer):  # Handle a connection from a client
-    stream = Stream(reader, writer)
-    logger.debug(f"Connection received from {stream.remote[0]}:{stream.remote[1]}.")
+    async def handle_con(self, reader, writer):  # Handle a connection from a client
+        stream = Stream(reader, writer)
+        self.logger.debug(f"Connection received from {stream.remote[0]}:{stream.remote[1]}.")
 
-    continue_ = True
+        do_continue = True
 
-    while continue_:
-        try:
-            continue_, stream = await handle_packet(stream)
-        except BaseException as e:
-            logger.error(logger.f_traceback(e))
+        while do_continue:
+            try:
+                do_continue, stream = await self.handle_packet(stream)
+            except BaseException as e:
+                self.logger.error(self.logger.f_traceback(e))
 
-    await close_con(stream)
+        await self.close_connection(stream)
 
 
 async def start():  # Actually start the server

@@ -29,14 +29,12 @@ async def login_start(stream: Stream, packet: Packet) -> tuple:
 
         lc["verify"] = packet.verify_token
 
-        stream.write(Buffer.pack_packet(packet))
-        await stream.drain()
+        await server.send_packet(stream, packet, -1)
     else:  # No need for encryption since online mode is off, just send login success
         # This should be only generated if the player name isn't found in the world data, but no way to do that rn
         uuid_ = uuid.uuid4()
 
-        stream.write(Buffer.pack_packet(login_packets.LoginSuccess(uuid_, packet.username), server.comp_thresh))
-        await stream.drain()
+        await server.send_packet(login_packets.LoginSuccess(uuid_, packet.username), -1)
 
         server.cache.states[stream.remote] = 3  # Update state to play
 

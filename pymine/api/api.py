@@ -81,7 +81,7 @@ class PluginAPI:
                 try:
                     plugin_path = root.rstrip(".py").replace("\\", "/").replace("/", ".")
                     plugin_module = importlib.import_module(plugin_path)
-                    plugins[plugin_path] = plugin_module
+                    self.plugins[plugin_path] = plugin_module
                 except BaseException as e:
                     self.logger.error(f"Failed to load {plugin_name} due to: {logger.f_traceback(e)}")
 
@@ -155,7 +155,7 @@ class PluginAPI:
                 self.logger.error(f"Failed to load {plugin} due to: {logger.f_traceback(e)}")
 
         # start command handler task
-        running_tasks.append(asyncio.create_task(cmds.handle_server_commands()))
+        self.running_tasks.append(asyncio.create_task(cmds.handle_server_commands()))
 
     async def stop(self):  # called when server is stopping
         for task in self.running_tasks:

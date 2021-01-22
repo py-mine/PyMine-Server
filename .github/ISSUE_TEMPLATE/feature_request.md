@@ -11,5 +11,5 @@ assignees: ''
 - Basic description of what this idea / new feature would entail
 - List out all features of the idea / new feature
 
-### Benefits / Reason?
+### Why tho?
 - Reasoning / benefits behind this feature / idea.

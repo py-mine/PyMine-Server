@@ -80,23 +80,19 @@ class Server:
     async def stop(self):
         pass
 
+    async def close_connection(self, stream):  # Close a connection to a client
+        await stream.drain()
 
-async def close_con(stream):  # Close a connection to a client
-    await stream.drain()
+        stream.close()
+        await stream.wait_closed()
 
-    stream.close()
-    await stream.wait_closed()
+        try:
+            del self.cache.states[stream.remote]
+        except BaseException:
+            pass
 
-    try:
-        del states[stream.remote]
-    except BaseException:
-        pass
+        self.logger.debug(f"Disconnected nicely from {stream.remote[0]}:{stream.remote[1]}.")
 
-    logger.debug(f"Disconnected nicely from {stream.remote[0]}:{stream.remote[1]}.")
-    return False, stream
-
-
-share["close_con"] = close_con
 
 
 # Handle / respond to packets, this is a loop

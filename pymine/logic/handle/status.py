@@ -12,7 +12,7 @@ async def send_status(stream: Stream, packet: Packet) -> tuple:
     data = {
         "version": {"name": server.meta.version, "protocol": server.meta.protocol},
         "players": {
-            "max": server.conf['max_players'],
+            "max": server.conf["max_players"],
             "online": len(server.cache.states),
             "sample": [
                 {"name": "Iapetus11", "id": "cbcfa252-867d-4bda-a214-776c881cf370"},
@@ -24,7 +24,7 @@ async def send_status(stream: Stream, packet: Packet) -> tuple:
     }
 
     if server.favicon:
-        data['favicon'] = server.favicon
+        data["favicon"] = server.favicon
 
     stream.write(Buffer.pack_packet(status_packets.StatusStatusResponse(data)))
     await stream.drain()

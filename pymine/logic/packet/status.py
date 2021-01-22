@@ -27,7 +27,6 @@ async def send_status(stream: Stream, packet: Packet) -> tuple:
         data["favicon"] = server.favicon
 
     await server.send_packet(stream, status_packets.StatusStatusResponse(data), -1)
-
     return True, stream
 
 

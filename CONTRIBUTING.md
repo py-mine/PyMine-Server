@@ -10,7 +10,7 @@
 6. *You should probably also [join our Discord server](discord.gg/dHjv7DJgb2), for news on the status and direction of the project*
 
 ### General Guidelines
-* Use f-strings (`f'{thing}'`) instead of `.format()` where possible
+* Use f-strings (`f"{thing}"`) instead of `.format()` where possible
 * Use concatenation instead of f-strings where possible, as concatenation is faster
 * Use `snake_case` for variables
 * Constants should either be loaded from a config file or be in `UPPER_SNAKE_CASE`

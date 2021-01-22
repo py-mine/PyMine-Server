@@ -8,13 +8,13 @@ import os
 
 import pymine.logic.commands as cmds
 from pymine.server import server
-from pymine import api
 
 
 class PluginAPI:
     def __init__(self, server):
         self.server = server
         self.logger = server.logger
+
         self.plugins = {}
         self.running_tasks = []
 
@@ -83,7 +83,7 @@ class PluginAPI:
 
                     plugin_module = importlib.import_module(plugin_path)
                     await plugin_module.setup(self.server, None)
-                    
+
                     self.plugins[plugin_path] = plugin_module
                 except BaseException as e:
                     self.logger.error(f"Failed to load {plugin_name} due to: {logger.f_traceback(e)}")

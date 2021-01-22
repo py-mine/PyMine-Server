@@ -11,8 +11,6 @@ from pymine.types.chat import Chat
 from pymine.data.registry import ITEM_REGISTRY
 import pymine.data.misc as misc_data
 
-from pymine.util.share import logger
-
 
 class Buffer:
     """
@@ -55,10 +53,6 @@ class Buffer:
         """
         Packs a Packet object into bytes.
         """
-
-        logger.debug(  # We log this here for consistency and not having to implement it everywhere
-            f"OUT: state:unknown     | id:0x{packet.id:02X} | packet:{type(packet).__name__}"
-        )
 
         data = cls.pack_varint(packet.id) + packet.encode()
 

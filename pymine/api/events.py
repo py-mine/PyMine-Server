@@ -15,7 +15,7 @@ class EventHandler:
         self._server_stop = []  # [func, func, func,..]
 
     def on_packet(self, state: str, id_: int):
-        state = STATES.encode(state)
+        state = STATES.decode(state)
 
         def deco(func):
             if not asyncio.iscoroutinefunction(func):

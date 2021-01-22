@@ -99,16 +99,16 @@ class PluginAPI:
             self.logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. ({str(e)})")
             return
         except BaseException as e:
-            logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. Error: {logger.f_traceback(e)}")
+            self.logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. Error: {logger.f_traceback(e)}")
             return
 
         if conf.get("git_url"):
-            logger.info(f"Checking for updates for {plugin_name}...")
+            self.logger.info(f"Checking for updates for {plugin_name}...")
 
             try:
                 update_repo(git_dir, conf["git_url"], root, plugin_name)
             except BaseException as e:
-                logger.error(f"Failed to update {plugin_name} due to: {logger.f_traceback(e)}")
+                self.logger.error(f"Failed to update {plugin_name} due to: {logger.f_traceback(e)}")
                 return
 
         plugin_path = root
@@ -121,13 +121,13 @@ class PluginAPI:
         try:
             plugin_module = importlib.import_module(plugin_path)
         except BaseException as e:
-            logger.error(f"Failed to import {plugin_name} due to: {logger.f_traceback(e)}")
+            self.logger.error(f"Failed to import {plugin_name} due to: {logger.f_traceback(e)}")
             return
 
         try:
             await plugin_module.setup()
         except BaseException as e:
-            logger.error(f"Failed to setup {plugin_name} due to: {logger.f_traceback(e)}")
+            self.logger.error(f"Failed to setup {plugin_name} due to: {logger.f_traceback(e)}")
             return
 
         self.plugins[plugin_path] = plugin_module
@@ -152,7 +152,7 @@ class PluginAPI:
             try:
                 await self.load_plugin(git_dir, plugin)
             except BaseException as e:
-                logger.error(f"Failed to load {plugin} due to: {logger.f_traceback(e)}")
+                self.logger.error(f"Failed to load {plugin} due to: {logger.f_traceback(e)}")
 
         # start command handler task
         running_tasks.append(asyncio.create_task(cmds.handle_server_commands()))
@@ -161,11 +161,14 @@ class PluginAPI:
         for task in self.running_tasks:
             task.cancel()
 
-        for plugin_module in self.plugins.values():
+        for plugin_name, plugin_module in self.plugins.items():
             teardown = plugin_module.__dict__.get("teardown")
 
             if teardown_function:
-                await teardown()
+                try:
+                    await teardown()
+                except BaseException as e:
+                    self.logger.error(f'Error occurred while tearing down {plugin_name}: {logger.f_traceback(e)}')
 
         # call all registered on_server_stop handlers
         await asyncio.gather(*(h() for h in api.server.SERVER_STOP_HANDLERS))

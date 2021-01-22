@@ -17,6 +17,7 @@ from pymine.util.encryption import gen_rsa_keys
 
 from pymine.api import PyMineAPI
 
+# Used for parts of PyMine that utilize the server instance without being a plugin themselves
 server = None
 
 

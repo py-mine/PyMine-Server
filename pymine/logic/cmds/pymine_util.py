@@ -1,8 +1,7 @@
-from pymine.logic.commands import on_command, handle_server_command
-from pymine.util.share import logger
+from pymine.server import server
 
 
-@on_command(name="exec", node="pymine.cmds.exec")
+@server.api.on_command(name="exec", node="pymine.cmds.exec")
 async def exec_(uuid: str, args: list):
     file_name = "".join(args)
 
@@ -17,6 +16,6 @@ async def exec_(uuid: str, args: list):
         logger.warn("Can't find that file...")
 
 
-@on_command(name="echo", node="pymine.cmds.echo")
+@server.api.on_command(name="echo", node="pymine.cmds.echo")
 def echo(uuid: str, text: str):
     logger.info(f"{uuid}: {text}")

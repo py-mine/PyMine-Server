@@ -1,7 +1,6 @@
-from pymine.logic.commands import on_command
-from pymine.util.share import share
+from pymine.server import server
 
 
-@on_command(name="stop", node="minecraft.cmd.stop")
+@server.api.on_command(name="stop", node="minecraft.cmd.stop")
 def stop_server(uuid: str, args: str):
     share["server"].close()

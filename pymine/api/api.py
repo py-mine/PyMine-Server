@@ -12,7 +12,9 @@ from pymine import api
 
 
 class PluginAPI:
-    def __init__(self):
+    def __init__(self, server):
+        self.server = server
+        self.logger = server.logger
         self.plugins = {}
         self.running_tasks = []
 
@@ -21,13 +23,13 @@ class PluginAPI:
         if do_clone:
             try:
                 os.rename(root, f"{root}_backup_{int(time.time())}")
-                logger.debug(f"Renamed {root} for clone.")
+                self.logger.debug(f"Renamed {root} for clone.")
             except FileNotFoundError:
                 pass
 
-            logger.debug(f"Cloning from {git_url}...")
+            self.logger.debug(f"Cloning from {git_url}...")
             git_dir.clone(git_url)
-            logger.info(f"Updated {plugin_name}!")
+            self.logger.info(f"Updated {plugin_name}!")
 
             return
 
@@ -35,16 +37,16 @@ class PluginAPI:
             return update_repo(git_dir, git_url, root, plugin_name, True)
 
         try:
-            logger.debug(f"Pulling from {git_url}...")
+            self.logger.debug(f"Pulling from {git_url}...")
             res = git.Git(root).pull()  # pull latest from remote
         except BaseException as e:
-            logger.debug(f"Failed to pull from {git_url}, attempting to clone...")
+            self.logger.debug(f"Failed to pull from {git_url}, attempting to clone...")
             return update_repo(git_dir, git_url, root, plugin_name, True)
 
         if res == "Already up to date.":
-            logger.info(f"No updates found for {plugin_name}.")
+            self.logger.info(f"No updates found for {plugin_name}.")
         else:
-            logger.info(f"Updated {plugin_name}!")
+            self.logger.info(f"Updated {plugin_name}!")
 
     @staticmethod
     def load_plugin_config(root):
@@ -81,20 +83,20 @@ class PluginAPI:
                     plugin_module = importlib.import_module(plugin_path)
                     plugins[plugin_path] = plugin_module
                 except BaseException as e:
-                    logger.error(f"Failed to load {plugin_name} due to: {logger.f_traceback(e)}")
+                    self.logger.error(f"Failed to load {plugin_name} due to: {logger.f_traceback(e)}")
 
             return
 
         plugin_config_file = os.path.join(root, "plugin.yml")
 
         if not os.path.isfile(plugin_config_file):
-            logger.error(f"Failed to load {plugin_name} due to missing plugin.yml.")
+            self.logger.error(f"Failed to load {plugin_name} due to missing plugin.yml.")
             return
 
         try:
             conf = load_plugin_config(root)
         except ValueError as e:
-            logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. ({str(e)})")
+            self.logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. ({str(e)})")
             return
         except BaseException as e:
             logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. Error: {logger.f_traceback(e)}")

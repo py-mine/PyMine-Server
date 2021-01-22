@@ -17,5 +17,5 @@ async def exec_(uuid: str, args: list):
 
 
 @server.api.events.on_command(name="echo", node="pymine.cmds.echo")
-def echo(uuid: str, text: str):
+async def echo(uuid: str, text: str):
     logger.info(f"{uuid}: {text}")

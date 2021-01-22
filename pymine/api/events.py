@@ -28,10 +28,10 @@ class EventHandlers:
 
     def on_command(self, name: str, node: str):
         if name in self._commands:
-            raise ValueError('Command name is already in use.')
+            raise ValueError("Command name is already in use.")
 
-        if ' ' in name:
-            raise ValueError('Command name may not contain spaces.')
+        if " " in name:
+            raise ValueError("Command name may not contain spaces.")
 
         def deco(func):
             self._commands[name] = func, node

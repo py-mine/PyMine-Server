@@ -8,8 +8,6 @@ import os
 
 sys.path.append(os.getcwd())
 
-import pymine.api as pymine_api
-
 from pymine.types.buffer import Buffer
 from pymine.types.stream import Stream
 
@@ -19,6 +17,8 @@ from pymine.data.states import STATES
 from pymine.util.logging import task_exception_handler, Logger
 from pymine.util.config import load_config, load_favicon
 from pymine.util.encryption import gen_rsa_keys
+
+from pymine.api import PyMineAPI
 
 share["rsa"]["private"], share["rsa"]["public"] = gen_rsa_keys()
 
@@ -54,7 +54,7 @@ class Server:
         self.server = None
         self.api = None
 
-    async def start():
+    async def start(self):
         addr = self.conf["server_ip"]
         port = self.conf["server_port"]
 
@@ -63,13 +63,14 @@ class Server:
 
         self.aiohttp_ses = aiohttp.ClientSession()
         self.server = await asyncio.start_server(self.handle_con, host=addr, port=port)
+        self.api = PyMineAPI(self)
 
         async with self.server:
             logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
 
             await server.serve_forever()
 
-    async def stop():
+    async def stop(self):
         pass
 
 

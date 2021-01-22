@@ -8,7 +8,7 @@ from pymine.types.buffer import Buffer
 __all__ = (
     "PlayEffect",
     "PlayEntityEffect",
-    'PlaySoundEffect',
+    "PlaySoundEffect",
 )
 
 
@@ -104,4 +104,12 @@ class PlaySoundEffect(Packet):
         self.pitch = pitch
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.sound_id) + Buffer.pack_varint(self.category) + Buffer.pack('i', self.x*8) + Buffer.pack('i', self.y*8) + Buffer.pack('i', self.z*8) + Buffer.pack('f', self.volume) + Buffer.pack('f', self.pitch)
+        return (
+            Buffer.pack_varint(self.sound_id)
+            + Buffer.pack_varint(self.category)
+            + Buffer.pack("i", self.x * 8)
+            + Buffer.pack("i", self.y * 8)
+            + Buffer.pack("i", self.z * 8)
+            + Buffer.pack("f", self.volume)
+            + Buffer.pack("f", self.pitch)
+        )

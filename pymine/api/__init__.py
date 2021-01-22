@@ -17,7 +17,7 @@ class PyMineAPI:
         self.logger = server.logger
 
         self.plugins = {}
-        self.running_tasks = []
+        self.tasks = []
 
         self.handler = EventsHandler()
 
@@ -161,10 +161,10 @@ class PyMineAPI:
                 self.logger.error(f"Failed to load {plugin} due to: {logger.f_traceback(e)}")
 
         # start command handler task
-        self.running_tasks.append(asyncio.create_task(cmds.handle_server_commands()))
+        self.tasks.append(asyncio.create_task(cmds.handle_server_commands()))
 
     async def stop(self):  # called when server is stopping
-        for task in self.running_tasks:
+        for task in self.tasks:
             task.cancel()
 
         for plugin_name, plugin_module in self.plugins.items():

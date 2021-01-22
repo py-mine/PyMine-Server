@@ -81,7 +81,6 @@ class Server:
         self.logger.info("Closing server...")
 
         self.server.close()
-
         await asyncio.gather(self.server.wait_closed(), self.api.stop(), self.aiohttp_ses.close())
 
         self.logger.info("Server closed.")

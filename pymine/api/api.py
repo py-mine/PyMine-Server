@@ -161,10 +161,10 @@ async def stop():  # called when server is stopping
         task.cancel()
 
     for plugin_module in plugins.values():
-        teardown_function = plugin_module.__dict__.get("teardown")
+        teardown = plugin_module.__dict__.get("teardown")
 
         if teardown_function:
-            await teardown_function()
+            await teardown()
 
     # call all registered on_server_stop handlers
     await asyncio.gather(*(h() for h in api.server.SERVER_STOP_HANDLERS))

@@ -32,7 +32,7 @@ async def login_start(stream: Stream, packet: Packet) -> tuple:
         await server.send_packet(stream, packet, -1)
     else:  # No need for encryption since online mode is off, just send login success
         if server.comp_thresh > 0:  # Send set compression packet if needed
-            await server.send_packet(stream, LoginSetCompression(server.comp_thresh))
+            await server.send_packet(stream, LoginSetCompression(server.comp_thresh), -1)
 
         # This should be only generated if the player name isn't found in the world data, but no way to do that rn
         uuid_ = uuid.uuid4()
@@ -51,8 +51,7 @@ async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
     del server.cache.login[stream.remote]  # No longer needed
 
     if not auth:  # If authentication failed, disconnect client
-        stream.write(Buffer.pack_packet(login_packets.LoginDisconnect("Failed to authenticate your connection.")))
-        await stream.drain()
+        await server.send_packet(stream, login_packets.LoginDisconnect("Failed to authenticate your connection."))
         return False, stream
 
     # Generate a cipher for that client using the shared key from the client
@@ -62,12 +61,10 @@ async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
     stream = EncryptedStream(stream, cipher)
 
     if server.comp_thresh > 0:  # Send set compression packet if needed
-        stream.write(Buffer.pack_packet(LoginSetCompression(server.comp_thresh)))
-        await stream.drain()
+        await server.send_packet(stream, LoginSetCompression(server.comp_thresh), -1)
 
     # Send LoginSuccess packet, tells client they've logged in succesfully
-    stream.write(Buffer.pack_packet(login_packets.LoginSuccess(*auth), server.comp_thresh))
-    await stream.drain()
+    await server.send_packet(stream, login_packets.LoginSuccess(*auth))
 
     return True, stream
 

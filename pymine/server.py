@@ -27,7 +27,7 @@ class Server:
     class Meta:
         def __init__(self):
             self.server = 1
-            self.version = '1.16.5'
+            self.version = "1.16.5"
             self.protocol = 754
 
     class Secrets:
@@ -45,10 +45,9 @@ class Server:
         self.conf = load_config()
         self.favicon = load_favicon()
         self.secrets = self.Secrets(*gen_rsa_keys())
-        self.logger = Logger(self.conf['debug'])
+        self.logger = Logger(self.conf["debug"])
         self.aiohttp_ses = None
         self.cache = self.Cache()
-
 
 
 async def close_con(stream):  # Close a connection to a client

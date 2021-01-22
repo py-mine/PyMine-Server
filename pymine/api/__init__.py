@@ -123,7 +123,7 @@ class PyMineAPI:
             try:
                 self.update_repo(git_dir, conf["git_url"], root, plugin_name)
             except BaseException as e:
-                self.logger.warn(f"Failed to update {plugin_name} due to: {self.logger.f_traceback(e)}")
+                self.logger.error(f"Failed to update {plugin_name} due to: {self.logger.f_traceback(e)}")
 
         plugin_path = root
 

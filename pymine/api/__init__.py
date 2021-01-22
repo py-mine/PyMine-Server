@@ -21,6 +21,9 @@ class PyMineAPI:
         self.handlers = EventHandlers(server)
         self.command_handler = CommandHandler(server)
 
+    def taskify_many(self, coroutines: list):
+        self.tasks.extend(asyncio.create_task(coro) for coro in coroutines)
+
     @staticmethod
     def update_repo(git_dir, git_url, root, plugin_name, do_clone=False):
         if do_clone:

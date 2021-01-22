@@ -20,8 +20,6 @@ from pymine.util.encryption import gen_rsa_keys
 
 from pymine.api import PyMineAPI
 
-share["rsa"]["private"], share["rsa"]["public"] = gen_rsa_keys()
-
 
 class Server:
     class Meta:

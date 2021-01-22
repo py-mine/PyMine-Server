@@ -55,8 +55,8 @@ class Server:
         self.api = None
 
     async def start():
-        addr = self.conf['server_ip']
-        port = self.conf['server_port']
+        addr = self.conf["server_ip"]
+        port = self.conf["server_port"]
 
         if not addr:
             addr = socket.gethostbyname(socket.gethostname())
@@ -65,7 +65,7 @@ class Server:
         self.server = await asyncio.start_server(self.handle_con, host=addr, port=port)
 
         async with self.server:
-            logger.info(f'PyMine {self.meta.server:.1f} started on {addr}:{port}!')
+            logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
 
             await server.serve_forever()
 

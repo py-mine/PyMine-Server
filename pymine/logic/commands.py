@@ -15,20 +15,6 @@ def load_commands():  # only loads commands inside cmds folder, not subfolders
             importlib.import_module(f"pymine.logic.cmds.{file[:-3]}")
 
 
-def on_command(name: str, node: str):
-    if name in registered_commands:
-        raise ValueError("Command name is already in use.")
-
-    if " " in name:
-        raise ValueError("Command name may not contain spaces.")
-
-    def command_deco(func):
-        registered_commands[name] = func, node
-        return func
-
-    return command_deco
-
-
 async def handle_server_command(in_text: str):
     in_split = in_text.split(" ")
     cmd = in_split.pop(0)

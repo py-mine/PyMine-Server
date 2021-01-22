@@ -105,7 +105,7 @@ class Server:
             try:
                 read = await asyncio.wait_for(stream.read(1), 5)
             except asyncio.TimeoutError:
-                logger.debug("Closing due to timeout on read...")
+                self.logger.debug("Closing due to timeout on read...")
                 return False, stream
 
             if read == b"":
@@ -130,24 +130,27 @@ class Server:
         state = STATES.encode(states.get(stream.remote, 0))
         packet = buf.unpack_packet(state, PACKET_MAP)
 
-        logger.debug(f"IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
+        self.logger.debug(f"IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
-        for handler in pymine_api.packet.PACKET_HANDLERS[state][packet.id]:
+        if self.api.handlers._packet[state].get(packet.id) is None:
+            self.logger.warn(f'No valid packet handler found for packet {state} 0x{packet.id:02X} {type(packet).__name__}')
+            return True, stream
+
+        do_continue = True
+
+        for handler in self.api.handlers._packet[state][packet.id]:
             resp_value = await handler(stream, packet)
 
             try:
                 continue_, stream = resp_value
-            except (
-                ValueError,
-                TypeError,
-            ):
+            except (ValueError, TypeError):
                 logger.warn(f"Invalid return from packet handler: {handler.__module__}.{handler.__qualname__}")
                 continue
 
             if not continue_:
-                return False, stream
+                do_continue = False
 
-        return continue_, stream
+        return do_continue, stream
 
 
 async def handle_con(reader, writer):  # Handle a connection from a client
@@ -161,7 +164,6 @@ async def handle_con(reader, writer):  # Handle a connection from a client
             continue_, stream = await handle_packet(stream)
         except BaseException as e:
             logger.error(logger.f_traceback(e))
-            break
 
     await close_con(stream)
 

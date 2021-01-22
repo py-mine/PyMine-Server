@@ -10,7 +10,7 @@ async def exec_(uuid: str, args: list):
             cmds_lines = [l.rstrip("\n") for l in f.readlines()]
 
             for cmd_line in cmds_lines:
-                await handle_server_command(cmd_line)
+                await server.api.commands.server_command(cmd_line)
 
     except FileNotFoundError:
         server.logger.warn("Can't find that file...")

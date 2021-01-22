@@ -89,7 +89,7 @@ class PyMineAPI:
 
                     self.plugins[plugin_path] = plugin_module
                 except BaseException as e:
-                    self.logger.error(f"Failed to load {plugin_name} due to: {logger.f_traceback(e)}")
+                    self.logger.error(f"Failed to load {plugin_name} due to: {self.logger.f_traceback(e)}")
 
             return
 
@@ -105,7 +105,7 @@ class PyMineAPI:
             self.logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. ({str(e)})")
             return
         except BaseException as e:
-            self.logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. Error: {logger.f_traceback(e)}")
+            self.logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. Error: {self.logger.f_traceback(e)}")
             return
 
         if conf.get("git_url"):
@@ -114,7 +114,7 @@ class PyMineAPI:
             try:
                 self.update_repo(git_dir, conf["git_url"], root, plugin_name)
             except BaseException as e:
-                self.logger.warn(f"Failed to update {plugin_name} due to: {logger.f_traceback(e)}")
+                self.logger.warn(f"Failed to update {plugin_name} due to: {self.logger.f_traceback(e)}")
 
         plugin_path = root
 
@@ -126,13 +126,13 @@ class PyMineAPI:
         try:
             plugin_module = importlib.import_module(plugin_path)
         except BaseException as e:
-            self.logger.error(f"Failed to import {plugin_name} due to: {logger.f_traceback(e)}")
+            self.logger.error(f"Failed to import {plugin_name} due to: {self.logger.f_traceback(e)}")
             return
 
         try:
             await plugin_module.setup(self.server, conf)
         except BaseException as e:
-            self.logger.error(f"Failed to setup {plugin_name} due to: {logger.f_traceback(e)}")
+            self.logger.error(f"Failed to setup {plugin_name} due to: {self.logger.f_traceback(e)}")
             return
 
         self.plugins[plugin_path] = plugin_module
@@ -155,7 +155,7 @@ class PyMineAPI:
             try:
                 await self.load_plugin(git_dir, plugin)
             except BaseException as e:
-                self.logger.error(f"Failed to load {plugin} due to: {logger.f_traceback(e)}")
+                self.logger.error(f"Failed to load {plugin} due to: {self.logger.f_traceback(e)}")
 
         # start console command handler task
         self.tasks.append(asyncio.create_task(self.command_handler.handle_console()))
@@ -168,7 +168,7 @@ class PyMineAPI:
             try:
                 await plugin_module.teardown(self.server)
             except BaseException as e:
-                self.logger.error(f"Error occurred while tearing down {plugin_name}: {logger.f_traceback(e)}")
+                self.logger.error(f"Error occurred while tearing down {plugin_name}: {self.logger.f_traceback(e)}")
 
         # call all registered on_server_stop handlers
         await asyncio.gather(*(h() for h in self.handlers._server_stop))

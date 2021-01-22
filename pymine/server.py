@@ -3,10 +3,6 @@ import aiohttp
 import random
 import socket
 import struct
-import sys
-import os
-
-sys.path.append(os.getcwd())
 
 from pymine.types.buffer import Buffer
 from pymine.types.stream import Stream
@@ -40,7 +36,9 @@ class Server:
             self.entity_id = {}  # {remote: entity_id}
             self.user_cache = {}  # {entity_id: {remote: tuple, uuid: str}}
 
-    def __init__(self):
+    def __init__(self, logger):
+        self.logger = logger
+
         self.meta = self.Meta()
         self.cache = self.Cache()
         self.secrets = self.Secrets(*gen_rsa_keys())
@@ -49,7 +47,7 @@ class Server:
         self.favicon = load_favicon()
         self.comp_thresh = conf["comp_thresh"]
 
-        self.logger = Logger(self.conf["debug"])
+        self.logger.debug_ = self.conf['debug']
 
         self.aiohttp_ses = None
         self.server = None

@@ -169,7 +169,10 @@ class PyMineAPI:
 
     async def stop(self):  # called when server is stopping
         for task in self.tasks:
-            task.cancel()
+            try:
+                task.cancel()
+            except BaseException:
+                pass
 
         for plugin_name, plugin_module in self.plugins.items():
             try:

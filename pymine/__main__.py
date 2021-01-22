@@ -2,7 +2,8 @@ import asyncio
 import sys
 import os
 
-sys.path.append(os.path.split(__file__)[0])  # ensure the pymine folder is in the current working dir
+# ensure the pymine modules are accessible
+sys.path.append(os.path.join(os.getcwd(), os.path.split(__file__)[0]))
 
 from pymine.util.logging import Logger, task_exception_handler
 from pymine.server import Server

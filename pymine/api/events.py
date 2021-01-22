@@ -34,6 +34,9 @@ class EventHandlers:
             raise ValueError("Command name may not contain spaces.")
 
         def deco(func):
+            if not asyncio.iscoroutinefunction(func):
+                raise ValueError(self.must_be_coroutine)
+
             self._commands[name] = func, node
             return func
 

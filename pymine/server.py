@@ -16,13 +16,39 @@ from pymine.types.stream import Stream
 from pymine.data.packet_map import PACKET_MAP
 from pymine.data.states import STATES
 
-from pymine.util.logging import task_exception_handler
+from pymine.util.logging import task_exception_handler, Logger
+from pymine.util.config import load_config, load_favicon
 from pymine.util.encryption import gen_rsa_keys
-from pymine.util.share import share, logger
 
 share["rsa"]["private"], share["rsa"]["public"] = gen_rsa_keys()
-states = share["states"]
-logger.debug_ = share["conf"]["debug"]
+
+
+class Server:
+    class Meta:
+        def __init__(self):
+            self.server = 1
+            self.version = '1.16.5'
+            self.protocol = 754
+
+    class Secrets:
+        def __init__(self, rsa_private, rsa_public):
+            self.rsa_private = rsa_private
+            self.rsa_public = rsa_public
+
+    class Cache:
+        def __init__(self):
+            self.states = {}
+            self.login = {}
+
+    def __init__(self):
+        self.meta = self.Meta()
+        self.conf = load_config()
+        self.favicon = load_favicon()
+        self.secrets = self.Secrets(*gen_rsa_keys())
+        self.logger = Logger(self.conf['debug'])
+        self.aiohttp_ses = None
+        self.cache = self.Cache()
+
 
 
 async def close_con(stream):  # Close a connection to a client

@@ -26,12 +26,12 @@ async def send_status(stream: Stream, packet: Packet) -> tuple:
     if server.favicon:
         data["favicon"] = server.favicon
 
-    await server.send_packet(stream, status_packets.StatusStatusResponse(data))
+    await server.send_packet(stream, status_packets.StatusStatusResponse(data), -1)
 
     return True, stream
 
 
 @server.api.events.on_packet("status", 0x01)
 async def send_pong(stream: Stream, packet: Packet) -> tuple:
-    await server.send_packet(stream, packet)
+    await server.send_packet(stream, packet, -1)
     return False, stream

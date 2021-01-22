@@ -99,10 +99,13 @@ class Server:
 
         return False, stream
 
-    async def send_packet(self, stream: Stream, packet: Packet):
+    async def send_packet(self, stream: Stream, packet: Packet, comp_thresh=None):
         self.logger.debug(f"OUT: state:unknown     | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
-        stream.write(Buffer.pack_packet(packet))
+        if comp_thresh is None:
+            comp_thresh = self.comp_thresh
+
+        stream.write(Buffer.pack_packet(packet, comp_thresh))
         await stream.drain()
 
     async def broadcast_packet(self, packet: Packet):

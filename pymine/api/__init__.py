@@ -8,6 +8,8 @@ import os
 
 import pymine.logic.commands as cmds
 
+from pymine.api.events import Handlers
+
 
 class PyMineAPI:
     class Handlers:

@@ -33,14 +33,14 @@ def load_config():
 
     try:
         with open("server.yml", "r") as f:
-            properties = yaml.safe_load(f.read())
+            conf = yaml.safe_load(f.read())
     except FileNotFoundError:
         with open("server.yml", "w+") as f:
             f.write(yaml.dump(DEFAULT_CONFIG))
 
     # Check for missing
     if any([(key not in conf) for key in DEFAULT_CONFIG.keys()]):
-        conf = {**SERVER_PROPERTIES_DEFAULT, **properties}
+        conf = {**DEFAULT_CONFIG, **conf}
 
         with open("server.yml", "w") as f:
             f.write(yaml.dump(conf))

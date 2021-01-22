@@ -49,6 +49,7 @@ class Server:
 
         self.conf = load_config()
         self.favicon = load_favicon()
+        self.comp_thresh = conf['comp_thresh']
 
         self.logger = Logger(self.conf["debug"])
 

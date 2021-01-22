@@ -23,7 +23,7 @@ class CommandHandler:
 
         args = " ".join(in_split)
 
-        reg_cmd = self.api.handlers._commands.get(cmd)
+        reg_cmd = self.api.events._commands.get(cmd)
 
         if reg_cmd is not None:
             cmd_func = reg_cmd[0]

@@ -130,7 +130,6 @@ class PluginAPI:
 
         self.plugins[plugin_path] = plugin_module
 
-
     async def init(self):  # called when server starts up
         cmds.load_commands()  # load commands in pymine/logic/cmds/*
 

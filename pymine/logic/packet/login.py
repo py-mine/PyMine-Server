@@ -85,17 +85,14 @@ async def server_auth(packet: login_packets.LoginEncryptionResponse, remote: tup
                     decrypted_shared_key,
                     server.secrets.rsa_public.public_bytes(
                         encoding=serialization.Encoding.DER, format=serialization.PublicFormat.SubjectPublicKeyInfo
-                    )
-                )
-            }
+                    ),
+                ),
+            },
         )
 
         jj = await resp.json()
 
         if jj is not None:
-            return decrypted_shared_key, (
-                uuid.UUID(jj["id"]),
-                jj["name"]
-            )
+            return decrypted_shared_key, (uuid.UUID(jj["id"]), jj["name"])
 
     return False, False

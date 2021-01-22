@@ -8,8 +8,8 @@ class EventHandlers:
         self.must_be_coroutine = "Decorated object must be a coroutine function."
 
         self._packet = {"handshaking": {}, "login": {}, "play": {}, "status": {}}
-        self._server_ready = []
-        self._server_stop = []
+        self._server_ready = []  # [func, func, func,..]
+        self._server_stop = []  # [func, func, func,..]
         self._commands = {}  # {name: (func, node)}
 
     def on_packet(self, state: str, id_: int):

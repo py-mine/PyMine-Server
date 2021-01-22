@@ -49,7 +49,7 @@ class Server:
 
         self.conf = load_config()
         self.favicon = load_favicon()
-        self.comp_thresh = conf['comp_thresh']
+        self.comp_thresh = conf["comp_thresh"]
 
         self.logger = Logger(self.conf["debug"])
 
@@ -78,13 +78,13 @@ class Server:
             await self.server.serve_forever()
 
     async def stop(self):
-        self.logger.info('Closing server...')
+        self.logger.info("Closing server...")
 
         self.server.close()
 
         await asyncio.gather(self.server.wait_closed(), self.api.stop(), self.aiohttp_ses.close())
 
-        self.logger.info('Server closed.')
+        self.logger.info("Server closed.")
 
     async def close_connection(self, stream: Stream):  # Close a connection to a client
         await stream.drain()
@@ -139,7 +139,7 @@ class Server:
         self.logger.debug(f"IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
         if self.api.handlers._packet[state].get(packet.id) is None:
-            self.logger.warn(f'No valid packet handler found for packet {state} 0x{packet.id:02X} {type(packet).__name__}')
+            self.logger.warn(f"No valid packet handler found for packet {state} 0x{packet.id:02X} {type(packet).__name__}")
             return True, stream
 
         do_continue = True
@@ -148,7 +148,9 @@ class Server:
             try:
                 continue_, stream = await handler(stream, packet)
             except BaseException as e:
-                self.logger.error(f"Error occurred in {handler.__module__}.{handler.__qualname__}: {self.logger.f_traceback(e)}")
+                self.logger.error(
+                    f"Error occurred in {handler.__module__}.{handler.__qualname__}: {self.logger.f_traceback(e)}"
+                )
 
             if not continue_:
                 do_continue = False

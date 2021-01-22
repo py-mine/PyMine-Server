@@ -3,11 +3,6 @@ import importlib
 import asyncio
 import os
 
-from pymine.util.share import share, logger
-
-registered_commands = {}  # {name: (function, permission_node),..}
-
-
 # loads default built in commands
 def load_commands():  # only loads commands inside cmds folder, not subfolders
     for file in os.listdir("pymine/logic/cmds"):

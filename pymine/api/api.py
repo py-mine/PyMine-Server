@@ -80,7 +80,10 @@ class PluginAPI:
             if root.endswith(".py"):  # .py file (so try to import)
                 try:
                     plugin_path = root.rstrip(".py").replace("\\", "/").replace("/", ".")
+
                     plugin_module = importlib.import_module(plugin_path)
+                    await plugin_module.setup(self.server, None)
+                    
                     self.plugins[plugin_path] = plugin_module
                 except BaseException as e:
                     self.logger.error(f"Failed to load {plugin_name} due to: {logger.f_traceback(e)}")

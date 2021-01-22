@@ -6,6 +6,7 @@ import struct
 
 from pymine.types.buffer import Buffer
 from pymine.types.stream import Stream
+from pymine.types.packet import Packet
 
 from pymine.data.packet_map import PACKET_MAP
 from pymine.data.states import STATES
@@ -96,6 +97,12 @@ class Server:
         self.logger.debug(f"Disconnected nicely from {stream.remote[0]}:{stream.remote[1]}.")
 
         return False, stream
+
+    async def send_packet(self, stream: Stream, packet: Packet):
+        self.logger.debug(f"OUT: state:unknown     | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
+
+        stream.write(Buffer.pack_packet(packet))
+        await stream.drain()
 
     async def handle_packet(stream: Stream):  # Handle / respond to packets, this is called in a loop
         packet_length = 0

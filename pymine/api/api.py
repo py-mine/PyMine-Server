@@ -10,12 +10,20 @@ import pymine.logic.commands as cmds
 
 
 class PluginAPI:
+    class Handlers:
+        def __init__(self):
+            self.packet = {"handshaking": {}, "login": {}, "play": {}, "status": {}}
+            self.server_ready = []
+            self.server_stop = []
+
     def __init__(self, server):
         self.server = server
         self.logger = server.logger
 
         self.plugins = {}
         self.running_tasks = []
+
+        self.handlers = self.Handlers()
 
     @staticmethod
     def update_repo(git_dir, git_url, root, plugin_name, do_clone=False):

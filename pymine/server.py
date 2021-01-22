@@ -9,7 +9,6 @@ from pymine.types.stream import Stream
 from pymine.types.packet import Packet
 
 from pymine.data.packet_map import PACKET_MAP
-from pymine.data.states import STATES
 
 from pymine.util.logging import task_exception_handler, Logger
 from pymine.util.config import load_config, load_favicon
@@ -143,7 +142,7 @@ class Server:
 
         buf = Buffer(await stream.read(packet_length))
 
-        state = STATES.encode(self.cache.states.get(stream.remote, 0))
+        state = self.cache.states.get(stream.remote, 0)
         packet = buf.unpack_packet(state, PACKET_MAP)
 
         self.logger.debug(f"IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")

@@ -1,7 +1,7 @@
 import asyncio
 
 
-class EventsHandler:
+class EventHandlers:
     def __init__(self, server):
         self.server = server
 

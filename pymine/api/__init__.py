@@ -8,7 +8,7 @@ import os
 
 import pymine.logic.commands as cmds
 
-from pymine.api.events import EventsHandler
+from pymine.api.events import EventHandlers
 
 
 class PyMineAPI:
@@ -19,7 +19,7 @@ class PyMineAPI:
         self.plugins = {}
         self.tasks = []
 
-        self.handler = EventsHandler()
+        self.handlers = EventHandlers()
 
     @staticmethod
     def update_repo(git_dir, git_url, root, plugin_name, do_clone=False):
@@ -168,13 +168,10 @@ class PyMineAPI:
             task.cancel()
 
         for plugin_name, plugin_module in self.plugins.items():
-            teardown = plugin_module.__dict__.get("teardown")
-
-            if teardown_function:
-                try:
-                    await teardown()
-                except BaseException as e:
-                    self.logger.error(f"Error occurred while tearing down {plugin_name}: {logger.f_traceback(e)}")
+            try:
+                await plugin_module.teardown()
+            except BaseException as e:
+                self.logger.error(f"Error occurred while tearing down {plugin_name}: {logger.f_traceback(e)}")
 
         # call all registered on_server_stop handlers
-        await asyncio.gather(*(h() for h in api.server.SERVER_STOP_HANDLERS))
+        await asyncio.gather(*(h() for h in self.handlers._server_stop))

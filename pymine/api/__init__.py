@@ -21,8 +21,12 @@ class PyMineAPI:
         self.handlers = EventHandlers(server)
         self.command_handler = CommandHandler(server)
 
-    def taskify_many(self, coroutines: list):
-        self.tasks.extend(asyncio.create_task(coro) for coro in coroutines)
+    def taskify_handlers(self, handlers: list):
+        for handler in handlers:
+            try:
+                self.tasks.append(asyncio.create_task(handler()))
+            except BaseException as e:
+                self.logger.error(f'Failed to call handler {handler.__module__}.{handler.__qualname__} due to: {self.logger.f_traceback(e)}')
 
     @staticmethod
     def update_repo(git_dir, git_url, root, plugin_name, do_clone=False):

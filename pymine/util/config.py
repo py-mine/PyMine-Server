@@ -4,7 +4,7 @@ import yaml
 
 from pymine.util.seeds import string_hash_code, gen_seed
 
-SERVER_PROPERTIES_DEFAULT = {
+DEFAULT_CONFIG = {
     "debug": True,
     "server_ip": None,
     "server_port": 25565,
@@ -28,33 +28,33 @@ SERVER_PROPERTIES_DEFAULT = {
 }
 
 
-def load_properties():
-    properties = SERVER_PROPERTIES_DEFAULT
+def load_config():
+    conf = DEFAULT_CONFIG
 
     try:
         with open("server.yml", "r") as f:
             properties = yaml.safe_load(f.read())
     except FileNotFoundError:
         with open("server.yml", "w+") as f:
-            f.write(yaml.dump(SERVER_PROPERTIES_DEFAULT))
+            f.write(yaml.dump(DEFAULT_CONFIG))
 
     # Check for missing
-    if any([(key not in properties) for key in SERVER_PROPERTIES_DEFAULT.keys()]):
-        properties = {**SERVER_PROPERTIES_DEFAULT, **properties}
+    if any([(key not in conf) for key in DEFAULT_CONFIG.keys()]):
+        conf = {**SERVER_PROPERTIES_DEFAULT, **properties}
 
         with open("server.yml", "w") as f:
-            f.write(yaml.dump(properties))
+            f.write(yaml.dump(conf))
 
-    if isinstance(properties["seed"], str):  # seed is str, we need int
-        properties["seed"] = string_hash_code(properties["seed"][:20])
+    if isinstance(conf["seed"], str):  # seed is str, we need int
+        conf["seed"] = string_hash_code(conf["seed"][:20])
 
-    if properties["seed"] > 2 ** 64:  # seed is too big
-        properties["seed"] = gen_seed()
+    if conf["seed"] > 2 ** 64:  # seed is too big
+        conf["seed"] = gen_seed()
 
         with open("server.yml", "w") as f:
-            f.write(yaml.dump(properties))
+            f.write(yaml.dump(conf))
 
-    return Map(properties)
+    return Map(conf)
 
 
 def load_favicon():

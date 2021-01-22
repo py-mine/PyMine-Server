@@ -17,6 +17,8 @@ from pymine.util.encryption import gen_rsa_keys
 
 from pymine.api import PyMineAPI
 
+server = None
+
 
 class Server:
     class Meta:

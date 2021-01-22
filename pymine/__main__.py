@@ -6,7 +6,7 @@ import os
 sys.path.append(os.path.join(os.getcwd(), os.path.split(os.path.split(__file__)[0])[0]))
 
 from pymine.util.logging import Logger, task_exception_handler
-from pymine.server import Server
+import pymine.server
 
 if __name__ == "__main__":
     logger = Logger()  # debug status will be set later after config is loaded
@@ -14,7 +14,8 @@ if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.set_exception_handler(task_exception_handler)
 
-    server = Server(logger)
+    server = pymine.server.Server(logger)
+    pymine.server.server = server
 
     try:
         loop.run_until_complete(server.start())

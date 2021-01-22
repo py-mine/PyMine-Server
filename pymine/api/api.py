@@ -7,7 +7,6 @@ import git
 import os
 
 import pymine.logic.commands as cmds
-from pymine.server import server
 
 
 class PluginAPI:

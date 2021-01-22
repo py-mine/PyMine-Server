@@ -65,6 +65,8 @@ class Server:
         self.server = await asyncio.start_server(self.handle_con, host=addr, port=port)
         self.api = PyMineAPI(self)
 
+        await self.api.init()
+
         async with self.server:
             logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
 

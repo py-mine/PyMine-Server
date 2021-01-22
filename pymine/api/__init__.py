@@ -6,8 +6,6 @@ import yaml
 import git
 import os
 
-import pymine.logic.commands as cmds
-
 from pymine.api.commands import CommandHandler
 from pymine.api.events import EventHandlers
 

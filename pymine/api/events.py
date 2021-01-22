@@ -5,11 +5,12 @@ class EventHandlers:
     def __init__(self, server):
         self.server = server
 
-        self.must_be_coroutine = "Decorated object must be a coroutine function"
+        self.must_be_coroutine = "Decorated object must be a coroutine function."
 
         self._packet = {"handshaking": {}, "login": {}, "play": {}, "status": {}}
         self._server_ready = []
         self._server_stop = []
+        self._commands = {}  # {name: (func, node)}
 
     def on_packet(self, state: str, id_: int):
         def command_deco(func):
@@ -24,6 +25,19 @@ class EventHandlers:
             return func
 
         return command_deco
+
+    def on_command(self, name: str, node: str):
+        if name in self._commands:
+            raise ValueError('Command name is already in use.')
+
+        if ' ' in name:
+            raise ValueError('Command name may not contain spaces.')
+
+        def deco(func):
+            self._commands[name] = func, node
+            return func
+
+        return deco
 
     def on_server_ready(self, func):
         if not asyncio.iscoroutinefunction(func):

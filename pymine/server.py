@@ -149,7 +149,6 @@ class Server:
 
         return do_continue, stream
 
-
     async def handle_con(self, reader, writer):  # Handle a connection from a client
         stream = Stream(reader, writer)
         self.logger.debug(f"Connection received from {stream.remote[0]}:{stream.remote[1]}.")
@@ -163,7 +162,6 @@ class Server:
                 self.logger.error(self.logger.f_traceback(e))
 
         await self.close_connection(stream)
-
 
 async def start():  # Actually start the server
     addr = share["conf"]["server_ip"]

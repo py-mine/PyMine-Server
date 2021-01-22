@@ -42,12 +42,35 @@ class Server:
 
     def __init__(self):
         self.meta = self.Meta()
+        self.cache = self.Cache()
+        self.secrets = self.Secrets(*gen_rsa_keys())
+
         self.conf = load_config()
         self.favicon = load_favicon()
-        self.secrets = self.Secrets(*gen_rsa_keys())
+
         self.logger = Logger(self.conf["debug"])
+
         self.aiohttp_ses = None
-        self.cache = self.Cache()
+        self.server = None
+        self.api = None
+
+    async def start():
+        addr = self.conf['server_ip']
+        port = self.conf['server_port']
+
+        if not addr:
+            addr = socket.gethostbyname(socket.gethostname())
+
+        self.aiohttp_ses = aiohttp.ClientSession()
+        self.server = await asyncio.start_server(self.handle_con, host=addr, port=port)
+
+        async with self.server:
+            logger.info(f'PyMine {self.meta.server:.1f} started on {addr}:{port}!')
+
+            await server.serve_forever()
+
+    async def stop():
+        pass
 
 
 async def close_con(stream):  # Close a connection to a client
@@ -163,10 +186,7 @@ async def start():  # Actually start the server
                 asyncio.create_task(handler())
 
             await server.serve_forever()
-    except (
-        asyncio.CancelledError,
-        KeyboardInterrupt,
-    ):
+    except (asyncio.CancelledError, KeyboardInterrupt):
         pass
 
 

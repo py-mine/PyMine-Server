@@ -185,4 +185,4 @@ class PyMineAPI:
 
         # call and await upon all registered on_server_stop handlers
         self.taskify_handlers(self.events._server_stop)
-        await asyncio.gather(self.tasks)
+        await asyncio.gather(*self.tasks)

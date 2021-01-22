@@ -104,6 +104,11 @@ class Server:
         stream.write(Buffer.pack_packet(packet))
         await stream.drain()
 
+    async def broadcast_packet(self, packet: Packet):
+        self.logger.debug(f"OUT: state:BROADCAST   | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
+
+        raise NotImplementedError
+
     async def handle_packet(stream: Stream):  # Handle / respond to packets, this is called in a loop
         packet_length = 0
 

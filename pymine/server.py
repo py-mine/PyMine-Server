@@ -68,7 +68,7 @@ class Server:
         async with self.server:
             logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
 
-            await server.serve_forever()
+            await self.server.serve_forever()
 
     async def stop(self):
         pass

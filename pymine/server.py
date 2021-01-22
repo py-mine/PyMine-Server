@@ -170,21 +170,3 @@ class Server:
                 self.logger.error(self.logger.f_traceback(e))
 
         await self.close_connection(stream)
-
-
-if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    loop.set_exception_handler(task_exception_handler)
-
-    try:
-        loop.run_until_complete(start())
-    except BaseException as e:
-        logger.critical(logger.f_traceback(e))
-
-    try:
-        loop.run_until_complete(stop())
-    except BaseException as e:
-        logger.critical(logger.f_traceback(e))
-
-    loop.stop()
-    loop.close()

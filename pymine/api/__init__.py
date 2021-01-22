@@ -30,8 +30,7 @@ class PyMineAPI:
                     f"Failed to call handler {handler.__module__}.{handler.__qualname__} due to: {self.logger.f_traceback(e)}"
                 )
 
-    @staticmethod
-    def update_repo(git_dir, git_url, root, plugin_name, do_clone=False):
+    def update_repo(self, git_dir, git_url, root, plugin_name, do_clone=False):
         if do_clone:
             try:
                 os.rename(root, f"{root}_backup_{int(time.time())}")

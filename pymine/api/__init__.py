@@ -162,8 +162,8 @@ class PyMineAPI:
             except BaseException as e:
                 self.logger.error(f"Failed to load {plugin} due to: {logger.f_traceback(e)}")
 
-        # start command handler task
-        self.tasks.append(asyncio.create_task(cmds.handle_server_commands()))
+        # start console command handler task
+        self.tasks.append(asyncio.create_task(self.command_handler.handle_console()))
 
     async def stop(self):  # called when server is stopping
         for task in self.tasks:

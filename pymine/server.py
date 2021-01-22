@@ -109,11 +109,11 @@ class Server:
                 return False, stream
 
             if read == b"":
-                logger.debug("Closing due to invalid read....")
+                self.logger.debug("Closing due to invalid read....")
                 return False, stream
 
             if i == 0 and read == b"\xFE":
-                logger.warn("Legacy ping attempted, legacy ping is not supported.")
+                self.logger.warn("Legacy ping attempted, legacy ping is not supported.")
                 return False, stream
 
             b = struct.unpack("B", read)[0]
@@ -139,13 +139,10 @@ class Server:
         do_continue = True
 
         for handler in self.api.handlers._packet[state][packet.id]:
-            resp_value = await handler(stream, packet)
-
             try:
-                continue_, stream = resp_value
-            except (ValueError, TypeError):
-                logger.warn(f"Invalid return from packet handler: {handler.__module__}.{handler.__qualname__}")
-                continue
+                continue_, stream = await handler(stream, packet)
+            except BaseException as e:
+                self.logger.error(f"Error occurred in {handler.__module__}.{handler.__qualname__}: {self.logger.f_traceback(e)}")
 
             if not continue_:
                 do_continue = False

@@ -7,7 +7,7 @@ import git
 import os
 
 from pymine.api.commands import CommandHandler
-from pymine.api.events import EventHandlers
+from pymine.api.events import EventHandler
 
 
 class PyMineAPI:
@@ -18,8 +18,8 @@ class PyMineAPI:
         self.plugins = {}
         self.tasks = []
 
-        self.handlers = EventHandlers(server)
-        self.command_handler = CommandHandler(server)
+        self.events = EventHandler(server)
+        self.commands = CommandHandler(server)
 
     def taskify_handlers(self, handlers: list):
         for handler in handlers:
@@ -147,7 +147,7 @@ class PyMineAPI:
         self.plugins[plugin_path] = plugin_module
 
     async def init(self):  # called when server starts up
-        self.command_handler.load_commands()
+        self.commands.load_commands()
 
         # Load packet handlers / packet logic handlers under pymine/logic/handle
         for root, dirs, files in os.walk(os.path.join("pymine", "logic", "handle")):
@@ -169,7 +169,7 @@ class PyMineAPI:
                 self.logger.error(f"Failed to load {plugin} due to: {self.logger.f_traceback(e)}")
 
         # start console command handler task
-        self.tasks.append(asyncio.create_task(self.command_handler.handle_console()))
+        self.tasks.append(asyncio.create_task(self.commands.handle_console()))
 
     async def stop(self):  # called when server is stopping
         for task in self.tasks:

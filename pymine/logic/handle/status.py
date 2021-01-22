@@ -1,14 +1,13 @@
-from pymine.util.share import share, logger
-from pymine.api.packet import handle_packet
-
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 from pymine.types.stream import Stream
 
 import pymine.types.packets.status.status as status_packets
 
+from pymine.server import server
 
-@handle_packet("status", 0x00)
+
+@server.api.events.on_packet("status", 0x00)
 async def send_status(stream: Stream, packet: Packet) -> tuple:
     data = {
         "version": {"name": share["version"], "protocol": share["protocol"]},
@@ -33,7 +32,7 @@ async def send_status(stream: Stream, packet: Packet) -> tuple:
     return True, stream
 
 
-@handle_packet("status", 0x01)
+@server.api.events.on_packet("status", 0x01)
 async def send_pong(stream: Stream, packet: Packet) -> tuple:
     stream.write(Buffer.pack_packet(packet))
     await stream.drain()

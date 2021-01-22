@@ -4,10 +4,7 @@ from cryptography.hazmat.primitives import serialization
 import aiohttp
 import uuid
 
-from pymine.api.packet import handle_packet
-
 import pymine.util.encryption as encryption
-from pymine.util.share import share
 
 from pymine.types.stream import Stream, EncryptedStream
 from pymine.types.packet import Packet
@@ -16,11 +13,13 @@ from pymine.types.buffer import Buffer
 from pymine.types.packets.login.set_comp import LoginSetCompression
 import pymine.types.packets.login.login as login_packets
 
+from pymine.server import server
+
 login_cache = {}
 states = share["states"]
 
 
-@handle_packet("login", 0x00)
+@server.api.events.on_packet("login", 0x00)
 async def login_start(stream: Stream, packet: Packet) -> tuple:
     if share["conf"]["online_mode"]:  # Online mode is enabled, so we request encryption
         lc = login_cache[stream.remote] = {"username": packet.username, "verify": None}
@@ -48,7 +47,7 @@ async def login_start(stream: Stream, packet: Packet) -> tuple:
     return True, stream
 
 
-@handle_packet("login", 0x01)
+@server.api.events.on_packet("login", 0x01)
 async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
     shared_key, auth = await server_auth(packet, stream.remote, login_cache[stream.remote])
 

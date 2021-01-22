@@ -72,8 +72,7 @@ class PluginAPI:
 
         return conf
 
-    @staticmethod
-    async def load_plugin(git_dir, plugin_name):
+    async def load_plugin(self, git_dir, plugin_name):
         root = os.path.join("plugins", plugin_name)
 
         if os.path.isfile(root):
@@ -130,7 +129,7 @@ class PluginAPI:
             logger.error(f"Failed to setup {plugin_name} due to: {logger.f_traceback(e)}")
             return
 
-        plugins[plugin_path] = plugin_module
+        self.plugins[plugin_path] = plugin_module
 
 
     async def init(self):  # called when server starts up
@@ -151,19 +150,18 @@ class PluginAPI:
 
         for plugin in plugins_dir:
             try:
-                await load_plugin(git_dir, plugin)
+                await self.load_plugin(git_dir, plugin)
             except BaseException as e:
                 logger.error(f"Failed to load {plugin} due to: {logger.f_traceback(e)}")
 
         # start command handler task
         running_tasks.append(asyncio.create_task(cmds.handle_server_commands()))
 
-
     async def stop(self):  # called when server is stopping
-        for task in running_tasks:
+        for task in self.running_tasks:
             task.cancel()
 
-        for plugin_module in plugins.values():
+        for plugin_module in self.plugins.values():
             teardown = plugin_module.__dict__.get("teardown")
 
             if teardown_function:

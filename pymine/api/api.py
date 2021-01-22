@@ -125,7 +125,7 @@ class PluginAPI:
             return
 
         try:
-            await plugin_module.setup(self.server)
+            await plugin_module.setup(self.server, conf)
         except BaseException as e:
             self.logger.error(f"Failed to setup {plugin_name} due to: {logger.f_traceback(e)}")
             return

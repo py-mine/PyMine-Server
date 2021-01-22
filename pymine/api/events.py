@@ -13,7 +13,7 @@ class EventHandlers:
         self._commands = {}  # {name: (func, node)}
 
     def on_packet(self, state: str, id_: int):
-        def command_deco(func):
+        def deco(func):
             if not asyncio.iscoroutinefunction(func):
                 raise ValueError(self.must_be_coroutine)
 
@@ -24,7 +24,7 @@ class EventHandlers:
 
             return func
 
-        return command_deco
+        return deco
 
     def on_command(self, name: str, node: str):
         if name in self._commands:

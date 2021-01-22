@@ -100,7 +100,7 @@ class Server:
         return False, stream
 
     async def send_packet(self, stream: Stream, packet: Packet, comp_thresh=None):
-        self.logger.debug(f"OUT: state:unknown     | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
+        self.logger.debug(f"OUT: state:-1 | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
         if comp_thresh is None:
             comp_thresh = self.comp_thresh
@@ -109,7 +109,7 @@ class Server:
         await stream.drain()
 
     async def broadcast_packet(self, packet: Packet):
-        self.logger.debug(f"OUT: BROADCAST         | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
+        self.logger.debug(f"BROADCAST:      id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
         raise NotImplementedError
 
@@ -148,7 +148,7 @@ class Server:
         state = self.cache.states.get(stream.remote, 0)
         packet = buf.unpack_packet(state, PACKET_MAP)
 
-        self.logger.debug(f"IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
+        self.logger.debug(f"IN : state: {state} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
         if self.api.events._packet[state].get(packet.id) is None:
             self.logger.warn(f"No valid packet handler found for packet {state} 0x{packet.id:02X} {type(packet).__name__}")

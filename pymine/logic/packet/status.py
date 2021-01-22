@@ -26,15 +26,12 @@ async def send_status(stream: Stream, packet: Packet) -> tuple:
     if server.favicon:
         data["favicon"] = server.favicon
 
-    stream.write(Buffer.pack_packet(status_packets.StatusStatusResponse(data)))
-    await stream.drain()
+    await server.send_packet(stream, status_packets.StatusStatusResponse(data))
 
     return True, stream
 
 
 @server.api.events.on_packet("status", 0x01)
 async def send_pong(stream: Stream, packet: Packet) -> tuple:
-    stream.write(Buffer.pack_packet(packet))
-    await stream.drain()
-
+    await server.send_packet(stream, packet)
     return False, stream

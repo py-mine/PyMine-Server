@@ -7,8 +7,9 @@ import os
 class CommandHandler:
     def __init__(self, server):
         self.server = server
+        self.logger = server.logger
         self.api = server.api
-        
+
         self.load_commands()
 
     # loads default built in commands
@@ -32,9 +33,9 @@ class CommandHandler:
             try:
                 await cmd_func("server", args)
             except BaseException as e:
-                logger.error(logger.f_traceback(e))
+                self.logger.error(self.logger.f_traceback(e))
         else:
-            logger.warn(f"Invalid/unknown command: {cmd}")
+            self.logger.warn(f"Invalid/unknown command: {cmd}")
 
     async def handle_console(self):
         try:
@@ -50,4 +51,4 @@ class CommandHandler:
         except (KeyboardInterrupt, asyncio.CancelledError):
             pass
         except BaseException as e:
-            logger.error(logger.f_traceback(e))
+            self.logger.error(self.logger.f_traceback(e))

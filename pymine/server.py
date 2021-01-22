@@ -65,7 +65,7 @@ class Server:
             addr = socket.gethostbyname(socket.gethostname())
 
         self.aiohttp_ses = aiohttp.ClientSession()
-        self.server = await asyncio.start_server(self.handle_con, host=addr, port=port)
+        self.server = await asyncio.start_server(self.handle_connection, host=addr, port=port)
         self.api = PyMineAPI(self)
 
         await self.api.init()
@@ -149,7 +149,7 @@ class Server:
 
         return do_continue, stream
 
-    async def handle_con(self, reader, writer):  # Handle a connection from a client
+    async def handle_connection(self, reader, writer):  # Handle a connection from a client
         stream = Stream(reader, writer)
         self.logger.debug(f"Connection received from {stream.remote[0]}:{stream.remote[1]}.")
 

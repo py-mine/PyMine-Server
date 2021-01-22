@@ -12,6 +12,7 @@ __all__ = (
     "PlayChatMessageServerBound",
     "PlayTabCompleteClientBound",
     "PlayTabCompleteServerBound",
+    'PlayTitle',
 )
 
 
@@ -126,5 +127,36 @@ class PlayTabCompleteClientBound(Packet):
                 out += Buffer.pack("?", True) + Buffer.pack_chat(Chat(m[1]))
             else:
                 out += Buffer.pack("?", False)
+
+        return out
+
+
+class PlayTitle(Packet):
+    """Edits the title. (Server -> Client)
+
+    :param int action: The action to be taken, see here: https://wiki.vg/Protocol#Title.
+    :param object data: Depends on the action to be taken.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr action:
+    :attr data:
+    """
+
+    id = 0x4F
+    to = 1
+
+    def __init__(self, action: int, data: object = None) -> None:
+        super().__init__()
+
+        self.action = action
+        self.data = data
+
+    def encode(self) -> bytes:
+        out = Buffer.pack_varint(self.action)
+
+        if 2 >= self.action >= 0:
+            out += Buffer.pack_chat(Chat(self.data))
+        elif self.action == 3:
+            out += b''.join(Buffer.pack('i', i) for i in self.data)
 
         return out

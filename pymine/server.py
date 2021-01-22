@@ -106,7 +106,7 @@ class Server:
         await stream.drain()
 
     async def broadcast_packet(self, packet: Packet):
-        self.logger.debug(f"OUT: state:BROADCAST   | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
+        self.logger.debug(f"OUT: BROADCAST         | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
         raise NotImplementedError
 

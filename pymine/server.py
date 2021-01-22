@@ -37,8 +37,10 @@ class Server:
 
     class Cache:
         def __init__(self):
-            self.states = {}
-            self.login = {}
+            self.states = {}  # {remote: state}
+            self.login = {}  # {remote: {username: username, verify: verify token}}
+            self.entity_id = {}  # {remote: entity_id}
+            self.user_cache = {}  # {entity_id: {remote: tuple, uuid: str}}
 
     def __init__(self):
         self.meta = self.Meta()

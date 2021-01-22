@@ -141,8 +141,6 @@ class PyMineAPI:
         self.plugins[plugin_path] = plugin_module
 
     async def init(self):  # called when server starts up
-        cmds.load_commands()  # load commands in pymine/logic/cmds/*
-
         # Load packet handlers / packet logic handlers under pymine/logic/handle
         for root, dirs, files in os.walk(os.path.join("pymine", "logic", "handle")):
             for file in filter((lambda f: f.endswith(".py")), files):

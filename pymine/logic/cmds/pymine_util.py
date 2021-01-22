@@ -13,9 +13,9 @@ async def exec_(uuid: str, args: list):
                 await handle_server_command(cmd_line)
 
     except FileNotFoundError:
-        logger.warn("Can't find that file...")
+        server.logger.warn("Can't find that file...")
 
 
 @server.api.events.on_command(name="echo", node="pymine.cmds.echo")
 async def echo(uuid: str, text: str):
-    logger.info(f"{uuid}: {text}")
+    server.logger.info(f"{uuid}: {text}")

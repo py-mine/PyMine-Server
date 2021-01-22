@@ -72,7 +72,7 @@ class Server:
         async with self.server:
             logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
 
-            self.api.taskify_handlers(self.api.handlers._server_ready)
+            self.api.taskify_handlers(self.api.events._server_ready)
 
             await self.server.serve_forever()
 
@@ -148,13 +148,13 @@ class Server:
 
         self.logger.debug(f"IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
-        if self.api.handlers._packet[state].get(packet.id) is None:
+        if self.api.events._packet[state].get(packet.id) is None:
             self.logger.warn(f"No valid packet handler found for packet {state} 0x{packet.id:02X} {type(packet).__name__}")
             return True, stream
 
         do_continue = True
 
-        for handler in self.api.handlers._packet[state][packet.id]:
+        for handler in self.api.events._packet[state][packet.id]:
             try:
                 continue_, stream = await handler(stream, packet)
             except BaseException as e:

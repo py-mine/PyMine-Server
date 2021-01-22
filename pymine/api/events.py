@@ -10,7 +10,6 @@ class EventHandler:
         self._packet = {"handshaking": {}, "login": {}, "play": {}, "status": {}}
         self._server_ready = []  # [func, func, func,..]
         self._server_stop = []  # [func, func, func,..]
-        self._commands = {}  # {name: (func, node)}
 
     def on_packet(self, state: str, id_: int):
         def deco(func):
@@ -22,22 +21,6 @@ class EventHandler:
             except KeyError:
                 self._packet[state][id_] = [func]
 
-            return func
-
-        return deco
-
-    def on_command(self, name: str, node: str):
-        if name in self._commands:
-            raise ValueError("Command name is already in use.")
-
-        if " " in name:
-            raise ValueError("Command name may not contain spaces.")
-
-        def deco(func):
-            if not asyncio.iscoroutinefunction(func):
-                raise ValueError(self.must_be_coroutine)
-
-            self._commands[name] = func, node
             return func
 
         return deco

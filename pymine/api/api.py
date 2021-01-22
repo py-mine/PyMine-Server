@@ -6,9 +6,8 @@ import yaml
 import git
 import os
 
-from pymine.util.share import logger, share
 import pymine.logic.commands as cmds
-
+from pymine.server import server
 from pymine import api
 
 

@@ -8,16 +8,10 @@ import os
 
 import pymine.logic.commands as cmds
 
-from pymine.api.events import Handlers
+from pymine.api.events import EventsHandler
 
 
 class PyMineAPI:
-    class Handlers:
-        def __init__(self):
-            self.packet = {"handshaking": {}, "login": {}, "play": {}, "status": {}}
-            self.server_ready = []
-            self.server_stop = []
-
     def __init__(self, server):
         self.server = server
         self.logger = server.logger
@@ -25,7 +19,7 @@ class PyMineAPI:
         self.plugins = {}
         self.running_tasks = []
 
-        self.handlers = self.Handlers()
+        self.handler = EventsHandler()
 
     @staticmethod
     def update_repo(git_dir, git_url, root, plugin_name, do_clone=False):

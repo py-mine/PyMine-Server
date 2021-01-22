@@ -34,14 +34,14 @@ class PluginAPI:
             return
 
         if not os.path.isdir(os.path.join(root, ".git")):
-            return update_repo(git_dir, git_url, root, plugin_name, True)
+            return self.update_repo(git_dir, git_url, root, plugin_name, True)
 
         try:
             self.logger.debug(f"Pulling from {git_url}...")
             res = git.Git(root).pull()  # pull latest from remote
         except BaseException as e:
             self.logger.debug(f"Failed to pull from {git_url}, attempting to clone...")
-            return update_repo(git_dir, git_url, root, plugin_name, True)
+            return self.update_repo(git_dir, git_url, root, plugin_name, True)
 
         if res == "Already up to date.":
             self.logger.info(f"No updates found for {plugin_name}.")
@@ -94,7 +94,7 @@ class PluginAPI:
             return
 
         try:
-            conf = load_plugin_config(root)
+            conf = self.load_plugin_config(root)
         except ValueError as e:
             self.logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. ({str(e)})")
             return
@@ -106,7 +106,7 @@ class PluginAPI:
             self.logger.info(f"Checking for updates for {plugin_name}...")
 
             try:
-                update_repo(git_dir, conf["git_url"], root, plugin_name)
+                self.update_repo(git_dir, conf["git_url"], root, plugin_name)
             except BaseException as e:
                 self.logger.error(f"Failed to update {plugin_name} due to: {logger.f_traceback(e)}")
                 return
@@ -125,7 +125,7 @@ class PluginAPI:
             return
 
         try:
-            await plugin_module.setup()
+            await plugin_module.setup(self.server)
         except BaseException as e:
             self.logger.error(f"Failed to setup {plugin_name} due to: {logger.f_traceback(e)}")
             return

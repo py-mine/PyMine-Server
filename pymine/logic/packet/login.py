@@ -31,10 +31,13 @@ async def login_start(stream: Stream, packet: Packet) -> tuple:
 
         await server.send_packet(stream, packet, -1)
     else:  # No need for encryption since online mode is off, just send login success
+        if server.comp_thresh > 0:  # Send set compression packet if needed
+            await server.send_packet(stream, LoginSetCompression(server.comp_thresh))
+
         # This should be only generated if the player name isn't found in the world data, but no way to do that rn
         uuid_ = uuid.uuid4()
 
-        await server.send_packet(login_packets.LoginSuccess(uuid_, packet.username), -1)
+        await server.send_packet(login_packets.LoginSuccess(uuid_, packet.username))
 
         server.cache.states[stream.remote] = 3  # Update state to play
 

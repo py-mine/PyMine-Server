@@ -8,7 +8,8 @@ class CommandHandler:
     def __init__(self, server):
         self.server = server
         self.logger = server.logger
-        self.api = server.api
+
+        self._commands = {}  # {name: (func, node)}
 
     # loads default built in commands
     @staticmethod
@@ -16,6 +17,22 @@ class CommandHandler:
         for file in os.listdir("pymine/logic/cmds"):
             if file.endswith(".py"):
                 importlib.import_module(f"pymine.logic.cmds.{file[:-3]}")
+
+    def on_command(self, name: str, node: str):
+        if name in self._commands:
+            raise ValueError("Command name is already in use.")
+
+        if " " in name:
+            raise ValueError("Command name may not contain spaces.")
+
+        def deco(func):
+            if not asyncio.iscoroutinefunction(func):
+                raise ValueError("Decorated object must be a coroutine function.")
+
+            self._commands[name] = func, node
+            return func
+
+        return deco
 
     async def server_command(self, in_text: str):
         in_split = in_text.split(" ")

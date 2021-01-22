@@ -10,8 +10,6 @@ class CommandHandler:
         self.logger = server.logger
         self.api = server.api
 
-        self.load_commands()
-
     # loads default built in commands
     @staticmethod
     def load_commands():  # only loads commands inside cmds folder, not subfolders

@@ -93,62 +93,61 @@ class Server:
 
         self.logger.debug(f"Disconnected nicely from {stream.remote[0]}:{stream.remote[1]}.")
 
+        return False, stream
 
+    async def handle_packet(stream: Stream):  # Handle / respond to packets, this is called in a loop
+        packet_length = 0
 
-# Handle / respond to packets, this is a loop
-async def handle_packet(stream: Stream):
-    packet_length = 0
+        # Basically an implementation of Buffer.unpack_varint()
+        # except designed to read directly from a a StreamReader
+        # and also to handle legacy server list ping packets
+        for i in range(5):
+            try:
+                read = await asyncio.wait_for(stream.read(1), 5)
+            except asyncio.TimeoutError:
+                logger.debug("Closing due to timeout on read...")
+                return False, stream
 
-    # Basically an implementation of Buffer.unpack_varint()
-    # except designed to read directly from a a StreamReader
-    # and also to handle legacy server list ping packets
-    for i in range(5):
-        try:
-            read = await asyncio.wait_for(stream.read(1), 5)
-        except asyncio.TimeoutError:
-            logger.debug("Closing due to timeout on read...")
-            return False, stream
+            if read == b"":
+                logger.debug("Closing due to invalid read....")
+                return False, stream
 
-        if read == b"":
-            logger.debug("Closing due to invalid read....")
-            return False, stream
+            if i == 0 and read == b"\xFE":
+                logger.warn("Legacy ping attempted, legacy ping is not supported.")
+                return False, stream
 
-        if i == 0 and read == b"\xFE":
-            logger.warn("Legacy ping attempted, legacy ping is not supported.")
-            return False, stream
+            b = struct.unpack("B", read)[0]
+            packet_length |= (b & 0x7F) << 7 * i
 
-        b = struct.unpack("B", read)[0]
-        packet_length |= (b & 0x7F) << 7 * i
+            if not b & 0x80:
+                break
 
-        if not b & 0x80:
-            break
+        if packet_length & (1 << 31):
+            packet_length -= 1 << 32
 
-    if packet_length & (1 << 31):
-        packet_length -= 1 << 32
+        buf = Buffer(await stream.read(packet_length))
 
-    buf = Buffer(await stream.read(packet_length))
+        state = STATES.encode(states.get(stream.remote, 0))
+        packet = buf.unpack_packet(state, PACKET_MAP)
 
-    state = STATES.encode(states.get(stream.remote, 0))
-    packet = buf.unpack_packet(state, PACKET_MAP)
+        logger.debug(f"IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
-    logger.debug(f"IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
+        for handler in pymine_api.packet.PACKET_HANDLERS[state][packet.id]:
+            resp_value = await handler(stream, packet)
 
-    for handler in pymine_api.packet.PACKET_HANDLERS[state][packet.id]:
-        resp_value = await handler(stream, packet)
+            try:
+                continue_, stream = resp_value
+            except (
+                ValueError,
+                TypeError,
+            ):
+                logger.warn(f"Invalid return from packet handler: {handler.__module__}.{handler.__qualname__}")
+                continue
 
-        try:
-            continue_, stream = resp_value
-        except (
-            ValueError,
-            TypeError,
-        ):
-            logger.warn(f"Invalid return from packet handler: {handler.__module__}.{handler.__qualname__}")
-            continue
+            if not continue_:
+                return False, stream
 
-        if not continue_:
-            return False, stream
-
-    return continue_, stream
+        return continue_, stream
 
 
 async def handle_con(reader, writer):  # Handle a connection from a client

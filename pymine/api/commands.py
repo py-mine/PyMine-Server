@@ -8,7 +8,7 @@ class CommandHandler:
     def __init__(self, server):
         self.server = server
         self.api = server.api
-        
+
         self.load_commands()
 
     # loads default built in commands

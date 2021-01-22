@@ -178,7 +178,7 @@ class PyMineAPI:
                 try:
                     await teardown()
                 except BaseException as e:
-                    self.logger.error(f'Error occurred while tearing down {plugin_name}: {logger.f_traceback(e)}')
+                    self.logger.error(f"Error occurred while tearing down {plugin_name}: {logger.f_traceback(e)}")
 
         # call all registered on_server_stop handlers
         await asyncio.gather(*(h() for h in api.server.SERVER_STOP_HANDLERS))

@@ -3,7 +3,6 @@ import asyncio
 from pymine import server
 
 
-
 def on_packet(state: str, id_: int):
     def command_deco(func):
         if not asyncio.iscoroutinefunction(func):

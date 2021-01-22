@@ -9,7 +9,7 @@ import os
 import pymine.logic.commands as cmds
 
 
-class PluginAPI:
+class PyMineAPI:
     class Handlers:
         def __init__(self):
             self.packet = {"handshaking": {}, "login": {}, "play": {}, "status": {}}

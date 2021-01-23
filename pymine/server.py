@@ -100,14 +100,15 @@ class Server:
 
         return False, stream
 
-    async def send_packet(self, stream: Stream, packet: Packet, comp_thresh=None):
+    # Not a coroutine, but returns one, so it still needs to be awaited.
+    def send_packet(self, stream: Stream, packet: Packet, comp_thresh=None):
         self.logger.debug(f"OUT: state:-1 | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
         if comp_thresh is None:
             comp_thresh = self.comp_thresh
 
         stream.write(Buffer.pack_packet(packet, comp_thresh))
-        await stream.drain()
+        return stream.drain()
 
     async def broadcast_packet(self, packet: Packet):
         self.logger.debug(f"BROADCAST:      id:0x{packet.id:02X} | packet:{type(packet).__name__}")

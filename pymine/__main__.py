@@ -12,7 +12,6 @@ if __name__ == "__main__":
     logger = Logger()  # debug status will be set later after config is loaded
 
     loop = asyncio.get_event_loop()
-    loop.set_debug(True)
     loop.set_exception_handler(task_exception_handler)
 
     server = pymine.server.Server(logger)

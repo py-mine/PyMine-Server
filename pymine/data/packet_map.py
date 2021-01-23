@@ -2,6 +2,7 @@ import importlib
 import os
 
 from pymine.util.immutable import make_immutable
+from pymine.data.states import STATES
 
 __all__ = (
     "PACKET_MAP",
@@ -13,12 +14,13 @@ def load_packets():
     packet_map = {}
     packet_map_clientbound = {}
 
-    for state in os.listdir("pymine/types/packets"):
+    for state_name in os.listdir("pymine/types/packets"):
+        state = STATES.decode(state_name)
         packet_map[state] = {}
         packet_map_clientbound[state] = {}
 
-        for file in filter((lambda f: f.endswith(".py")), os.listdir(f"pymine/types/packets/{state}")):
-            module = importlib.import_module(f"pymine.types.packets.{state}.{file[:-3]}")
+        for file in filter((lambda f: f.endswith(".py")), os.listdir(f"pymine/types/packets/{state_name}")):
+            module = importlib.import_module(f"pymine.types.packets.{state_name}.{file[:-3]}")
 
             for name in module.__all__:
                 packet = module.__dict__.get(name)

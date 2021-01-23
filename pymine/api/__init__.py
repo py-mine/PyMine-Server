@@ -6,6 +6,8 @@ import yaml
 import git
 import os
 
+from pymine.util.immutable import make_immutable
+
 from pymine.api.commands import CommandHandler
 from pymine.api.events import EventHandler
 
@@ -166,6 +168,9 @@ class PyMineAPI:
                 await self.load_plugin(git_dir, plugin)
             except BaseException as e:
                 self.logger.error(f"Failed to load {plugin} due to: {self.logger.f_traceback(e)}")
+
+        # *should* make packet handling slightly faster
+        self.events._packet = make_immutable(self.events._packet)
 
         # start console command handler task
         self.tasks.append(asyncio.create_task(self.commands.handle_console()))

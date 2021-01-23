@@ -7,7 +7,7 @@
 3. Make your changes, with descriptive commit names.
 4. [Create a pull request](https://github.com/py-mine/PyMine/pulls) with a detailed description of the issue resolved, link the issue you created, and request a reviewer.
 5. One of the main devs will review it and request changes if needed!
-6. *You should probably also [join our Discord server](https://discord.gg/dHjv7DJgb2), for news on the status and direction of the project*
+6. *You should probably also [join our Discord server](discord.gg/dHjv7DJgb2), for news on the status and direction of the project*
 
 ### General Guidelines
 * Use f-strings (`f"{thing}"`) instead of `.format()` where possible

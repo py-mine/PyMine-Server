@@ -53,7 +53,7 @@ class Server:
         self.logger.debug_ = self.conf["debug"]
         asyncio.get_event_loop().set_debug(self.conf['debug'])
 
-        self.aiohttp_ses = None
+        self.aiohttp = None
         self.server = None
         self.api = None
 
@@ -64,7 +64,7 @@ class Server:
         if not addr:
             addr = socket.gethostbyname(socket.gethostname())
 
-        self.aiohttp_ses = aiohttp.ClientSession()
+        self.aiohttp = aiohttp.ClientSession()
         self.server = await asyncio.start_server(self.handle_connection, host=addr, port=port)
         self.api = PyMineAPI(self)
 
@@ -81,7 +81,7 @@ class Server:
         self.logger.info("Closing server...")
 
         self.server.close()
-        await asyncio.gather(self.server.wait_closed(), self.api.stop(), self.aiohttp_ses.close())
+        await asyncio.gather(self.server.wait_closed(), self.api.stop(), self.aiohttp.close())
 
         self.logger.info("Server closed.")
 

@@ -75,7 +75,7 @@ async def server_auth(packet: login_packets.LoginEncryptionResponse, remote: tup
     if server.secrets.rsa_private.decrypt(packet.verify_token, PKCS1v15()) == cache["verify"]:
         decrypted_shared_key = server.secrets.rsa_private.decrypt(packet.shared_key, PKCS1v15())
 
-        resp = await server.aiohttp_ses.get(
+        resp = await server.aiohttp.get(
             "https://sessionserver.mojang.com/session/minecraft/hasJoined",
             params={
                 "username": cache["username"],

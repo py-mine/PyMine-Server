@@ -7,6 +7,7 @@ import git
 import os
 
 from pymine.util.immutable import make_immutable
+from pymine.util.misc import run_in_executor
 
 from pymine.api.commands import CommandHandler
 from pymine.api.events import EventHandler
@@ -163,10 +164,10 @@ class PyMineAPI:
         plugins_dir = os.listdir("plugins")
         git_dir = git.Git("plugins")
 
-        for plugin in plugins_dir:
-            try:
-                await self.load_plugin(git_dir, plugin)
-            except BaseException as e:
+        results = await asyncio.gather(*[self.load_plugin(git_dir, plugin) for plugin in plugins_dir], return_exceptions=True)
+
+        for plugin, result in zip(plugins_dir, results):
+            if isinstance(result, BaseException):
                 self.logger.error(f"Failed to load {plugin} due to: {self.logger.f_traceback(e)}")
 
         # *should* make packet handling slightly faster

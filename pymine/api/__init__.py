@@ -168,7 +168,7 @@ class PyMineAPI:
 
         for plugin, result in zip(plugins_dir, results):
             if isinstance(result, BaseException):
-                self.logger.error(f"Failed to load {plugin} due to: {self.logger.f_traceback(e)}")
+                self.logger.error(f"Failed to load {plugin} due to: {self.logger.f_traceback(result)}")
 
         # *should* make packet handling slightly faster
         self.events._packet = make_immutable(self.events._packet)

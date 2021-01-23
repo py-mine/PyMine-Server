@@ -51,8 +51,9 @@ class Server:
         self.comp_thresh = self.conf["comp_thresh"]
 
         self.logger.debug_ = self.conf["debug"]
+        asyncio.get_event_loop().set_debug(self.conf["debug"])
 
-        self.aiohttp_ses = None
+        self.aiohttp = None
         self.server = None
         self.api = None
 
@@ -63,7 +64,7 @@ class Server:
         if not addr:
             addr = socket.gethostbyname(socket.gethostname())
 
-        self.aiohttp_ses = aiohttp.ClientSession()
+        self.aiohttp = aiohttp.ClientSession()
         self.server = await asyncio.start_server(self.handle_connection, host=addr, port=port)
         self.api = PyMineAPI(self)
 
@@ -80,7 +81,7 @@ class Server:
         self.logger.info("Closing server...")
 
         self.server.close()
-        await asyncio.gather(self.server.wait_closed(), self.api.stop(), self.aiohttp_ses.close())
+        await asyncio.gather(self.server.wait_closed(), self.api.stop(), self.aiohttp.close())
 
         self.logger.info("Server closed.")
 
@@ -119,7 +120,7 @@ class Server:
         # Basically an implementation of Buffer.unpack_varint()
         # except designed to read directly from a a StreamReader
         # and also to handle legacy server list ping packets
-        for i in range(5):
+        for i in range(3):
             try:
                 read = await asyncio.wait_for(stream.read(1), 5)
             except asyncio.TimeoutError:

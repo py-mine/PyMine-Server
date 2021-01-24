@@ -20,7 +20,8 @@
         "question",
         "bug",
         "example",
-        "ideas"
+        "ideas",
+        "infra"
       ]
     }
   ],

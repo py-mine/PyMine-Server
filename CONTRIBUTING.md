@@ -1,6 +1,6 @@
 # <img src="https://i.imgur.com/hXiemtm.png" height=25> PyMine
 ## Contributing
-*Want to help out? This is how!*
+*Want to help out? This is how! P.S. You get a shiny contributor role in the Discord server too!*
 
 1. [Create a bug report, feature request, or other issue](https://github.com/py-mine/PyMine/issues), and assign yourself.
 2. Fork the repository, or create a new branch.

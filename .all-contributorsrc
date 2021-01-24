@@ -27,6 +27,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "Sh-wayz",
+      "name": "Sh-wayz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67710582?v=4",
+      "profile": "https://github.com/Sh-wayz",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,

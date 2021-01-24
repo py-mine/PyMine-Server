@@ -45,7 +45,7 @@ class PlayTeams(Packet):
                 + Buffer.pack_chat(Chat(self.data["team_prefix"]))
                 + Buffer.pack_chat(Chat(self.data["team_suffix"]))
                 + Buffer.pack_varint(len(self.data["entities"]))
-                + b"".join(Buffer.pack_string(e) for e in self.data["entities"])
+                + b"".join([Buffer.pack_string(e) for e in self.data["entities"]])
             )
         elif self.mode == 2:  # update team info
             out += (
@@ -58,12 +58,12 @@ class PlayTeams(Packet):
                 + Buffer.pack_chat(Chat(self.data["team_suffix"]))
             )
         elif self.mode == 3:  # add entities to team
-            out += Buffer.pack_varint(len(self.data["entities"])) + b"".join(
+            out += Buffer.pack_varint(len(self.data["entities"])) + b"".join([
                 Buffer.pack_string(e) for e in self.data["entities"]
-            )
+            ])
         elif self.mode == 4:  # remove entities from team
-            out += Buffer.pack_varint(len(self.data["entities"])) + b"".join(
+            out += Buffer.pack_varint(len(self.data["entities"])) + b"".join([
                 Buffer.pack_string(e) for e in self.data["entities"]
-            )
+            ])
 
         return out

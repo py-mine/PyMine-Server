@@ -27,10 +27,7 @@ if "--packets" in sys.argv or "-P" in sys.argv:
 
                 print("\x1b[D\x1b[D ")
 
-                if len(done) < max(done) - 1 and max(done) not in (
-                    0xFF,
-                    0xFE
-                ):
+                if len(done) < max(done) - 1 and max(done) not in (0xFF, 0xFE):
                     print(f"{state} MISSING ({dir_}): ", end="")
 
                     for i in range(max(done)):

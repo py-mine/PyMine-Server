@@ -36,8 +36,8 @@ class PyMineAPI:
     def update_repo(self, git_dir, git_url, root, plugin_name, do_clone=False):
         if do_clone:
             try:
-                os.rename(root, os.path.join('plugins', f".{plugin_name}_backup_{int(time.time())}"))
-                logger.warn(f'Backing up and resetting {plugin_name}...')
+                os.rename(root, os.path.join("plugins", f".{plugin_name}_backup_{int(time.time())}"))
+                logger.warn(f"Backing up and resetting {plugin_name}...")
             except FileNotFoundError as e:
                 pass
 

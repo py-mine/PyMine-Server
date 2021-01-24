@@ -4,12 +4,13 @@ import os
 sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
 
 from pymine.data.packet_map import PACKET_MAP, PACKET_MAP_CLIENTBOUND
+from pymine.data.states import STATES
 
 if "--packets" in sys.argv or "-P" in sys.argv:
     if len(sys.argv) < 3:
         to_dump = "all"
     else:
-        to_dump = sys.argv[2:]
+        to_dump = [STATES.decode(state) for state in sys.argv[2:]]
 
     for pmap, dir_ in ((PACKET_MAP, "serverbound"), (PACKET_MAP_CLIENTBOUND, "clientbound")):
         for state, map_ in pmap.items():

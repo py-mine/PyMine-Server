@@ -18,6 +18,15 @@
         "mentoring",
         "doc"
       ]
+    },
+    {
+      "login": "emerald73",
+      "name": "Treyver Reicha",
+      "avatar_url": "https://avatars.githubusercontent.com/u/70043252?v=4",
+      "profile": "https://github.com/emerald73",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

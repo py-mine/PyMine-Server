@@ -31,25 +31,25 @@ class Logger:
 
     def debug(self, *message):
         if self.debug_:
-            message = " ".join(str(m) for m in message)
+            message = " ".join([str(m) for m in message])
             print(f"{WHITE}[{nice_time()} {GREY}DEBUG{WHITE}]: {GREY}{message}{END}")
 
     def info(self, *message):
-        message = " ".join(str(m) for m in message)
+        message = " ".join([str(m) for m in message])
         print(f"{BRIGHT}{WHITE}[{nice_time()} {BLUE}INFO{WHITE}]: {message}{END}")
 
     def warn(self, *message):
-        message = " ".join(str(m) for m in message)
+        message = " ".join([str(m) for m in message])
         print(f"{BRIGHT}{WHITE}[{nice_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{message}{END}")
 
     warning = warn
 
     def error(self, *message):
-        message = " ".join(str(m) for m in message)
+        message = " ".join([str(m) for m in message])
         print(f"{BRIGHT}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{message}{END}")
 
     def critical(self, *message):
-        message = " ".join(str(m) for m in message)
+        message = " ".join([str(m) for m in message])
         print(f"{BRIGHT}{WHITE}{BG_RED}[{nice_time()} CRITICAL]: {message}{END}")
 
     @staticmethod

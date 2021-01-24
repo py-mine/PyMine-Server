@@ -524,4 +524,9 @@ class PlayEntityProperties(Packet):
         out = Buffer.pack_varint(self.entity_id)
 
         for prop in self.properties:
-            out += Buffer.pack_string(prop['key']) + Buffer.pack('d', prop['value']) + Buffer.pack_varint(len(prop['modifiers'])) + b''.join([Buffer.pack_modifier(m) for m in prop['modifiers']])
+            out += (
+                Buffer.pack_string(prop["key"])
+                + Buffer.pack("d", prop["value"])
+                + Buffer.pack_varint(len(prop["modifiers"]))
+                + b"".join([Buffer.pack_modifier(m) for m in prop["modifiers"]])
+            )

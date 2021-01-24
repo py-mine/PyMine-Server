@@ -88,6 +88,9 @@ class PyMineAPI:
         return conf
 
     async def load_plugin(self, git_dir, plugin_name):
+        if plugin_name.startswith('.'):
+            return
+
         root = os.path.join("plugins", plugin_name)
 
         if os.path.isfile(root):

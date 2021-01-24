@@ -7,12 +7,15 @@ from pymine.data.formats import TERMINAL_CODES, FORMAT_BY_NAME
 class Chat:
     """A Minecraft chat message.
 
-    :param object msg: dict or list object representing chat message json data.
+    :param object msg: dict or list or str object representing chat message json data.
     :attr msg:
     """
 
     def __init__(self, msg: object) -> None:
-        self.msg = msg
+        if isinstance(msg, str):
+            self.msg = {"text": msg}
+        else:
+            self.msg = msg
 
     @classmethod
     def from_string(cls, text: str) -> Chat:
@@ -45,7 +48,7 @@ class Chat:
 
                     return colored
             elif isinstance(msg, list):
-                return "".join(parse(e) for e in msg)
+                return "".join([parse(e) for e in msg])
             elif isinstance(msg, dict):
                 text = ""
 

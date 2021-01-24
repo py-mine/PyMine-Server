@@ -29,6 +29,39 @@
         "security",
         "test"
       ]
+    },
+    {
+      "login": "Sh-wayz",
+      "name": "Sh-wayz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67710582?v=4",
+      "profile": "https://github.com/Sh-wayz",
+      "contributions": [
+        "code",
+        "bug",
+        "doc",
+        "example",
+        "question",
+        "review",
+        "test"
+      ]
+    },
+    {
+      "login": "Ammar-sys",
+      "name": "Ammar-sys",
+      "avatar_url": "https://avatars.githubusercontent.com/u/69536330?v=4",
+      "profile": "https://github.com/Ammar-sys",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "emerald73",
+      "name": "Treyver Reicha",
+      "avatar_url": "https://avatars.githubusercontent.com/u/70043252?v=4",
+      "profile": "https://github.com/emerald73",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

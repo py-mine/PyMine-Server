@@ -35,6 +35,6 @@ class PlayStatistics(Packet):
         out = Buffer.pack_varint(len(self.stats))
 
         for entry in self.stats:
-            out += b"".join(Buffer.pack_varint(e) for e in entry)
+            out += b"".join([Buffer.pack_varint(e) for e in entry])
 
         return out

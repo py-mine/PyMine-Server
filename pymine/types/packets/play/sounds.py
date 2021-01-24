@@ -8,6 +8,7 @@ from pymine.types.buffer import Buffer
 __all__ = (
     "PlayNamedSoundEffect",
     "PlayEntitySoundEffect",
+    "PlayStopSound",
 )
 
 
@@ -65,4 +66,35 @@ class PlayEntitySoundEffect(Packet):
             + Buffer.pack_varint(self.eid)
             + Buffer.pack("f", self.volume)
             + Buffer.pack("f", self.pitch)
+        )
+
+
+class PlayStopSound(Packet):
+    """Sent by the server to stop a sound. (Server -> Client)
+
+    :param int flags: Tells what data is going to be sent.
+    :param int source: See here: https://wiki.vg/Protocol#Stop_Sound.
+    :param str sound: See here: https://wiki.vg/Protocol#Stop_Sound.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr flags:
+    :attr source:
+    :attr sound:
+    """
+
+    id = 0x52
+    to = 1
+
+    def __init__(self, flags: int, source: int = None, sound: str = None) -> None:
+        super().__init__()
+
+        self.flags = flags
+        self.source = source
+        self.sound = sound
+
+    def encode(self) -> bytes:
+        return (
+            Buffer.pack("b", self.flags)
+            + Buffer.pack_optional(Buffer.pack_varint, self.source)
+            + Buffer.pack_optional(Buffer.pack_string, self.sound)
         )

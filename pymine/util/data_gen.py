@@ -17,26 +17,30 @@ if "--packets" in sys.argv or "-P" in sys.argv:
             done = []
 
             if to_dump == "all" or state in to_dump:
-                print(f"\n{state} DONE ({dir_}): ", end="")
+                print(f"\n{STATES.encode(state)} DONE ({dir_}): ", end="")
+
+                done_local = []
 
                 for id_ in sorted(map_.keys(), key=(lambda x: 0 if x is None else x)):
                     if id_ is None:
                         print("MISSING ID, ", end="")
                     else:
-                        print(f"0x{id_:02X}, ", end="")
                         done.append(id_)
+                        done_local.append(id_)
 
-                print("\x1b[D\x1b[D ")
+                print(", ".join([f"0x{id_:02X}" for id_ in done_local]))
 
                 if len(done) < max(done) - 1 and max(done) not in (0xFF, 0xFE):
-                    print(f"{state} MISSING ({dir_}): ", end="")
+                    print(f"{STATES.encode(state)} MISSING ({dir_}): ", end="")
+
+                    missing = []
 
                     for i in range(max(done)):
                         try:
                             done.index(i)
                         except ValueError:
-                            print(f"0x{i:02X}, ", end="")
+                            missing.append(i)
 
-                    print("\x1b[D\x1b[D ")
+                    print(", ".join([f"0x{id_:02X}" for id_ in missing]))
 else:
     print("Nothing to dump?")

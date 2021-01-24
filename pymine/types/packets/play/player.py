@@ -256,7 +256,7 @@ class PlayJoinGame(Packet):
             + Buffer.pack("B", self.gamemode)
             + Buffer.pack("b", self.prev_gamemode)
             + Buffer.pack_varint(len(self.world_names))
-            + b"".join(Buffer.pack_string(w) for w in self.world_names)
+            + b"".join([Buffer.pack_string(w) for w in self.world_names])
             + Buffer.pack_nbt(self.dim_codec)
             + Buffer.pack_nbt(self.dimension)
             + Buffer.pack_string(self.world_name)
@@ -680,13 +680,13 @@ class PlayPlayerInfo(Packet):
                     + Buffer.pack_optional(Buffer.pack_chat, player["display_name"])
                 )
         elif self.action == 1:  # update gamemode
-            out += b"".join(Buffer.pack_uuid(p["uuid"]) + Buffer.pack_varint(p["gamemode"]) for p in self.players)
+            out += b"".join([Buffer.pack_uuid(p["uuid"]) + Buffer.pack_varint(p["gamemode"]) for p in self.players])
         elif self.action == 2:  # update latency
-            out += b"".join(Buffer.pack_uuid(p["uuid"]) + Buffer.pack_varint(p["ping"]) for p in self.players)
+            out += b"".join([Buffer.pack_uuid(p["uuid"]) + Buffer.pack_varint(p["ping"]) for p in self.players])
         elif self.action == 3:  # update display name
-            out += b"".join(Buffer.pack_uuid(p["uuid"]) + Buffer.pack_optional(p.get("display_name")) for p in self.players)
+            out += b"".join([Buffer.pack_uuid(p["uuid"]) + Buffer.pack_optional(p.get("display_name")) for p in self.players])
         elif self.action == 4:
-            out += b"".join(Buffer.pack_uuid(p["uuid"]) for p in self.players)
+            out += b"".join([Buffer.pack_uuid(p["uuid"]) for p in self.players])
 
         return out
 

@@ -37,7 +37,7 @@ class PyMineAPI:
         if do_clone:
             try:
                 os.rename(root, os.path.join("plugins", f".{plugin_name}_backup_{int(time.time())}"))
-                self.logger.debug(f"Renamed {root} for clone.")
+                self.logger.warn(f"Backing up and resetting {plugin_name}...")
             except FileNotFoundError as e:
                 pass
 

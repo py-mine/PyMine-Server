@@ -13,6 +13,8 @@ class PlayUpdateTime(Packet):
 
     :param int world_age: In ticks, not changed by server commands.
     :param int day_time: The world (or region) time, in ticks. If negative the sun will stop moving at the Math.abs of the time.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
     :attr int world_age:
     :attr int day_time:
     """

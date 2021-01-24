@@ -3,7 +3,7 @@ import sys
 import os
 
 # ensure the pymine modules are accessible
-sys.path.append(os.path.join(os.getcwd(), os.path.split(os.path.split(__file__)[0])[0]))
+sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 
 from pymine.util.logging import Logger, task_exception_handler
 import pymine.server

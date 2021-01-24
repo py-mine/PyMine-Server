@@ -17,7 +17,7 @@ if "--packets" in sys.argv or "-P" in sys.argv:
             done = []
 
             if to_dump == "all" or state in to_dump:
-                print(f"\n{state} DONE ({dir_}): ", end="")
+                print(f"\n{STATES.encode(state)} DONE ({dir_}): ", end="")
 
                 for id_ in sorted(map_.keys(), key=(lambda x: 0 if x is None else x)):
                     if id_ is None:
@@ -29,7 +29,7 @@ if "--packets" in sys.argv or "-P" in sys.argv:
                 print("\x1b[D\x1b[D ")
 
                 if len(done) < max(done) - 1 and max(done) not in (0xFF, 0xFE):
-                    print(f"{state} MISSING ({dir_}): ", end="")
+                    print(f"{STATES.encode(state)} MISSING ({dir_}): ", end="")
 
                     for i in range(max(done)):
                         try:

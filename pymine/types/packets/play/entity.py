@@ -504,5 +504,5 @@ class PlayEntityEquipment(Packet):
         return (
             Buffer.pack_varint(self.entity_id)
             + Buffer.pack_varint(len(self.equipment))
-            + b"".join(Buffer.pack("b", e[0]) + Buffer.pack_slot(**e[1]) for e in self.equipment)
+            + b"".join([Buffer.pack("b", e[0]) + Buffer.pack_slot(**e[1]) for e in self.equipment])
         )

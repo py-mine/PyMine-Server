@@ -48,7 +48,7 @@ class Chat:
 
                     return colored
             elif isinstance(msg, list):
-                return "".join(parse(e) for e in msg)
+                return "".join([parse(e) for e in msg])
             elif isinstance(msg, dict):
                 text = ""
 

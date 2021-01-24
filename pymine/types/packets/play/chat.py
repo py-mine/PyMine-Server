@@ -157,6 +157,6 @@ class PlayTitle(Packet):
         if 2 >= self.action >= 0:
             out += Buffer.pack_chat(Chat(self.data))
         elif self.action == 3:
-            out += b"".join(Buffer.pack("i", i) for i in self.data)
+            out += b"".join([Buffer.pack("i", i) for i in self.data])
 
         return out

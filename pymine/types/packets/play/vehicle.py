@@ -153,5 +153,5 @@ class PlaySetPassengers(Packet):
         return (
             Buffer.pack_varint(self.entity_id)
             + Buffer.pack_varint(self.passenger_count)
-            + b"".join(Buffer.pack_varint(passenger) for passenger in self.passengers)
+            + b"".join([Buffer.pack_varint(passenger) for passenger in self.passengers])
         )

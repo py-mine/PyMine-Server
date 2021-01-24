@@ -212,7 +212,7 @@ class PlayWindowItems(Packet):
         self.slots = slots
 
     def encode(self) -> bytes:
-        return Buffer.pack("h", len(self.slots)) + b"".join(Buffer.pack_slot(s) for s in self.slots)
+        return Buffer.pack("h", len(self.slots)) + b"".join([Buffer.pack_slot(s) for s in self.slots])
 
 
 class PlayWindowProperty(Packet):

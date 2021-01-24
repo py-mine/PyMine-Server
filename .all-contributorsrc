@@ -25,7 +25,8 @@
         "maintenance",
         "platform",
         "projectManagement",
-        "review"
+        "review",
+        "security"
       ]
     }
   ],

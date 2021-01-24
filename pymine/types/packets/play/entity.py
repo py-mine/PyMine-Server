@@ -453,7 +453,7 @@ class PlayDestroyEntities(Packet):
         self.entity_ids = entity_ids
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(len(self.entity_ids)) + b"".join(Buffer.pack_varint(eid) for eid in self.entity_ids)
+        return Buffer.pack_varint(len(self.entity_ids)) + b"".join([Buffer.pack_varint(eid) for eid in self.entity_ids])
 
 
 class PlayEntityMetadata(Packet):

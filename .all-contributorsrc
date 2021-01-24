@@ -17,7 +17,8 @@
         "data",
         "mentoring",
         "doc",
-        "question"
+        "question",
+        "bug"
       ]
     }
   ],

@@ -1,6 +1,6 @@
 # <img src="https://i.imgur.com/hXiemtm.png" height=25> PyMine
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![discord](https://img.shields.io/discord/789623993547227147.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/eeyEcwR9EM)
 ![views](https://api.ghprofile.me/view?username=py-mine/PyMine&color=0FAE6E&style=flat&label=views)
@@ -48,6 +48,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://iapetus11.me"><img src="https://avatars.githubusercontent.com/u/38477514?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Milo Weinberg</b></sub></a><br /><a href="https://github.com/py-mine/PyMine/commits?author=Iapetus-11" title="Code">💻</a> <a href="#design-Iapetus-11" title="Design">🎨</a> <a href="#plugin-Iapetus-11" title="Plugin/utility libraries">🔌</a> <a href="#data-Iapetus-11" title="Data">🔣</a> <a href="#mentoring-Iapetus-11" title="Mentoring">🧑‍🏫</a> <a href="https://github.com/py-mine/PyMine/commits?author=Iapetus-11" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/Ammar-sys"><img src="https://avatars.githubusercontent.com/u/69536330?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ammar-sys</b></sub></a><br /><a href="https://github.com/py-mine/PyMine/commits?author=Ammar-sys" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/Sh-wayz"><img src="https://avatars.githubusercontent.com/u/67710582?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sh-wayz</b></sub></a><br /><a href="https://github.com/py-mine/PyMine/commits?author=Sh-wayz" title="Code">💻</a> <a href="https://github.com/py-mine/PyMine/issues?q=author%3ASh-wayz" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 

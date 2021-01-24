@@ -20,15 +20,6 @@
       ]
     },
     {
-      "login": "Ammar-sys",
-      "name": "Ammar-sys",
-      "avatar_url": "https://avatars.githubusercontent.com/u/69536330?v=4",
-      "profile": "https://github.com/Ammar-sys",
-      "contributions": [
-        "doc"
-      ]
-    },
-    {
       "login": "Sh-wayz",
       "name": "Sh-wayz",
       "avatar_url": "https://avatars.githubusercontent.com/u/67710582?v=4",
@@ -42,7 +33,16 @@
         "review",
         "test"
       ]
-    }
+    },
+    {
+      "login": "Ammar-sys",
+      "name": "Ammar-sys",
+      "avatar_url": "https://avatars.githubusercontent.com/u/69536330?v=4",
+      "profile": "https://github.com/Ammar-sys",
+      "contributions": [
+        "doc"
+      ]
+    },
   ],
   "contributorsPerLine": 7,
   "projectName": "PyMine",

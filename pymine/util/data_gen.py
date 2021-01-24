@@ -28,7 +28,7 @@ if "--packets" in sys.argv or "-P" in sys.argv:
                         done.append(id_)
                         done_local.append(id_)
 
-                print(', '.join([f'0x{id_:02X}' for id_ in done_local]))
+                print(", ".join([f"0x{id_:02X}" for id_ in done_local]))
 
                 if len(done) < max(done) - 1 and max(done) not in (0xFF, 0xFE):
                     print(f"{STATES.encode(state)} MISSING ({dir_}): ", end="")
@@ -41,6 +41,6 @@ if "--packets" in sys.argv or "-P" in sys.argv:
                         except ValueError:
                             missing.append(i)
 
-                    print(', '.join([f'0x{id_:02X}' for id_ in missing]))
+                    print(", ".join([f"0x{id_:02X}" for id_ in missing]))
 else:
     print("Nothing to dump?")

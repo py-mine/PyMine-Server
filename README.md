@@ -46,7 +46,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://iapetus11.me"><img src="https://avatars.githubusercontent.com/u/38477514?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Milo Weinberg</b></sub></a><br /><a href="https://github.com/py-mine/PyMine/commits?author=Iapetus-11" title="Code">💻</a> <a href="#design-Iapetus-11" title="Design">🎨</a></td>
+    <td align="center"><a href="https://iapetus11.me"><img src="https://avatars.githubusercontent.com/u/38477514?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Milo Weinberg</b></sub></a><br /><a href="https://github.com/py-mine/PyMine/commits?author=Iapetus-11" title="Code">💻</a> <a href="#design-Iapetus-11" title="Design">🎨</a> <a href="#plugin-Iapetus-11" title="Plugin/utility libraries">🔌</a></td>
   </tr>
 </table>
 

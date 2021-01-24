@@ -8,7 +8,7 @@ from pymine.types.buffer import Buffer
 __all__ = (
     "PlayNamedSoundEffect",
     "PlayEntitySoundEffect",
-    'PlayStopSound',
+    "PlayStopSound",
 )
 
 
@@ -93,4 +93,8 @@ class PlayStopSound(Packet):
         self.sound = sound
 
     def encode(self) -> bytes:
-        return Buffer.pack('b', self.flags) + Buffer.pack_optional(Buffer.pack_varint, self.source) + Buffer.pack_optional(Buffer.pack_string, self.sound)
+        return (
+            Buffer.pack("b", self.flags)
+            + Buffer.pack_optional(Buffer.pack_varint, self.source)
+            + Buffer.pack_optional(Buffer.pack_string, self.sound)
+        )

@@ -327,7 +327,7 @@ class Buffer:
         """Packs a recipe ingredient into bytes."""
 
         if isinstance(ingredient, list):
-            return cls.pack_varint(len(ingredient)) + b"".join(cls.pack_slot(**slot) for slot in ingredient)
+            return cls.pack_varint(len(ingredient)) + b"".join([cls.pack_slot(**slot) for slot in ingredient])
 
         if isinstance(ingredient, dict):
             return cls.pack_varint(1) + cls.pack_slot(**ingredient)
@@ -390,7 +390,7 @@ class Buffer:
         if recipe_type == "minecraft:crafting_shapeless":
             out += cls.pack_string(recipe["group"])
             out += cls.pack_varint(len(recipe["ingredients"]))  # Length of ingredient array
-            out += b"".join(cls.pack_ingredient(ingredient) for ingredient in recipe["ingredients"])
+            out += b"".join([cls.pack_ingredient(ingredient) for ingredient in recipe["ingredients"]])
             out += cls.pack_slot(**recipe["result"])
         elif recipe_type == "minecraft:crafting_shaped":
             width = len(recipe["pattern"][0])  # Width of pattern

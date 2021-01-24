@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "Iapetus-11",
+      "name": "Milo Weinberg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38477514?v=4",
+      "profile": "https://iapetus11.me",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "PyMine",
+  "projectOwner": "py-mine",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}

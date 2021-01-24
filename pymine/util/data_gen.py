@@ -11,16 +11,7 @@ if "--packets" in sys.argv or "-P" in sys.argv:
     else:
         to_dump = sys.argv[2:]
 
-    for pmap, dir_ in (
-        (
-            PACKET_MAP,
-            "serverbound",
-        ),
-        (
-            PACKET_MAP_CLIENTBOUND,
-            "clientbound",
-        ),
-    ):
+    for pmap, dir_ in ((PACKET_MAP, "serverbound"), (PACKET_MAP_CLIENTBOUND, "clientbound")):
         for state, map_ in pmap.items():
             done = []
 

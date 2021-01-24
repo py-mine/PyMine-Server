@@ -36,7 +36,7 @@ class PyMineAPI:
     def update_repo(self, git_dir, git_url, root, plugin_name, do_clone=False):
         if do_clone:
             try:
-                os.rename(root, f"{root}_backup_{int(time.time())}")
+                os.rename(root, f".{root}_backup_{int(time.time())}")
                 self.logger.debug(f"Renamed {root} for clone.")
             except FileNotFoundError:
                 pass

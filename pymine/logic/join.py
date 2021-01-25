@@ -5,6 +5,8 @@ import time
 from pymine.types.packet import Packet
 from pymine.types.stream import Stream
 
+import pymine.types.packets.play.player as packets_player
+
 from pymine.util.misc import seed_hash
 from pymine.server import server
 

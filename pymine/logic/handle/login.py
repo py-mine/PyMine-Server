@@ -13,6 +13,7 @@ from pymine.types.buffer import Buffer
 from pymine.types.packets.login.set_comp import LoginSetCompression
 import pymine.types.packets.login.login as login_packets
 
+from pymine.logic.join import join
 from pymine.api import StopStream
 from pymine.server import server
 
@@ -41,6 +42,7 @@ async def login_start(stream: Stream, packet: Packet) -> tuple:
         await server.send_packet(login_packets.LoginSuccess(uuid_, packet.username))
 
         server.cache.states[stream.remote] = 3  # Update state to play
+        await join(stream, packet)
 
 
 @server.api.events.on_packet("login", 0x01)
@@ -66,6 +68,7 @@ async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
     await server.send_packet(stream, login_packets.LoginSuccess(*auth))
 
     server.cache.states[stream.remote] = 3  # Update state to play
+    await join(stream, packet)
 
     return stream
 

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import struct
 
 
@@ -8,6 +10,10 @@ class TAG:
         self.id: int = self.__class__.id
 
     @staticmethod
+    def pack(f: str, *data: object) -> bytes:
+        return struct.pack(">" + f, *data)
+
+    @staticmethod
     def unpack(f: str, buf) -> object:
         unpacked = struct.unpack(">" + f, buf.read(struct.calcsize(f)))
 
@@ -16,22 +22,20 @@ class TAG:
 
         return unpacked
 
-    @staticmethod
-    def pack(f: str, *data: object) -> bytes:
-        return struct.pack(">" + f, *data)
-
 
 class TAG_End(TAG):
-    pass
+    id = 0
 
-
-class TAG_Byte(TAG):
-    id = 1
-
-    def __init__(self, value: int) -> None:
+    def __init__(self) -> None:
         super().__init__()
 
-        self.value = value
-
     def encode(self) -> bytes:
-        return struct.pack("")
+        return b'\x00'
+
+    @classmethod
+    def decode(cls, buf) -> TAG_End:
+        value = buf.read(1)
+
+        assert value == b'\x00'
+
+        return cls()

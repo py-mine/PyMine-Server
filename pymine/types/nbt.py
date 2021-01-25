@@ -68,4 +68,4 @@ class TAG_Byte(TAG):
 
     @classmethod
     def decode(cls, buf) -> TAG_Byte:
-        return cls(buf.read(1))
+        return cls(cls.unpack("b", buf))

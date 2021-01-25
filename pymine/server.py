@@ -159,7 +159,7 @@ class Server:
             try:
                 res = await handler(stream, packet)
 
-                if res:
+                if isinstance(res, Stream):
                     stream = res
             except StopStream:
                 raise
@@ -176,10 +176,7 @@ class Server:
 
         while True:
             try:
-                res = await self.handle_packet(stream)
-
-                if res:
-                    stream = res
+                stream = await self.handle_packet(stream)
             except StopStream:
                 break
             except BaseException as e:

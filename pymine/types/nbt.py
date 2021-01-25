@@ -69,3 +69,26 @@ class TAG_Byte(TAG):
     @classmethod
     def decode(cls, buf) -> TAG_Byte:
         return cls(cls.unpack("b", buf))
+
+
+class TAG_Short(TAG):
+    """Used to represent a TAG_Short, stores a single short.
+
+    :param int value: A short (number).
+    :attr int id: The type ID of the tag, see here: https://wiki.vg/NBT.
+    :attr value:
+    """
+
+    id = 2
+
+    def __init__(self, value: int) -> None:
+        super().__init__()
+
+        self.value = value
+
+    def encode(self) -> bytes:
+        return self.pack('h', self.value)
+
+    @classmethod
+    def decode(cls, buf) -> TAG_Short:
+        return cls(self.unpack('h', buf))

@@ -34,4 +34,4 @@ class TAG_Byte(TAG):
         self.value = value
 
     def encode(self) -> bytes:
-        return struct.pack('')
+        return struct.pack("")

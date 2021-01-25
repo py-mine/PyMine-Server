@@ -65,6 +65,8 @@ async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
     # Send LoginSuccess packet, tells client they've logged in succesfully
     await server.send_packet(stream, login_packets.LoginSuccess(*auth))
 
+    server.cache.states[stream.remote] = 3  # Update state to play
+    
     return stream
 
 

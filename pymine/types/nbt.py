@@ -34,8 +34,5 @@ class TAG_End(TAG):
 
     @classmethod
     def decode(cls, buf) -> TAG_End:
-        value = buf.read(1)
-
-        assert value == b'\x00'
-
+        assert buf.read(1) == b'\x00'
         return cls()

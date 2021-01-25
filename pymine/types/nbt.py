@@ -110,8 +110,8 @@ class TAG_Int(TAG):
         self.value = value
 
     def encode(self) -> bytes:
-        return self.pack('h', self.value)
+        return self.pack("h", self.value)
 
     @classmethod
     def decode(cls, buf) -> TAG_Short:
-        return cls(self.unpack('h', buf))
+        return cls(self.unpack("h", buf))

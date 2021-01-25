@@ -23,3 +23,15 @@ class TAG:
 
 class TAG_End(TAG):
     pass
+
+
+class TAG_Byte(TAG):
+    id = 1
+
+    def __init__(self, value: int) -> None:
+        super().__init__()
+
+        self.value = value
+
+    def encode(self) -> bytes:
+        return struct.pack('')

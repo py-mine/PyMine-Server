@@ -4,6 +4,7 @@ from pymine.types.stream import Stream
 
 import pymine.types.packets.status.status as status_packets
 
+from pymine.api import StopStream
 from pymine.server import server
 
 
@@ -27,10 +28,9 @@ async def send_status(stream: Stream, packet: Packet) -> tuple:
         data["favicon"] = server.favicon
 
     await server.send_packet(stream, status_packets.StatusStatusResponse(data), -1)
-    return True, stream
 
 
 @server.api.events.on_packet("status", 0x01)
 async def send_pong(stream: Stream, packet: Packet) -> tuple:
     await server.send_packet(stream, packet, -1)
-    return False, stream
+    raise StopStream

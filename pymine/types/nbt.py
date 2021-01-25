@@ -4,10 +4,15 @@ import struct
 
 
 class TAG:
+    """Base class for an NBT tag.
+
+    :attr int id: The type ID of the tag, see here: https://wiki.vg/NBT.
+    """
+
     id: int = -1
 
     def __init__(self) -> None:
-        self.id: int = self.__class__.id
+        self.id = self.__class__.id
 
     @staticmethod
     def pack(f: str, *data: object) -> bytes:

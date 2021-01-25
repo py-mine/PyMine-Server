@@ -29,6 +29,11 @@ class TAG:
 
 
 class TAG_End(TAG):
+    """Used to represent a TAG_End, signifies the end of a TAG_Compound.
+
+    :attr int id: The type ID of the tag, see here: https://wiki.vg/NBT.
+    """
+
     id = 0
 
     def __init__(self) -> None:
@@ -44,6 +49,13 @@ class TAG_End(TAG):
 
 
 class TAG_Byte(TAG):
+    """Used to represent a TAG_Byte, stores a single signed byte.
+
+    :param int value: A signed byte.
+    :attr int id: The type ID of the tag, see here: https://wiki.vg/NBT.
+    :attr value:
+    """
+
     id = 1
 
     def __init__(self, value: int) -> None:

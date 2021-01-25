@@ -5,6 +5,7 @@ import time
 from pymine.types.packet import Packet
 from pymine.types.stream import Stream
 
+from pymine.util.misc import seed_hash
 from pymine.server import server
 
 
@@ -12,12 +13,12 @@ async def join(stream: Stream, packet: Packet) -> None:
     lvl_name = server.conf["level_name"]
 
     # should be loaded from a cache on the disk or level.dat I think
-    entity_id = server.cache.entity_id[remote] = int(time.time())
+    entity_id = server.cache.entity_id[stream.remote] = int(time.time())
 
     server.send_packet(
         packets_player.PlayJoinGame(
             entity_id,
-            share["conf"]["hardcore"],
+            server.conf["hardcore"],
             0,  # Should be current gamemode
             -1,  # Should be previous gamemode
             # Should be actual world names
@@ -25,10 +26,10 @@ async def join(stream: Stream, packet: Packet) -> None:
             nbt.TAG_Int(name="bruh", value=1),
             nbt.TAG_Int(name="bruh", value=1),
             f"minecraft:{lvl_name}",  # should be actual current world name
-            seed_hash(share["conf"]["seed"]),
-            share["conf"]["max_players"],
-            share["conf"]["view_distance"],
-            (not share["conf"]["debug"]),
+            seed_hash(server.conf["seed"]),
+            server.conf["max_players"],
+            server.conf["view_distance"],
+            (not server.conf["debug"]),
             True,  # should be (not doImmediateRespawn gamerule)
             False,
             False,  # Should be true if world is superflat

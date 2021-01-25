@@ -19,3 +19,7 @@ class TAG:
     @staticmethod
     def pack(f: str, *data: object) -> bytes:
         return struct.pack(">" + f, *data)
+
+
+class TAG_End(TAG):
+    pass

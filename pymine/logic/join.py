@@ -18,6 +18,7 @@ async def join(stream: Stream, packet: Packet) -> None:
     entity_id = server.cache.entity_id[stream.remote] = int(time.time())
 
     server.send_packet(
+        stream,
         packets_player.PlayJoinGame(
             entity_id,
             server.conf["hardcore"],

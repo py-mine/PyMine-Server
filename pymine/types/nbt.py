@@ -30,11 +30,11 @@ class TAG_End(TAG):
         super().__init__()
 
     def encode(self) -> bytes:
-        return b'\x00'
+        return b"\x00"
 
     @classmethod
     def decode(cls, buf) -> TAG_End:
-        assert buf.read(1) == b'\x00'
+        assert buf.read(1) == b"\x00"
         return cls()
 
 
@@ -47,7 +47,7 @@ class TAG_Byte(TAG):
         self.value = value
 
     def encode(self) -> bytes:
-        return self.pack('b', self.value)
+        return self.pack("b", self.value)
 
     @classmethod
     def decode(cls, buf) -> TAG_Byte:

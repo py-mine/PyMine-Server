@@ -91,7 +91,7 @@ class TAG_Short(TAG):
 
     @classmethod
     def decode(cls, buf) -> TAG_Short:
-        return cls(self.unpack('h', buf))
+        return cls(cls.unpack('h', buf))
 
 
 class TAG_Int(TAG):
@@ -114,4 +114,4 @@ class TAG_Int(TAG):
 
     @classmethod
     def decode(cls, buf) -> TAG_Int:
-        return cls(self.unpack("i", buf))
+        return cls(cls.unpack("i", buf))

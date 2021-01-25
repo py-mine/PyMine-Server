@@ -36,5 +36,5 @@ async def join(stream: Stream, packet: Packet) -> None:
             True,  # should be (not doImmediateRespawn gamerule)
             False,
             False,  # Should be true if world is superflat
-        )
+        ),
     )

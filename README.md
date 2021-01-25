@@ -49,6 +49,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/Ammar-sys"><img src="https://avatars.githubusercontent.com/u/69536330?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ammar-sys</b></sub></a><br /><a href="https://github.com/py-mine/PyMine/commits?author=Ammar-sys" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/emerald73"><img src="https://avatars.githubusercontent.com/u/70043252?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Treyver Reicha</b></sub></a><br /><a href="https://github.com/py-mine/PyMine/commits?author=emerald73" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/itsmewulf"><img src="https://avatars.githubusercontent.com/u/63970738?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Paul Przybyszewski</b></sub></a><br /><a href="https://github.com/py-mine/PyMine/commits?author=itsmewulf" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/ashwinvin"><img src="https://avatars.githubusercontent.com/u/38067089?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ashwin Vinod</b></sub></a><br /><a href="#ideas-ashwinvin" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 

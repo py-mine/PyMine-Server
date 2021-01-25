@@ -1,6 +1,7 @@
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 from pymine.types.stream import Stream
+from pymine.types.chat import Chat
 
 import pymine.types.packets.status.status as status_packets
 
@@ -21,7 +22,7 @@ async def send_status(stream: Stream, packet: Packet) -> tuple:
                 {"name": "emeralddragonmc", "id": "eb86dc19-c3f5-4aef-a50e-a4bf435a7528"},
             ],
         },
-        "description": {"text": server.conf["motd"]},  # a Chat
+        "description": Chat(server.conf["motd"]).msg,  # a Chat
     }
 
     if server.favicon:

@@ -36,3 +36,19 @@ class TAG_End(TAG):
     def decode(cls, buf) -> TAG_End:
         assert buf.read(1) == b'\x00'
         return cls()
+
+
+class TAG_Byte(TAG):
+    id = 1
+
+    def __init__(self, value: int) -> None:
+        super().__init__()
+
+        self.value = value
+
+    def encode(self) -> bytes:
+        return self.pack('b', self.value)
+
+    @classmethod
+    def decode(cls, buf) -> TAG_Byte:
+        return cls(buf.read(1))

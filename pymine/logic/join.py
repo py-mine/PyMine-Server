@@ -17,7 +17,7 @@ async def join(stream: Stream, packet: Packet) -> None:
     server.send_packet(packets_player.PlayJoinGame(
         entity_id,
         share["conf"]["hardcore"],
-        0,  # Shoudl be current gamemode
+        0,  # Should be current gamemode
         -1,  # Should be previous gamemode
         # Should be actual world names
         [f"minecraft:{lvl_name}", f"minecraft:{lvl_name}_nether", f"minecraft:{lvl_name}_the_end"],

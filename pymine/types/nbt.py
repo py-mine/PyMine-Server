@@ -250,25 +250,25 @@ class TAG_String(TAG):
     """Used to represent a TAG_String, stores a string.
 
     :param str name: The name of the TAG.
-    :param str value: A string.
+    :param str data: A string.
     :int id: The type ID of the TAG.
     :attr value:
     """
 
     id = 8
 
-    def __init__(self, name: str, value: str) -> None:
+    def __init__(self, name: str, data: str) -> None:
         super().__init__(name)
 
-        self.value = value
+        self.data = data
 
-    def encode_value(self) -> bytes:
-        mutf8_text = encode_modified_utf8(self.value)
-        return Buffer.pack("H", len(mutf8_text)) + mutf8_text
+    def pack_data(self) -> bytes:
+        mutf8_text = encode_modified_utf8(self.data)
+        return Buffer.pack('H', len(mutf8_text)) + mutf8_text
 
     @staticmethod
-    def value_from_buf(buf: Buffer) -> str:
-        return decode_modified_utf8(buf.read(buf.unpack("H")))
+    def unpack_data(buf: Buffer) -> str:
+        return decode_modified_utf8(buf.read(buf.unpack('H')))
 
 
 class TAG_List(TAG):

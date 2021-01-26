@@ -311,6 +311,7 @@ class TAG_List(TAG):
     def pretty(self, indent: int = 0) -> str:
         tab = "    " * indent
         nl = f",\n"
+
         return f'{tab}TAG_List("{self.name}"): [\n{nl.join([t.pretty(indent+1) for t in self.data])}\n{tab}]'
 
 
@@ -350,6 +351,7 @@ class TAG_Compound(TAG):
     def pretty(self, indent: int = 0) -> str:
         tab = "    " * indent
         nl = f",\n"
+
         return f'{tab}TAG_Compound("{self.name}"): [\n{nl.join([t.pretty(indent + 1) for t in self.data])}\n{tab}]'
 
 

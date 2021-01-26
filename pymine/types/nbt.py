@@ -72,16 +72,32 @@ class TAG_End(TAG):
 
     id = 0
 
-    # tag is nameless, placeholder is used for compatibility with other tags
-    def __init__(self, placeholder_name=None, placeholder_value=None) -> None:
+    # tag is nameless and valueless, consists of just \x00
+    def __init__(self) -> None:
         super().__init__()
+
+    def encode_meta(self) -> bytes:
+        return b''
+
+    @staticmethod
+    def meta_from_buf(buf: Buffer) -> tuple:  # returns the type id and name
+        return 0, None
 
     def encode_value(self) -> bytes:
         return b"\x00"
 
+    def encode(self) -> bytes:
+        return self.encode_value()
+
     @staticmethod
     def value_from_buf(buf: Buffer) -> TAG_End:
         assert buf.unpack("b") == b"\x00"
+        return b'\x00'
+
+    @classmethod
+    def from_buf(cls, buf: Buffer):
+        self.value_from_buf(buf)
+        return cls()
 
 
 class TAG_Byte(TAG):

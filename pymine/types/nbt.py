@@ -174,11 +174,11 @@ class TAG_Float(TAG):
         self.value = value
 
     def encode_value(self) -> bytes:
-        return Buffer.pack('f', self.value)
+        return Buffer.pack("f", self.value)
 
     @staticmethod
     def value_from_buf(buf: Buffer) -> float:
-        return buf.unpack('f')
+        return buf.unpack("f")
 
 
 class TAG_Double(TAG):
@@ -198,11 +198,11 @@ class TAG_Double(TAG):
         self.value = value
 
     def encode_value(self) -> bytes:
-        return Buffer.pack('d', self.value)
+        return Buffer.pack("d", self.value)
 
     @staticmethod
     def value_from_buf(buf: Buffer) -> float:
-        return buf.unpack('d')
+        return buf.unpack("d")
 
 
 class TAG_Byte_Array(TAG):
@@ -279,6 +279,6 @@ class TAG_List(TAG):
     def value_from_buf(buf: Buffer) -> list:
         tag_type = TYPES[buf.unpack("b")]
         return [tag_type.from_buf(buf) for _ in range(buf.unpack("i"))]
-        
+
 
 TYPES.extend([TAG_End, TAG_Byte, TAG_Short, TAG_Int, TAG_Long, TAG_Float, TAG_Double, TAG_Byte_Array, TAG_String, TAG_List])

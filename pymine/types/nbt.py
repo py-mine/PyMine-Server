@@ -225,14 +225,16 @@ class TAG_Byte_Array(TAG):
         return Buffer.pack("i", len(self.value)) + Buffer.pack_array("b", self.value)
 
     @staticmethod
-    def from_buf(buf: Buffer) -> bytearray:
+    def value_from_buf(buf: Buffer) -> bytearray:
         return bytearray(buf.unpack_array("b", buf.unpack("i")))
 
 
 class TAG_String(TAG):
     """Used to represent a TAG_String, stores a string.
 
-    :param str value: A string
+    :param str name: The name of the TAG.
+    :param str value: A string.
+    :int id: The type ID of the TAG.
     :attr value:
     """
 
@@ -244,12 +246,12 @@ class TAG_String(TAG):
         self.value = value
 
     def encode(self) -> bytes:
-        utf8 = self.value.encode("utf8")
-        return Buffer.pack("h", len(utf8)) + utf8
+        mutf8_text = encode_modified_utf8(self.value)
+        return Buffer.pack("h", len(mutf8_text)) + mutf8_text
 
-    @classmethod
-    def from_buf(cls, buf: Buffer) -> TAG_String:
-        return cls(buf.read(buf.unpack("h")).decode("utf8"))
+    @staticmethod
+    def value_from_buf(buf: Buffer) -> TAG_String:
+        return cls(buf.read(buf.unpack("H")).decode("utf8"))
 
 
 class TAG_List(TAG):

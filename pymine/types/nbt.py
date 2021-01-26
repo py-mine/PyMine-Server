@@ -301,6 +301,11 @@ class TAG_List(TAG):
 
         return out
 
+    def pretty(self, indent: int = 0) -> str:
+        tab = ('  ' * indent)
+        nl = f',\n{tab}'
+        return f'{tab}TAG_List({self.name}):\n[{[nl.join(str(v)) for v in self.data]}]'
+
 
 class TAG_Compound(TAG):
     """Represents a TAG_Compound, a list of named tags.

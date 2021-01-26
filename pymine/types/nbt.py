@@ -304,7 +304,17 @@ class TAG_Compound(TAG):
 
     @staticmethod
     def value_from_buf(buf: Buffer) -> list:
-        return [TYPES[buf.buf[buf.pos]].from_buf(buf) for _ in range(buf.unpack("i"))]
+        out = []
+
+        while True:
+            tag = TYPES[buf.buf[buf.pos]]
+
+            if tag == TAG_End:
+                break
+
+            out.append(tag.from_buf(buf))
+
+        return out
 
 
-TYPES.extend([TAG_End, TAG_Byte, TAG_Short, TAG_Int, TAG_Long, TAG_Float, TAG_Double, TAG_Byte_Array, TAG_String, TAG_List])
+TYPES.extend([TAG_End, TAG_Byte, TAG_Short, TAG_Int, TAG_Long, TAG_Float, TAG_Double, TAG_Byte_Array, TAG_String, TAG_List, TAG_Compound])

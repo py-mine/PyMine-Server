@@ -243,9 +243,9 @@ class TAG_Byte_Array(TAG):
         return bytearray(buf.read(buf.unpack("i")))
 
     def pretty(self, indent: int = 0) -> str:
-        tab = '    ' * indent
-        tab_extra = '    ' * (indent + 1)
-        nl = f', '
+        tab = "    " * indent
+        tab_extra = "    " * (indent + 1)
+        nl = f", "
 
         return f'{tab}TAG_Int_Array("{self.name}"): [{nl.join([str(v) for v in self.data])}]'
 
@@ -379,9 +379,9 @@ class TAG_Int_Array(TAG):
         return [buf.unpack("i") for _ in range(buf.unpack("i"))]
 
     def pretty(self, indent: int = 0) -> str:
-        tab = '    ' * indent
-        tab_extra = '    ' * (indent + 1)
-        nl = f', '
+        tab = "    " * indent
+        tab_extra = "    " * (indent + 1)
+        nl = f", "
 
         return f'{tab}TAG_Int_Array("{self.name}"): [{nl.join([str(v) for v in self.data])}]'
 
@@ -410,9 +410,9 @@ class TAG_Long_Array(TAG):
         return [buf.unpack("q") for _ in range(buf.unpack("i"))]
 
     def pretty(self, indent: int = 0) -> str:
-        tab = '    ' * indent
-        tab_extra = '    ' * (indent + 1)
-        nl = f', '
+        tab = "    " * indent
+        tab_extra = "    " * (indent + 1)
+        nl = f", "
 
         return f'{tab}TAG_Int_Array("{self.name}"): [{nl.join([str(v) for v in self.data])}]'
 

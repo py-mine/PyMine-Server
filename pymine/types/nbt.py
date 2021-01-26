@@ -39,7 +39,7 @@ class TAG_Byte(TAG):  # 1
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Byte:
-        return cls(cls.unpack("b", buf))
+        return cls(buf.unpack("b"))
 
 
 class TAG_Short(TAG):  # 2
@@ -59,7 +59,7 @@ class TAG_Short(TAG):  # 2
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Short:
-        return cls(cls.unpack("h", buf))
+        return cls(buf.unpack("h"))
 
 
 class TAG_Int(TAG):  # 3
@@ -77,7 +77,7 @@ class TAG_Int(TAG):  # 3
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Int:
-        return cls(cls.unpack("i", buf))
+        return cls(buf.unpack("i"))
 
 
 class TAG_Long(TAG):  # 4
@@ -95,7 +95,7 @@ class TAG_Long(TAG):  # 4
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Long:
-        return cls(cls.unpack("q", buf))
+        return cls(buf.unpack("q"))
 
 
 class TAG_Float(TAG):  # 5
@@ -113,7 +113,7 @@ class TAG_Float(TAG):  # 5
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Float:
-        return cls(cls.unpack('f', buf))
+        return cls(buf.unpack('f'))
 
 
 class TAG_Double(TAG):  # 6
@@ -131,7 +131,7 @@ class TAG_Double(TAG):  # 6
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Double:
-        return cls(cls.unpack('d', buf))
+        return cls(buf.unpack('d'))
 
 
 class TAG_Byte_Array(TAG, bytearray):  # 7
@@ -145,9 +145,4 @@ class TAG_Byte_Array(TAG, bytearray):  # 7
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Byte_Array:
-        return cls(buf.read(cls.unpack('i', buf)))
-
-
-class TAG_String(TAG, str):
-
-    def __init__(self, value: str) -> None:
+        return cls(buf.unpack_array('b', buf.unpack('i')))

@@ -179,23 +179,23 @@ class TAG_Float(TAG):
     """Used to represent a TAG_Float, stores a float (4 bytes).
 
     :param str name: The name of the TAG.
-    :param float value: A float (4 bytes).
+    :param float data: A float (4 bytes).
     :int id: The type ID of the TAG.
     :attr value:
     """
 
     id = 5
 
-    def __init__(self, name: str, value: float) -> None:
+    def __init__(self, name: str, data: float) -> None:
         super().__init__(name)
 
-        self.value = value
+        self.data = data
 
-    def encode_value(self) -> bytes:
-        return Buffer.pack("f", self.value)
+    def pack_data(self) -> bytes:
+        return Buffer.pack("f", self.data)
 
     @staticmethod
-    def value_from_buf(buf: Buffer) -> float:
+    def unpack_data(buf: Buffer) -> float:
         return buf.unpack("f")
 
 

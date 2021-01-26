@@ -334,7 +334,7 @@ class TAG_Compound(TAG):
         out = []
 
         while True:
-            tag = TYPES[buf.unpack('b')]
+            tag = TYPES[buf.unpack("b")]
 
             if tag == TAG_End:
                 break

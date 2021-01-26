@@ -14,7 +14,7 @@ def from_buf(buf: Buffer) -> TAG_Compound:
     except BaseException:
         pass
 
-    return TAG_Compound.from_buf(buf)
+    return TAG_Compound.unpack(buf)
 
 
 class TAG:

@@ -159,8 +159,8 @@ class TAG_Double(TAG):  # 6
 class TAG_Byte_Array(TAG, bytearray):
     """Used to represent a TAG_Byte_Array, stores an array of bytes."""
 
-    def __init__(self, data: bytes) -> None:
-        bytearray.__init__(self, data)
+    def __init__(self, value: bytes) -> None:
+        bytearray.__init__(self, value)
 
     def encode(self) -> bytes:
         return self.pack('i', len(self)) + bytes(self)

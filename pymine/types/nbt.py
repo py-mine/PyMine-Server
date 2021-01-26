@@ -13,7 +13,7 @@ class TAG:
 
     id = None
 
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str = None) -> None:
         self.id = self.__class__.id
         self.name = name
 

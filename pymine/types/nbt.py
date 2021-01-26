@@ -49,7 +49,9 @@ class TAG_End(TAG):
 
     id = 0
 
-    def __init__(self, placeholder_name = None, placeholder_value = None) -> None:  # tag is nameless, placeholder is used for compatibility with other tags
+    def __init__(
+        self, placeholder_name=None, placeholder_value=None
+    ) -> None:  # tag is nameless, placeholder is used for compatibility with other tags
         super().__init__()
 
     def encode_value(self) -> bytes:
@@ -77,11 +79,11 @@ class TAG_Byte(TAG):
         self.value = value
 
     def encode_value(self) -> bytes:
-        return Buffer.pack('b', self.value)
+        return Buffer.pack("b", self.value)
 
     @staticmethod
     def value_from_buf(buf: Buffer) -> int:
-        return buf.unpack('b')
+        return buf.unpack("b")
 
 
 class TAG_Short(TAG):
@@ -101,11 +103,11 @@ class TAG_Short(TAG):
         self.value = value
 
     def encode_value(self) -> bytes:
-        return Buffer.pack('h', self.value)
+        return Buffer.pack("h", self.value)
 
     @staticmethod
     def value_from_buf(buf: Buffer) -> int:
-        return buf.unpack('h')
+        return buf.unpack("h")
 
 
 class TAG_Int(TAG):
@@ -125,11 +127,11 @@ class TAG_Int(TAG):
         self.value = value
 
     def encode_value(self) -> bytes:
-        return Buffer.pack('i', self.value)
+        return Buffer.pack("i", self.value)
 
     @staticmethod
     def value_from_buf(buf: Buffer) -> int:
-        return buf.unpack('i')
+        return buf.unpack("i")
 
 
 class TAG_Long(TAG):

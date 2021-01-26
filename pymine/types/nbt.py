@@ -311,7 +311,7 @@ class TAG_List(TAG, list):
         return f'{tab}TAG_List("{self.name}"): [\n{nl.join([t.pretty(indent+1) for t in self])}\n{tab}]'
 
 
-class TAG_Compound(TAG):
+class TAG_Compound(TAG, dict):
     """Represents a TAG_Compound, a list of named tags.
 
     :param str name: The name of the TAG.
@@ -323,12 +323,11 @@ class TAG_Compound(TAG):
     id = 10
 
     def __init__(self, name: str, data: list) -> None:
-        super().__init__(name)
-
-        self.data = data
+        TAG.__init__(self, name)
+        dict.__init__(self, [(t.name, t) for t in data])
 
     def pack_data(self) -> bytes:
-        return b"".join([tag.pack() for tag in self.data]) + b"\x00"
+        return b"".join([tag.pack() for tag in self.values()]) + b"\x00"
 
     @staticmethod
     def unpack_data(buf: Buffer) -> list:
@@ -348,7 +347,7 @@ class TAG_Compound(TAG):
         tab = "    " * indent
         nl = f",\n"
 
-        return f'{tab}TAG_Compound("{self.name}"): [\n{nl.join([t.pretty(indent + 1) for t in self.data])}\n{tab}]'
+        return f'{tab}TAG_Compound("{self.name}"): [\n{nl.join([t.pretty(indent + 1) for t in self.values()])}\n{tab}]'
 
 
 class TAG_Int_Array(TAG, list):

@@ -57,15 +57,17 @@ class TAG_Byte(TAG):
         return cls(buf.unpack("b"))
 
 
-class TAG_Short(TAG):  # 2
+class TAG_Short(TAG):
     """Used to represent a TAG_Short, stores a single short (2 byte int).
 
     :param int value: A short (number).
     :attr value:
     """
 
-    def __init__(self, value: int) -> None:
-        super().__init__()
+    id = 2
+
+    def __init__(self, name: str, value: int) -> None:
+        super().__init__(name)
 
         self.value = value
 
@@ -77,14 +79,18 @@ class TAG_Short(TAG):  # 2
         return cls(buf.unpack("h"))
 
 
-class TAG_Int(TAG):  # 3
+class TAG_Int(TAG):
     """Used to represent a TAG_Int, stores a single integer (4 bytes).
 
     :param int value: An integer.
     :attr value:
     """
 
-    def __init__(self, value: int) -> None:
+    id = 3
+
+    def __init__(self, name: str, value: int) -> None:
+        super().__init__(name)
+
         self.value = value
 
     def encode(self) -> bytes:

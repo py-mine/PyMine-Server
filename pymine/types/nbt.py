@@ -109,9 +109,11 @@ class TAG_Short(TAG):
 
 
 class TAG_Int(TAG):
-    """Used to represent a TAG_Int, stores a single integer (4 bytes).
+    """Used to represent a TAG_Int, stores an integer (4 bytes).
 
-    :param int value: An integer.
+    :param str name: The name of the TAG.
+    :param int value: A int (4 bytes).
+    :int id: The type ID of the TAG.
     :attr value:
     """
 
@@ -122,12 +124,12 @@ class TAG_Int(TAG):
 
         self.value = value
 
-    def encode(self) -> bytes:
-        return Buffer.pack("i", self.value)
+    def encode_value(self) -> bytes:
+        return Buffer.pack('i', self.value)
 
-    @classmethod
-    def from_buf(cls, buf: Buffer) -> TAG_Int:
-        return cls(buf.unpack("i"))
+    @staticmethod
+    def value_from_buf(buf: Buffer) -> int:
+        return buf.unpack('i')
 
 
 class TAG_Long(TAG):

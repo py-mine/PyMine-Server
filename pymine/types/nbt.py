@@ -259,6 +259,8 @@ class TAG_List(TAG):
 
     :param str name: The name of the TAG
     :param list value: A uniform list of TAGs
+    :int id: The type ID of the TAG.
+    :attr value:
     """
 
     def __init__(self, name: str, value: list) -> None:
@@ -266,14 +268,14 @@ class TAG_List(TAG):
 
         self.value = value
 
-    def encode(self) -> bytes:
+    def encode_value(self) -> bytes:
         return (
             Buffer.pack("b", self.value[0].id)
             + Buffer.pack("i", len(self.value))
             + b"".join([value.encode() for value in self.value])
         )
 
-    @classmethod
-    def from_buf(cls, buf: Buffer) -> TAG_List:
-        type_id = buf.unpack("b")
-        return cls([TYPES[type_id].from_buf(buf) for _ in range(buf.unpack("i"))])
+    @staticmethod
+    def value_from_buf(buf: Buffer) -> list:
+        tag_type = TYPES[buf.unpack("b")]
+        return [tag_type.from_buf(buf) for _ in range(buf.unpack("i"))]

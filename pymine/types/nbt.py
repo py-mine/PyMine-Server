@@ -76,107 +76,78 @@ class TAG:
 
 
 class TAG_End(TAG):
-    """Used to represent a TAG_End, signifies the end of a TAG_Compound."""
-
     id = 0
-
-    # tag is nameless and valueless, consists of just \x00
-    def __init__(self) -> None:
-        super().__init__()
-
-    def encode_meta(self) -> bytes:
-        return b''
-
-    @staticmethod
-    def meta_from_buf(buf: Buffer) -> tuple:  # returns the type id and name
-        return 0, None
-
-    def encode_value(self) -> bytes:
-        return b"\x00"
-
-    def encode(self) -> bytes:
-        return self.encode_value()
-
-    @staticmethod
-    def value_from_buf(buf: Buffer) -> TAG_End:
-        assert buf.unpack("b") == b"\x00"
-        return b'\x00'
-
-    @classmethod
-    def from_buf(cls, buf: Buffer):
-        self.value_from_buf(buf)
-        return cls()
 
 
 class TAG_Byte(TAG):
     """Used to represent a TAG_Byte, stores a single signed byte.
 
     :param str name: The name of the TAG.
-    :param int value: A signed byte.
+    :param int data: A signed byte.
     :int id: The type ID of the TAG.
     :attr value:
     """
 
     id = 1
 
-    def __init__(self, name: str, value: int) -> None:
+    def __init__(self, name: str, data: int) -> None:
         super().__init__(name)
 
-        self.value = value
+        self.data = data
 
-    def encode_value(self) -> bytes:
-        return Buffer.pack("b", self.value)
+    def pack_data(self) -> bytes:
+        return Buffer.pack('b', self.data)
 
     @staticmethod
-    def value_from_buf(buf: Buffer) -> int:
-        return buf.unpack("b")
+    def unpack_data(buf: Buffer) -> int:
+        return buf.unpack('b')
 
 
 class TAG_Short(TAG):
     """Used to represent a TAG_Short, stores a single short (2 byte int).
 
     :param str name: The name of the TAG.
-    :param int value: A short (2 byte int).
+    :param int data: A short (2 byte int).
     :int id: The type ID of the TAG.
     :attr value:
     """
 
     id = 2
 
-    def __init__(self, name: str, value: int) -> None:
+    def __init__(self, name: str, data: int) -> None:
         super().__init__(name)
 
-        self.value = value
+        self.data = data
 
-    def encode_value(self) -> bytes:
-        return Buffer.pack("h", self.value)
+    def pack_data(self) -> bytes:
+        return Buffer.pack('h', self.data)
 
     @staticmethod
-    def value_from_buf(buf: Buffer) -> int:
-        return buf.unpack("h")
+    def unpack_data(buf: Buffer) -> int:
+        return buf.unpack('h')
 
 
 class TAG_Int(TAG):
     """Used to represent a TAG_Int, stores an integer (4 bytes).
 
     :param str name: The name of the TAG.
-    :param int value: A int (4 bytes).
+    :param int data: A int (4 bytes).
     :int id: The type ID of the TAG.
     :attr value:
     """
 
     id = 3
 
-    def __init__(self, name: str, value: int) -> None:
+    def __init__(self, name: str, data: int) -> None:
         super().__init__(name)
 
-        self.value = value
+        self.data = data
 
-    def encode_value(self) -> bytes:
-        return Buffer.pack("i", self.value)
+    def pack_data(self) -> bytes:
+        return Buffer.pack("i", self.data)
 
     @staticmethod
-    def value_from_buf(buf: Buffer) -> int:
+    def unpack_data(buf: Buffer) -> int:
         return buf.unpack("i")
 
 

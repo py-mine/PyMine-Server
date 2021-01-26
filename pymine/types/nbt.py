@@ -61,19 +61,6 @@ class TAG:
         cls.unpack_id(buf)
         return cls(cls.unpack_name(buf), cls.unpack_data(buf))
 
-    def pretty(self, obj: object = None, i: int = 0):
-        if obj is None:
-            obj = self
-
-        t = "  " * i
-
-        if isinstance(obj, TAG):
-            return f"{t}{type(obj).__name__}({obj.name})[\n{self.pretty(obj.value, i+1)}\n{t}]"
-        elif isinstance(obj, list):
-            return f",\n{t}".join([self.pretty(val, i + 1) for val in obj])
-        else:
-            return f"{t}{obj}"
-
 
 class TAG_End(TAG):
     id = 0

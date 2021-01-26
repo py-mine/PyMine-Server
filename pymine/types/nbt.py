@@ -211,7 +211,7 @@ class TAG_Double(TAG):
 
         self.data = data
 
-    def pack_data(self) -> bytes:the
+    def pack_data(self) -> bytes:
         return Buffer.pack("d", self.data)
 
     @staticmethod

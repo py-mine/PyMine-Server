@@ -4,7 +4,12 @@ from pymine.types.buffer import Buffer
 
 
 class TAG:
-    """Base class for an NBT tag."""
+    """Base class for an NBT tag.
+
+    :param str name: Name of the tag.
+    :attr int id: The type ID.
+    :attr name
+    """
 
     id = None
 
@@ -24,7 +29,7 @@ class TAG_End(TAG):
 
     @classmethod
     def from_buf(cls, buf) -> TAG_End:
-        assert buf.read(1) == b"\x00"
+        assert buf.unpack('b') == b"\x00"
         return cls()
 
 
@@ -35,8 +40,10 @@ class TAG_Byte(TAG):  # 1
     :attr value:
     """
 
-    def __init__(self, value: int) -> None:
-        super().__init__()
+    id = 1
+
+    def __init__(self, name: str, value: int) -> None:
+        super().__init__(name)
 
         self.value = value
 

@@ -29,7 +29,7 @@ class TAG_End(TAG):
 
     @classmethod
     def from_buf(cls, buf) -> TAG_End:
-        assert buf.unpack('b') == b"\x00"
+        assert buf.unpack("b") == b"\x00"
         return cls()
 
 

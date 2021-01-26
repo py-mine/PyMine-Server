@@ -138,3 +138,26 @@ class TAG_Long(TAG):
     @classmethod
     def decode(cls, buf) -> TAG_Long:
         return cls(cls.unpack("q", buf))
+
+
+class TAG_Float(TAG):
+    """Used to represent a TAG_Float, stores a float (4 bytes).
+
+    :param int value: A float (number).
+    :attr int id: The type ID of the tag, see here: https://wiki.vg/NBT.
+    :attr value:
+    """
+
+    id = 5
+
+    def __init__(self, value: float) -> None:
+        super().__init__()
+
+        self.value = value
+
+    def encode(self) -> bytes:
+        return self.pack('f', self.value)
+
+    @classmethod
+    def decode(cls, buf) -> TAG_Float:
+        return cls(cls.unpack('f', buf))

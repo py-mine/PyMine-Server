@@ -343,23 +343,23 @@ class TAG_Int_Array(TAG):
     """Represents a TAG_Int_Array, a list of ints (4 bytes each).
 
     :param str name: The name of the TAG.
-    :param list value: A list of ints (4 bytes each).
+    :param list data: A list of ints (4 bytes each).
     :int id: The type ID of the TAG.
     :attr value:
     """
 
     id = 11
 
-    def __init__(self, name: str, value: list) -> None:
+    def __init__(self, name: str, data: list) -> None:
         super().__init__(name)
 
-        self.value = value
+        self.data = data
 
-    def encode_value(self) -> bytes:
-        return Buffer.pack("i", len(self.value)) + b"".join([Buffer.pack("i", num) for num in self.value])
+    def pack_data(self) -> bytes:
+        return Buffer.pack("i", len(self.data)) + b"".join([Buffer.pack("i", num) for num in self.data])
 
     @staticmethod
-    def value_from_buf(buf: Buffer) -> list:
+    def unpack_data(buf: Buffer) -> list:
         return [buf.unpack("i") for _ in range(buf.unpack("i"))]
 
 

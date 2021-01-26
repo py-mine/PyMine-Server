@@ -75,7 +75,7 @@ class TAG_End(TAG):
         return ("    " * indent) + "TAG_End(): 0"
 
 
-class TAG_Byte(TAG):
+class TAG_Byte(TAG, int):
     """Used to represent a TAG_Byte, stores a single signed byte.
 
     :param str name: The name of the TAG.
@@ -87,19 +87,18 @@ class TAG_Byte(TAG):
     id = 1
 
     def __init__(self, name: str, data: int) -> None:
-        super().__init__(name)
-
-        self.data = data
+        TAG.__init__(self, name)
+        int.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("b", self.data)
+        return Buffer.pack("b", self)
 
     @staticmethod
     def unpack_data(buf: Buffer) -> int:
         return buf.unpack("b")
 
 
-class TAG_Short(TAG):
+class TAG_Short(TAG, int):
     """Used to represent a TAG_Short, stores a single short (2 byte int).
 
     :param str name: The name of the TAG.
@@ -111,19 +110,18 @@ class TAG_Short(TAG):
     id = 2
 
     def __init__(self, name: str, data: int) -> None:
-        super().__init__(name)
-
-        self.data = data
+        TAG.__init__(self, name)
+        int.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("h", self.data)
+        return Buffer.pack("h", self)
 
     @staticmethod
     def unpack_data(buf: Buffer) -> int:
         return buf.unpack("h")
 
 
-class TAG_Int(TAG):
+class TAG_Int(TAG, int):
     """Used to represent a TAG_Int, stores an integer (4 bytes).
 
     :param str name: The name of the TAG.
@@ -135,19 +133,18 @@ class TAG_Int(TAG):
     id = 3
 
     def __init__(self, name: str, data: int) -> None:
-        super().__init__(name)
-
-        self.data = data
+        TAG.__init__(self, name)
+        int.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("i", self.data)
+        return Buffer.pack("i", self)
 
     @staticmethod
     def unpack_data(buf: Buffer) -> int:
         return buf.unpack("i")
 
 
-class TAG_Long(TAG):
+class TAG_Long(TAG, int):
     """Used to represent a TAG_Long, stores a long long (8 byte int).
 
     :param str name: The name of the TAG.
@@ -159,19 +156,18 @@ class TAG_Long(TAG):
     id = 4
 
     def __init__(self, name: str, data: int) -> None:
-        super().__init__(name)
-
-        self.data = data
+        TAG.__init__(self, name)
+        int.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("q", self.data)
+        return Buffer.pack("q", self)
 
     @staticmethod
     def unpack_data(buf: Buffer) -> int:
         return buf.unpack("q")
 
 
-class TAG_Float(TAG):
+class TAG_Float(TAG, float):
     """Used to represent a TAG_Float, stores a float (4 bytes).
 
     :param str name: The name of the TAG.
@@ -183,19 +179,18 @@ class TAG_Float(TAG):
     id = 5
 
     def __init__(self, name: str, data: float) -> None:
-        super().__init__(name)
-
-        self.data = data
+        TAG.__init__(self, name)
+        float.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("f", self.data)
+        return Buffer.pack("f", self)
 
     @staticmethod
     def unpack_data(buf: Buffer) -> float:
         return buf.unpack("f")
 
 
-class TAG_Double(TAG):
+class TAG_Double(TAG, float):
     """Used to represent a TAG_Double, stores a double (8 byte float).
 
     :param str name: The name of the TAG.
@@ -207,12 +202,11 @@ class TAG_Double(TAG):
     id = 6
 
     def __init__(self, name: str, data: float) -> None:
-        super().__init__(name)
-
-        self.data = data
+        TAG.__init__(self, name)
+        float.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("d", self.data)
+        return Buffer.pack("d", self)
 
     @staticmethod
     def unpack_data(buf: Buffer) -> float:

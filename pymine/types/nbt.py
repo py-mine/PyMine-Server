@@ -29,6 +29,22 @@ class TAG:
     def meta_from_buf(buf: Buffer) -> tuple:  # returns the type id and name
         return buf.unpack("b"), decode_modified_utf8(buf.read(buf.unpack("H")))
 
+    def encode_value(self) -> bytes:
+        raise NotImplementedError
+
+    def encode(self) -> bytes:
+        raise NotImplementedError
+
+    @staticmethod
+    def value_from_buf(buf: Buffer) -> NotImplemented:
+        raise NotImplementedError
+
+    @classmethod
+    def from_buf(cls, buf: Buffer) -> NotImplemented:
+        raise NotImplementedError
+
+
+
 
 class TAG_End(TAG):
     """Used to represent a TAG_End, signifies the end of a TAG_Compound."""

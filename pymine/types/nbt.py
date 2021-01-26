@@ -25,8 +25,8 @@ class TAG:
         mutf8_name = encode_modified_utf8(self.name)
         return Buffer.pack("b", self.id) + Buffer.pack("H", len(mutf8_name)) + mutf8_name
 
-    @classmethod
-    def meta_from_buf(cls, buf: Buffer) -> tuple:  # returns the type id and name
+    @staticmethod
+    def meta_from_buf(buf: Buffer) -> tuple:  # returns the type id and name
         return buf.unpack("b"), decode_modified_utf8(buf.read(buf.unpack("H")))
 
 
@@ -61,12 +61,19 @@ class TAG_Byte(TAG):
 
         self.value = value
 
-    def encode(self) -> bytes:
+    def encode_value(self) -> bytes:
         return Buffer.pack("b", self.value)
+
+    def encode(self) -> bytes:
+        return self.encode_meta() + self.encode_value()
+
+    @staticmethod
+    def value_from_buf(buf: Buffer) -> int:
+        return buf.unpack("b")
 
     @classmethod
     def from_buf(cls, buf: Buffer) -> TAG_Byte:
-        return cls(buf.unpack("b"))
+        return cls(cls.decode_meta(buf)[1], cls.value_from_buf(buf))
 
 
 class TAG_Short(TAG):

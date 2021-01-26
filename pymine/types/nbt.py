@@ -4,18 +4,7 @@ from mutf8 import encode_modified_utf8, decode_modified_utf8
 
 from pymine.types.buffer import Buffer
 
-TYPES = (
-    TAG_End,
-    TAG_Byte,
-    TAG_Short,
-    TAG_Int,
-    TAG_Long,
-    TAG_Float,
-    TAG_Double,
-    TAG_Byte_Array,
-    TAG_String,
-    TAG_List
-)
+TYPES = (TAG_End, TAG_Byte, TAG_Short, TAG_Int, TAG_Long, TAG_Float, TAG_Double, TAG_Byte_Array, TAG_String, TAG_List)
 
 
 class TAG:
@@ -34,11 +23,11 @@ class TAG:
 
     def encode_meta(self) -> bytes:
         mutf8_name = encode_modified_utf8(self.name)
-        return Buffer.pack('b', self.id) + Buffer.pack('H', len(mutf8_name)) + mutf8_name
+        return Buffer.pack("b", self.id) + Buffer.pack("H", len(mutf8_name)) + mutf8_name
 
     @classmethod
     def meta_from_buf(cls, buf: Buffer) -> tuple:  # returns the type id and name
-        return buf.unpack('b'), decode_modified_utf8(buf.read(buf.unpack('H')))
+        return buf.unpack("b"), decode_modified_utf8(buf.read(buf.unpack("H")))
 
 
 class TAG_End(TAG):
@@ -248,9 +237,13 @@ class TAG_List(TAG):
         self.value = value
 
     def encode(self) -> bytes:
-        return Buffer.pack('b', self.value[0].id) + Buffer.pack('i', len(self.value)) + b"".join([value.encode() for value in self.value])
+        return (
+            Buffer.pack("b", self.value[0].id)
+            + Buffer.pack("i", len(self.value))
+            + b"".join([value.encode() for value in self.value])
+        )
 
     @classmethod
     def from_buf(cls, buf: Buffer) -> TAG_List:
-        type_id = buf.unpack('b')
-        return cls([TYPES[type_id].from_buf(buf) for _ in range(buf.unpack('i'))])
+        type_id = buf.unpack("b")
+        return cls([TYPES[type_id].from_buf(buf) for _ in range(buf.unpack("i"))])

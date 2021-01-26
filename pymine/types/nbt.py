@@ -123,12 +123,14 @@ class TAG_Long(TAG):
         return cls(buf.unpack("q"))
 
 
-class TAG_Float(TAG):  # 5
+class TAG_Float(TAG):
     """Used to represent a TAG_Float, stores a float (4 bytes).
 
     :param float value: A float (number).
     :attr value:
     """
+
+    id = 5
 
     def __init__(self, name: str, value: float) -> None:
         super().__init__(name)

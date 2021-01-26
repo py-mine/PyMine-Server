@@ -244,8 +244,10 @@ class TAG_Byte_Array(TAG):
 
     def pretty(self, indent: int = 0) -> str:
         tab = '    ' * indent
-        nl = f',\n'
-        return f'{tab}TAG_Int_Array("{self.name}"): [\n{nl.join([str(v) for v in self.data])}\n{tab}]'
+        tab_extra = '    ' * (indent + 1)
+        nl = f', '
+
+        return f'{tab}TAG_Int_Array("{self.name}"): [{nl.join([str(v) for v in self.data])}]'
 
 
 class TAG_String(TAG):
@@ -376,8 +378,10 @@ class TAG_Int_Array(TAG):
 
     def pretty(self, indent: int = 0) -> str:
         tab = '    ' * indent
-        nl = f',\n'
-        return f'{tab}TAG_Int_Array("{self.name}"): [\n{nl.join([str(v) for v in self.data])}\n{tab}]'
+        tab_extra = '    ' * (indent + 1)
+        nl = f', '
+
+        return f'{tab}TAG_Int_Array("{self.name}"): [{nl.join([str(v) for v in self.data])}]'
 
 
 class TAG_Long_Array(TAG):
@@ -405,8 +409,10 @@ class TAG_Long_Array(TAG):
 
     def pretty(self, indent: int = 0) -> str:
         tab = '    ' * indent
-        nl = f',\n'
-        return f'{tab}TAG_Int_Array("{self.name}"): [\n{nl.join([str(v) for v in self.data])}\n{tab}]'
+        tab_extra = '    ' * (indent + 1)
+        nl = f', '
+
+        return f'{tab}TAG_Int_Array("{self.name}"): [{nl.join([str(v) for v in self.data])}]'
 
 
 TYPES.extend(

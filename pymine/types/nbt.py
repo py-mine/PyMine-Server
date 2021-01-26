@@ -47,11 +47,11 @@ class TAG:
         return decode_modified_utf8(buf.read(buf.unpack("H")))
 
     def pack_data(self) -> bytes:
-        raise NotImplementedError
+        raise NotImplementedError(self.__class__.__name__)
 
-    @staticmethod
-    def unpack_data(buf: Buffer) -> NotImplemented:
-        raise NotImplementedError
+    @classmethod
+    def unpack_data(cls, buf: Buffer) -> NotImplemented:
+        raise NotImplementedError(cls.__name__)
 
     def pack(self) -> bytes:
         return self.pack_id() + self.pack_name() + self.pack_data()

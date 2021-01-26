@@ -10,7 +10,7 @@ TYPES = (TAG_End, TAG_Byte, TAG_Short, TAG_Int, TAG_Long, TAG_Float, TAG_Double,
 class TAG:
     """Base class for an NBT tag.
 
-    :param str name: Name of the tag.
+    :param str name: The name of the TAG.
     :attr int id: The type ID.
     :attr name
     """
@@ -49,7 +49,7 @@ class TAG_End(TAG):
 
     id = 0
 
-    def __init__(self) -> None:  # tag is nameless
+    def __init__(self, *placeholder = None) -> None:  # tag is nameless, placeholder is used for compatibility with other tags
         super().__init__()
 
     def encode_value(self) -> bytes:
@@ -63,7 +63,9 @@ class TAG_End(TAG):
 class TAG_Byte(TAG):
     """Used to represent a TAG_Byte, stores a single signed byte.
 
+    :param str name: The name of the TAG.
     :param int value: A signed byte.
+    :int id: The type ID of the TAG.
     :attr value:
     """
 
@@ -75,18 +77,11 @@ class TAG_Byte(TAG):
         self.value = value
 
     def encode_value(self) -> bytes:
-        return Buffer.pack("b", self.value)
-
-    def encode(self) -> bytes:
-        return self.encode_meta() + self.encode_value()
+        return Buffer.pack('b', self.value)
 
     @staticmethod
     def value_from_buf(buf: Buffer) -> int:
-        return buf.unpack("b")
-
-    @classmethod
-    def from_buf(cls, buf: Buffer) -> TAG_Byte:
-        return cls(cls.decode_meta(buf)[1], cls.value_from_buf(buf))
+        return buf.unpack('b')
 
 
 class TAG_Short(TAG):

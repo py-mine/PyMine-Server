@@ -300,7 +300,7 @@ class TAG_Compound(TAG):
         self.value = value
 
     def encode_value(self) -> bytes:
-        return b"".join([tag.encode() for tag in self.value]) + b'\x00'
+        return b"".join([tag.encode() for tag in self.value]) + b"\x00"
 
     @staticmethod
     def value_from_buf(buf: Buffer) -> list:

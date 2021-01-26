@@ -64,6 +64,9 @@ class TAG:
     def pretty(self, indent: int = 0) -> str:
         return ('  '*indent) + f'{self.__class__.__name__}({self.name}): {self.data}'
 
+    def __str__(self):
+        return self.pretty()
+
 
 class TAG_End(TAG):
     id = 0

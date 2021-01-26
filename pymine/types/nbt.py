@@ -145,14 +145,18 @@ class TAG_Float(TAG):
         return cls(buf.unpack("f"))
 
 
-class TAG_Double(TAG):  # 6
+class TAG_Double(TAG):
     """Used to represent a TAG_Double, stores a double (8 byte float).
 
     :param float value: A double (number).
     :attr value:
     """
 
-    def __init__(self, value: float) -> None:
+    id = 6
+
+    def __init__(self, name: str, value: float) -> None:
+        super().__init__(name)
+
         self.value = value
 
     def encode(self) -> bytes:
@@ -170,7 +174,11 @@ class TAG_Byte_Array(TAG):
     :attr value:
     """
 
-    def __init__(self, value: bytes) -> None:
+    id = 7
+
+    def __init__(self, name: str, value: bytes) -> None:
+        super().__init__(name)
+
         self.value = bytearray(value)
 
     def encode(self) -> bytes:

@@ -255,10 +255,10 @@ class TAG_String(TAG):
 
 
 class TAG_List(TAG):
-    """Packs a list of other tags, the tags in the array are nameless and typeless.
+    """Represents a TAG_List, a list of nameless and typeless tagss.
 
-    :param str name: The name of the TAG
-    :param list value: A uniform list of TAGs
+    :param str name: The name of the TAG.
+    :param list value: A uniform list of TAGs.
     :int id: The type ID of the TAG.
     :attr value:
     """
@@ -284,6 +284,13 @@ class TAG_List(TAG):
 
 
 class TAG_Compound(TAG):
+    """Represents a TAG_Compound, a list of named tags.
+
+    :param str name: The name of the TAG.
+    :param list value: A list of tags.
+    :int id: The type ID of the TAG.
+    :attr value:
+    """
 
     id = 10
 

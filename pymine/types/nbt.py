@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mutf8 import encode_modified_utf8, decode_modified_utf8
-from collections.abc import MutableMapping, MutableSequence
 import gzip
 
 from pymine.types.buffer import Buffer
@@ -220,7 +219,7 @@ class TAG_Double(TAG):
         return buf.unpack("d")
 
 
-class TAG_Byte_Array(TAG):
+class TAG_Byte_Array(TAG, bytearray):
     """Used to represent a TAG_Byte_Array, stores an array of bytes.
 
     :param str name: The name of the TAG.
@@ -232,12 +231,11 @@ class TAG_Byte_Array(TAG):
     id = 7
 
     def __init__(self, name: str, data: bytearray) -> None:
-        super().__init__(name)
-
-        self.data = data
+        TAG.__init__(self, name)
+        bytearray.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("i", len(self.data)) + bytes(self.data)
+        return Buffer.pack("i", len(self)) + bytes(self)
 
     @staticmethod
     def unpack_data(buf: Buffer) -> bytearray:
@@ -248,7 +246,7 @@ class TAG_Byte_Array(TAG):
         tab_extra = "    " * (indent + 1)
         nl = f", "
 
-        return f'{tab}TAG_Int_Array("{self.name}"): [{nl.join([str(v) for v in self.data])}]'
+        return f'{tab}TAG_Int_Array("{self.name}"): [{nl.join([str(v) for v in self])}]'
 
 
 class TAG_String(TAG):

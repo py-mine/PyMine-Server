@@ -177,4 +177,4 @@ class TAG_List(TAG):
         self.value = value
 
     def encode(self) -> bytes:
-        return
+        out = b''.join()

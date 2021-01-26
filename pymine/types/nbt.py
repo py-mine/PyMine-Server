@@ -167,7 +167,7 @@ class TAG_Long(TAG, int):
         return buf.unpack("q")
 
 
-class TAG_Float(TAG):
+class TAG_Float(TAG, float):
     """Used to represent a TAG_Float, stores a float (4 bytes).
 
     :param str name: The name of the TAG.
@@ -179,12 +179,11 @@ class TAG_Float(TAG):
     id = 5
 
     def __init__(self, name: str, data: float) -> None:
-        super().__init__(name)
-
-        self.data = data
+        TAG.__init__(self, name)
+        float.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("f", self.data)
+        return Buffer.pack("f", self)
 
     @staticmethod
     def unpack_data(buf: Buffer) -> float:

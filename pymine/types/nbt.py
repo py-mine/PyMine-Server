@@ -250,8 +250,8 @@ class TAG_String(TAG):
         return Buffer.pack("h", len(mutf8_text)) + mutf8_text
 
     @staticmethod
-    def value_from_buf(buf: Buffer) -> TAG_String:
-        return cls(buf.read(buf.unpack("H")).decode("utf8"))
+    def value_from_buf(buf: Buffer) -> str:
+        return decode_modified_utf8(buf.read(buf.unpack("H")))
 
 
 class TAG_List(TAG):

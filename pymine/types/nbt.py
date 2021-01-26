@@ -226,7 +226,15 @@ class TAG_String(TAG):
 
 
 class TAG_List(TAG):
+    """Packs a list of other tags, the tags in the array are nameless and typeless.
+
+    :param str name: The name of the TAG
+    :param list value: A uniform list of TAGs
+    """
+
     def __init__(self, name: str, value: list) -> None:
+        super().__init__(name)
+
         self.value = value
 
     def encode(self) -> bytes:
@@ -235,3 +243,4 @@ class TAG_List(TAG):
     @classmethod
     def from_buf(cls, buf: Buffer) -> TAG_List:
         type_id = buf.unpack('b')
+        return cls([TYPES[type_id].from_buf(buf) for _ in range(buf.unpack('i'))])

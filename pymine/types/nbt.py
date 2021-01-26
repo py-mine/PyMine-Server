@@ -30,6 +30,8 @@ class TAG:
         self.id = self.__class__.id
         self.name = name
 
+    def encode_meta()
+
 
 class TAG_End(TAG):
     """Used to represent a TAG_End, signifies the end of a TAG_Compound."""

@@ -341,6 +341,29 @@ class TAG_Int_Array(TAG):
         return [buf.unpack('i') for _ in range(buf.unpack('i'))]
 
 
+class TAG_Long_Array(TAG):
+    """Represents a TAG_Long_Array, a list of long longs (8 byte ints).
+
+    :param str name: The name of the TAG.
+    :param list value: A list of long longs (8 byte ints).
+    :int id: The type ID of the TAG.
+    :attr value:
+    """
+
+    id = 12
+
+    def __init__(self, name: str, value: list) -> None:
+        super().__init__(name)
+
+        self.value = value
+
+    def encode_value(self) -> bytes:
+        return Buffer.pack('i', len(self.value)) + b''.join([Buffer.pack('q', num) for num in self.value])
+
+    @staticmethod
+    def value_from_buf(buf: Buffer) -> list:
+        return [buf.unpack('q') for _ in range(buf.unpack('i'))]
+
 TYPES.extend(
     [
         TAG_End,
@@ -355,5 +378,6 @@ TYPES.extend(
         TAG_List,
         TAG_Compound,
         TAG_Int_Array,
+        TAG_Long_Array,
     ]
 )

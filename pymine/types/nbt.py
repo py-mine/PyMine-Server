@@ -281,4 +281,19 @@ class TAG_List(TAG):
         return [tag_type(None, tag_type.value_from_buf(buf)) for _ in range(buf.unpack("i"))]
 
 
+class TAG_Compound(TAG):
+
+    def __init__(self, name: str, value: list) -> None:
+        super().__init__(name)
+
+        self.value = value
+
+    def encode_value(self) -> bytes:
+        return b''.join([tag.encode() for tag in self.value])
+
+    @staticmethod
+    def value_from_buf(buf: Buffer) -> list:
+        return [TYPES[buf.buf[buf.pos]].from_buf(buf) for _ in range(buf.unpack("i"))]
+
+
 TYPES.extend([TAG_End, TAG_Byte, TAG_Short, TAG_Int, TAG_Long, TAG_Float, TAG_Double, TAG_Byte_Array, TAG_String, TAG_List])

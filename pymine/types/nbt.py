@@ -58,6 +58,7 @@ class TAG:
 
     @classmethod
     def unpack(cls, buf: Buffer) -> TAG:
+        cls.unpack_id(buf)
         return cls(cls.unpack_name(buf), cls.unpack_data(buf))
 
     def pretty(self, obj: object = None, i: int = 0):

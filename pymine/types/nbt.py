@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import struct
+from pymine.types.buffer import Buffer
 
 
 class TAG:
@@ -35,7 +35,7 @@ class TAG_Byte(TAG):  # 1
         self.value = value
 
     def encode(self) -> bytes:
-        return self.pack("b", self.value)
+        return Buffer.pack("b", self.value)
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Byte:
@@ -55,7 +55,7 @@ class TAG_Short(TAG):  # 2
         self.value = value
 
     def encode(self) -> bytes:
-        return self.pack("h", self.value)
+        return Buffer.pack("h", self.value)
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Short:
@@ -73,7 +73,7 @@ class TAG_Int(TAG):  # 3
         self.value = value
 
     def encode(self) -> bytes:
-        return self.pack("i", self.value)
+        return Buffer.pack("i", self.value)
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Int:
@@ -91,7 +91,7 @@ class TAG_Long(TAG):  # 4
         self.value = value
 
     def encode(self) -> bytes:
-        return self.pack("q", self.value)
+        return Buffer.pack("q", self.value)
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Long:
@@ -109,7 +109,7 @@ class TAG_Float(TAG):  # 5
         self.value = value
 
     def from_buf(self) -> bytes:
-        return self.pack('f', self.value)
+        return Buffer.pack('f', self.value)
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Float:
@@ -127,22 +127,27 @@ class TAG_Double(TAG):  # 6
         self.value = value
 
     def encode(self) -> bytes:
-        return self.pack('d', self.value)
+        return Buffer.pack('d', self.value)
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Double:
         return cls(buf.unpack('d'))
 
 
-class TAG_Byte_Array(TAG, bytearray):  # 7
+class TAG_Byte_Array(TAG):  # 7
     """Used to represent a TAG_Byte_Array, stores an array of bytes."""
 
     def __init__(self, value: bytes) -> None:
-        bytearray.__init__(self, value)
+        self.value = bytearray(value)
 
     def encode(self) -> bytes:
-        return self.pack('i', len(self)) + bytes(self)
+        return Buffer.pack('i', len(self.value)) + Buffer.pack_array('b', self.value)
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Byte_Array:
         return cls(buf.unpack_array('b', buf.unpack('i')))
+
+
+class TAG_String(TAG):
+
+    def __init__(self, value: str) -> None:

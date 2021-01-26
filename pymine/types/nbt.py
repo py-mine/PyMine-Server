@@ -272,13 +272,13 @@ class TAG_List(TAG):
         return (
             Buffer.pack("b", self.value[0].id)
             + Buffer.pack("i", len(self.value))
-            + b"".join([value.encode() for value in self.value])
+            + b"".join([value.encode_value() for value in self.value])
         )
 
     @staticmethod
     def value_from_buf(buf: Buffer) -> list:
         tag_type = TYPES[buf.unpack("b")]
-        return [tag_type.from_buf(buf) for _ in range(buf.unpack("i"))]
+        return [tag_type(None, tag_type.value_from_buf(buf)) for _ in range(buf.unpack("i"))]
 
 
 TYPES.extend([TAG_End, TAG_Byte, TAG_Short, TAG_Int, TAG_Long, TAG_Float, TAG_Double, TAG_Byte_Array, TAG_String, TAG_List])

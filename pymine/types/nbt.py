@@ -31,27 +31,35 @@ class TAG:
         self.id = self.__class__.id
         self.name = name
 
-    def encode_meta(self) -> bytes:
+    def pack_id(self) -> bytes:
+        return Buffer.pack('b', self.id)
+
+    @staticmethod
+    def unpack_id(buf: Buffer) -> int:
+        return buf.unpack('b')
+
+    def pack_name(self) -> bytes:
         mutf8_name = encode_modified_utf8(self.name)
-        return Buffer.pack("b", self.id) + Buffer.pack("H", len(mutf8_name)) + mutf8_name
+        return Buffer.pack("H", len(mutf8_name)) + mutf8_name
 
     @staticmethod
-    def meta_from_buf(buf: Buffer) -> tuple:  # returns the type id and name
-        return buf.unpack("b"), decode_modified_utf8(buf.read(buf.unpack("H")))
+    def unpack_name(buf: Buffer) -> str:
+        return decode_modified_utf8(buf.read(buf.unpack('H')))
 
-    def encode_value(self) -> bytes:
+    def pack_data(self) -> bytes:
         raise NotImplementedError
-
-    def encode(self) -> bytes:
-        return self.encode_meta() + self.encode_value()
 
     @staticmethod
-    def value_from_buf(buf: Buffer) -> NotImplemented:
+    def unpack_data(buf: Buffer) -> NotImplemented:
         raise NotImplementedError
+
+    def pack(self) -> bytes:
+        return self.pack_id() + self.pack_name() + self.pack_data()
 
     @classmethod
-    def from_buf(cls, buf: Buffer):
-        return cls(cls.meta_from_buf(buf)[1], cls.value_from_buf(buf))
+    def unpack(cls, buf: Buffer) -> TAG:
+        assert cls.unpack_id(buf) == self.id
+        return cls(cls.unpack_name(buf), cls.unpack_data(buf))
 
     def pretty(self, obj: object = None, i: int = 0):
         if obj is None:

@@ -77,7 +77,7 @@ class TAG_End(TAG):
         super().__init__()
 
     def encode_meta(self) -> bytes:
-        return b''
+        return b""
 
     @staticmethod
     def meta_from_buf(buf: Buffer) -> tuple:  # returns the type id and name
@@ -92,7 +92,7 @@ class TAG_End(TAG):
     @staticmethod
     def value_from_buf(buf: Buffer) -> TAG_End:
         assert buf.unpack("b") == b"\x00"
-        return b'\x00'
+        return b"\x00"
 
     @classmethod
     def from_buf(cls, buf: Buffer):

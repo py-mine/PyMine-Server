@@ -308,7 +308,7 @@ class TAG_List(TAG, list):
         tab = "    " * indent
         nl = f",\n"
 
-        return f'{tab}TAG_List("{self.name}"): [\n{nl.join([t.pretty(indent+1) for t in self.data])}\n{tab}]'
+        return f'{tab}TAG_List("{self.name}"): [\n{nl.join([t.pretty(indent+1) for t in self])}\n{tab}]'
 
 
 class TAG_Compound(TAG):

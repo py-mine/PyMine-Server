@@ -101,14 +101,18 @@ class TAG_Int(TAG):
         return cls(buf.unpack("i"))
 
 
-class TAG_Long(TAG):  # 4
+class TAG_Long(TAG):
     """Used to represent a TAG_Long, stores a long long (8 byte integer).
 
     :param int value: A long long (number).
     :attr value:
     """
 
-    def __init__(self, value: int) -> None:
+    id = 4
+
+    def __init__(self, name: str, value: int) -> None:
+        super().__init__(name)
+
         self.value = value
 
     def encode(self) -> bytes:
@@ -126,7 +130,9 @@ class TAG_Float(TAG):  # 5
     :attr value:
     """
 
-    def __init__(self, value: float) -> None:
+    def __init__(self, name: str, value: float) -> None:
+        super().__init__(name)
+
         self.value = value
 
     def from_buf(self) -> bytes:

@@ -49,9 +49,10 @@ class TAG_End(TAG):
 
     id = 0
 
+    # tag is nameless, placeholder is used for compatibility with other tags
     def __init__(
         self, placeholder_name=None, placeholder_value=None
-    ) -> None:  # tag is nameless, placeholder is used for compatibility with other tags
+    ) -> None:
         super().__init__()
 
     def encode_value(self) -> bytes:

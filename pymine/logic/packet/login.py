@@ -38,7 +38,7 @@ async def login_start(stream: Stream, packet: Packet) -> tuple:
         # This should be only generated if the player name isn't found in the world data, but no way to do that rn
         uuid_ = uuid.uuid4()
 
-        await server.send_packet(login_packets.LoginSuccess(uuid_, packet.username))
+        await server.send_packet(stream, login_packets.LoginSuccess(uuid_, packet.username))
 
         server.cache.states[stream.remote] = 3  # Update state to play
 

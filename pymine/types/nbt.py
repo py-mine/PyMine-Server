@@ -275,29 +275,34 @@ class TAG_List(TAG):
     """Represents a TAG_List, a list of nameless and typeless tagss.
 
     :param str name: The name of the TAG.
-    :param list value: A uniform list of TAGs.
+    :param list data: A uniform list of TAGs.
     :int id: The type ID of the TAG.
     :attr value:
     """
 
     id = 9
 
-    def __init__(self, name: str, value: list) -> None:
+    def __init__(self, name: str, data: list) -> None:
         super().__init__(name)
 
-        self.value = value
+        self.data = data
 
-    def encode_value(self) -> bytes:
-        return (
-            Buffer.pack("b", self.value[0].id)
-            + Buffer.pack("i", len(self.value))
-            + b"".join([value.encode_value() for value in self.value])
-        )
+    def pack_data(self) -> bytes:
+        return Buffer.pack('b', self.data[0].id) + Buffer.pack('i', len(self.data)) + b''.join([t.pack_id() + t.pack_data() for t in self.data])
 
     @staticmethod
-    def value_from_buf(buf: Buffer) -> list:
-        tag_type = TYPES[buf.unpack("b")]
-        return [tag_type(None, tag_type.value_from_buf(buf)) for _ in range(buf.unpack("i"))]
+    def unpack_data(buf: Buffer) -> list:
+        tag = TYPES[buf.unpack('b')]
+        length = buf.unpack('i')
+
+        out = []
+
+        for _ in range(length):
+            tag.unpack_id(buf)
+
+            out.append(tag(None, tag.unpack_data(buf)))
+
+        return out
 
 
 class TAG_Compound(TAG):

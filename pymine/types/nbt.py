@@ -374,16 +374,16 @@ class TAG_Long_Array(TAG):
 
     id = 12
 
-    def __init__(self, name: str, value: list) -> None:
+    def __init__(self, name: str, data: list) -> None:
         super().__init__(name)
 
-        self.value = value
+        self.data = data
 
-    def encode_value(self) -> bytes:
-        return Buffer.pack("i", len(self.value)) + b"".join([Buffer.pack("q", num) for num in self.value])
+    def pack_data(self) -> bytes:
+        return Buffer.pack("i", len(self.data)) + b"".join([Buffer.pack("q", num) for num in self.data])
 
     @staticmethod
-    def value_from_buf(buf: Buffer) -> list:
+    def unpack_data(buf: Buffer) -> list:
         return [buf.unpack("q") for _ in range(buf.unpack("i"))]
 
 

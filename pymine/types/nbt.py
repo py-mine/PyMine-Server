@@ -62,7 +62,7 @@ class TAG:
         return cls(cls.unpack_name(buf), cls.unpack_data(buf))
 
     def pretty(self, indent: int = 0) -> str:
-        return ("\t" * indent) + f"{self.__class__.__name__}({self.name}): {self.data}"
+        return ("    " * indent) + f"{self.__class__.__name__}({self.name}): {self.data}"
 
     def __str__(self):
         return self.pretty()
@@ -72,7 +72,7 @@ class TAG_End(TAG):
     id = 0
 
     def pretty(self, indent: int = 0) -> str:
-        return ("\t" * indent) + "TAG_End(): 0"
+        return ("    " * indent) + "TAG_End(): 0"
 
 
 class TAG_Byte(TAG):
@@ -302,7 +302,7 @@ class TAG_List(TAG):
         return out
 
     def pretty(self, indent: int = 0) -> str:
-        tab = ('\t' * indent)
+        tab = ('    ' * indent)
         nl = f',\n'
         return f'{tab}TAG_List({self.name}): [\n{nl.join([t.pretty(indent+1) for t in self.data])}\n{tab}]'
 
@@ -341,7 +341,7 @@ class TAG_Compound(TAG):
         return out
 
     def pretty(self, indent: int = 0) -> str:
-        tab = ('\t' * indent)
+        tab = ('    ' * indent)
         nl = f',\n'
         return f'{tab}TAG_Compound({self.name}): [\n{nl.join([t.pretty(indent + 1) for t in self.data])}\n{tab}]'
 

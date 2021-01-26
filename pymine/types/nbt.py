@@ -163,7 +163,7 @@ class TAG_String(TAG):
         self.value = value
 
     def encode(self) -> bytes:
-        utf8 = self.value.encode('utf8')
+        utf8 = self.value.encode("utf8")
         return Buffer.pack("h", len(utf8)) + utf8
 
     @classmethod
@@ -172,9 +172,8 @@ class TAG_String(TAG):
 
 
 class TAG_List(TAG):
-
     def __init__(self, value: list) -> None:
         self.value = value
 
     def encode(self) -> bytes:
-        out = b''.join()
+        out = b"".join()

@@ -33,15 +33,15 @@ class TAG:
         raise NotImplementedError
 
     def encode(self) -> bytes:
-        raise NotImplementedError
+        return self.encode_meta() + self.encode_value()
 
     @staticmethod
     def value_from_buf(buf: Buffer) -> NotImplemented:
         raise NotImplementedError
 
     @classmethod
-    def from_buf(cls, buf: Buffer) -> NotImplemented:
-        raise NotImplementedError
+    def from_buf(cls, buf: Buffer):
+        return cls(cls.meta_from_buf(buf)[1], cls.value_from_buf(buf))
 
 
 class TAG_End(TAG):
@@ -52,13 +52,18 @@ class TAG_End(TAG):
     def __init__(self) -> None:
         super().__init__()
 
-    def encode(self) -> bytes:
+    def encode_value(self) -> bytes:
         return b"\x00"
+
+    def encode(self) -> bytes:
+        return self.encode_meta() + self.encode_value()
 
     @classmethod
     def from_buf(cls, buf: Buffer) -> TAG_End:
         assert buf.unpack("b") == b"\x00"
         return cls()
+
+    @staticmethod
 
 
 class TAG_Byte(TAG):

@@ -264,11 +264,11 @@ class TAG_String(TAG):
 
     def pack_data(self) -> bytes:
         mutf8_text = encode_modified_utf8(self.data)
-        return Buffer.pack('H', len(mutf8_text)) + mutf8_text
+        return Buffer.pack("H", len(mutf8_text)) + mutf8_text
 
     @staticmethod
     def unpack_data(buf: Buffer) -> str:
-        return decode_modified_utf8(buf.read(buf.unpack('H')))
+        return decode_modified_utf8(buf.read(buf.unpack("H")))
 
 
 class TAG_List(TAG):
@@ -288,12 +288,16 @@ class TAG_List(TAG):
         self.data = data
 
     def pack_data(self) -> bytes:
-        return Buffer.pack('b', self.data[0].id) + Buffer.pack('i', len(self.data)) + b''.join([t.pack_id() + t.pack_data() for t in self.data])
+        return (
+            Buffer.pack("b", self.data[0].id)
+            + Buffer.pack("i", len(self.data))
+            + b"".join([t.pack_id() + t.pack_data() for t in self.data])
+        )
 
     @staticmethod
     def unpack_data(buf: Buffer) -> list:
-        tag = TYPES[buf.unpack('b')]
-        length = buf.unpack('i')
+        tag = TYPES[buf.unpack("b")]
+        length = buf.unpack("i")
 
         out = []
 
@@ -322,7 +326,7 @@ class TAG_Compound(TAG):
         self.data = data
 
     def pack_data(self) -> bytes:
-        return b''.join([tag.pack() for tag in self.data]) + b'\x00'
+        return b"".join([tag.pack() for tag in self.data]) + b"\x00"
 
     @staticmethod
     def unpack_data(buf: Buffer) -> list:

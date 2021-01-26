@@ -334,11 +334,11 @@ class TAG_Int_Array(TAG):
         self.value = value
 
     def encode_value(self) -> bytes:
-        return Buffer.pack('i', len(self.value)) + b''.join([Buffer.pack('i', num) for num in self.value])
+        return Buffer.pack("i", len(self.value)) + b"".join([Buffer.pack("i", num) for num in self.value])
 
     @staticmethod
     def value_from_buf(buf: Buffer) -> list:
-        return [buf.unpack('i') for _ in range(buf.unpack('i'))]
+        return [buf.unpack("i") for _ in range(buf.unpack("i"))]
 
 
 class TAG_Long_Array(TAG):
@@ -358,11 +358,12 @@ class TAG_Long_Array(TAG):
         self.value = value
 
     def encode_value(self) -> bytes:
-        return Buffer.pack('i', len(self.value)) + b''.join([Buffer.pack('q', num) for num in self.value])
+        return Buffer.pack("i", len(self.value)) + b"".join([Buffer.pack("q", num) for num in self.value])
 
     @staticmethod
     def value_from_buf(buf: Buffer) -> list:
-        return [buf.unpack('q') for _ in range(buf.unpack('i'))]
+        return [buf.unpack("q") for _ in range(buf.unpack("i"))]
+
 
 TYPES.extend(
     [

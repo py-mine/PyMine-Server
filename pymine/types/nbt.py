@@ -340,6 +340,11 @@ class TAG_Compound(TAG):
 
         return out
 
+    def pretty(self, indent: int = 0) -> str:
+        tab = ('  ' * indent)
+        nl = f',\n{tab}'
+        return f'{tab}TAG_Compound({self.name}):\n[{[nl.join(str(v)) for v in self.data]}]'
+
 
 class TAG_Int_Array(TAG):
     """Represents a TAG_Int_Array, a list of ints (4 bytes each).

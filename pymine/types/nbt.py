@@ -171,7 +171,7 @@ class TAG_Long(TAG):
         return Buffer.pack("q", self.data)
 
     @staticmethod
-    def pack_data(buf: Buffer) -> int:
+    def unpack_data(buf: Buffer) -> int:
         return buf.unpack("q")
 
 

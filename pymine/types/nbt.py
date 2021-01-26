@@ -390,7 +390,7 @@ class TAG_Long_Array(TAG, list):
         list.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("i", len(self.data)) + b"".join([Buffer.pack("q", num) for num in self])
+        return Buffer.pack("i", len(self)) + b"".join([Buffer.pack("q", num) for num in self])
 
     @staticmethod
     def unpack_data(buf: Buffer) -> list:

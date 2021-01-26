@@ -7,6 +7,7 @@ from pymine.types.buffer import Buffer
 
 TYPES = []
 
+
 def from_buf(buf: Buffer) -> TAG_Compound:
     try:
         buf = Buffer(gzip.decompress(buf.read()))

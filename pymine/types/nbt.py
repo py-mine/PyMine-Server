@@ -1,10 +1,19 @@
 from __future__ import annotations
 
 from mutf8 import encode_modified_utf8, decode_modified_utf8
+import gzip
 
 from pymine.types.buffer import Buffer
 
 TYPES = []
+
+def from_buf(buf: Buffer) -> TAG_Compound:
+    try:
+        buf = Buffer(gzip.decompress(buf.read()))
+    except BaseException:
+        pass
+
+    return TAG_Compound.from_buf(buf)
 
 
 class TAG:

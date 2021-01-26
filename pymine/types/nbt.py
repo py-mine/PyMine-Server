@@ -4,7 +4,7 @@ from mutf8 import encode_modified_utf8, decode_modified_utf8
 
 from pymine.types.buffer import Buffer
 
-TYPES = (TAG_End, TAG_Byte, TAG_Short, TAG_Int, TAG_Long, TAG_Float, TAG_Double, TAG_Byte_Array, TAG_String, TAG_List)
+TYPES = []
 
 
 class TAG:
@@ -279,3 +279,6 @@ class TAG_List(TAG):
     def value_from_buf(buf: Buffer) -> list:
         tag_type = TYPES[buf.unpack("b")]
         return [tag_type.from_buf(buf) for _ in range(buf.unpack("i"))]
+        
+
+TYPES.extend([TAG_End, TAG_Byte, TAG_Short, TAG_Int, TAG_Long, TAG_Float, TAG_Double, TAG_Byte_Array, TAG_String, TAG_List])

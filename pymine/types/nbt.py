@@ -134,8 +134,12 @@ class TAG_Double(TAG):  # 6
         return cls(buf.unpack('d'))
 
 
-class TAG_Byte_Array(TAG):  # 7
-    """Used to represent a TAG_Byte_Array, stores an array of bytes."""
+class TAG_Byte_Array(TAG):
+    """Used to represent a TAG_Byte_Array, stores an array of bytes.
+
+    :param bytes value: Some bytes.
+    :attr value:
+    """
 
     def __init__(self, value: bytes) -> None:
         self.value = bytearray(value)
@@ -149,5 +153,18 @@ class TAG_Byte_Array(TAG):  # 7
 
 
 class TAG_String(TAG):
+    """Used to represent a TAG_String, stores a string.
+
+    :param str value: A string
+    :attr value:
+    """
 
     def __init__(self, value: str) -> None:
+        self.value = value
+
+    def encode(self) -> bytes:
+        return Buffer.pack('h', len(self.value)) + self.value.encode('utf8')
+
+    @classmethod
+    def from_buf(cls, buf) -> TAG_String:
+        return cls(buf.read(buf.unpack('h')).decode('utf8'))

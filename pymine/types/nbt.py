@@ -267,6 +267,9 @@ class TAG_String(TAG):
     def unpack_data(buf: Buffer) -> str:
         return decode_modified_utf8(buf.read(buf.unpack("H")))
 
+    def pretty(self, indent: int = 0) -> str:
+        return ("    " * indent) + f'{self.__class__.__name__}("{self.name}"): {self.data}'
+
 
 class TAG_List(TAG, list):
     """Represents a TAG_List, a list of nameless and typeless tagss.

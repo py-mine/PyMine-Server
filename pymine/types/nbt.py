@@ -163,8 +163,11 @@ class TAG_String(TAG):
         self.value = value
 
     def encode(self) -> bytes:
-        return Buffer.pack("h", len(self.value)) + self.value.encode("utf8")
+        return Buffer.pack("h", len(self.value.encode('utf8'))) + self.value.encode("utf8")
 
     @classmethod
     def from_buf(cls, buf) -> TAG_String:
         return cls(buf.read(buf.unpack("h")).decode("utf8"))
+
+
+class TAG_

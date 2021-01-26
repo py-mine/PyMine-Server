@@ -87,7 +87,9 @@ class TAG_Byte(TAG):
 class TAG_Short(TAG):
     """Used to represent a TAG_Short, stores a single short (2 byte int).
 
-    :param int value: A short (number).
+    :param str name: The name of the TAG.
+    :param int value: A short (2 byte int).
+    :int id: The type ID of the TAG.
     :attr value:
     """
 
@@ -98,12 +100,12 @@ class TAG_Short(TAG):
 
         self.value = value
 
-    def encode(self) -> bytes:
-        return Buffer.pack("h", self.value)
+    def encode_value(self) -> bytes:
+        return Buffer.pack('h', self.value)
 
-    @classmethod
-    def from_buf(cls, buf: Buffer) -> TAG_Short:
-        return cls(buf.unpack("h"))
+    @staticmethod
+    def value_from_buf(buf: Buffer) -> int:
+        return buf.unpack('h')
 
 
 class TAG_Int(TAG):

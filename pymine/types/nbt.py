@@ -4,12 +4,7 @@ import struct
 
 
 class TAG:
-    """Base class for an NBT tag.
-
-    :attr int id: The type ID of the tag, see here: https://wiki.vg/NBT.
-    """
-
-    id: int = -1
+    """Base class for an NBT tag."""
 
     def __init__(self) -> None:
         self.id = self.__class__.id
@@ -29,12 +24,7 @@ class TAG:
 
 
 class TAG_End(TAG):
-    """Used to represent a TAG_End, signifies the end of a TAG_Compound.
-
-    :attr int id: The type ID of the tag, see here: https://wiki.vg/NBT.
-    """
-
-    id = 0
+    """Used to represent a TAG_End, signifies the end of a TAG_Compound."""
 
     def __init__(self) -> None:
         super().__init__()
@@ -48,15 +38,12 @@ class TAG_End(TAG):
         return cls()
 
 
-class TAG_Byte(TAG):
+class TAG_Byte(TAG):  # 1
     """Used to represent a TAG_Byte, stores a single signed byte.
 
     :param int value: A signed byte.
-    :attr int id: The type ID of the tag, see here: https://wiki.vg/NBT.
     :attr value:
     """
-
-    id = 1
 
     def __init__(self, value: int) -> None:
         super().__init__()
@@ -71,15 +58,12 @@ class TAG_Byte(TAG):
         return cls(cls.unpack("b", buf))
 
 
-class TAG_Short(TAG):
+class TAG_Short(TAG):  # 2
     """Used to represent a TAG_Short, stores a single short (2 byte int).
 
     :param int value: A short (number).
-    :attr int id: The type ID of the tag, see here: https://wiki.vg/NBT.
     :attr value:
     """
-
-    id = 2
 
     def __init__(self, value: int) -> None:
         super().__init__()
@@ -94,15 +78,12 @@ class TAG_Short(TAG):
         return cls(cls.unpack("h", buf))
 
 
-class TAG_Int(TAG):
+class TAG_Int(TAG):  # 3
     """Used to represent a TAG_Int, stores a single integer (4 bytes).
 
     :param int value: An integer.
-    :attr int id: The type ID of the tag, see here: https://wiki.vg/NBT.
     :attr value:
     """
-
-    id = 3
 
     def __init__(self, value: int) -> None:
         super().__init__()
@@ -117,15 +98,12 @@ class TAG_Int(TAG):
         return cls(cls.unpack("i", buf))
 
 
-class TAG_Long(TAG):
+class TAG_Long(TAG):  # 4
     """Used to represent a TAG_Long, stores a long long (8 byte integer).
 
     :param int value: A long long (number).
-    :attr int id: The type ID of the tag, see here: https://wiki.vg/NBT.
     :attr value:
     """
-
-    id = 4
 
     def __init__(self, value: int) -> None:
         super().__init__()
@@ -140,15 +118,12 @@ class TAG_Long(TAG):
         return cls(cls.unpack("q", buf))
 
 
-class TAG_Float(TAG):
+class TAG_Float(TAG):  # 5
     """Used to represent a TAG_Float, stores a float (4 bytes).
 
     :param float value: A float (number).
-    :attr int id: The type ID of the tag, see here: https://wiki.vg/NBT.
     :attr value:
     """
-
-    id = 5
 
     def __init__(self, value: float) -> None:
         super().__init__()
@@ -156,31 +131,26 @@ class TAG_Float(TAG):
         self.value = value
 
     def encode(self) -> bytes:
-        return self.pack("f", self.value)
+        return self.pack('f', self.value)
 
     @classmethod
     def decode(cls, buf) -> TAG_Float:
-        return cls(cls.unpack("f", buf))
+        return cls(cls.unpack('f', buf))
 
 
-class TAG_Double(TAG):
+class TAG_Double(TAG):  # 6
     """Used to represent a TAG_Double, stores a double (8 byte float).
 
     :param float value: A double (number).
-    :attr int id: The type ID of the tag, see here: https://wiki.vg/NBT.
     :attr value:
     """
 
-    id = 6
-
     def __init__(self, value: float) -> None:
-        super().__init__()
-
         self.value = value
 
     def encode(self) -> bytes:
-        return self.pack("d", self.value)
+        return self.pack('d', self.value)
 
     @classmethod
     def decode(cls, buf) -> TAG_Double:
-        return cls(cls.unpack("d", buf))
+        return cls(cls.unpack('d', buf))

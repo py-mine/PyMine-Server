@@ -35,7 +35,7 @@ class TAG_End(TAG):
         return cls()
 
 
-class TAG_Byte(TAG):  # 1
+class TAG_Byte(TAG):
     """Used to represent a TAG_Byte, stores a single signed byte.
 
     :param int value: A signed byte.

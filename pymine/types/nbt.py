@@ -58,7 +58,6 @@ class TAG:
 
     @classmethod
     def unpack(cls, buf: Buffer) -> TAG:
-        assert cls.unpack_id(buf) == self.id
         return cls(cls.unpack_name(buf), cls.unpack_data(buf))
 
     def pretty(self, obj: object = None, i: int = 0):

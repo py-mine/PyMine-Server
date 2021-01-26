@@ -171,7 +171,7 @@ class TAG_Double(TAG):
     :attr value:
     """
 
-    id = 5
+    id = 6
 
     def __init__(self, value: float) -> None:
         super().__init__()

@@ -226,24 +226,24 @@ class TAG_Byte_Array(TAG):
     """Used to represent a TAG_Byte_Array, stores an array of bytes.
 
     :param str name: The name of the TAG.
-    :param bytes value: Some bytes.
+    :param bytearray data: Some bytes.
     :int id: The type ID of the TAG.
     :attr value:
     """
 
     id = 7
 
-    def __init__(self, name: str, value: bytes) -> None:
+    def __init__(self, name: str, data: bytearray) -> None:
         super().__init__(name)
 
-        self.value = bytearray(value)
+        self.data = data
 
-    def encode_value(self) -> bytes:
-        return Buffer.pack("i", len(self.value)) + Buffer.pack_array("b", self.value)
+    def pack_data(self) -> bytes:
+        return Buffer.pack('i', len(self.data)) + bytes(self.data)
 
     @staticmethod
-    def value_from_buf(buf: Buffer) -> bytearray:
-        return bytearray(buf.unpack_array("b", buf.unpack("i")))
+    def unpack_data(buf: Buffer) -> bytearray:
+        return bytearray(buf.read(buf.unpack('i')))
 
 
 class TAG_String(TAG):

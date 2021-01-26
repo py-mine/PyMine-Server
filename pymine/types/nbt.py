@@ -49,21 +49,15 @@ class TAG_End(TAG):
 
     id = 0
 
-    def __init__(self) -> None:
+    def __init__(self) -> None:  # tag is nameless
         super().__init__()
 
     def encode_value(self) -> bytes:
         return b"\x00"
 
-    def encode(self) -> bytes:
-        return self.encode_meta() + self.encode_value()
-
-    @classmethod
-    def from_buf(cls, buf: Buffer) -> TAG_End:
-        assert buf.unpack("b") == b"\x00"
-        return cls()
-
     @staticmethod
+    def value_from_buf(buf: Buffer) -> TAG_End:
+        assert buf.unpack("b") == b"\x00"
 
 
 class TAG_Byte(TAG):

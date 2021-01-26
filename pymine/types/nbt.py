@@ -61,9 +61,15 @@ class TAG:
         cls.unpack_id(buf)
         return cls(cls.unpack_name(buf), cls.unpack_data(buf))
 
+    def pretty(self, indent: int = 0) -> str:
+        return ('  '*indent) + f'{self.__class__.__name__}({self.name}): {self.data}'
+
 
 class TAG_End(TAG):
     id = 0
+
+    def pretty(self, indent: int = 0) -> str:
+        return ('  '*indent) + 'TAG_End(): 0'
 
 
 class TAG_Byte(TAG):

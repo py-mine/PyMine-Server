@@ -62,7 +62,7 @@ class TAG:
         return cls(cls.unpack_name(buf), cls.unpack_data(buf))
 
     def pretty(self, indent: int = 0) -> str:
-        return ("    " * indent) + f'{self.__class__.__name__}("{self.name}"): {self.data}'
+        return ("    " * indent) + f'{self.__class__.__name__}("{self.name}"): {self}'
 
     def __str__(self):
         return self.pretty()

@@ -2,18 +2,7 @@ from __future__ import annotations
 
 from pymine.types.buffer import Buffer
 
-TYPES = (
-    TAG_End,
-    TAG_Byte,
-    TAG_Short,
-    TAG_Int,
-    TAG_Long,
-    TAG_Float,
-    TAG_Double,
-    TAG_Byte_Array,
-    TAG_String,
-    TAG_List
-)
+TYPES = (TAG_End, TAG_Byte, TAG_Short, TAG_Int, TAG_Long, TAG_Float, TAG_Double, TAG_Byte_Array, TAG_String, TAG_List)
 
 
 class TAG:
@@ -238,9 +227,13 @@ class TAG_List(TAG):
         self.value = value
 
     def encode(self) -> bytes:
-        return Buffer.pack('b', self.value[0].id) + Buffer.pack('i', len(self.value)) + b"".join([value.encode() for value in self.value])
+        return (
+            Buffer.pack("b", self.value[0].id)
+            + Buffer.pack("i", len(self.value))
+            + b"".join([value.encode() for value in self.value])
+        )
 
     @classmethod
     def from_buf(cls, buf: Buffer) -> TAG_List:
-        type_id = buf.unpack('b')
-        return cls([TYPES[type_id].from_buf(buf) for _ in range(buf.unpack('i'))])
+        type_id = buf.unpack("b")
+        return cls([TYPES[type_id].from_buf(buf) for _ in range(buf.unpack("i"))])

@@ -317,6 +317,30 @@ class TAG_Compound(TAG):
         return out
 
 
+class TAG_Int_Array(TAG):
+    """Represents a TAG_Int_Array, a list of ints (4 bytes each).
+
+    :param str name: The name of the TAG.
+    :param list value: A list of ints (4 bytes each).
+    :int id: The type ID of the TAG.
+    :attr value:
+    """
+
+    id = 11
+
+    def __init__(self, name: str, value: list) -> None:
+        super().__init__(name)
+
+        self.value = value
+
+    def encode_value(self) -> bytes:
+        return Buffer.pack('i', len(self.value)) + b''.join([Buffer.pack('i', num) for num in self.value])
+
+    @staticmethod
+    def value_from_buf(buf: Buffer) -> list:
+        return [buf.unpack('i') for _ in range(buf.unpack('i'))]
+
+
 TYPES.extend(
     [
         TAG_End,
@@ -330,5 +354,6 @@ TYPES.extend(
         TAG_String,
         TAG_List,
         TAG_Compound,
+        TAG_Int_Array,
     ]
 )

@@ -6,6 +6,12 @@ from pymine.types.buffer import Buffer
 class TAG:
     """Base class for an NBT tag."""
 
+    id = None
+
+    def __init__(self, name: str) -> None:
+        self.id = self.__class__.id
+        self.name = name
+
 
 class TAG_End(TAG):
     """Used to represent a TAG_End, signifies the end of a TAG_Compound."""

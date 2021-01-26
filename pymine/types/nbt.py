@@ -156,11 +156,11 @@ class TAG_Float(TAG):
         self.value = value
 
     def encode(self) -> bytes:
-        return self.pack('f', self.value)
+        return self.pack("f", self.value)
 
     @classmethod
     def decode(cls, buf) -> TAG_Float:
-        return cls(cls.unpack('f', buf))
+        return cls(cls.unpack("f", buf))
 
 
 class TAG_Double(TAG):
@@ -179,8 +179,8 @@ class TAG_Double(TAG):
         self.value = value
 
     def encode(self) -> bytes:
-        return self.pack('d', self.value)
+        return self.pack("d", self.value)
 
     @classmethod
     def decode(cls, buf) -> TAG_Double:
-        return cls(cls.unpack('d', buf))
+        return cls(cls.unpack("d", buf))

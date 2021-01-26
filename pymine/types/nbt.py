@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from mutf8 import encode_modified_utf8, decode_modified_utf8
+from collections.abc import MutableMapping, MutableSequence
 import gzip
 
 from pymine.types.buffer import Buffer
@@ -211,7 +212,7 @@ class TAG_Double(TAG):
 
         self.data = data
 
-    def pack_data(self) -> bytes:
+    def pack_data(self) -> bytes:the
         return Buffer.pack("d", self.data)
 
     @staticmethod
@@ -275,7 +276,7 @@ class TAG_String(TAG):
         return decode_modified_utf8(buf.read(buf.unpack("H")))
 
 
-class TAG_List(TAG):
+class TAG_List(TAG, list):
     """Represents a TAG_List, a list of nameless and typeless tagss.
 
     :param str name: The name of the TAG.
@@ -287,14 +288,11 @@ class TAG_List(TAG):
     id = 9
 
     def __init__(self, name: str, data: list) -> None:
-        super().__init__(name)
-
-        self.data = data
+        TAG.__init__(self, name)
+        list.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return (
-            Buffer.pack("b", self.data[0].id) + Buffer.pack("i", len(self.data)) + b"".join([t.pack_data() for t in self.data])
-        )
+        return Buffer.pack("b", self[0].id) + Buffer.pack("i", len(self)) + b"".join([t.pack_data() for t in self])
 
     @staticmethod
     def unpack_data(buf: Buffer) -> list:

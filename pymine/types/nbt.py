@@ -245,7 +245,7 @@ class TAG_String(TAG):
 
         self.value = value
 
-    def encode(self) -> bytes:
+    def encode_value(self) -> bytes:
         mutf8_text = encode_modified_utf8(self.value)
         return Buffer.pack("h", len(mutf8_text)) + mutf8_text
 

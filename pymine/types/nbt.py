@@ -160,7 +160,9 @@ class TAG_Long(TAG):
 class TAG_Float(TAG):
     """Used to represent a TAG_Float, stores a float (4 bytes).
 
-    :param float value: A float (number).
+    :param str name: The name of the TAG.
+    :param float value: A float (4 bytes).
+    :int id: The type ID of the TAG.
     :attr value:
     """
 
@@ -171,12 +173,12 @@ class TAG_Float(TAG):
 
         self.value = value
 
-    def from_buf(self) -> bytes:
-        return Buffer.pack("f", self.value)
+    def encode_value(self) -> bytes:
+        return Buffer.pack('f', self.value)
 
-    @classmethod
-    def from_buf(cls, buf: Buffer) -> TAG_Float:
-        return cls(buf.unpack("f"))
+    @staticmethod
+    def value_from_buf(buf: Buffer) -> float:
+        return buf.unpack('f')
 
 
 class TAG_Double(TAG):

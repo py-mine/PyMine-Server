@@ -212,7 +212,7 @@ class TAG_Double(TAG):
     def __init__(self, name: str, data: float) -> None:
         super().__init__(name)
 
-        self.value = value
+        self.data = data
 
     def pack_data(self) -> bytes:
         return Buffer.pack("d", self.data)

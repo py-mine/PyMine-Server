@@ -196,7 +196,11 @@ class TAG_String(TAG):
     :attr value:
     """
 
-    def __init__(self, value: str) -> None:
+    id = 8
+
+    def __init__(self, name: str, value: str) -> None:
+        super().__init__(name)
+
         self.value = value
 
     def encode(self) -> bytes:

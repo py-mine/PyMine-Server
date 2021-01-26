@@ -190,7 +190,7 @@ class TAG_Float(TAG, float):
         return buf.unpack("f")
 
 
-class TAG_Double(TAG):
+class TAG_Double(TAG, float):
     """Used to represent a TAG_Double, stores a double (8 byte float).
 
     :param str name: The name of the TAG.
@@ -202,12 +202,11 @@ class TAG_Double(TAG):
     id = 6
 
     def __init__(self, name: str, data: float) -> None:
-        super().__init__(name)
-
-        self.data = data
+        TAG.__init__(self, name)
+        float.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("d", self.data)
+        return Buffer.pack("d", self)
 
     @staticmethod
     def unpack_data(buf: Buffer) -> float:

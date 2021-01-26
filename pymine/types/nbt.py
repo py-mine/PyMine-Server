@@ -263,6 +263,8 @@ class TAG_List(TAG):
     :attr value:
     """
 
+    id = 9
+
     def __init__(self, name: str, value: list) -> None:
         super().__init__(name)
 
@@ -282,6 +284,8 @@ class TAG_List(TAG):
 
 
 class TAG_Compound(TAG):
+
+    id = 10
 
     def __init__(self, name: str, value: list) -> None:
         super().__init__(name)

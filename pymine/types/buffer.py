@@ -171,6 +171,12 @@ class Buffer:
 
         return struct.pack(f">{f*len(array)}", *array)
 
+    def unpack_array(self, f: str, length: int) -> list:
+        """Unpacks an array/list from the buffer."""
+
+        data = self.read(struct.calcsize(f">{f}") * length)
+        return list(struct.unpack(f">{f*length}", data))
+
     @classmethod
     def pack_string(cls, text: str) -> bytes:
         """Packs a string into bytes."""
@@ -183,12 +189,6 @@ class Buffer:
 
         length = self.unpack_varint(max_bits=16)
         return self.read(length).decode("utf-8")
-
-    def unpack_array(self, f: str, length: int) -> list:
-        """Unpacks an array/list from the buffer."""
-
-        data = self.read(struct.calcsize(f">{f}") * length)
-        return list(struct.unpack(f">{f*length}", data))
 
     @classmethod
     def pack_json(cls, obj: object) -> bytes:

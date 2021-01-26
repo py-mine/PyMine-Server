@@ -203,23 +203,23 @@ class TAG_Double(TAG):
     """Used to represent a TAG_Double, stores a double (8 byte float).
 
     :param str name: The name of the TAG.
-    :param float value: A double (8 byte float).
+    :param float data: A double (8 byte float).
     :int id: The type ID of the TAG.
     :attr value:
     """
 
     id = 6
 
-    def __init__(self, name: str, value: float) -> None:
+    def __init__(self, name: str, data: float) -> None:
         super().__init__(name)
 
         self.value = value
 
-    def encode_value(self) -> bytes:
-        return Buffer.pack("d", self.value)
+    def pack_data(self) -> bytes:
+        return Buffer.pack("d", self.data)
 
     @staticmethod
-    def value_from_buf(buf: Buffer) -> float:
+    def unpack_data(buf: Buffer) -> float:
         return buf.unpack("d")
 
 

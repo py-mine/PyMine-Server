@@ -239,11 +239,11 @@ class TAG_Byte_Array(TAG):
         self.data = data
 
     def pack_data(self) -> bytes:
-        return Buffer.pack('i', len(self.data)) + bytes(self.data)
+        return Buffer.pack("i", len(self.data)) + bytes(self.data)
 
     @staticmethod
     def unpack_data(buf: Buffer) -> bytearray:
-        return bytearray(buf.read(buf.unpack('i')))
+        return bytearray(buf.read(buf.unpack("i")))
 
 
 class TAG_String(TAG):

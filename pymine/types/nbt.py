@@ -32,11 +32,11 @@ class TAG:
         self.name = name
 
     def pack_id(self) -> bytes:
-        return Buffer.pack('b', self.id)
+        return Buffer.pack("b", self.id)
 
     @staticmethod
     def unpack_id(buf: Buffer) -> int:
-        return buf.unpack('b')
+        return buf.unpack("b")
 
     def pack_name(self) -> bytes:
         mutf8_name = encode_modified_utf8(self.name)
@@ -44,7 +44,7 @@ class TAG:
 
     @staticmethod
     def unpack_name(buf: Buffer) -> str:
-        return decode_modified_utf8(buf.read(buf.unpack('H')))
+        return decode_modified_utf8(buf.read(buf.unpack("H")))
 
     def pack_data(self) -> bytes:
         raise NotImplementedError
@@ -96,11 +96,11 @@ class TAG_Byte(TAG):
         self.data = data
 
     def pack_data(self) -> bytes:
-        return Buffer.pack('b', self.data)
+        return Buffer.pack("b", self.data)
 
     @staticmethod
     def unpack_data(buf: Buffer) -> int:
-        return buf.unpack('b')
+        return buf.unpack("b")
 
 
 class TAG_Short(TAG):
@@ -120,11 +120,11 @@ class TAG_Short(TAG):
         self.data = data
 
     def pack_data(self) -> bytes:
-        return Buffer.pack('h', self.data)
+        return Buffer.pack("h", self.data)
 
     @staticmethod
     def unpack_data(buf: Buffer) -> int:
-        return buf.unpack('h')
+        return buf.unpack("h")
 
 
 class TAG_Int(TAG):

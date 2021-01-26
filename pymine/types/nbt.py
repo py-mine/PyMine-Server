@@ -309,32 +309,32 @@ class TAG_Compound(TAG):
     """Represents a TAG_Compound, a list of named tags.
 
     :param str name: The name of the TAG.
-    :param list value: A list of tags.
+    :param list data: A list of tags.
     :int id: The type ID of the TAG.
     :attr value:
     """
 
     id = 10
 
-    def __init__(self, name: str, value: list) -> None:
+    def __init__(self, name: str, data: list) -> None:
         super().__init__(name)
 
-        self.value = value
+        self.data = data
 
-    def encode_value(self) -> bytes:
-        return b"".join([tag.encode() for tag in self.value]) + b"\x00"
+    def pack_data(self) -> bytes:
+        return b''.join([tag.pack() for tag in self.data]) + b'\x00'
 
     @staticmethod
-    def value_from_buf(buf: Buffer) -> list:
+    def unpack_data(buf: Buffer) -> list:
         out = []
 
         while True:
-            tag = TYPES[buf.buf[buf.pos]]
+            tag = TYPES[buf.read(1)]
 
             if tag == TAG_End:
                 break
 
-            out.append(tag.from_buf(buf))
+            out.append(tag(tag.unpack_name(buf), tag.unpack_data(buf)))
 
         return out
 

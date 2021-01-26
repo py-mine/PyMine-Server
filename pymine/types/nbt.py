@@ -2,6 +2,19 @@ from __future__ import annotations
 
 from pymine.types.buffer import Buffer
 
+TYPES = (
+    TAG_End,
+    TAG_Byte,
+    TAG_Short,
+    TAG_Int,
+    TAG_Long,
+    TAG_Float,
+    TAG_Double,
+    TAG_Byte_Array,
+    TAG_String,
+    TAG_List
+)
+
 
 class TAG:
     """Base class for an NBT tag.
@@ -30,7 +43,7 @@ class TAG_End(TAG):
         return b"\x00"
 
     @classmethod
-    def from_buf(cls, buf) -> TAG_End:
+    def from_buf(cls, buf: Buffer) -> TAG_End:
         assert buf.unpack("b") == b"\x00"
         return cls()
 
@@ -53,7 +66,7 @@ class TAG_Byte(TAG):
         return Buffer.pack("b", self.value)
 
     @classmethod
-    def from_buf(cls, buf) -> TAG_Byte:
+    def from_buf(cls, buf: Buffer) -> TAG_Byte:
         return cls(buf.unpack("b"))
 
 
@@ -75,7 +88,7 @@ class TAG_Short(TAG):
         return Buffer.pack("h", self.value)
 
     @classmethod
-    def from_buf(cls, buf) -> TAG_Short:
+    def from_buf(cls, buf: Buffer) -> TAG_Short:
         return cls(buf.unpack("h"))
 
 
@@ -97,7 +110,7 @@ class TAG_Int(TAG):
         return Buffer.pack("i", self.value)
 
     @classmethod
-    def from_buf(cls, buf) -> TAG_Int:
+    def from_buf(cls, buf: Buffer) -> TAG_Int:
         return cls(buf.unpack("i"))
 
 
@@ -119,7 +132,7 @@ class TAG_Long(TAG):
         return Buffer.pack("q", self.value)
 
     @classmethod
-    def from_buf(cls, buf) -> TAG_Long:
+    def from_buf(cls, buf: Buffer) -> TAG_Long:
         return cls(buf.unpack("q"))
 
 
@@ -141,7 +154,7 @@ class TAG_Float(TAG):
         return Buffer.pack("f", self.value)
 
     @classmethod
-    def from_buf(cls, buf) -> TAG_Float:
+    def from_buf(cls, buf: Buffer) -> TAG_Float:
         return cls(buf.unpack("f"))
 
 
@@ -163,7 +176,7 @@ class TAG_Double(TAG):
         return Buffer.pack("d", self.value)
 
     @classmethod
-    def from_buf(cls, buf) -> TAG_Double:
+    def from_buf(cls, buf: Buffer) -> TAG_Double:
         return cls(buf.unpack("d"))
 
 
@@ -185,7 +198,7 @@ class TAG_Byte_Array(TAG):
         return Buffer.pack("i", len(self.value)) + Buffer.pack_array("b", self.value)
 
     @classmethod
-    def from_buf(cls, buf) -> TAG_Byte_Array:
+    def from_buf(cls, buf: Buffer) -> TAG_Byte_Array:
         return cls(buf.unpack_array("b", buf.unpack("i")))
 
 
@@ -208,13 +221,17 @@ class TAG_String(TAG):
         return Buffer.pack("h", len(utf8)) + utf8
 
     @classmethod
-    def from_buf(cls, buf) -> TAG_String:
+    def from_buf(cls, buf: Buffer) -> TAG_String:
         return cls(buf.read(buf.unpack("h")).decode("utf8"))
 
 
 class TAG_List(TAG):
-    def __init__(self, value: list) -> None:
+    def __init__(self, name: str, value: list) -> None:
         self.value = value
 
     def encode(self) -> bytes:
-        out = b"".join()
+        return Buffer.pack('b', self.value[0].id) + Buffer.pack('i', len(self.value)) + b"".join([value.encode() for value in self.value])
+
+    @classmethod
+    def from_buf(cls, buf: Buffer) -> TAG_List:
+        type_id = buf.unpack('b')

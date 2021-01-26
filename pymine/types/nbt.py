@@ -21,6 +21,8 @@ class TAG:
 class TAG_End(TAG):
     """Used to represent a TAG_End, signifies the end of a TAG_Compound."""
 
+    id = 0
+
     def __init__(self) -> None:
         super().__init__()
 

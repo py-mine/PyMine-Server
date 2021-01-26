@@ -57,14 +57,14 @@ class TAG:
         if obj is None:
             obj = self
 
-        t = '  '*i
+        t = "  " * i
 
         if isinstance(obj, TAG):
-            return f'{t}{type(obj).__name__}({obj.name})[\n{self.pretty(obj.value, i+1)}\n{t}]'
+            return f"{t}{type(obj).__name__}({obj.name})[\n{self.pretty(obj.value, i+1)}\n{t}]"
         elif isinstance(obj, list):
-            return f',\n{t}'.join([self.pretty(val, i+1) for val in obj])
+            return f",\n{t}".join([self.pretty(val, i + 1) for val in obj])
         else:
-            return f'{t}{obj}'
+            return f"{t}{obj}"
 
 
 class TAG_End(TAG):

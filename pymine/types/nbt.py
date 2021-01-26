@@ -381,7 +381,7 @@ class TAG_Int_Array(TAG, list):
         return f'{tab}TAG_Int_Array("{self.name}"): [{nl.join([str(v) for v in self])}]'
 
 
-class TAG_Long_Array(TAG):
+class TAG_Long_Array(TAG, list):
     """Represents a TAG_Long_Array, a list of long longs (8 byte ints).
 
     :param str name: The name of the TAG.
@@ -393,12 +393,11 @@ class TAG_Long_Array(TAG):
     id = 12
 
     def __init__(self, name: str, data: list) -> None:
-        super().__init__(name)
-
-        self.data = data
+        TAG.__init__(self, name)
+        list.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("i", len(self.data)) + b"".join([Buffer.pack("q", num) for num in self.data])
+        return Buffer.pack("i", len(self.data)) + b"".join([Buffer.pack("q", num) for num in self])
 
     @staticmethod
     def unpack_data(buf: Buffer) -> list:
@@ -409,7 +408,7 @@ class TAG_Long_Array(TAG):
         tab_extra = "    " * (indent + 1)
         nl = f", "
 
-        return f'{tab}TAG_Int_Array("{self.name}"): [{nl.join([str(v) for v in self.data])}]'
+        return f'{tab}TAG_Int_Array("{self.name}"): [{nl.join([str(v) for v in self])}]'
 
 
 TYPES.extend(

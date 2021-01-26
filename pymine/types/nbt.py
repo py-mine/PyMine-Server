@@ -242,6 +242,11 @@ class TAG_Byte_Array(TAG):
     def unpack_data(buf: Buffer) -> bytearray:
         return bytearray(buf.read(buf.unpack("i")))
 
+    def pretty(self, indent: int = 0) -> str:
+        tab = ('    ' * indent)
+        nl = f',\n'
+        return f'{tab}TAG_Int_Array("{self.name}"): [\n{nl.join([str(v) for v in self.data])}\n{tab}]'
+
 
 class TAG_String(TAG):
     """Used to represent a TAG_String, stores a string.
@@ -369,6 +374,11 @@ class TAG_Int_Array(TAG):
     def unpack_data(buf: Buffer) -> list:
         return [buf.unpack("i") for _ in range(buf.unpack("i"))]
 
+    def pretty(self, indent: int = 0) -> str:
+        tab = ('    ' * indent)
+        nl = f',\n'
+        return f'{tab}TAG_Int_Array("{self.name}"): [\n{nl.join([str(v) for v in self.data])}\n{tab}]'
+
 
 class TAG_Long_Array(TAG):
     """Represents a TAG_Long_Array, a list of long longs (8 byte ints).
@@ -392,6 +402,11 @@ class TAG_Long_Array(TAG):
     @staticmethod
     def unpack_data(buf: Buffer) -> list:
         return [buf.unpack("q") for _ in range(buf.unpack("i"))]
+
+    def pretty(self, indent: int = 0) -> str:
+        tab = ('    ' * indent)
+        nl = f',\n'
+        return f'{tab}TAG_Int_Array("{self.name}"): [\n{nl.join([str(v) for v in self.data])}\n{tab}]'
 
 
 TYPES.extend(

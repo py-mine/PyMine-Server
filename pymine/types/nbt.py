@@ -109,11 +109,11 @@ class TAG_Float(TAG):  # 5
         self.value = value
 
     def from_buf(self) -> bytes:
-        return Buffer.pack('f', self.value)
+        return Buffer.pack("f", self.value)
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Float:
-        return cls(buf.unpack('f'))
+        return cls(buf.unpack("f"))
 
 
 class TAG_Double(TAG):  # 6
@@ -127,11 +127,11 @@ class TAG_Double(TAG):  # 6
         self.value = value
 
     def encode(self) -> bytes:
-        return Buffer.pack('d', self.value)
+        return Buffer.pack("d", self.value)
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Double:
-        return cls(buf.unpack('d'))
+        return cls(buf.unpack("d"))
 
 
 class TAG_Byte_Array(TAG):
@@ -145,11 +145,11 @@ class TAG_Byte_Array(TAG):
         self.value = bytearray(value)
 
     def encode(self) -> bytes:
-        return Buffer.pack('i', len(self.value)) + Buffer.pack_array('b', self.value)
+        return Buffer.pack("i", len(self.value)) + Buffer.pack_array("b", self.value)
 
     @classmethod
     def from_buf(cls, buf) -> TAG_Byte_Array:
-        return cls(buf.unpack_array('b', buf.unpack('i')))
+        return cls(buf.unpack_array("b", buf.unpack("i")))
 
 
 class TAG_String(TAG):
@@ -163,8 +163,8 @@ class TAG_String(TAG):
         self.value = value
 
     def encode(self) -> bytes:
-        return Buffer.pack('h', len(self.value)) + self.value.encode('utf8')
+        return Buffer.pack("h", len(self.value)) + self.value.encode("utf8")
 
     @classmethod
     def from_buf(cls, buf) -> TAG_String:
-        return cls(buf.read(buf.unpack('h')).decode('utf8'))
+        return cls(buf.read(buf.unpack("h")).decode("utf8"))

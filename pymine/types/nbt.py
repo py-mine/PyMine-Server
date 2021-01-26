@@ -292,7 +292,7 @@ class TAG_List(TAG):
         return (
             Buffer.pack("b", self.data[0].id)
             + Buffer.pack("i", len(self.data))
-            + b"".join([t.pack_id() + t.pack_data() for t in self.data])
+            + b"".join([t.pack_data() for t in self.data])
         )
 
     @staticmethod
@@ -303,8 +303,6 @@ class TAG_List(TAG):
         out = []
 
         for _ in range(length):
-            tag.unpack_id(buf)
-
             out.append(tag(None, tag.unpack_data(buf)))
 
         return out

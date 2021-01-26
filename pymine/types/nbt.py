@@ -155,23 +155,23 @@ class TAG_Long(TAG):
     """Used to represent a TAG_Long, stores a long long (8 byte int).
 
     :param str name: The name of the TAG.
-    :param int value: A long long (8 byte int).
+    :param int data: A long long (8 byte int).
     :int id: The type ID of the TAG.
     :attr value:
     """
 
     id = 4
 
-    def __init__(self, name: str, value: int) -> None:
+    def __init__(self, name: str, data: int) -> None:
         super().__init__(name)
 
-        self.value = value
+        self.data = data
 
-    def encode_value(self) -> bytes:
-        return Buffer.pack("q", self.value)
+    def pack_data(self) -> bytes:
+        return Buffer.pack("q", self.data)
 
     @staticmethod
-    def value_from_buf(buf: Buffer) -> int:
+    def pack_data(buf: Buffer) -> int:
         return buf.unpack("q")
 
 

@@ -286,9 +286,7 @@ class TAG_List(TAG):
 
     def pack_data(self) -> bytes:
         return (
-            Buffer.pack("b", self.data[0].id)
-            + Buffer.pack("i", len(self.data))
-            + b"".join([t.pack_data() for t in self.data])
+            Buffer.pack("b", self.data[0].id) + Buffer.pack("i", len(self.data)) + b"".join([t.pack_data() for t in self.data])
         )
 
     @staticmethod

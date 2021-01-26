@@ -62,7 +62,7 @@ class TAG:
         return cls(cls.unpack_name(buf), cls.unpack_data(buf))
 
     def pretty(self, indent: int = 0) -> str:
-        return ("    " * indent) + f'{self.__class__.__name__}("{self.name}"): {self.data}'
+        return ("    " * indent) + f'{self.__class__.__name__}("{self.name}"): {self}'
 
     def __str__(self):
         return self.pretty()
@@ -273,6 +273,9 @@ class TAG_String(TAG):
     def unpack_data(buf: Buffer) -> str:
         return decode_modified_utf8(buf.read(buf.unpack("H")))
 
+    def pretty(self, indent: int = 0) -> str:
+        return ("    " * indent) + f'{self.__class__.__name__}("{self.name}"): {self.data}'
+
 
 class TAG_List(TAG, list):
     """Represents a TAG_List, a list of nameless and typeless tagss.
@@ -396,7 +399,7 @@ class TAG_Long_Array(TAG, list):
         list.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("i", len(self.data)) + b"".join([Buffer.pack("q", num) for num in self])
+        return Buffer.pack("i", len(self)) + b"".join([Buffer.pack("q", num) for num in self])
 
     @staticmethod
     def unpack_data(buf: Buffer) -> list:

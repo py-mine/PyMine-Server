@@ -10,8 +10,6 @@ try:
     import uvloop
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except BaseException:
-    pass
-else:
     uvloop = None
 
 # ensure the pymine modules are accessible

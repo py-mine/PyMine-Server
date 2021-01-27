@@ -1,5 +1,4 @@
-import nbt
-
+import pymine.types.nbt as nbt
 
 class LevelData:
     def __init__(self, data: nbt.TAG) -> None:

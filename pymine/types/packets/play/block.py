@@ -1,10 +1,10 @@
 """Contains packets related to blocks."""
 
 from __future__ import annotations
-from nbt import nbt
 
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
+import pymine.types.nbt as nbt
 
 __all__ = (
     "PlayBlockAction",

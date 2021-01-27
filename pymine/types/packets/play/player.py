@@ -1,12 +1,12 @@
 """Contains packets related to players."""
 
 from __future__ import annotations
-from nbt import nbt
 import uuid
 
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 from pymine.types.chat import Chat
+import pymine.types.nbt as nbt
 
 __all__ = (
     "PlayPlayerDigging",

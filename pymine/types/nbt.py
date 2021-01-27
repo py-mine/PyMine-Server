@@ -1,20 +1,55 @@
 from __future__ import annotations
 
 from mutf8 import encode_modified_utf8, decode_modified_utf8
+import struct
 import gzip
 
-from pymine.types.buffer import Buffer
+__all__ = (
+    "TAG",
+    "TAG_End",
+    "TAG_Byte",
+    "TAG_Short",
+    "TAG_Int",
+    "TAG_Long",
+    "TAG_Float",
+    "TAG_Double",
+    "TAG_Byte_Array",
+    "TAG_String",
+    "TAG_List",
+    "TAG_Compound",
+    "TAG_Int_Array",
+    "TAG_Long_Array",
+    "TYPES",
+    "unpack",
+)
 
 TYPES = []
 
 
-def from_buf(buf: Buffer) -> TAG_Compound:
+def unpack(buf) -> TAG_Compound:
     try:
-        buf = Buffer(gzip.decompress(buf.read()))
+        data = gzip.decompress(buf.read())
+        buf.buf = data
+        buf.reset()
     except BaseException:
         pass
 
     return TAG_Compound.unpack(buf)
+
+
+class BufferUtil:
+    @staticmethod
+    def unpack(buf, f: str) -> object:
+        unpacked = struct.unpack(">" + f, buf.read(struct.calcsize(f)))
+
+        if len(unpacked) == 1:
+            return unpacked[0]
+
+        return unpacked
+
+    @staticmethod
+    def pack(f: str, *data: object) -> bytes:
+        return struct.pack(">" + f, *data)
 
 
 class TAG:
@@ -32,32 +67,32 @@ class TAG:
         self.name = name
 
     def pack_id(self) -> bytes:
-        return Buffer.pack("b", self.id)
+        return BufferUtil.pack("b", self.id)
 
     @staticmethod
-    def unpack_id(buf: Buffer) -> int:
+    def unpack_id(buf) -> int:
         return buf.unpack("b")
 
     def pack_name(self) -> bytes:
         mutf8_name = encode_modified_utf8(self.name)
-        return Buffer.pack("H", len(mutf8_name)) + mutf8_name
+        return BufferUtil.pack("H", len(mutf8_name)) + mutf8_name
 
     @staticmethod
-    def unpack_name(buf: Buffer) -> str:
+    def unpack_name(buf) -> str:
         return decode_modified_utf8(buf.read(buf.unpack("H")))
 
     def pack_data(self) -> bytes:
         raise NotImplementedError(self.__class__.__name__)
 
     @classmethod
-    def unpack_data(cls, buf: Buffer) -> NotImplemented:
+    def unpack_data(cls, buf) -> NotImplemented:
         raise NotImplementedError(cls.__name__)
 
     def pack(self) -> bytes:
         return self.pack_id() + self.pack_name() + self.pack_data()
 
     @classmethod
-    def unpack(cls, buf: Buffer) -> TAG:
+    def unpack(cls, buf) -> TAG:
         cls.unpack_id(buf)
         return cls(cls.unpack_name(buf), cls.unpack_data(buf))
 
@@ -92,10 +127,10 @@ class TAG_Byte(TAG):
         self.data = data
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("b", self.data)
+        return BufferUtil.pack("b", self.data)
 
     @staticmethod
-    def unpack_data(buf: Buffer) -> int:
+    def unpack_data(buf) -> int:
         return buf.unpack("b")
 
 
@@ -116,10 +151,10 @@ class TAG_Short(TAG):
         self.data = data
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("h", self.data)
+        return BufferUtil.pack("h", self.data)
 
     @staticmethod
-    def unpack_data(buf: Buffer) -> int:
+    def unpack_data(buf) -> int:
         return buf.unpack("h")
 
 
@@ -140,10 +175,10 @@ class TAG_Int(TAG):
         self.data = data
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("i", self.data)
+        return BufferUtil.pack("i", self.data)
 
     @staticmethod
-    def unpack_data(buf: Buffer) -> int:
+    def unpack_data(buf) -> int:
         return buf.unpack("i")
 
 
@@ -164,10 +199,10 @@ class TAG_Long(TAG):
         self.data = data
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("q", self.data)
+        return BufferUtil.pack("q", self.data)
 
     @staticmethod
-    def unpack_data(buf: Buffer) -> int:
+    def unpack_data(buf) -> int:
         return buf.unpack("q")
 
 
@@ -188,10 +223,10 @@ class TAG_Float(TAG):
         self.data = data
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("f", self.data)
+        return BufferUtil.pack("f", self.data)
 
     @staticmethod
-    def unpack_data(buf: Buffer) -> float:
+    def unpack_data(buf) -> float:
         return buf.unpack("f")
 
 
@@ -212,10 +247,10 @@ class TAG_Double(TAG):
         self.data = data
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("d", self.data)
+        return BufferUtil.pack("d", self.data)
 
     @staticmethod
-    def unpack_data(buf: Buffer) -> float:
+    def unpack_data(buf) -> float:
         return buf.unpack("d")
 
 
@@ -235,10 +270,10 @@ class TAG_Byte_Array(TAG, bytearray):
         bytearray.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("i", len(self)) + bytes(self)
+        return BufferUtil.pack("i", len(self)) + bytes(self)
 
     @staticmethod
-    def unpack_data(buf: Buffer) -> bytearray:
+    def unpack_data(buf) -> bytearray:
         return bytearray(buf.read(buf.unpack("i")))
 
     def pretty(self, indent: int = 0) -> str:
@@ -267,10 +302,10 @@ class TAG_String(TAG):
 
     def pack_data(self) -> bytes:
         mutf8_text = encode_modified_utf8(self.data)
-        return Buffer.pack("H", len(mutf8_text)) + mutf8_text
+        return BufferUtil.pack("H", len(mutf8_text)) + mutf8_text
 
     @staticmethod
-    def unpack_data(buf: Buffer) -> str:
+    def unpack_data(buf) -> str:
         return decode_modified_utf8(buf.read(buf.unpack("H")))
 
     def pretty(self, indent: int = 0) -> str:
@@ -293,10 +328,10 @@ class TAG_List(TAG, list):
         list.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("b", self[0].id) + Buffer.pack("i", len(self)) + b"".join([t.pack_data() for t in self])
+        return BufferUtil.pack("b", self[0].id) + BufferUtil.pack("i", len(self)) + b"".join([t.pack_data() for t in self])
 
     @staticmethod
-    def unpack_data(buf: Buffer) -> list:
+    def unpack_data(buf) -> list:
         tag = TYPES[buf.unpack("b")]
         length = buf.unpack("i")
 
@@ -333,7 +368,7 @@ class TAG_Compound(TAG, dict):
         return b"".join([tag.pack() for tag in self.values()]) + b"\x00"
 
     @staticmethod
-    def unpack_data(buf: Buffer) -> list:
+    def unpack_data(buf) -> list:
         out = []
 
         while True:
@@ -369,10 +404,10 @@ class TAG_Int_Array(TAG, list):
         list.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("i", len(self)) + b"".join([Buffer.pack("i", num) for num in self])
+        return BufferUtil.pack("i", len(self)) + b"".join([BufferUtil.pack("i", num) for num in self])
 
     @staticmethod
-    def unpack_data(buf: Buffer) -> list:
+    def unpack_data(buf) -> list:
         return [buf.unpack("i") for _ in range(buf.unpack("i"))]
 
     def pretty(self, indent: int = 0) -> str:
@@ -399,10 +434,10 @@ class TAG_Long_Array(TAG, list):
         list.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return Buffer.pack("i", len(self)) + b"".join([Buffer.pack("q", num) for num in self])
+        return BufferUtil.pack("i", len(self)) + b"".join([BufferUtil.pack("q", num) for num in self])
 
     @staticmethod
-    def unpack_data(buf: Buffer) -> list:
+    def unpack_data(buf) -> list:
         return [buf.unpack("q") for _ in range(buf.unpack("i"))]
 
     def pretty(self, indent: int = 0) -> str:

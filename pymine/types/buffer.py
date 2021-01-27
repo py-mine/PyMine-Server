@@ -6,6 +6,7 @@ import zlib
 
 from pymine.types.packet import Packet
 from pymine.types.chat import Chat
+import pymine.types.nbt as nbt
 
 from pymine.data.registry import ITEM_REGISTRY
 import pymine.data.misc as misc_data
@@ -199,6 +200,18 @@ class Buffer:
         """Unpacks serialized json data from the buffer."""
 
         return json.loads(self.unpack_string())
+
+    @classmethod
+    def pack_nbt(cls, tag: nbt.TAG = None) -> bytes:
+        """Packs an NBT tag into bytes."""
+
+        if tag is None:
+            return b'\x00'
+
+        return tag.pack()
+
+    def unpack_nbt(self):
+        return nbt.unpack(self)
 
     @classmethod
     def pack_uuid(cls, uuid: uuid.UUID) -> bytes:

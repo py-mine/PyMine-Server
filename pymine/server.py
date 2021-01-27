@@ -70,11 +70,11 @@ class Server:
 
         await self.api.init()
 
+        self.logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
+
+        self.api.taskify_handlers(self.api.events._server_ready)
+
         async with self.server:
-            self.logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
-
-            self.api.taskify_handlers(self.api.events._server_ready)
-
             await self.server.serve_forever()
 
     async def stop(self):

@@ -219,12 +219,12 @@ class Buffer:
         return nbt.NBTFile(buffer=self.buf)
 
     @classmethod
-    def pack_uuid(cls, uuid: uuid.UUID) -> bytes:
+    def pack_uuid(cls, uuid_: uuid.UUID) -> bytes:
         """Packs a UUID into bytes."""
 
-        return uuid.bytes
+        return uuid_.bytes
 
-    def unpack_uuid(self):
+    def unpack_uuid(self) -> uuid.UUID:
         """Unpacks a UUID from the buffer."""
 
         return uuid.UUID(bytes=self.read(16))
@@ -558,3 +558,6 @@ class Buffer:
                 out += cls.pack_pose(value)
 
         return out + b"\xFE"
+
+    @classmethod
+    def pack_modifier(cls, uuid_, )

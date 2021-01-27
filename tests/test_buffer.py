@@ -29,10 +29,10 @@ def test_buffer_basic():
     buf.write(Buffer.pack("i", 123) + Buffer.pack("b", 1) + Buffer.pack("?", True) + Buffer.pack("q", 1234567890456))
     assert buf.buf == b"\x00\x00\x00{\x01\x01\x00\x00\x01\x1fq\xfb\x06\x18"
 
-    assert buf.unpack('i') == 123
-    assert buf.unpack('b') == 1
-    assert buf.unpack('?') == True
-    assert buf.unpack('q') == 1234567890456
+    assert buf.unpack("i") == 123
+    assert buf.unpack("b") == 1
+    assert buf.unpack("?") == True
+    assert buf.unpack("q") == 1234567890456
 
 
 def test_buffer_varint():

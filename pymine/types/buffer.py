@@ -6,7 +6,6 @@ import zlib
 
 from pymine.types.packet import Packet
 from pymine.types.chat import Chat
-import pymine.types.nbt as nbt
 
 from pymine.data.registry import ITEM_REGISTRY
 import pymine.data.misc as misc_data

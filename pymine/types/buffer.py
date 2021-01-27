@@ -83,7 +83,7 @@ class Buffer:
         return unpacked
 
     @classmethod
-    def pack(self, f: str, *data: object) -> bytes:
+    def pack(cls, f: str, *data: object) -> bytes:
         return struct.pack(">" + f, *data)
 
     @classmethod

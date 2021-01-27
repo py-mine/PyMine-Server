@@ -3,9 +3,6 @@ server.yml
 server-icon.png
 plugins/*
 
-bigtest.nbt
-nantest.nbt
-
 # VirtualEnv
 venv/
 

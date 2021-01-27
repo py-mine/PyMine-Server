@@ -1,5 +1,4 @@
 from __future__ import annotations
-from nbt import nbt
 import struct
 import json
 import uuid
@@ -7,6 +6,7 @@ import zlib
 
 from pymine.types.packet import Packet
 from pymine.types.chat import Chat
+import pymine.types.nbt as nbt
 
 from pymine.data.registry import ITEM_REGISTRY
 import pymine.data.misc as misc_data
@@ -84,7 +84,7 @@ class Buffer:
         return unpacked
 
     @classmethod
-    def pack(self, f: str, *data: object) -> bytes:
+    def pack(cls, f: str, *data: object) -> bytes:
         return struct.pack(">" + f, *data)
 
     @classmethod
@@ -208,23 +208,18 @@ class Buffer:
         if tag is None:
             return b"\x00"
 
-        buf = cls()
-        tag._render_buffer(buf)
-        return buf.buf
+        return tag.pack()
 
-    def unpack_nbt(self) -> object:
-        """Unpacks a NBT tag(s) from the buffer"""
-
-        # assumes data is NOT compressed, isn't an issue (hopefully)!
-        return nbt.NBTFile(buffer=self.buf)
+    def unpack_nbt(self):
+        return nbt.unpack(self)
 
     @classmethod
-    def pack_uuid(cls, uuid: uuid.UUID) -> bytes:
+    def pack_uuid(cls, uuid_: uuid.UUID) -> bytes:
         """Packs a UUID into bytes."""
 
-        return uuid.bytes
+        return uuid_.bytes
 
-    def unpack_uuid(self):
+    def unpack_uuid(self) -> uuid.UUID:
         """Unpacks a UUID from the buffer."""
 
         return uuid.UUID(bytes=self.read(16))
@@ -558,3 +553,11 @@ class Buffer:
                 out += cls.pack_pose(value)
 
         return out + b"\xFE"
+
+    # 0 = add/subtract amount, 1 = add/subtract amount percent of the current value, 2 = multiply by percent amount
+    @classmethod
+    def pack_modifier(cls, uuid_: uuid.UUID, amount: float, operation: int) -> bytes:
+        return cls.pack_uuid(uuid_) + Buffer.pack("d", amount) + Buffer.pack("b", operation)
+
+    def unpack_modifier(self) -> tuple:
+        return self.unpack_uuid(), self.unpack("d"), self.unpack("b")

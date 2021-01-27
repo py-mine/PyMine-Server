@@ -214,12 +214,12 @@ class Buffer:
         return nbt.unpack(self)
 
     @classmethod
-    def pack_uuid(cls, uuid: uuid.UUID) -> bytes:
+    def pack_uuid(cls, uuid_: uuid.UUID) -> bytes:
         """Packs a UUID into bytes."""
 
-        return uuid.bytes
+        return uuid_.bytes
 
-    def unpack_uuid(self):
+    def unpack_uuid(self) -> uuid.UUID:
         """Unpacks a UUID from the buffer."""
 
         return uuid.UUID(bytes=self.read(16))
@@ -553,3 +553,11 @@ class Buffer:
                 out += cls.pack_pose(value)
 
         return out + b"\xFE"
+
+    # 0 = add/subtract amount, 1 = add/subtract amount percent of the current value, 2 = multiply by percent amount
+    @classmethod
+    def pack_modifier(cls, uuid_: uuid.UUID, amount: float, operation: int) -> bytes:
+        return cls.pack_uuid(uuid_) + Buffer.pack("d", amount) + Buffer.pack("b", operation)
+
+    def unpack_modifier(self) -> tuple:
+        return self.unpack_uuid(), self.unpack("d"), self.unpack("b")

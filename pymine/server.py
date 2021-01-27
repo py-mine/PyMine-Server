@@ -74,8 +74,7 @@ class Server:
 
         self.api.taskify_handlers(self.api.events._server_ready)
 
-        async with self.server:
-            await self.server.serve_forever()
+        await self.server.serve_forever()
 
     async def stop(self):
         self.logger.info("Closing server...")

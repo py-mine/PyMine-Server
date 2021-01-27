@@ -45,3 +45,17 @@ def test_buffer_varint():
     assert buf.unpack_varint() == 0
     assert buf.unpack_varint() == 1
     assert buf.unpack_varint() == 3749146
+
+
+def test_buffer_optional_varint():
+    buf = Buffer()
+
+    buf.write(Buffer.pack_optional_varint(1))
+    buf.write(Buffer.pack_optional_varint(2))
+    buf.write(Buffer.pack_optional_varint(None))
+    buf.write(Buffer.pack_optional_varint(3))
+
+    assert buf.unpack_optional_varint() == 1
+    assert buf.unpack_optional_varint() == 2
+    assert buf.unpack_optional_varint() == None
+    assert buf.unpack_optional_varint() == 3

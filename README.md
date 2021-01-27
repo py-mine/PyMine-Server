@@ -30,7 +30,7 @@
 ### Installing from source
 - First, clone the repository `git clone https://github.com/py-mine/PyMine.git` and move into that directory (`cd PyMine`)
 - Next, install the required Python packages via pip (`python3 -m pip install -r requirements.txt`)
-- To run the server, you should run `server.py` from the root directory, like `python3 pymine/server.py`
+- To run the server, you should run `python3 pymine`.
 - It is recommended you do not use regular Python, but [PyPy3](https://www.pypy.org/)
 
 

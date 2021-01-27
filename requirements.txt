@@ -3,6 +3,5 @@ aiohttp
 cryptography
 immutables
 mutf8
-nbt
 PyYAML
 gitpython

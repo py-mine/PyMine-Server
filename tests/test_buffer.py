@@ -31,7 +31,7 @@ def test_buffer_basic():
 
     assert buf.unpack("i") == 123
     assert buf.unpack("b") == 1
-    assert buf.unpack("?") == True
+    assert buf.unpack("?") is True
     assert buf.unpack("q") == 1234567890456
 
 
@@ -57,5 +57,5 @@ def test_buffer_optional_varint():
 
     assert buf.unpack_optional_varint() == 1
     assert buf.unpack_optional_varint() == 2
-    assert buf.unpack_optional_varint() == None
+    assert buf.unpack_optional_varint() is None
     assert buf.unpack_optional_varint() == 3

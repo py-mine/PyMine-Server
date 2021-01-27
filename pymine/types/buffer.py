@@ -559,6 +559,7 @@ class Buffer:
 
         return out + b"\xFE"
 
+    # 0 = add/subtract amount, 1 = add/subtract amount percent of the current value, 2 = multiply by percent amount
     @classmethod
     def pack_modifier(cls, uuid_: uuid.UUID, amount: float, operation: int) -> bytes:
         return cls.pack_uuid(uuid_) + Buffer.pack("d", amount) + Buffer.pack("b", operation)

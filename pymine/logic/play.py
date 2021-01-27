@@ -1,11 +1,12 @@
 from asyncio import StreamReader, StreamWriter
-from nbt import nbt
 import hashlib
 import time
 
-from pymine.types.packets.play import player as packets_player
 from pymine.types.buffer import Buffer
 from pymine.types.buffer import Packet
+import pymine.types.nbt as nbt
+
+from pymine.types.packets.play import player as packets_player
 
 from pymine.util.share import share, logger, entity_id_cache, user_cache
 from pymine.util.seeds import seed_hash

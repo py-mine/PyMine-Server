@@ -1,5 +1,4 @@
 from __future__ import annotations
-from nbt import nbt
 import struct
 import json
 import uuid
@@ -7,6 +6,7 @@ import zlib
 
 from pymine.types.packet import Packet
 from pymine.types.chat import Chat
+import pymine.types.nbt as nbt
 
 from pymine.data.registry import ITEM_REGISTRY
 import pymine.data.misc as misc_data
@@ -84,7 +84,7 @@ class Buffer:
         return unpacked
 
     @classmethod
-    def pack(self, f: str, *data: object) -> bytes:
+    def pack(cls, f: str, *data: object) -> bytes:
         return struct.pack(">" + f, *data)
 
     @classmethod
@@ -208,15 +208,10 @@ class Buffer:
         if tag is None:
             return b"\x00"
 
-        buf = cls()
-        tag._render_buffer(buf)
-        return buf.buf
+        return tag.pack()
 
-    def unpack_nbt(self) -> object:
-        """Unpacks a NBT tag(s) from the buffer"""
-
-        # assumes data is NOT compressed, isn't an issue (hopefully)!
-        return nbt.NBTFile(buffer=self.buf)
+    def unpack_nbt(self):
+        return nbt.unpack(self)
 
     @classmethod
     def pack_uuid(cls, uuid: uuid.UUID) -> bytes:

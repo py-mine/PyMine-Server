@@ -8,6 +8,7 @@ if not sys.implementation.version[:3] >= (3, 7, 9):  # Ensure user is on correct
 
 try:
     import uvloop
+
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except BaseException:
     uvloop = None
@@ -22,7 +23,7 @@ if __name__ == "__main__":
     logger = Logger()  # debug status will be set later after config is loaded
 
     if uvloop:
-        logger.debug('Using uvloop as the event loop.')
+        logger.debug("Using uvloop as the event loop.")
 
     loop = asyncio.get_event_loop()
     loop.set_exception_handler(task_exception_handler)

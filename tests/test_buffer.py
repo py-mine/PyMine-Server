@@ -33,3 +33,15 @@ def test_buffer_basic():
     assert buf.unpack('b') == 1
     assert buf.unpack('?') == True
     assert buf.unpack('q') == 1234567890456
+
+
+def test_buffer_varint():
+    buf = Buffer()
+
+    buf.write(Buffer.pack_varint(0))
+    buf.write(Buffer.pack_varint(1))
+    buf.write(Buffer.pack_varint(3749146))
+
+    assert buf.unpack_varint() == 0
+    assert buf.unpack_varint() == 1
+    assert buf.unpack_varint() == 3749146

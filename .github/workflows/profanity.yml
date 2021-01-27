@@ -1,4 +1,4 @@
-name: Profanity check
+name: Profanity Check
 
 on:
   issues:

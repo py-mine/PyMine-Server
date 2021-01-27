@@ -1,4 +1,4 @@
-name: "Auto Black"
+name: Auto Black
 on: [push]
 jobs:
   autoblack:

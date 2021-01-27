@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from mutf8 import encode_modified_utf8, decode_modified_utf8
+import struct
 import gzip
 
 __all__ = (

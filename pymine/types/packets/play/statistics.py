@@ -5,7 +5,7 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlayStatistics',)
+__all__ = ("PlayStatistics",)
 
 
 class PlayStatistics(Packet):
@@ -35,6 +35,6 @@ class PlayStatistics(Packet):
         out = Buffer.pack_varint(len(self.stats))
 
         for entry in self.stats:
-            out += b''.join(Buffer.pack_varint(e) for e in entry)
+            out += b"".join([Buffer.pack_varint(e) for e in entry])
 
         return out

@@ -5,7 +5,7 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlayChangeGameState',)
+__all__ = ("PlayChangeGameState",)
 
 
 class PlayChangeGameState(Packet):
@@ -21,4 +21,4 @@ class PlayChangeGameState(Packet):
         self.value = value
 
     def encode(self) -> bytes:
-        return Buffer.pack('B', self.reason) + Buffer.pack('f', self.value)
+        return Buffer.pack("B", self.reason) + Buffer.pack("f", self.value)

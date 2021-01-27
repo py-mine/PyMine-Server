@@ -3,7 +3,7 @@ import os
 
 from pymine.util.immutable import make_immutable
 
-__all__ = ('TAGS',)
+__all__ = ("TAGS",)
 
 TAGS = {}
 
@@ -20,22 +20,22 @@ TAGS = {}
 #     ...
 # }
 
-for tag_type in os.listdir('pymine/data/tags'):
+for tag_type in os.listdir("pymine/data/tags"):
     TAGS[tag_type] = {}
 
-    for tag_file in os.listdir(f'pymine/data/tags/{tag_type}'):
-        with open(f'pymine/data/tags/{tag_type}/{tag_file}') as f:
-            TAGS[tag_type][tag_file[:-5]] = json.load(f)['values']
+    for tag_file in os.listdir(f"pymine/data/tags/{tag_type}"):
+        with open(f"pymine/data/tags/{tag_type}/{tag_file}") as f:
+            TAGS[tag_type][tag_file[:-5]] = json.load(f)["values"]
 
 
 def parse(values: list, tag_type: str):
     new_values = []
 
     for value in values:
-        if value.startswith('#'):
-            new_values += TAGS[tag_type][value.split(':')[1]]
+        if value.startswith("#"):
+            new_values += TAGS[tag_type][value.split(":")[1]]
 
-    if any(v.startswith('#') for v in new_values):
+    if any(v.startswith("#") for v in new_values):
         return parse(new_values, tag_type)
 
     return new_values

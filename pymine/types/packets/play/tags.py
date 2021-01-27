@@ -7,7 +7,7 @@ from pymine.types.buffer import Buffer
 
 from pymine.data.registry import BLOCK_REGISTRY, ITEM_REGISTRY, FLUID_REGISTRY, ENTITY_REGISTRY
 
-__all__ = ('PlayTags',)
+__all__ = ("PlayTags",)
 
 
 class PlayTags(Packet):
@@ -44,13 +44,25 @@ class PlayTags(Packet):
         self.entity = entity
 
     def encode(self) -> bytes:
-        out = b''
+        out = b""
 
         for tags, REG in (
-            (self.block, BLOCK_REGISTRY,),
-            (self.item, ITEM_REGISTRY,),
-            (self.fluid, FLUID_REGISTRY,),
-            (self.entity, ENTITY_REGISTRY,),
+            (
+                self.block,
+                BLOCK_REGISTRY,
+            ),
+            (
+                self.item,
+                ITEM_REGISTRY,
+            ),
+            (
+                self.fluid,
+                FLUID_REGISTRY,
+            ),
+            (
+                self.entity,
+                ENTITY_REGISTRY,
+            ),
         ):
             out += Buffer.pack_varint(len(tags))  # pack length
 

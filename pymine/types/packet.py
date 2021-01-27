@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ('Packet',)
+__all__ = ("Packet",)
 
 
 class Packet:

@@ -6,8 +6,9 @@ from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
 __all__ = (
-    'PlayNamedSoundEffect',
-    'PlayEntitySoundEffect',
+    "PlayNamedSoundEffect",
+    "PlayEntitySoundEffect",
+    "PlayStopSound",
 )
 
 
@@ -18,14 +19,8 @@ class PlayNamedSoundEffect(Packet):
     to = 1
 
     def __init__(
-            self,
-            name: str,
-            category: int,
-            effect_pos_x: int,
-            effect_pos_y: int,
-            effect_pos_z: int,
-            volume: int,
-            pitch: int) -> None:
+        self, name: str, category: int, effect_pos_x: int, effect_pos_y: int, effect_pos_z: int, volume: int, pitch: int
+    ) -> None:
         super().__init__()
 
         self.name = name
@@ -37,9 +32,16 @@ class PlayNamedSoundEffect(Packet):
         self.pitch = pitch
 
     def encode(self) -> bytes:
-        return Buffer.pack_string(self.name) + Buffer.pack_varint(self.category) + Buffer.pack('i', self.category) + \
-            Buffer.pack('i', self.effect_pos_x) + Buffer.pack('i', self.effect_pos_y) + Buffer.pack('i', self.effect_pos_z) + \
-            Buffer.pack('f', self.volume) + Buffer.pack('f', self.pitch)
+        return (
+            Buffer.pack_string(self.name)
+            + Buffer.pack_varint(self.category)
+            + Buffer.pack("i", self.category)
+            + Buffer.pack("i", self.effect_pos_x)
+            + Buffer.pack("i", self.effect_pos_y)
+            + Buffer.pack("i", self.effect_pos_z)
+            + Buffer.pack("f", self.volume)
+            + Buffer.pack("f", self.pitch)
+        )
 
 
 class PlayEntitySoundEffect(Packet):
@@ -58,5 +60,41 @@ class PlayEntitySoundEffect(Packet):
         self.pitch = pitch
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.sound_id) + Buffer.pack_varint(self.category) + Buffer.pack_varint(self.eid) + \
-            Buffer.pack('f', self.volume) + Buffer.pack('f', self.pitch)
+        return (
+            Buffer.pack_varint(self.sound_id)
+            + Buffer.pack_varint(self.category)
+            + Buffer.pack_varint(self.eid)
+            + Buffer.pack("f", self.volume)
+            + Buffer.pack("f", self.pitch)
+        )
+
+
+class PlayStopSound(Packet):
+    """Sent by the server to stop a sound. (Server -> Client)
+
+    :param int flags: Tells what data is going to be sent.
+    :param int source: See here: https://wiki.vg/Protocol#Stop_Sound.
+    :param str sound: See here: https://wiki.vg/Protocol#Stop_Sound.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr flags:
+    :attr source:
+    :attr sound:
+    """
+
+    id = 0x52
+    to = 1
+
+    def __init__(self, flags: int, source: int = None, sound: str = None) -> None:
+        super().__init__()
+
+        self.flags = flags
+        self.source = source
+        self.sound = sound
+
+    def encode(self) -> bytes:
+        return (
+            Buffer.pack("b", self.flags)
+            + Buffer.pack_optional(Buffer.pack_varint, self.source)
+            + Buffer.pack_optional(Buffer.pack_string, self.sound)
+        )

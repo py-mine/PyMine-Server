@@ -6,11 +6,11 @@ from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
 __all__ = (
-    'PlayVehicleMoveServerBound',
-    'PlayVehicleMoveClientBound',
-    'PlaySteerBoat',
-    'PlaySteerVehicle',
-    'PlaySetPassengers',
+    "PlayVehicleMoveServerBound",
+    "PlayVehicleMoveClientBound",
+    "PlaySteerBoat",
+    "PlaySteerVehicle",
+    "PlaySetPassengers",
 )
 
 
@@ -43,13 +43,7 @@ class PlayVehicleMoveServerBound(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayVehicleMoveServerBound:
-        return cls(
-            buf.unpack('d'),
-            buf.unpack('d'),
-            buf.unpack('d'),
-            buf.unpack('f'),
-            buf.unpack('f')
-        )
+        return cls(buf.unpack("d"), buf.unpack("d"), buf.unpack("d"), buf.unpack("f"), buf.unpack("f"))
 
 
 class PlayVehicleMoveClientBound(Packet):
@@ -80,8 +74,13 @@ class PlayVehicleMoveClientBound(Packet):
         self.pitch = pitch
 
     def encode(self) -> bytes:
-        return Buffer.pack('d', self.x) + Buffer.pack('d', self.y) + Buffer.pack('d', self.z) + Buffer.pack('f', self.yaw) + \
-            Buffer.pack('f', self.pitch)
+        return (
+            Buffer.pack("d", self.x)
+            + Buffer.pack("d", self.y)
+            + Buffer.pack("d", self.z)
+            + Buffer.pack("f", self.yaw)
+            + Buffer.pack("f", self.pitch)
+        )
 
 
 class PlaySteerBoat(Packet):
@@ -106,7 +105,7 @@ class PlaySteerBoat(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlaySteerBoat:
-        return cls(buf.unpack('?'), buf.unpack('?'))
+        return cls(buf.unpack("?"), buf.unpack("?"))
 
 
 class PlaySteerVehicle(Packet):
@@ -134,7 +133,7 @@ class PlaySteerVehicle(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlaySteerVehicle:
-        return cls(buf.unpack('f'), buf.unpack('f'), buf.unpack('B'))
+        return cls(buf.unpack("f"), buf.unpack("f"), buf.unpack("B"))
 
 
 class PlaySetPassengers(Packet):
@@ -151,5 +150,8 @@ class PlaySetPassengers(Packet):
         self.passengers = passengers
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.entity_id) + Buffer.pack_varint(self.passenger_count) + \
-            b''.join(Buffer.pack_varint(passenger) for passenger in self.passengers)
+        return (
+            Buffer.pack_varint(self.entity_id)
+            + Buffer.pack_varint(self.passenger_count)
+            + b"".join([Buffer.pack_varint(passenger) for passenger in self.passengers])
+        )

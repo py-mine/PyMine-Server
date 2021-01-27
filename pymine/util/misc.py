@@ -1,4 +1,6 @@
 from random import randint
+import functools
+import asyncio
 import hashlib
 
 
@@ -18,5 +20,13 @@ def gen_seed() -> int:
 
 def seed_hash(seed: int):
     m = hashlib.sha256()
-    m.update(seed.to_bytes(8, 'big'))
-    return int.from_bytes(m.digest()[:8], 'big')
+    m.update(seed.to_bytes(8, "big"))
+    return int.from_bytes(m.digest()[:8], "big")
+
+
+def run_in_executor(func):
+    @functools.wraps(func)
+    def deco(*args, **kwargs):
+        return asyncio.get_running_loop().run_in_executor(None, functools.partial(func, *args, **kwargs))
+
+    return deco

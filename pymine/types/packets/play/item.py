@@ -6,13 +6,13 @@ from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
 __all__ = (
-    'PlayUseItem',
-    'PlayEditBook',
-    'PlayPickItem',
-    'PlayNameItem',
-    'PlayHeldItemChangeServerBound',
-    'PlayHeldItemChangeClientBound',
-    'PlayCollectItem',
+    "PlayUseItem",
+    "PlayEditBook",
+    "PlayPickItem",
+    "PlayNameItem",
+    "PlayHeldItemChangeServerBound",
+    "PlayHeldItemChangeClientBound",
+    "PlayCollectItem",
 )
 
 
@@ -63,7 +63,7 @@ class PlayEditBook(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayEditBook:
-        return cls(buf.unpack_slot(), buf.unpack('?'), buf.unpack_varint())
+        return cls(buf.unpack_slot(), buf.unpack("?"), buf.unpack_varint())
 
 
 class PlayPickItem(Packet):
@@ -129,7 +129,7 @@ class PlayHeldItemChangeServerBound(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayHeldItemChangeServerBound:
-        return cls(buf.unpack('h'))
+        return cls(buf.unpack("h"))
 
 
 class PlayHeldItemChangeClientBound(Packet):
@@ -144,7 +144,7 @@ class PlayHeldItemChangeClientBound(Packet):
         self.slot = slot
 
     def encode(self) -> bytes:
-        return Buffer.pack('h', self.slot)
+        return Buffer.pack("h", self.slot)
 
 
 class PlayCollectItem(Packet):
@@ -161,5 +161,8 @@ class PlayCollectItem(Packet):
         self.item_count = item_count
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.collected_eid) + Buffer.pack_varint(self.collector_eid) + \
-            Buffer.pack_varint(self.item_count)
+        return (
+            Buffer.pack_varint(self.collected_eid)
+            + Buffer.pack_varint(self.collector_eid)
+            + Buffer.pack_varint(self.item_count)
+        )

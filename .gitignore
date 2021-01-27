@@ -1,11 +1,13 @@
+# PyMine config / unnecessary files
 server.yml
-plugins.yml
-
 server-icon.png
-
 plugins/*
-plugins/FAP
-!plugins/FAP/__init__.py
+
+bigtest.nbt
+nantest.nbt
+
+# VirtualEnv
+venv/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

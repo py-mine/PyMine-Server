@@ -5,7 +5,7 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlayUpdateSign',)
+__all__ = ("PlayUpdateSign",)
 
 
 class PlayUpdateSign(Packet):
@@ -43,10 +43,4 @@ class PlayUpdateSign(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayUpdateSign:
-        return cls(
-            *buf.unpack_pos(),
-            buf.unpack_string(),
-            buf.unpack_string(),
-            buf.unpack_string(),
-            buf.unpack_string()
-        )
+        return cls(*buf.unpack_pos(), buf.unpack_string(), buf.unpack_string(), buf.unpack_string(), buf.unpack_string())

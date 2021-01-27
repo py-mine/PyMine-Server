@@ -5,7 +5,11 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlayServerDifficulty', 'PlaySetDifficulty', 'PlayLockDifficulty',)
+__all__ = (
+    "PlayServerDifficulty",
+    "PlaySetDifficulty",
+    "PlayLockDifficulty",
+)
 
 
 class PlayServerDifficulty(Packet):
@@ -26,7 +30,7 @@ class PlayServerDifficulty(Packet):
         self.difficulty = difficulty
 
     def encode(self) -> bytes:
-        return Buffer.pack('B', self.difficulty)
+        return Buffer.pack("B", self.difficulty)
 
 
 class PlaySetDifficulty(Packet):
@@ -48,7 +52,7 @@ class PlaySetDifficulty(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlaySetDifficulty:
-        return cls(buf.unpack('b'))
+        return cls(buf.unpack("b"))
 
 
 class PlayLockDifficulty(Packet):
@@ -70,4 +74,4 @@ class PlayLockDifficulty(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayLockDifficulty:
-        return cls(buf.unpack('?'))
+        return cls(buf.unpack("?"))

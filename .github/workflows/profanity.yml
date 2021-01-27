@@ -1,6 +1,6 @@
 name: Profanity check
 
-on: 
+on:
   issues:
     types: [opened, edited]
   issue_comment:
@@ -9,8 +9,7 @@ on:
     types: [opened, edited]
 
 jobs:
-  build:
-
+  profanity:
     runs-on: ubuntu-latest
 
     steps:

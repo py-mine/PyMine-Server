@@ -5,7 +5,10 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-__all__ = ('PlayUpdateCommandBlock', 'PlayUpdateCommandBlockMinecart',)
+__all__ = (
+    "PlayUpdateCommandBlock",
+    "PlayUpdateCommandBlockMinecart",
+)
 
 
 class PlayUpdateCommandBlock(Packet):
@@ -40,7 +43,7 @@ class PlayUpdateCommandBlock(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayUpdateCommandBlock:
-        return cls(*buf.unpack_pos(), buf.unpack_string(), buf.unpack_varint(), buf.unpack('b'))
+        return cls(*buf.unpack_pos(), buf.unpack_string(), buf.unpack_varint(), buf.unpack("b"))
 
 
 class PlayUpdateCommandBlockMinecart(Packet):
@@ -68,4 +71,4 @@ class PlayUpdateCommandBlockMinecart(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayUpdateCommandBlockMinecart:
-        return cls(buf.unpack_varint(), buf.unpack_string(), buf.unpack('?'))
+        return cls(buf.unpack_varint(), buf.unpack_string(), buf.unpack("?"))

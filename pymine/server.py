@@ -1,164 +1,185 @@
 import asyncio
 import aiohttp
 import random
+import socket
 import struct
-import sys
-import os
-
-sys.path.append(os.getcwd())  # nopep8
-
-import pymine.api as pymine_api
 
 from pymine.types.buffer import Buffer
 from pymine.types.stream import Stream
+from pymine.types.packet import Packet
 
 from pymine.data.packet_map import PACKET_MAP
-from pymine.data.states import STATES
 
-from pymine.util.logging import task_exception_handler
+from pymine.util.logging import task_exception_handler, Logger
+from pymine.util.config import load_config, load_favicon
 from pymine.util.encryption import gen_rsa_keys
-from pymine.util.share import share, logger
 
-share['rsa']['private'], share['rsa']['public'] = gen_rsa_keys()
-states = share['states']
-logger.debug_ = share['conf']['debug']
+from pymine.api import PyMineAPI, StopStream
 
-
-async def close_con(stream):  # Close a connection to a client
-    await stream.drain()
-
-    stream.close()
-    await stream.wait_closed()
-
-    try:
-        del states[stream.remote]
-    except BaseException:
-        pass
-
-    logger.debug(f'Disconnected nicely from {stream.remote[0]}:{stream.remote[1]}.')
-    return False, stream
+# Used for parts of PyMine that utilize the server instance without being a plugin themselves
+server = None
 
 
-share['close_con'] = close_con
+class Server:
+    class Meta:
+        def __init__(self):
+            self.server = 0.1
+            self.version = "1.16.5"
+            self.protocol = 754
 
+    class Secrets:
+        def __init__(self, rsa_private, rsa_public):
+            self.rsa_private = rsa_private
+            self.rsa_public = rsa_public
 
-# Handle / respond to packets, this is a loop
-async def handle_packet(stream: Stream):
-    packet_length = 0
+    class Cache:
+        def __init__(self):
+            self.states = {}  # {remote: state}
+            self.login = {}  # {remote: {username: username, verify: verify token}}
+            self.entity_id = {}  # {remote: entity_id}
+            self.user_cache = {}  # {entity_id: {remote: tuple, uuid: str}}
 
-    # Basically an implementation of Buffer.unpack_varint()
-    # except designed to read directly from a a StreamReader
-    # and also to handle legacy server list ping packets
-    for i in range(5):
+    def __init__(self, logger):
+        self.logger = logger
+
+        self.meta = self.Meta()
+        self.cache = self.Cache()
+        self.secrets = self.Secrets(*gen_rsa_keys())
+
+        self.conf = load_config()
+        self.favicon = load_favicon()
+        self.comp_thresh = self.conf["comp_thresh"]
+
+        self.logger.debug_ = self.conf["debug"]
+        asyncio.get_event_loop().set_debug(self.conf["debug"])
+
+        self.aiohttp = None
+        self.server = None
+        self.api = None
+
+    async def start(self):
+        addr = self.conf["server_ip"]
+        port = self.conf["server_port"]
+
+        if not addr:
+            addr = socket.gethostbyname(socket.gethostname())
+
+        self.aiohttp = aiohttp.ClientSession()
+        self.server = await asyncio.start_server(self.handle_connection, host=addr, port=port)
+        self.api = PyMineAPI(self)
+
+        await self.api.init()
+
+        async with self.server:
+            self.logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
+
+            self.api.taskify_handlers(self.api.events._server_ready)
+
+            await self.server.serve_forever()
+
+    async def stop(self):
+        self.logger.info("Closing server...")
+
+        self.server.close()
+        await asyncio.gather(self.server.wait_closed(), self.api.stop(), self.aiohttp.close())
+
+        self.logger.info("Server closed.")
+
+    async def close_connection(self, stream: Stream):  # Close a connection to a client
+        await stream.drain()
+
+        stream.close()
+        await stream.wait_closed()
+
         try:
-            read = await asyncio.wait_for(stream.read(1), 5)
-        except asyncio.TimeoutError:
-            logger.debug('Closing due to timeout on read...')
-            return False, stream
+            del self.cache.states[stream.remote]
+        except BaseException:
+            pass
 
-        if read == b'':
-            logger.debug('Closing due to invalid read....')
-            return False, stream
+        self.logger.debug(f"Disconnected nicely from {stream.remote[0]}:{stream.remote[1]}.")
 
-        if i == 0 and read == b'\xFE':
-            logger.warn('Legacy ping attempted, legacy ping is not supported.')
-            return False, stream
+        return False, stream
 
-        b = struct.unpack('B', read)[0]
-        packet_length |= (b & 0x7F) << 7 * i
+    async def send_packet(self, stream: Stream, packet: Packet, comp_thresh=None):
+        self.logger.debug(f"OUT: state:-1 | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
-        if not b & 0x80:
-            break
+        if comp_thresh is None:
+            comp_thresh = self.comp_thresh
 
-    if packet_length & (1 << 31):
-        packet_length -= 1 << 32
+        stream.write(Buffer.pack_packet(packet, comp_thresh))
+        await stream.drain()
 
-    buf = Buffer(await stream.read(packet_length))
+    async def broadcast_packet(self, packet: Packet):
+        self.logger.debug(f"BROADCAST:      id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
-    state = STATES.encode(states.get(stream.remote, 0))
-    packet = buf.unpack_packet(state, PACKET_MAP)
+        raise NotImplementedError
 
-    logger.debug(f'IN : state:{state:<11} | id:0x{packet.id:02X} | packet:{type(packet).__name__}')
+    async def handle_packet(self, stream: Stream):  # Handle / respond to packets, this is called in a loop
+        packet_length = 0
 
-    for handler in pymine_api.packet.PACKET_HANDLERS[state][packet.id]:
-        resp_value = await handler(stream, packet)
+        # Basically an implementation of Buffer.unpack_varint()
+        # except designed to read directly from a a StreamReader
+        # and also to handle legacy server list ping packets
+        for i in range(3):
+            try:
+                read = await asyncio.wait_for(stream.read(1), 5)
+            except asyncio.TimeoutError:
+                self.logger.debug("Closing due to timeout on read...")
+                raise StopStream
 
-        try:
-            continue_, stream = resp_value
-        except (ValueError, TypeError,):
-            logger.warn(f'Invalid return from packet handler: {handler.__module__}.{handler.__qualname__}')
-            continue
+            if read == b"":
+                self.logger.debug("Closing due to invalid read....")
+                raise StopStream
 
-        if not continue_:
-            return False, stream
+            if i == 0 and read == b"\xFE":
+                self.logger.warn("Legacy ping attempted, legacy ping is not supported.")
+                raise StopStream
 
-    return continue_, stream
+            b = struct.unpack("B", read)[0]
+            packet_length |= (b & 0x7F) << 7 * i
 
+            if not b & 0x80:
+                break
 
-async def handle_con(reader, writer):  # Handle a connection from a client
-    stream = Stream(reader, writer)
-    logger.debug(f'Connection received from {stream.remote[0]}:{stream.remote[1]}.')
+        if packet_length & (1 << 31):
+            packet_length -= 1 << 32
 
-    continue_ = True
+        buf = Buffer(await stream.read(packet_length))
 
-    while continue_:
-        try:
-            continue_, stream = await handle_packet(stream)
-        except BaseException as e:
-            logger.error(logger.f_traceback(e))
-            break
+        state = self.cache.states.get(stream.remote, 0)
+        packet = buf.unpack_packet(state, PACKET_MAP)
 
-    await close_con(stream)
+        self.logger.debug(f"IN : state: {state} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
+        if self.api.events._packet[state].get(packet.id) is None:
+            self.logger.warn(f"No valid packet handler found for packet {state} 0x{packet.id:02X} {type(packet).__name__}")
+            return
 
-async def start():  # Actually start the server
-    addr = share['conf']['server_ip']
-    port = share['conf']['server_port']
+        for handler in self.api.events._packet[state][packet.id]:
+            try:
+                res = await handler(stream, packet)
 
-    server = share['server'] = await asyncio.start_server(handle_con, host=addr, port=port)
-    share['ses'] = aiohttp.ClientSession()
+                if isinstance(res, Stream):
+                    stream = res
+            except StopStream:
+                raise
+            except BaseException as e:
+                self.logger.error(
+                    f"Error occurred in {handler.__module__}.{handler.__qualname__}: {self.logger.f_traceback(e)}"
+                )
 
-    await pymine_api.init()
+        return stream
 
-    try:
-        async with server:
-            if random.randint(0, 999) == 1:  # shhhhh
-                logger.info(f'PPMine 69.420 started on port {addr}:{port}!')
-            else:
-                logger.info(f'PyMine {float(share["server_version"])} started on {addr}:{port}!')
+    async def handle_connection(self, reader, writer):  # Handle a connection from a client
+        stream = Stream(reader, writer)
+        self.logger.debug(f"Connection received from {stream.remote[0]}:{stream.remote[1]}.")
 
-            for handler in pymine_api.server.SERVER_READY_HANDLERS:
-                asyncio.create_task(handler())
+        while True:
+            try:
+                stream = await self.handle_packet(stream)
+            except StopStream:
+                break
+            except BaseException as e:
+                self.logger.error(self.logger.f_traceback(e))
 
-            await server.serve_forever()
-    except (asyncio.CancelledError, KeyboardInterrupt,):
-        pass
-
-
-async def stop():  # Stop the server properly
-    logger.info('Closing server...')
-
-    share['server'].close()
-
-    # wait for the server to be closed, stop the api, and stop the aiohttp.ClientSession
-    await asyncio.gather(share['server'].wait_closed(), pymine_api.stop(), share['ses'].close())
-
-    logger.info('Server closed.')
-
-
-if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.set_exception_handler(task_exception_handler)
-
-    try:
-        loop.run_until_complete(start())
-    except BaseException as e:
-        logger.critical(logger.f_traceback(e))
-
-    try:
-        loop.run_until_complete(stop())
-    except BaseException as e:
-        logger.critical(logger.f_traceback(e))
-
-    loop.stop()
-    loop.close()
+        await self.close_connection(stream)

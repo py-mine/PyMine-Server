@@ -7,7 +7,7 @@ from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 from pymine.types.chat import Chat
 
-__all__ = ('PlayBossBar',)
+__all__ = ("PlayBossBar",)
 
 
 class PlayBossBar(Packet):
@@ -37,16 +37,20 @@ class PlayBossBar(Packet):
         out = Buffer.pack_uuid(self.uuid) + Buffer.pack_varint(self.action)
 
         if self.action == 0:
-            out += Buffer.pack_chat(self.data['title']) + Buffer.pack('f', self.data['health']) + \
-                Buffer.pack_varint(self.data['color']) + Buffer.pack_varint(self.data['division']) + \
-                Buffer.pack('B', self.data['flags'])
+            out += (
+                Buffer.pack_chat(self.data["title"])
+                + Buffer.pack("f", self.data["health"])
+                + Buffer.pack_varint(self.data["color"])
+                + Buffer.pack_varint(self.data["division"])
+                + Buffer.pack("B", self.data["flags"])
+            )
         elif self.action == 2:
-            out += Buffer.pack('f', self.data['health'])
+            out += Buffer.pack("f", self.data["health"])
         elif self.action == 3:
-            out += Buffer.pack_chat(self.data['title'])
+            out += Buffer.pack_chat(self.data["title"])
         elif self.action == 4:
-            out += Buffer.pack_varint(self.data['color']) + Buffer.pack_varint(self.data['division'])
+            out += Buffer.pack_varint(self.data["color"]) + Buffer.pack_varint(self.data["division"])
         elif self.action == 5:
-            out += Buffer.pack('B', self.data['flags'])
+            out += Buffer.pack("B", self.data["flags"])
 
         return out

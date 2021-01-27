@@ -8,19 +8,19 @@ class Stream(StreamWriter):
     def __init__(self, reader: StreamReader, writer: StreamWriter) -> None:
         super().__init__(writer._transport, writer._protocol, writer._reader, writer._loop)
 
-        self.remote = self.get_extra_info('peername')
+        self.remote = self.get_extra_info("peername")
 
-    async def read(self, n: int = -1) -> bytes:
-        return await self._reader.read(n)
+    def read(self, n: int = -1) -> bytes:
+        return self._reader.read(n)
 
-    async def readline(self) -> bytes:
-        return await self._reader.readline()
+    def readline(self) -> bytes:
+        return self._reader.readline()
 
-    async def readexactly(self, n: int) -> bytes:
-        return await self._reader.readexactly(n)
+    def readexactly(self, n: int) -> bytes:
+        return self._reader.readexactly(n)
 
-    async def readuntil(self, separator: bytes = b'\n') -> bytes:
-        return await self._reader.readuntil(separator)
+    def readuntil(self, separator: bytes = b"\n") -> bytes:
+        return self._reader.readuntil(separator)
 
 
 class EncryptedStream(Stream):
@@ -39,7 +39,7 @@ class EncryptedStream(Stream):
     async def readexactly(self, n: int):
         return self.decryptor.update(await super().readexactly(n))
 
-    async def readuntil(self, separator=b'\n'):
+    async def readuntil(self, separator=b"\n"):
         return self.decryptor.update(await super().readuntil(separator))
 
     def write(self, data: bytes):

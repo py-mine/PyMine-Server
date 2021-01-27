@@ -1,12 +1,15 @@
 """Contains packets relating to chunks."""
 
 from __future__ import annotations
-from nbt import nbt
 
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
+import pymine.types.nbt as nbt
 
-__all__ = ('PlayUnloadChunk', 'PlayUpdateLight',)
+__all__ = (
+    "PlayUnloadChunk",
+    "PlayUpdateLight",
+)
 
 
 class PlayUnloadChunk(Packet):
@@ -21,7 +24,7 @@ class PlayUnloadChunk(Packet):
         self.chunk_x, self.chunk_z = chunk_x, chunk_z
 
     def encode(self) -> bytes:
-        return Buffer.pack('i', self.chunk_x) + Buffer.pack('i', self.chunk_z)
+        return Buffer.pack("i", self.chunk_x) + Buffer.pack("i", self.chunk_z)
 
 
 class PlayChunkData(Packet):
@@ -51,15 +54,16 @@ class PlayChunkData(Packet):
     to = 1
 
     def __init__(
-            self,
-            chunk_x: int,
-            chunk_z: int,
-            full_chunk: bool,
-            prim_bit_mask: int,
-            heightmaps: nbt.TAG,
-            data: bytes,
-            block_entities: list,
-            biomes: int = None) -> None:
+        self,
+        chunk_x: int,
+        chunk_z: int,
+        full_chunk: bool,
+        prim_bit_mask: int,
+        heightmaps: nbt.TAG,
+        data: bytes,
+        block_entities: list,
+        biomes: int = None,
+    ) -> None:
         super().__init__()
 
         self.chunk_x, self.chunk_z = chunk_x, chunk_z
@@ -81,16 +85,17 @@ class PlayUpdateLight(Packet):
     to = 1
 
     def __init__(
-            self,
-            chunk_x: int,
-            chunk_z: int,
-            trust_edges: bool,
-            sky_light_mask: int,
-            block_light_mask: int,
-            empty_sky_light_mask: int,
-            empty_block_light_mask: int,
-            sky_light_array: list,
-            block_light_array: list) -> None:
+        self,
+        chunk_x: int,
+        chunk_z: int,
+        trust_edges: bool,
+        sky_light_mask: int,
+        block_light_mask: int,
+        empty_sky_light_mask: int,
+        empty_block_light_mask: int,
+        sky_light_array: list,
+        block_light_array: list,
+    ) -> None:
         super().__init__()
 
         self.chunk_x, self.chunk_z = chunk_x, chunk_z
@@ -101,7 +106,14 @@ class PlayUpdateLight(Packet):
         self.block_light_array = block_light_array
 
     def encode(self) -> bytes:
-        return Buffer.pack('i', self.chunk_x) + Buffer.pack('i', self.chunk_z) + Buffer.pack('?', self.trust_edges) + \
-            Buffer.pack_varint(self.sky_light_mask) + Buffer.pack_varint(self.block_light_mask) + \
-            Buffer.pack_varint(self.empty_sky_light_max) + Buffer.pack_varint(self.empty_block_light_mask) + \
-            self.sky_light_array + self.block_light_array
+        return (
+            Buffer.pack("i", self.chunk_x)
+            + Buffer.pack("i", self.chunk_z)
+            + Buffer.pack("?", self.trust_edges)
+            + Buffer.pack_varint(self.sky_light_mask)
+            + Buffer.pack_varint(self.block_light_mask)
+            + Buffer.pack_varint(self.empty_sky_light_max)
+            + Buffer.pack_varint(self.empty_block_light_mask)
+            + self.sky_light_array
+            + self.block_light_array
+        )

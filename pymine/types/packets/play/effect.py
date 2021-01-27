@@ -6,8 +6,9 @@ from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
 __all__ = (
-    'PlayEffect',
-    'PlayEntityEffect',
+    "PlayEffect",
+    "PlayEntityEffect",
+    "PlaySoundEffect",
 )
 
 
@@ -42,8 +43,12 @@ class PlayEffect(Packet):
         self.disable_relative_volume = disable_relative_volume
 
     def encode(self) -> bytes:
-        return Buffer.pack('i', self.effect_id) + Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack('i', self.data) + \
-            Buffer.pack('?', self.disable_relative_volume)
+        return (
+            Buffer.pack("i", self.effect_id)
+            + Buffer.pack_pos(self.x, self.y, self.z)
+            + Buffer.pack("i", self.data)
+            + Buffer.pack("?", self.disable_relative_volume)
+        )
 
 
 class PlayEntityEffect(Packet):
@@ -63,3 +68,48 @@ class PlayEntityEffect(Packet):
 
     def encode(self) -> bytes:
         return Buffer.pack_varint(self.eid) + self.effect_id + self.amp + Buffer.pack_varint(self.duration) + self.flags
+
+
+class PlaySoundEffect(Packet):
+    """Used to play a hardcoded sound event. (Server -> Client)
+
+    :param int sound_id: The ID of the sound to be played.
+    :param int category: The sound category, see here: https://wiki.vg/Protocol#Sound_Effect.
+    :param int x: The x coordinate of where the effect is to be played.
+    :param int y: The y coordinate of where the effect is to be played.
+    :param int z: The z coordinate of where the effect is to be played.
+    :param float volume: Volume of the sound to be played, between 0.0 and 1.0.
+    :param float pitch: The pitch that the sound should be played at, between 0.5 and 2.0.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr sound_id:
+    :attr category:
+    :attr x:
+    :attr y:
+    :attr z:
+    :attr volume:
+    :attr pitch:
+    """
+
+    id = 0x51
+    to = 1
+
+    def __init__(self, sound_id: int, category: int, x: int, y: int, z: int, volume: float, pitch: float) -> None:
+        super().__init__()
+
+        self.sound_id = sound_id
+        self.category = category
+        self.x, self.y, self.z = x, y, z
+        self.volume = volume
+        self.pitch = pitch
+
+    def encode(self) -> bytes:
+        return (
+            Buffer.pack_varint(self.sound_id)
+            + Buffer.pack_varint(self.category)
+            + Buffer.pack("i", self.x * 8)
+            + Buffer.pack("i", self.y * 8)
+            + Buffer.pack("i", self.z * 8)
+            + Buffer.pack("f", self.volume)
+            + Buffer.pack("f", self.pitch)
+        )

@@ -6,8 +6,8 @@ from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
 __all__ = (
-    'PlayAdvancementTab',
-    'PlaySelectAdvancementTab',
+    "PlayAdvancementTab",
+    "PlaySelectAdvancementTab",
 )
 
 
@@ -33,7 +33,7 @@ class PlayAdvancementTab(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayAdvancementTab:
-        return cls(buf.unpack_varint(), (buf.unpack_varint() if buf.unpack('?') else None))
+        return cls(buf.unpack_varint(), (buf.unpack_varint() if buf.unpack("?") else None))
 
 
 class PlaySelectAdvancementTab(Packet):

@@ -1,20 +1,15 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
+about: Suggest an idea or an addition to PyMine!
 title: ''
-labels: ''
+labels: Enhancement
 assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+### Feature
+- Basic description of what this idea / new feature would entail
+- List out all features of the idea / new feature
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
-
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
-
-**Additional context**
-Add any other context or screenshots about the feature request here.
+### Reason
+- Reasoning / benefits behind this feature / idea.

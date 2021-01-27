@@ -1,38 +1,38 @@
 """Contains packets related to players."""
 
 from __future__ import annotations
-from nbt import nbt
 import uuid
 
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 from pymine.types.chat import Chat
+import pymine.types.nbt as nbt
 
 __all__ = (
-    'PlayPlayerDigging',
-    'PlayAcknowledgePlayerDigging',
-    'PlayDisconnect',
-    'PlayPlayerAbilitiesClientBound',
-    'PlayPlayerAbilitiesServerBound',
-    'PlayJoinGame',
-    'PlayPlayerPosition',
-    'PlayPlayerPositionAndRotationServerBound',
-    'PlayPlayerRotation',
-    'PlayPlayerMovement',
-    'PlayTeleportConfirm',
-    'PlayClientStatus',
-    'PlayClientSettings',
-    'PlayCreativeInventoryAction',
-    'PlaySpectate',
-    'PlayCamera',
-    'PlayUpdateViewPosition',
-    'PlayUpdateViewDistance',
-    'PlaySetExperience',
-    'PlayUpdateHealth',
-    'PlayCombatEvent',
-    'PlayFacePlayer',
-    'PlayPlayerInfo',
-    'PlayRespawn',
+    "PlayPlayerDigging",
+    "PlayAcknowledgePlayerDigging",
+    "PlayDisconnect",
+    "PlayPlayerAbilitiesClientBound",
+    "PlayPlayerAbilitiesServerBound",
+    "PlayJoinGame",
+    "PlayPlayerPosition",
+    "PlayPlayerPositionAndRotationServerBound",
+    "PlayPlayerRotation",
+    "PlayPlayerMovement",
+    "PlayTeleportConfirm",
+    "PlayClientStatus",
+    "PlayClientSettings",
+    "PlayCreativeInventoryAction",
+    "PlaySpectate",
+    "PlayCamera",
+    "PlayUpdateViewPosition",
+    "PlayUpdateViewDistance",
+    "PlaySetExperience",
+    "PlayUpdateHealth",
+    "PlayCombatEvent",
+    "PlayFacePlayer",
+    "PlayPlayerInfo",
+    "PlayRespawn",
 )
 
 
@@ -65,7 +65,7 @@ class PlayPlayerDigging(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayPlayerDigging:
-        return cls(buf.unpack_varint(), *buf.unpack_pos(), buf.unpack('b'))
+        return cls(buf.unpack_varint(), *buf.unpack_pos(), buf.unpack("b"))
 
 
 class PlayAcknowledgePlayerDigging(Packet):
@@ -99,8 +99,12 @@ class PlayAcknowledgePlayerDigging(Packet):
         self.successful = successful
 
     def encode(self) -> bytes:
-        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack_varint(self.block) + Buffer.pack_varint(self.status) + \
-            Buffer.pack('?', self.successful)
+        return (
+            Buffer.pack_pos(self.x, self.y, self.z)
+            + Buffer.pack_varint(self.block)
+            + Buffer.pack_varint(self.status)
+            + Buffer.pack("?", self.successful)
+        )
 
 
 class PlayDisconnect(Packet):
@@ -144,7 +148,7 @@ class PlayPlayerAbilitiesClientBound(Packet):
         self.fov_modifier = fov_modifier
 
     def encode(self) -> bytes:
-        return self.flags + Buffer.pack('f', self.flying_speed) + Buffer.pack('f', self.fov_modifier)
+        return self.flags + Buffer.pack("f", self.flying_speed) + Buffer.pack("f", self.fov_modifier)
 
 
 class PlayPlayerAbilitiesServerBound(Packet):
@@ -166,7 +170,7 @@ class PlayPlayerAbilitiesServerBound(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayPlayerAbilitiesServerBound:
-        return cls(buf.unpack('b') == 0x02)
+        return cls(buf.unpack("b") == 0x02)
 
 
 class PlayJoinGame(Packet):
@@ -210,22 +214,23 @@ class PlayJoinGame(Packet):
     to = 1
 
     def __init__(
-            self,
-            entity_id: int,
-            is_hardcore: bool,
-            gamemode: int,
-            prev_gamemode: int,
-            world_names: list,
-            dim_codec: nbt.Tag,
-            dimension: nbt.Tag,
-            world_name: str,
-            hashed_seed: int,
-            max_players: int,
-            view_distance: int,
-            reduced_debug_info: bool,
-            enable_respawn_screen: bool,
-            is_debug: bool,
-            is_flat: bool) -> None:
+        self,
+        entity_id: int,
+        is_hardcore: bool,
+        gamemode: int,
+        prev_gamemode: int,
+        world_names: list,
+        dim_codec: nbt.Tag,
+        dimension: nbt.Tag,
+        world_name: str,
+        hashed_seed: int,
+        max_players: int,
+        view_distance: int,
+        reduced_debug_info: bool,
+        enable_respawn_screen: bool,
+        is_debug: bool,
+        is_flat: bool,
+    ) -> None:
         super().__init__()
 
         self.entity_id = entity_id
@@ -245,15 +250,24 @@ class PlayJoinGame(Packet):
         self.is_flat = is_flat
 
     def encode(self) -> bytes:
-        return Buffer.pack('i', self.entity_id) + Buffer.pack('?', self.is_hardcore) + \
-            Buffer.pack('B', self.gamemode) + Buffer.pack('b', self.prev_gamemode) + \
-            Buffer.pack_varint(len(self.world_names)) + \
-            b''.join(Buffer.pack_string(w) for w in self.world_names) + \
-            Buffer.pack_nbt(self.dim_codec) + Buffer.pack_nbt(self.dimension) + \
-            Buffer.pack_string(self.world_name) + Buffer.pack('q', self.hashed_seed) + \
-            Buffer.pack_varint(self.max_players) + Buffer.pack_varint(self.view_distance) + \
-            Buffer.pack('?', self.reduced_debug_info) + Buffer.pack('?', self.enable_respawn_screen) + \
-            Buffer.pack('?', self.is_debug) + Buffer.pack('?', self.is_flat)
+        return (
+            Buffer.pack("i", self.entity_id)
+            + Buffer.pack("?", self.is_hardcore)
+            + Buffer.pack("B", self.gamemode)
+            + Buffer.pack("b", self.prev_gamemode)
+            + Buffer.pack_varint(len(self.world_names))
+            + b"".join([Buffer.pack_string(w) for w in self.world_names])
+            + Buffer.pack_nbt(self.dim_codec)
+            + Buffer.pack_nbt(self.dimension)
+            + Buffer.pack_string(self.world_name)
+            + Buffer.pack("q", self.hashed_seed)
+            + Buffer.pack_varint(self.max_players)
+            + Buffer.pack_varint(self.view_distance)
+            + Buffer.pack("?", self.reduced_debug_info)
+            + Buffer.pack("?", self.enable_respawn_screen)
+            + Buffer.pack("?", self.is_debug)
+            + Buffer.pack("?", self.is_flat)
+        )
 
 
 class PlayPlayerPosition(Packet):
@@ -284,7 +298,7 @@ class PlayPlayerPosition(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayPlayerPosition:
-        return cls(buf.unpack('d'), buf.unpack('d'), buf.unpack('d'), buf.unpack('?'))
+        return cls(buf.unpack("d"), buf.unpack("d"), buf.unpack("d"), buf.unpack("?"))
 
 
 class PlayPlayerPositionAndRotationServerBound(Packet):
@@ -321,14 +335,7 @@ class PlayPlayerPositionAndRotationServerBound(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayPlayerPositionAndRotationServerBound:
-        return cls(
-            buf.unpack('d'),
-            buf.unpack('d'),
-            buf.unpack('d'),
-            buf.unpack('d'),
-            buf.unpack('d'),
-            buf.unpack('?')
-        )
+        return cls(buf.unpack("d"), buf.unpack("d"), buf.unpack("d"), buf.unpack("d"), buf.unpack("d"), buf.unpack("?"))
 
 
 class PlayPlayerRotation(Packet):
@@ -355,7 +362,7 @@ class PlayPlayerRotation(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayPlayerRotation:
-        return cls(buf.unpack('d'), buf.unpack('d'), buf.unpack('?'))
+        return cls(buf.unpack("d"), buf.unpack("d"), buf.unpack("?"))
 
 
 class PlayPlayerMovement(Packet):
@@ -377,7 +384,7 @@ class PlayPlayerMovement(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayPlayerMovement:
-        return cls(buf.unpack('?'))
+        return cls(buf.unpack("?"))
 
 
 class PlayTeleportConfirm(Packet):
@@ -447,13 +454,8 @@ class PlayClientSettings(Packet):
     to = 0
 
     def __init__(
-            self,
-            locale: str,
-            view_distance: int,
-            chat_mode: int,
-            chat_colors: bool,
-            displayed_skin_parts: int,
-            main_hand: int) -> None:
+        self, locale: str, view_distance: int, chat_mode: int, chat_colors: bool, displayed_skin_parts: int, main_hand: int
+    ) -> None:
         super().__init__()
 
         self.locale = locale
@@ -466,12 +468,7 @@ class PlayClientSettings(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayClientSettings:
         return cls(
-            buf.unpack_string(),
-            buf.unpack('b'),
-            buf.unpack_varint(),
-            buf.unpack('?'),
-            buf.unpack('B'),
-            buf.unpack_varint()
+            buf.unpack_string(), buf.unpack("b"), buf.unpack_varint(), buf.unpack("?"), buf.unpack("B"), buf.unpack_varint()
         )
 
 
@@ -497,7 +494,7 @@ class PlayCreativeInventoryAction(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayCreativeInventoryAction:
-        return cls(buf.unpack('h'), buf.unpack_slot())
+        return cls(buf.unpack("h"), buf.unpack_slot())
 
 
 class PlaySpectate(Packet):
@@ -582,7 +579,7 @@ class PlaySetExperience(Packet):
         self.total_xp = total_xp
 
     def encode(self) -> bytes:
-        return Buffer.pack('f', self.xp_bar) + Buffer.pack_varint(self.lvl) + Buffer.pack_varint(self.total_xp)
+        return Buffer.pack("f", self.xp_bar) + Buffer.pack_varint(self.lvl) + Buffer.pack_varint(self.total_xp)
 
 
 class PlayUpdateHealth(Packet):
@@ -599,7 +596,7 @@ class PlayUpdateHealth(Packet):
         self.saturation = saturation
 
     def encode(self) -> bytes:
-        return Buffer.pack('f', self.health) + Buffer.pack_varint(self.food) + Buffer.pack('f', self.saturation)
+        return Buffer.pack("f", self.health) + Buffer.pack_varint(self.food) + Buffer.pack("f", self.saturation)
 
 
 class PlayCombatEvent(Packet):
@@ -631,8 +628,12 @@ class PlayCombatEvent(Packet):
         #         Buffer.pack('i', self.data['opponent'])
 
         if self.event == 2:  # entity dead, only one actually used
-            return Buffer.pack_varint(self.event) + Buffer.pack_varint(self.data['player_id']) + \
-                Buffer.pack('i', self.data['entity_id']) + Buffer.pack_chat(self.data['message'])
+            return (
+                Buffer.pack_varint(self.event)
+                + Buffer.pack_varint(self.data["player_id"])
+                + Buffer.pack("i", self.data["entity_id"])
+                + Buffer.pack_chat(self.data["message"])
+            )
 
 
 class PlayPlayerInfo(Packet):
@@ -660,23 +661,32 @@ class PlayPlayerInfo(Packet):
 
         if self.action == 0:  # add player
             for player in self.players:
-                out += Buffer.pack_uuid(player['uuid']) + Buffer.pack_string(player['name']) + \
-                    Buffer.pack_varint(len(player['properties']))
+                out += (
+                    Buffer.pack_uuid(player["uuid"])
+                    + Buffer.pack_string(player["name"])
+                    + Buffer.pack_varint(len(player["properties"]))
+                )
 
-                for prop in player['properties']:
-                    out += Buffer.pack_string(prop['name']) + Buffer.pack_string(prop['value']) + \
-                        Buffer.pack_optional(Buffer.pack_string, prop.get('signature'))
+                for prop in player["properties"]:
+                    out += (
+                        Buffer.pack_string(prop["name"])
+                        + Buffer.pack_string(prop["value"])
+                        + Buffer.pack_optional(Buffer.pack_string, prop.get("signature"))
+                    )
 
-                out += Buffer.pack_varint(player['gamemode']) + Buffer.pack_varint(player['ping']) + \
-                    Buffer.pack_optional(Buffer.pack_chat, player['display_name'])
+                out += (
+                    Buffer.pack_varint(player["gamemode"])
+                    + Buffer.pack_varint(player["ping"])
+                    + Buffer.pack_optional(Buffer.pack_chat, player["display_name"])
+                )
         elif self.action == 1:  # update gamemode
-            out += b''.join(Buffer.pack_uuid(p['uuid']) + Buffer.pack_varint(p['gamemode']) for p in self.players)
+            out += b"".join([Buffer.pack_uuid(p["uuid"]) + Buffer.pack_varint(p["gamemode"]) for p in self.players])
         elif self.action == 2:  # update latency
-            out += b''.join(Buffer.pack_uuid(p['uuid']) + Buffer.pack_varint(p['ping']) for p in self.players)
+            out += b"".join([Buffer.pack_uuid(p["uuid"]) + Buffer.pack_varint(p["ping"]) for p in self.players])
         elif self.action == 3:  # update display name
-            out += b''.join(Buffer.pack_uuid(p['uuid']) + Buffer.pack_optional(p.get('display_name')) for p in self.players)
+            out += b"".join([Buffer.pack_uuid(p["uuid"]) + Buffer.pack_optional(p.get("display_name")) for p in self.players])
         elif self.action == 4:
-            out += b''.join(Buffer.pack_uuid(p['uuid']) for p in self.players)
+            out += b"".join([Buffer.pack_uuid(p["uuid"]) for p in self.players])
 
         return out
 
@@ -705,14 +715,15 @@ class PlayFacePlayer(Packet):
     to = 1
 
     def __init__(
-            self,
-            feet_or_eyes: int,
-            tx: float,
-            ty: float,
-            tz: float,
-            is_entity: bool,
-            entity_id: int = None,
-            entity_feet_or_eyes: int = None) -> None:
+        self,
+        feet_or_eyes: int,
+        tx: float,
+        ty: float,
+        tz: float,
+        is_entity: bool,
+        entity_id: int = None,
+        entity_feet_or_eyes: int = None,
+    ) -> None:
         super().__init__()
 
         self.feet_or_eyes = feet_or_eyes
@@ -722,8 +733,12 @@ class PlayFacePlayer(Packet):
         self.entity_feet_or_eyes = entity_feet_or_eyes
 
     def encode(self) -> bytes:
-        out = Buffer.pack_varint(self.feet_or_eyes) + Buffer.pack('d', self.tx) + Buffer.pack('d', self.ty) + \
-            Buffer.pack('d', self.tz)
+        out = (
+            Buffer.pack_varint(self.feet_or_eyes)
+            + Buffer.pack("d", self.tx)
+            + Buffer.pack("d", self.ty)
+            + Buffer.pack("d", self.tz)
+        )
 
         if self.is_entity:
             out += Buffer.pack_varint(self.entity_id) + Buffer.pack_varint(self.entity_feet_or_eyes)
@@ -758,15 +773,16 @@ class PlayRespawn(Packet):
     to = 1
 
     def __init__(
-            self,
-            dimension: nbt.TAG,
-            world_name: str,
-            hashed_seed: int,
-            gamemode: int,
-            prev_gamemode: int,
-            is_debug: bool,
-            is_flat: bool,
-            copy_metadata: bool) -> None:
+        self,
+        dimension: nbt.TAG,
+        world_name: str,
+        hashed_seed: int,
+        gamemode: int,
+        prev_gamemode: int,
+        is_debug: bool,
+        is_flat: bool,
+        copy_metadata: bool,
+    ) -> None:
         super().__init__()
 
         self.dimension = dimension
@@ -779,6 +795,13 @@ class PlayRespawn(Packet):
         self.copy_metadata = copy_metadata
 
     def encode(self) -> bytes:
-        return Buffer.pack_nbt(self.dimension) + Buffer.pack_string(self.world_name) + Buffer.pack('l', self.hashed_seed) + \
-            Buffer.pack('B', self.gamemode) + Buffer.pack('B', self.prev_gamemode) + Buffer.pack('?', self.is_debug) + \
-            Buffer.pack('?', self.is_flat) + Buffer.pack('?', self.copy_metadata)
+        return (
+            Buffer.pack_nbt(self.dimension)
+            + Buffer.pack_string(self.world_name)
+            + Buffer.pack("l", self.hashed_seed)
+            + Buffer.pack("B", self.gamemode)
+            + Buffer.pack("B", self.prev_gamemode)
+            + Buffer.pack("?", self.is_debug)
+            + Buffer.pack("?", self.is_flat)
+            + Buffer.pack("?", self.copy_metadata)
+        )

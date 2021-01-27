@@ -2,6 +2,6 @@ aioconsole
 aiohttp
 cryptography
 immutables
-nbt
+mutf8
 PyYAML
 gitpython

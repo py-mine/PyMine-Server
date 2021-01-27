@@ -202,23 +202,6 @@ class Buffer:
         return json.loads(self.unpack_string())
 
     @classmethod
-    def pack_nbt(cls, tag: nbt.TAG = None) -> bytes:
-        """Packs an NBT tag into bytes."""
-
-        if tag is None:
-            return b"\x00"
-
-        buf = cls()
-        tag._render_buffer(buf)
-        return buf.buf
-
-    def unpack_nbt(self) -> object:
-        """Unpacks a NBT tag(s) from the buffer"""
-
-        # assumes data is NOT compressed, isn't an issue (hopefully)!
-        return nbt.NBTFile(buffer=self.buf)
-
-    @classmethod
     def pack_uuid(cls, uuid: uuid.UUID) -> bytes:
         """Packs a UUID into bytes."""
 

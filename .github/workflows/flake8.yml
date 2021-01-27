@@ -6,7 +6,7 @@ name: Flake8 Lint [PyPy-3.7]
 on: [push]
 
 jobs:
-  flake8-lint-pypy:
+  flake8-lint:
 
     runs-on: ubuntu-latest
     strategy:

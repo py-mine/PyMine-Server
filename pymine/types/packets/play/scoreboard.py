@@ -1,11 +1,11 @@
 """Contains packets related to scoreboard."""
 
 from __future__ import annotations
-import nbt
 
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 from pymine.types.chat import Chat
+import pymine.types.nbt as nbt
 
 __all__ = (
     "PlayDisplayScoreboard",

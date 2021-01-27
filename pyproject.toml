@@ -4,5 +4,5 @@ target-version = ['py37', 'py38']
 include = '\.pyi?$'
 
 [tool.pytest.ini_options]
-addopts = --full-trace
+addopts = "--full-trace"
 testpaths = ["tests"]

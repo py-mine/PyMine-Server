@@ -1,5 +1,8 @@
 import gzip
+import sys
 import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt

@@ -28,7 +28,7 @@ TYPES = []
 
 def unpack(buf) -> TAG_Compound:
     try:
-        data = gzip.decompress(buf.buf[buf.pos:])
+        data = gzip.decompress(buf.buf[buf.pos :])
         buf.buf = data
         buf.reset()
     except BaseException:

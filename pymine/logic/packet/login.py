@@ -13,6 +13,7 @@ from pymine.types.buffer import Buffer
 from pymine.types.packets.login.set_comp import LoginSetCompression
 import pymine.types.packets.login.login as login_packets
 
+from pymine.api import StopStream
 from pymine.server import server
 
 
@@ -37,11 +38,9 @@ async def login_start(stream: Stream, packet: Packet) -> tuple:
         # This should be only generated if the player name isn't found in the world data, but no way to do that rn
         uuid_ = uuid.uuid4()
 
-        await server.send_packet(login_packets.LoginSuccess(uuid_, packet.username))
+        await server.send_packet(stream, login_packets.LoginSuccess(uuid_, packet.username))
 
         server.cache.states[stream.remote] = 3  # Update state to play
-
-    return True, stream
 
 
 @server.api.events.on_packet("login", 0x01)
@@ -52,7 +51,7 @@ async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
 
     if not auth:  # If authentication failed, disconnect client
         await server.send_packet(stream, login_packets.LoginDisconnect("Failed to authenticate your connection."))
-        return False, stream
+        raise StopStream
 
     # Generate a cipher for that client using the shared key from the client
     cipher = encryption.gen_aes_cipher(shared_key)
@@ -66,7 +65,9 @@ async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
     # Send LoginSuccess packet, tells client they've logged in succesfully
     await server.send_packet(stream, login_packets.LoginSuccess(*auth))
 
-    return True, stream
+    server.cache.states[stream.remote] = 3  # Update state to play
+
+    return stream
 
 
 # Verifies that the shared key and token are the same, and does other authentication methods

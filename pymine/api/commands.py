@@ -49,7 +49,7 @@ class CommandHandler:
                 await cmd_func("server", args)
             except BaseException as e:
                 self.logger.error(self.logger.f_traceback(e))
-        else:
+        elif cmd != "":
             self.logger.warn(f"Invalid/unknown command: {cmd}")
 
     async def handle_console(self):

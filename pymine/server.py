@@ -14,7 +14,7 @@ from pymine.util.logging import task_exception_handler, Logger
 from pymine.util.config import load_config, load_favicon
 from pymine.util.encryption import gen_rsa_keys
 
-from pymine.api import PyMineAPI
+from pymine.api import PyMineAPI, StopStream
 
 # Used for parts of PyMine that utilize the server instance without being a plugin themselves
 server = None
@@ -23,7 +23,7 @@ server = None
 class Server:
     class Meta:
         def __init__(self):
-            self.server = 1
+            self.server = 0.1
             self.version = "1.16.5"
             self.protocol = 754
 
@@ -125,15 +125,15 @@ class Server:
                 read = await asyncio.wait_for(stream.read(1), 5)
             except asyncio.TimeoutError:
                 self.logger.debug("Closing due to timeout on read...")
-                return False, stream
+                raise StopStream
 
             if read == b"":
                 self.logger.debug("Closing due to invalid read....")
-                return False, stream
+                raise StopStream
 
             if i == 0 and read == b"\xFE":
                 self.logger.warn("Legacy ping attempted, legacy ping is not supported.")
-                return False, stream
+                raise StopStream
 
             b = struct.unpack("B", read)[0]
             packet_length |= (b & 0x7F) << 7 * i
@@ -153,32 +153,32 @@ class Server:
 
         if self.api.events._packet[state].get(packet.id) is None:
             self.logger.warn(f"No valid packet handler found for packet {state} 0x{packet.id:02X} {type(packet).__name__}")
-            return True, stream
-
-        do_continue = True
+            return
 
         for handler in self.api.events._packet[state][packet.id]:
             try:
-                continue_, stream = await handler(stream, packet)
+                res = await handler(stream, packet)
+
+                if isinstance(res, Stream):
+                    stream = res
+            except StopStream:
+                raise
             except BaseException as e:
                 self.logger.error(
                     f"Error occurred in {handler.__module__}.{handler.__qualname__}: {self.logger.f_traceback(e)}"
                 )
 
-            if not continue_:
-                do_continue = False
-
-        return do_continue, stream
+        return stream
 
     async def handle_connection(self, reader, writer):  # Handle a connection from a client
         stream = Stream(reader, writer)
         self.logger.debug(f"Connection received from {stream.remote[0]}:{stream.remote[1]}.")
 
-        do_continue = True
-
-        while do_continue:
+        while True:
             try:
-                do_continue, stream = await self.handle_packet(stream)
+                stream = await self.handle_packet(stream)
+            except StopStream:
+                break
             except BaseException as e:
                 self.logger.error(self.logger.f_traceback(e))
 

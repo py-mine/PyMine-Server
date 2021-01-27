@@ -1,9 +1,11 @@
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 from pymine.types.stream import Stream
+from pymine.types.chat import Chat
 
 import pymine.types.packets.status.status as status_packets
 
+from pymine.api import StopStream
 from pymine.server import server
 
 
@@ -20,17 +22,16 @@ async def send_status(stream: Stream, packet: Packet) -> tuple:
                 {"name": "emeralddragonmc", "id": "eb86dc19-c3f5-4aef-a50e-a4bf435a7528"},
             ],
         },
-        "description": {"text": server.conf["motd"]},  # a Chat
+        "description": Chat(server.conf["motd"]).msg,  # a Chat
     }
 
     if server.favicon:
         data["favicon"] = server.favicon
 
     await server.send_packet(stream, status_packets.StatusStatusResponse(data), -1)
-    return True, stream
 
 
 @server.api.events.on_packet("status", 0x01)
 async def send_pong(stream: Stream, packet: Packet) -> tuple:
     await server.send_packet(stream, packet, -1)
-    return False, stream
+    raise StopStream

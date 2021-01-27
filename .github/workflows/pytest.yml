@@ -1,4 +1,4 @@
-name: PyTest [PyPy-3.7]
+name: PyTest
 
 on: [push]
 

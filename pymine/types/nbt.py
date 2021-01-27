@@ -35,7 +35,6 @@ def unpack(buf) -> TAG_Compound:
 
 
 class BufferUtil:
-
     @staticmethod
     def unpack(buf, f: str) -> object:
         unpacked = struct.unpack(">" + f, buf.read(struct.calcsize(f)))

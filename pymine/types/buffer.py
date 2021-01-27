@@ -206,7 +206,7 @@ class Buffer:
         """Packs an NBT tag into bytes."""
 
         if tag is None:
-            return b'\x00'
+            return b"\x00"
 
         return tag.pack()
 

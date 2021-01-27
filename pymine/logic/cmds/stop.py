@@ -1,3 +1,5 @@
+import asyncio
+
 from pymine.server import server
 
 
@@ -5,3 +7,6 @@ from pymine.server import server
 async def stop_server(uuid: str, args: str):
     server.server.close()
     await server.server.wait_closed()
+
+    if server.uvloop:  # uvloop is difficult *sigh*
+        asyncio.get_event_loop().stop()

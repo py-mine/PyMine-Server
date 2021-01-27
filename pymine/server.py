@@ -39,8 +39,9 @@ class Server:
             self.entity_id = {}  # {remote: entity_id}
             self.user_cache = {}  # {entity_id: {remote: tuple, uuid: str}}
 
-    def __init__(self, logger):
+    def __init__(self, logger, uvloop):
         self.logger = logger
+        self.uvloop = uvloop
 
         self.meta = self.Meta()
         self.cache = self.Cache()

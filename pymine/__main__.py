@@ -27,7 +27,7 @@ if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.set_exception_handler(task_exception_handler)
 
-    server = pymine.server.Server(logger)
+    server = pymine.server.Server(logger, uvloop)
     pymine.server.server = server
 
     try:

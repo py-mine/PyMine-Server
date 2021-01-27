@@ -1,4 +1,4 @@
-import nbt
+import pymine.types.nbt as nbt
 
 
 class LevelData:

@@ -8,7 +8,7 @@ if not sys.implementation.version[:3] >= (3, 7, 9):  # Ensure user is on correct
 
 try:
     import uvloop
-    uvloop.install()
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except BaseException:
     pass
 else:

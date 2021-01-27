@@ -561,7 +561,7 @@ class Buffer:
 
     @classmethod
     def pack_modifier(cls, uuid_: uuid.UUID, amount: float, operation: int) -> bytes:
-        return cls.pack_uuid(uuid_) + Buffer.pack('d', amount) + Buffer.pack('b', operation)
+        return cls.pack_uuid(uuid_) + Buffer.pack("d", amount) + Buffer.pack("b", operation)
 
     def unpack_modifier(self) -> tuple:
-        return self.unpack_uuid(), self.unpack('d'), self.unpack('b')
+        return self.unpack_uuid(), self.unpack("d"), self.unpack("b")

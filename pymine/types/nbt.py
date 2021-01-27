@@ -21,12 +21,13 @@ __all__ = (
     'TAG_Int_Array',
     'TAG_Long_Array',
     'TYPES',
+    'unpack'
 )
 
 TYPES = []
 
 
-def from_buf(buf: Buffer) -> TAG_Compound:
+def unpack(buf: Buffer) -> TAG_Compound:
     try:
         buf = Buffer(gzip.decompress(buf.read()))
     except BaseException:

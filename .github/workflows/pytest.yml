@@ -3,7 +3,7 @@ name: PyTest [PyPy-3.7]
 on: [push]
 
 jobs:
-  pytest-pypy:
+  pytest:
 
     runs-on: ubuntu-latest
     strategy:

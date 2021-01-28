@@ -91,5 +91,4 @@ def test_json():
 
     for key, value in buf.unpack_json().items():
         assert key in data
-        print(data[key], value)
         assert data[key] == value

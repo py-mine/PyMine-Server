@@ -9,7 +9,7 @@ class Chunk:
         self.data_version = tag["DataVersion"]
         self.level = tag["Level"]
 
-        self.chunk_x = self.level["xPos"]
-        self.chunk_z = self.level["zPos"]
+        self.chunk_x = self.level["xPos"].data
+        self.chunk_z = self.level["zPos"].data
 
         self.timestamp = timestamp

@@ -85,7 +85,7 @@ def test_string():
 def test_json():
     buf = Buffer()
 
-    with open(os.path.join('tests', 'sample_data', 'test.json')) as test_file:
+    with open(os.path.join("tests", "sample_data", "test.json")) as test_file:
         data = json.load(test_file)
         buf.write(Buffer.pack_json(data))
 

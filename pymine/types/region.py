@@ -17,9 +17,9 @@ class Region(dict):
     @staticmethod  # finds the location of the chunk in the file
     def find_chunk_pos_in_buffer(loc: int) -> tuple:
         offset = (loc >> 8) & 0xFFFFFF
-        size = loc & 0xFF
+        # size = loc & 0xFF
 
-        return offset * 4096, size * 4096
+        return offset * 4096 # , size * 4096
 
     @staticmethod  # converts chunk coords to be region relative
     def chunk_coords_to_region_relative(chunk_x: int, chunk_z: int) -> tuple:
@@ -33,7 +33,7 @@ class Region(dict):
         def unpack_chunk(entry_timestamp) -> tuple:
             entry, timestamp = entry_timestamp
 
-            buf.pos = cls.find_chunk_pos_in_buffer(entry)[0]
+            buf.pos = cls.find_chunk_pos_in_buffer(entry)
 
             chunk_len = buf.unpack("i")
             comp_type = buf.unpack("b")

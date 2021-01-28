@@ -1,5 +1,6 @@
 from __future__ import annotations
 import zlib
+import os
 
 from pymine.types.buffer import Buffer
 from pymine.types.chunk import Chunk
@@ -25,7 +26,7 @@ class Region(dict):
     #     return cls.find_location_entry(((x % 32) + (z % 32) * 32) * 4)
 
     @classmethod
-    def unpack(cls, buf: Buffer, region_x: int, region_z: int) -> Region:
+    def unpack_chunk_map(cls, buf: Buffer) -> dict:
         location_table = [buf.unpack("i") for _ in range(1024)]
         timestamp_table = [buf.unpack("i") for _ in range(1024)]
 
@@ -49,4 +50,14 @@ class Region(dict):
             else:
                 raise ValueError(f"Value {comp_type} isn't a supported compression type.")
 
-        return cls(chunk_map, region_x, region_z)
+        return chunk_map
+
+    @classmethod
+    def from_file(cls, file: str) -> Region:
+        with open(file, 'rb') as region_file:
+            buf = Buffer(region_file.read())
+
+        region_x, region_z = os.path.split(file)[1].split('.')[1:3]
+        chunk_map = cls.unpack_chunk_map(buf)
+
+        return Region(chunk_map, region_x, region_z)

@@ -12,7 +12,7 @@ class Region:
 
     @staticmethod  # finds the location of the chunk in the file
     def find_location_entry(loc: int) -> tuple:
-        offset = ((loc >> 8) & 0xFFFFFF)
+        offset = (loc >> 8) & 0xFFFFFF
         size = loc & 0xFF
 
         return offset * 4096, size * 4096
@@ -27,6 +27,6 @@ class Region:
 
     @classmethod
     def unpack(cls, buf: Buffer) -> Region:
-        location_table = [cls.find_location_entry(buf.unpack('i')) for _ in range(1024)]
-        timestamp_table = [buf.unpack('i') for _ in range(1024)]
+        location_table = [cls.find_location_entry(buf.unpack("i")) for _ in range(1024)]
+        timestamp_table = [buf.unpack("i") for _ in range(1024)]
         chunks = [cls.get_chunk()]

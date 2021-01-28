@@ -2,6 +2,7 @@ from __future__ import annotations
 import zlib
 
 from pymine.types.buffer import Buffer
+from pymine.types.chunk import Chunk
 import pymine.types.nbt as nbt
 
 

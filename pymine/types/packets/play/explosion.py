@@ -34,7 +34,7 @@ class PlayExplosion(Packet):
             + Buffer.pack("f", self.z)
             + Buffer.pack("f", self.strength)
             + Buffer.pack("i", self.record_count)
-            + Buffer.pack_array("b", self.records)
+            + b''.join([Buffer.pack('b', r) for r in self.records])
             + Buffer.pack("f", self.pmx)
             + Buffer.pack("f", self.pmy)
             + Buffer.pack("f", self.pmz)

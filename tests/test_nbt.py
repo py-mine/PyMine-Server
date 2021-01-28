@@ -10,12 +10,12 @@ import pymine.types.nbt as nbt
 
 
 def test_loading_bigtest():  # tests that loading bigtest.nbt works without errors
-    with open(os.path.join("tests", "sample_nbt", "bigtest.nbt"), "rb") as nbt_file:
+    with open(os.path.join("tests", "sample_data", "bigtest.nbt"), "rb") as nbt_file:
         tag = nbt.unpack(Buffer(nbt_file.read()))
 
 
 def test_dumping_bigtest():  # tests that nbt loading and dumping work properly for bigtest.nbt
-    with open(os.path.join("tests", "sample_nbt", "bigtest.nbt"), "rb") as nbt_file:
+    with open(os.path.join("tests", "sample_data", "bigtest.nbt"), "rb") as nbt_file:
         buf = Buffer(gzip.decompress(nbt_file.read()))
 
         tag = nbt.unpack(Buffer(buf.buf))
@@ -25,7 +25,7 @@ def test_dumping_bigtest():  # tests that nbt loading and dumping work properly 
 
 
 def test_loading_leveltest():  # tests that nbt loading and dumping work properly for level.dat
-    with open(os.path.join("tests", "sample_nbt", "level.dat"), "rb") as nbt_file:
+    with open(os.path.join("tests", "sample_data", "level.dat"), "rb") as nbt_file:
         buf = Buffer(gzip.decompress(nbt_file.read()))
 
         tag = nbt.unpack(Buffer(buf.buf))
@@ -35,7 +35,7 @@ def test_loading_leveltest():  # tests that nbt loading and dumping work properl
 
 
 def test_values_nantest():  # tests that the values for loading the nantest are accurate
-    with open(os.path.join("tests", "sample_nbt", "nantest.nbt"), "rb") as nbt_file:
+    with open(os.path.join("tests", "sample_data", "nantest.nbt"), "rb") as nbt_file:
         tag = nbt.unpack(Buffer(nbt_file.read()))
 
         assert tag["Air"].data == 300

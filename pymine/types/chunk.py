@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
 
@@ -7,7 +9,3 @@ class Chunk:
         self.chunk_x = chunk_x
         self.chunk_z = chunk_z
         self.tag = tag
-
-    @classmethod
-    def unpack(cls) -> Chunk:
-        pass

@@ -3,6 +3,8 @@ import importlib
 import asyncio
 import os
 
+from pymine.util.stop import stop
+
 
 class CommandHandler:
     def __init__(self, server):
@@ -73,4 +75,4 @@ class CommandHandler:
             self.logger.error(self.logger.f_traceback(e))
 
         if eoferr:
-            self.server.server.close()
+            await stop(self.server)

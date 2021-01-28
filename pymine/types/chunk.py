@@ -6,7 +6,7 @@ import pymine.types.nbt as nbt
 
 class Chunk(dict):
     def __init__(self, tag: nbt.TAG, timestamp: int) -> None:
-        dict.__init__(self, tag['Level'])
+        dict.__init__(self, tag["Level"])
 
         self.data_version = tag["DataVersion"]
 

@@ -1,9 +1,9 @@
-from nbt import nbt
 import hashlib
 import time
 
 from pymine.types.packet import Packet
 from pymine.types.stream import Stream
+import pymine.types.nbt as nbt
 
 import pymine.types.packets.play.player as packets_player
 

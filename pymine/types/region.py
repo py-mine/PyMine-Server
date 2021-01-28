@@ -19,7 +19,7 @@ class Region(dict):
         offset = (loc >> 8) & 0xFFFFFF
         # size = loc & 0xFF
 
-        return offset * 4096 # , size * 4096
+        return offset * 4096  # , size * 4096
 
     @staticmethod  # converts chunk coords to be region relative
     def chunk_coords_to_region_relative(chunk_x: int, chunk_z: int) -> tuple:

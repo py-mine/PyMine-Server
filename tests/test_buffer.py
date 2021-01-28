@@ -5,6 +5,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from pymine.types.buffer import Buffer
+import pymine.types.nbt as nbt
 
 
 def test_io():
@@ -92,3 +93,15 @@ def test_json():
     for key, value in buf.unpack_json().items():
         assert key in data
         assert data[key] == value
+
+
+def test_nbt():
+    buf = Buffer()
+
+    tag = nbt.TAG_Compound('test', [nbt.TAG_Int('test', 69)])
+
+    buf.write(Buffer.pack_nbt(None))
+    buf.write(Buffer.pack_nbt(tag))
+
+    assert isinstance(buf.unpack_nbt(), TAG_Compound)
+    assert isinstance(buf.unpack_nbt(), TAG_Compound)

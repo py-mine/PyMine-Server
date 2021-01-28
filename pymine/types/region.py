@@ -44,8 +44,8 @@ class Region(dict):
                 return cls.chunk_coords_to_region_relative(chunk.chunk_x, chunk.chunk_z), chunk
 
             if comp_type == 0:
-                return Chunk(nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp)
-                return cs.chunk_coords_to_region_relative(chunk.chunk_x, chunk.chunk_z), chunk
+                chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp)
+                return cls.chunk_coords_to_region_relative(chunk.chunk_x, chunk.chunk_z), chunk
 
             raise ValueError(f"Value {comp_type} isn't a supported compression type.")
 

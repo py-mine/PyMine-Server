@@ -33,14 +33,14 @@ class Region(dict):
         chunk_map = {}
 
         for entry, timestamp in zip(location_table, timestamp_table):
+            buf.pos = cls.find_chunk_pos_in_buffer(entry)[0]
+
             chunk_len = buf.unpack("i")
             comp_type = buf.unpack("b")
             chunk = buf.read(chunk_len)
 
             if comp_type == 0:  # no compression
                 chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp)
-            elif comp_type == 1:  # gzip, shouldn't ever be used
-                raise NotImplementedError("Gzip compression isn't supported.")
             elif comp_type == 2:  # zlib compression
                 chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))), timestamp)
             else:

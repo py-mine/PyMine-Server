@@ -109,7 +109,7 @@ def test_nbt():
 
     tag = buf.unpack_nbt()
     assert isinstance(tag, nbt.TAG_Compound)
-    assert tag.name is None
+    assert tag.name == 'test'
     assert len(tag) == 2
     assert tag['test'].data == 69
     assert tag['test2'].data == '420'

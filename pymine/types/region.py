@@ -42,7 +42,7 @@ class Region(dict):
             if comp_type == 0:  # no compression
                 chunk_map[loc[0], loc[1]] = Chunk(loc[0], loc[1], nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp)
             elif comp_type == 1:  # gzip, shouldn't ever be used
-                raise NotImplementedError
+                raise NotImplementedError('Gzip compression isn\'t supported.')
             elif comp_type == 2:  # zlib compression
                 chunk_map[loc[0], loc[1]] = Chunk(
                     loc[0], loc[1], nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))), timestamp

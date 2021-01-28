@@ -23,7 +23,7 @@ class Region(dict):
 
     @staticmethod  # converts chunk coords to be region relative
     def chunk_coords_to_region_relative(chunk_x: int, chunk_z: int) -> tuple:
-        return chunk_x >> 5, chunk_z >> 5
+        return chunk_x % 32, chunk_z % 32
 
     @classmethod
     def unpack_chunk_map(cls, buf: Buffer) -> dict:

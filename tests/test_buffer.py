@@ -98,7 +98,7 @@ def test_json():
 def test_nbt():
     buf = Buffer()
 
-    tag = nbt.TAG_Compound('test', [nbt.TAG_Int('test', 69)])
+    tag = nbt.TAG_Compound("test", [nbt.TAG_Int("test", 69)])
 
     buf.write(Buffer.pack_nbt(None))
     buf.write(Buffer.pack_nbt(tag))

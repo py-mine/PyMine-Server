@@ -40,22 +40,22 @@ class Region(dict):
             if comp_type == 0:  # no compression
                 chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp)
             elif comp_type == 1:  # gzip, shouldn't ever be used
-                raise NotImplementedError('Gzip compression isn\'t supported.')
+                raise NotImplementedError("Gzip compression isn't supported.")
             elif comp_type == 2:  # zlib compression
                 chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))), timestamp)
             else:
                 raise ValueError(f"Value {comp_type} isn't a supported compression type.")
 
-            chunk_map[cls.chunk_coords_to_region_relative(chunk.tag['Level']['xPos'], chunk.tag['Level']['zPos'])] = chunk
+            chunk_map[cls.chunk_coords_to_region_relative(chunk.tag["Level"]["xPos"], chunk.tag["Level"]["zPos"])] = chunk
 
         return chunk_map
 
     @classmethod
     def from_file(cls, file: str) -> Region:
-        with open(file, 'rb') as region_file:
+        with open(file, "rb") as region_file:
             buf = Buffer(region_file.read())
 
-        region_x, region_z = os.path.split(file)[1].split('.')[1:3]
+        region_x, region_z = os.path.split(file)[1].split(".")[1:3]
         chunk_map = cls.unpack_chunk_map(buf)
 
         return Region(chunk_map, region_x, region_z)

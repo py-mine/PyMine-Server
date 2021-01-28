@@ -103,5 +103,5 @@ def test_nbt():
     buf.write(Buffer.pack_nbt(None))
     buf.write(Buffer.pack_nbt(tag))
 
-    assert isinstance(buf.unpack_nbt(), TAG_Compound)
-    assert isinstance(buf.unpack_nbt(), TAG_Compound)
+    assert isinstance(buf.unpack_nbt(), nbt.TAG_Compound)
+    assert isinstance(buf.unpack_nbt(), nbt.TAG_Compound)

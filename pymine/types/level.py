@@ -28,7 +28,7 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
         self.day_time = tag.get("DayTime")  # long
 
         self.difficulty = tag.get("Difficulty")  # byte
-        self.difficulty_locked = tag.get("DifficultyLocked")  # byte
+        self.difficulty_locked = bool(tag.get("DifficultyLocked"))  # byte
 
         self.dimension_data = tag.get("DimensionData")  # compound
 
@@ -42,9 +42,9 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
         self.generator_options = tag.get("generatorOptions")  # compound
         self.generator_version = tag.get("generatorVersion")  # int
 
-        self.hardcore = tag.get("hardcore")  # byte
+        self.hardcore = bool(tag.get("hardcore"))  # byte
 
-        self.initialized = tag.get("initialized")  # byte
+        self.initialized = bool(tag.get("initialized"))  # byte
 
         self.last_played = tag.get("LastPlayed")  # long
 
@@ -54,7 +54,7 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
 
         self.player = tag.get("Player")  # compound, probably not used
 
-        self.raining = tag.get("raining")  # byte
+        self.raining = bool(tag.get("raining"))  # byte
 
         self.rain_time = tag.get("rainTime")  # int
 
@@ -66,7 +66,7 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
         self.spawn_y = tag.get("SpawnY")  # int
         self.spawn_z = tag.get("SpawnZ")  # int
 
-        self.thundering = tag.get("thundering")  # byte
+        self.thundering = bool(tag.get("thundering"))  # byte
         self.thunder_time = tag.get("thunderTime")  # int
 
         self.time = tag.get("Time")  # long

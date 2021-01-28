@@ -6,11 +6,12 @@ from pymine.types.chunk import Chunk
 import pymine.types.nbt as nbt
 
 
-class Region:
-    def __init__(self, location_table: list, timestamp_table: list, chunks: list) -> None:
-        self.location_table = location_table
-        self.timestamp_table = timestamp_table
-        self.chunks = chunks
+class Region(dict):
+    def __init__(self, chunk_map: dict, region_x: int, region_z: int) -> None:
+        dict.__init__(self, chunk_map)
+
+        self.region_x = region_x
+        self.region_z = region_z
 
     @staticmethod  # finds the location of the chunk in the file
     def find_location_entry(loc: int) -> tuple:
@@ -24,7 +25,7 @@ class Region:
     #     return cls.find_location_entry(((x % 32) + (z % 32) * 32) * 4)
 
     @classmethod
-    def unpack(cls, buf: Buffer) -> Region:
+    def unpack(cls, buf: Buffer, region_x: int, region_z: int) -> Region:
         location_table = [buf.unpack("i") for _ in range(1024)]
         timestamp_table = [buf.unpack("i") for _ in range(1024)]
 
@@ -37,15 +38,17 @@ class Region:
             comp_type = buf.unpack("b")
             chunk = buf.read(chunk_len)
 
-            if comp_type == 0:
+            if comp_type == 0:  # no compression
                 chunk_map[loc[0], loc[1]] = Chunk(
                     loc[0], loc[1], nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp_table[index]
                 )
-            elif comp_type == 1:
+            elif comp_type == 1:  # gzip, shouldn't ever be used
                 raise NotImplementedError
-            elif comp_type == 2:
+            elif comp_type == 2:  # zlib compression
                 chunk_map[loc[0], loc[1]] = Chunk(
                     loc[0], loc[1], nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))), timestamp_table[index]
                 )
             else:
                 raise ValueError(f"Value {comp_type} isn't a supported compression type.")
+
+        return cls(chunk_map, region_x, region_z)

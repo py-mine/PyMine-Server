@@ -32,23 +32,43 @@ class Region(dict):
 
         chunk_map = {}
 
-        for entry, timestamp in zip(location_table, timestamp_table):
+        def unpack_chunk(entry_timestamp) -> tuple:
+            entry, timestamp = entry_timestamp
+
             buf.pos = cls.find_chunk_pos_in_buffer(entry)[0]
 
             chunk_len = buf.unpack("i")
             comp_type = buf.unpack("b")
             chunk = buf.read(chunk_len)
 
-            if comp_type == 0:  # no compression
-                chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp)
-            elif comp_type == 2:  # zlib compression
+            if comp_type == 2:  # zlib
                 chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))), timestamp)
-            else:
-                raise ValueError(f"Value {comp_type} isn't a supported compression type.")
+                return (chunk.chunk_x, chunk.chunk_z), chunk
 
-            chunk_map[cls.chunk_coords_to_region_relative(chunk.chunk_x, chunk.chunk_z)] = chunk
+            if comp_type == 0:
+                return Chunk(nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp)
+                return (chunk.chunk_x, chunk.chunk_z), chunk
 
-        return chunk_map
+            raise ValueError(f"Value {comp_type} isn't a supported compression type.")
+
+        return dict(map(unpack_chunk, zip(location_table, timestamp_table)))
+
+        # for entry, timestamp in zip(location_table, timestamp_table):
+        #     buf.pos = cls.find_chunk_pos_in_buffer(entry)[0]
+        #
+        #     chunk_len = buf.unpack("i")
+        #     comp_type = buf.unpack("b")
+        #     chunk = buf.read(chunk_len)
+        #
+        #     if comp_type == 0:  # no compression
+        #         chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp)
+        #     elif comp_type == 2:  # zlib compression
+        #         chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))), timestamp)
+        #     else:
+        #         raise ValueError(f"Value {comp_type} isn't a supported compression type.")
+        #
+        #     chunk_map[cls.chunk_coords_to_region_relative(chunk.chunk_x, chunk.chunk_z)] = chunk
+        # return chunk_map
 
     @classmethod
     def from_file(cls, file: str) -> Region:

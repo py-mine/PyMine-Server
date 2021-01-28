@@ -1,3 +1,4 @@
+import json
 import sys
 import os
 
@@ -79,3 +80,16 @@ def test_string():
     assert buf.unpack_string() == ""
     assert buf.unpack_string() == "BrUh"
     assert buf.unpack_string() == ""
+
+
+def test_json():
+    buf = Buffer()
+
+    with open(os.path.join('tests', 'sample_data', 'test.json')) as test_file:
+        data = json.load(test_file)
+        buf.write(Buffer.pack_json(data))
+
+    for key, value in buf.unpack_json().items():
+        assert key in data
+        print(data[key], value)
+        assert data[key] == value

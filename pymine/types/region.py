@@ -33,20 +33,19 @@ class Region:
         for index, entry in enumerate(location_table):
             loc = cls.find_location_entry(entry)
 
-            chunk_len = buf.unpack('i')
-            comp_type = buf.unpack('b')
+            chunk_len = buf.unpack("i")
+            comp_type = buf.unpack("b")
             chunk = buf.read(chunk_len)
 
             if comp_type == 0:
-                chunk_map[loc[0], loc[1]] = Chunk(loc[0], loc[1], nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp_table[index])
+                chunk_map[loc[0], loc[1]] = Chunk(
+                    loc[0], loc[1], nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp_table[index]
+                )
             elif comp_type == 1:
                 raise NotImplementedError
             elif comp_type == 2:
                 chunk_map[loc[0], loc[1]] = Chunk(
-                    loc[0],
-                    loc[1],
-                    nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))),
-                    timestamp_table[index]
+                    loc[0], loc[1], nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))), timestamp_table[index]
                 )
             else:
-                raise ValueError(f'Value {comp_type} isn\'t a supported compression type.')
+                raise ValueError(f"Value {comp_type} isn't a supported compression type.")

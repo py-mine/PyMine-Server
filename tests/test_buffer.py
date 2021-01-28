@@ -98,10 +98,18 @@ def test_json():
 def test_nbt():
     buf = Buffer()
 
-    tag = nbt.TAG_Compound('test', [nbt.TAG_Int('test', 69)])
+    tag = nbt.TAG_Compound('test', [nbt.TAG_Int('test', 69), nbt.TAG_String('test2', "420")])
 
     buf.write(Buffer.pack_nbt(None))
     buf.write(Buffer.pack_nbt(tag))
 
-    assert isinstance(buf.unpack_nbt(), nbt.TAG_Compound)
-    assert isinstance(buf.unpack_nbt(), nbt.TAG_Compound)
+    assert isinstance(tag, nbt.TAG_Compound)
+    assert tag.name is None
+    assert len(tag) == 0
+
+    tag = buf.unpack_nbt()
+    assert isinstance(tag, nbt.TAG_Compound)
+    assert tag.name is None
+    assert len(tag) == 2
+    assert tag['test'].data == 69
+    assert tag['test2'].data == '420'

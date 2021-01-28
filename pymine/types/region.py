@@ -46,7 +46,7 @@ class Region(dict):
             else:
                 raise ValueError(f"Value {comp_type} isn't a supported compression type.")
 
-            chunk_map[cls.chunk_coords_to_region_relative(chunk.tag["Level"]["xPos"], chunk.tag["Level"]["zPos"])] = chunk
+            chunk_map[cls.chunk_coords_to_region_relative(chunk.chunk_x, chunk.chunk_z)] = chunk
 
         return chunk_map
 

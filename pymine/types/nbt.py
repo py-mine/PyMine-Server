@@ -34,6 +34,9 @@ def unpack(buf) -> TAG_Compound:
     except BaseException:
         pass
 
+    if buf.buf == b"\x00":
+        return TAG_Compound(None, [])
+
     return TAG_Compound.unpack(buf)
 
 

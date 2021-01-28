@@ -7,7 +7,7 @@ if os.name == "nt":
 
     colorama.init()
 
-nice_time = lambda: time.strftime("%x %H:%M:%S")
+f_time = lambda: time.strftime("%x %H:%M:%S")
 
 BRIGHT = "\x1b[1m"
 END = "\x1b[0m"
@@ -32,25 +32,25 @@ class Logger:
     def debug(self, *message):
         if self.debug_:
             message = " ".join([str(m) for m in message])
-            print(f"{WHITE}[{nice_time()} {GREY}DEBUG{WHITE}]: {GREY}{message}{END}")
+            print(f"{WHITE}[{f_time()} {GREY}DEBUG{WHITE}]: {GREY}{message}{END}")
 
     def info(self, *message):
         message = " ".join([str(m) for m in message])
-        print(f"{BRIGHT}{WHITE}[{nice_time()} {BLUE}INFO{WHITE}]: {message}{END}")
+        print(f"{BRIGHT}{WHITE}[{f_time()} {BLUE}INFO{WHITE}]: {message}{END}")
 
     def warn(self, *message):
         message = " ".join([str(m) for m in message])
-        print(f"{BRIGHT}{WHITE}[{nice_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{message}{END}")
+        print(f"{BRIGHT}{WHITE}[{f_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{message}{END}")
 
     warning = warn
 
     def error(self, *message):
         message = " ".join([str(m) for m in message])
-        print(f"{BRIGHT}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{message}{END}")
+        print(f"{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{message}{END}")
 
     def critical(self, *message):
         message = " ".join([str(m) for m in message])
-        print(f"{BRIGHT}{WHITE}{BG_RED}[{nice_time()} CRITICAL]: {message}{END}")
+        print(f"{BRIGHT}{WHITE}{BG_RED}[{f_time()} CRITICAL]: {message}{END}")
 
     @staticmethod
     def f_traceback(e: BaseException):
@@ -59,9 +59,9 @@ class Logger:
 
 def task_exception_handler(loop, ctx):
     if ctx["exception"]:
-        print(f'{BRIGHT}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{Logger.f_traceback(ctx["exception"])}{END}')
+        print(f'{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{Logger.f_traceback(ctx["exception"])}{END}')
     else:
-        print(f'{BRIGHT}{WHITE}[{nice_time()} {RED}ERROR{WHITE}]: {RED}{ctx["message"]}{END}')
+        print(f'{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{ctx["message"]}{END}')
 
 
 if __name__ == "__main__":  # Used to test colors

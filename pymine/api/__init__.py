@@ -159,7 +159,7 @@ class PyMineAPI:
         self.commands.load_commands()
 
         # Load packet handlers / packet logic handlers under pymine/logic/handle
-        for root, dirs, files in os.walk(os.path.join("pymine", "logic", "packet")):
+        for root, dirs, files in os.walk(os.path.join("pymine", "logic", "handle")):
             for file in filter((lambda f: f.endswith(".py")), files):
                 importlib.import_module(os.path.join(root, file)[:-3].replace("\\", "/").replace("/", "."))
 

@@ -81,7 +81,17 @@
       "profile": "https://github.com/ashwinvin",
       "contributions": [
         "ideas",
-        "code"
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "imsofi",
+      "name": "imSofi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20756843?v=4",
+      "profile": "https://sofi.codes",
+      "contributions": [
+        "bug"
       ]
     }
   ],

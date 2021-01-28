@@ -3,9 +3,6 @@ server.yml
 server-icon.png
 plugins/*
 
-bigtest.nbt
-nantest.nbt
-
 # VirtualEnv
 venv/
 
@@ -16,6 +13,9 @@ __pycache__/
 
 # Sphinx documentation
 docs/_build/
+
+# Testing / pytest
+.pytest_cache
 
 # Sh-wayz's shit
 /tags

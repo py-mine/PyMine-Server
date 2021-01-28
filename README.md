@@ -30,7 +30,7 @@
 ### Installing from source
 - First, clone the repository `git clone https://github.com/py-mine/PyMine.git` and move into that directory (`cd PyMine`)
 - Next, install the required Python packages via pip (`python3 -m pip install -r requirements.txt`)
-- To run the server, you should run `server.py` from the root directory, like `python3 pymine/server.py`
+- To run the server, you should run `python3 pymine`.
 - It is recommended you do not use regular Python, but [PyPy3](https://www.pypy.org/)
 
 
@@ -51,7 +51,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/Ammar-sys"><img src="https://avatars.githubusercontent.com/u/69536330?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ammar-sys</b></sub></a><br /><a href="https://github.com/py-mine/PyMine/commits?author=Ammar-sys" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/emerald73"><img src="https://avatars.githubusercontent.com/u/70043252?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Treyver Reicha</b></sub></a><br /><a href="https://github.com/py-mine/PyMine/commits?author=emerald73" title="Code">💻</a> <a href="https://github.com/py-mine/PyMine/pulls?q=is%3Apr+reviewed-by%3Aemerald73" title="Reviewed Pull Requests">👀</a> <a href="#ideas-emerald73" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/py-mine/PyMine/issues?q=author%3Aemerald73" title="Bug reports">🐛</a> <a href="#projectManagement-emerald73" title="Project Management">📆</a> <a href="https://github.com/py-mine/PyMine/commits?author=emerald73" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/itsmewulf"><img src="https://avatars.githubusercontent.com/u/63970738?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Paul Przybyszewski</b></sub></a><br /><a href="https://github.com/py-mine/PyMine/commits?author=itsmewulf" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/ashwinvin"><img src="https://avatars.githubusercontent.com/u/38067089?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ashwin Vinod</b></sub></a><br /><a href="#ideas-ashwinvin" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/py-mine/PyMine/commits?author=ashwinvin" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/ashwinvin"><img src="https://avatars.githubusercontent.com/u/38067089?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ashwin Vinod</b></sub></a><br /><a href="#ideas-ashwinvin" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/py-mine/PyMine/commits?author=ashwinvin" title="Code">💻</a> <a href="https://github.com/py-mine/PyMine/commits?author=ashwinvin" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://sofi.codes"><img src="https://avatars.githubusercontent.com/u/20756843?v=4?s=100" width="100px;" alt=""/><br /><sub><b>imSofi</b></sub></a><br /><a href="https://github.com/py-mine/PyMine/issues?q=author%3Aimsofi" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 

@@ -53,6 +53,8 @@ class CommandHandler:
             self.logger.warn(f"Invalid/unknown command: {cmd}")
 
     async def handle_console(self):
+        eoferr = False
+
         try:
             while True:
                 in_text = await aioconsole.ainput(">")
@@ -65,5 +67,10 @@ class CommandHandler:
                 await self.server_command(in_text)
         except (KeyboardInterrupt, asyncio.CancelledError):
             pass
+        except EOFError:
+            eoferr = True
         except BaseException as e:
             self.logger.error(self.logger.f_traceback(e))
+
+        if eoferr:
+            self.server.server.close()

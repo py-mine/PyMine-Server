@@ -21,6 +21,10 @@ class Region(dict):
 
         return offset * 4096, size * 4096
 
+    @staticmethod  # converts chunk coords to be region relative
+    def chunk_coords_to_region_relative(chunk_x: int, chunk_z: int) -> tuple:
+        return chunk_x >> 5, chunk_z >> 5
+
     @classmethod
     def unpack_chunk_map(cls, buf: Buffer) -> dict:
         location_table = [buf.unpack("i") for _ in range(1024)]
@@ -34,13 +38,15 @@ class Region(dict):
             chunk = buf.read(chunk_len)
 
             if comp_type == 0:  # no compression
-                chunk_map[loc[0], loc[1]] = Chunk(nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp)
+                chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp)
             elif comp_type == 1:  # gzip, shouldn't ever be used
                 raise NotImplementedError('Gzip compression isn\'t supported.')
             elif comp_type == 2:  # zlib compression
-                chunk_map[loc[0], loc[1]] = Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))), timestamp)
+                chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))), timestamp)
             else:
                 raise ValueError(f"Value {comp_type} isn't a supported compression type.")
+
+            chunk_map[cls.chunk_coords_to_region_relative(chunk.tag['Level']['xPos'], chunk.tag['Level']['zPos'])] = chunk
 
         return chunk_map
 

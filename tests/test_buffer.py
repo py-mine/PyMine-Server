@@ -64,18 +64,18 @@ def test_optional_varint():
 def test_string():
     buf = Buffer()
 
-    buf.write(Buffer.pack_string(''))
-    buf.write(Buffer.pack_string(''))
-    buf.write(Buffer.pack_string('2'))
-    buf.write(Buffer.pack_string('adkfj;adkfa;ldkfj\x01af\t\n\n00;\xc3\x85\xc3\x84\xc3\x96'))
-    buf.write(Buffer.pack_string(''))
-    buf.write(Buffer.pack_string('BrUh'))
-    buf.write(Buffer.pack_string(''))
+    buf.write(Buffer.pack_string(""))
+    buf.write(Buffer.pack_string(""))
+    buf.write(Buffer.pack_string("2"))
+    buf.write(Buffer.pack_string("adkfj;adkfa;ldkfj\x01af\t\n\n00;\xc3\x85\xc3\x84\xc3\x96"))
+    buf.write(Buffer.pack_string(""))
+    buf.write(Buffer.pack_string("BrUh"))
+    buf.write(Buffer.pack_string(""))
 
-    assert buf.unpack_string() == ''
-    assert buf.unpack_string() == ''
-    assert buf.unpack_string() == '2'
-    assert buf.unpack_string() == 'adkfj;adkfa;ldkfj\x01af\t\n\n00;\xc3\x85\xc3\x84\xc3\x96'
-    assert buf.unpack_string() == ''
-    assert buf.unpack_string() == 'BrUh'
-    assert buf.unpack_string() == ''
+    assert buf.unpack_string() == ""
+    assert buf.unpack_string() == ""
+    assert buf.unpack_string() == "2"
+    assert buf.unpack_string() == "adkfj;adkfa;ldkfj\x01af\t\n\n00;\xc3\x85\xc3\x84\xc3\x96"
+    assert buf.unpack_string() == ""
+    assert buf.unpack_string() == "BrUh"
+    assert buf.unpack_string() == ""

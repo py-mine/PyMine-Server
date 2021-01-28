@@ -1,4 +1,5 @@
 from __future__ import annotations
+import zlib
 
 from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
@@ -17,16 +18,29 @@ class Region:
 
         return offset * 4096, size * 4096
 
-    @classmethod
-    def find_chunk_loc(cls, x: int, z: int) -> tuple:
-        return cls.find_location_entry(((x % 32) + (z % 32) * 32) * 4)
-
-    @classmethod
-    def get_chunk(cls, x: int, z: int) -> NotImplemented:
-        raise NotImplementedError
+    # @classmethod
+    # def find_chunk_loc(cls, x: int, z: int) -> tuple:
+    #     return cls.find_location_entry(((x % 32) + (z % 32) * 32) * 4)
 
     @classmethod
     def unpack(cls, buf: Buffer) -> Region:
-        location_table = [cls.find_location_entry(buf.unpack("i")) for _ in range(1024)]
+        location_table = [buf.unpack("i") for _ in range(1024)]
         timestamp_table = [buf.unpack("i") for _ in range(1024)]
-        chunks = [cls.get_chunk()]
+
+        chunk_map = {}
+
+        for entry in location_table:
+            loc = cls.find_location_entry(entry)
+
+            chunk_len = buf.unpack('i')
+            comp_type = buf.unpack('b')
+            chunk = buf.read(chunk_len)
+
+            if comp_type == 0:
+                chunk_map[loc[0], loc[1]] = Chunk(loc[0], loc[1], nbt.TAG_Compound.unpack(Buffer(chunk)))
+            elif comp_type == 1:
+                raise NotImplementedError
+            elif comp_type == 2:
+                chunk_map[loc[0], loc[1]] = Chunk(loc[0], loc[1], nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))))
+            else:
+                raise ValueError(f'Value {comp_type} isn\'t a supported compression type.')

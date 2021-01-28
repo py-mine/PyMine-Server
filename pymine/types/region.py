@@ -30,8 +30,6 @@ class Region(dict):
         location_table = [buf.unpack("i") for _ in range(1024)]
         timestamp_table = [buf.unpack("i") for _ in range(1024)]
 
-        chunk_map = {}
-
         def unpack_chunk(entry_timestamp) -> tuple:
             entry, timestamp = entry_timestamp
 
@@ -52,23 +50,6 @@ class Region(dict):
             raise ValueError(f"Value {comp_type} isn't a supported compression type.")
 
         return dict(map(unpack_chunk, zip(location_table, timestamp_table)))
-
-        # for entry, timestamp in zip(location_table, timestamp_table):
-        #     buf.pos = cls.find_chunk_pos_in_buffer(entry)[0]
-        #
-        #     chunk_len = buf.unpack("i")
-        #     comp_type = buf.unpack("b")
-        #     chunk = buf.read(chunk_len)
-        #
-        #     if comp_type == 0:  # no compression
-        #         chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp)
-        #     elif comp_type == 2:  # zlib compression
-        #         chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))), timestamp)
-        #     else:
-        #         raise ValueError(f"Value {comp_type} isn't a supported compression type.")
-        #
-        #     chunk_map[cls.chunk_coords_to_region_relative(chunk.chunk_x, chunk.chunk_z)] = chunk
-        # return chunk_map
 
     @classmethod
     def from_file(cls, file: str) -> Region:

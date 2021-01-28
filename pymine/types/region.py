@@ -31,7 +31,7 @@ class Region(dict):
 
         chunk_map = {}
 
-        for index, entry in enumerate(location_table):
+        for entry, timestamp in zip(location_table, timestamp_table):
             loc = cls.find_location_entry(entry)
 
             chunk_len = buf.unpack("i")
@@ -40,13 +40,13 @@ class Region(dict):
 
             if comp_type == 0:  # no compression
                 chunk_map[loc[0], loc[1]] = Chunk(
-                    loc[0], loc[1], nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp_table[index]
+                    loc[0], loc[1], nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp
                 )
             elif comp_type == 1:  # gzip, shouldn't ever be used
                 raise NotImplementedError
             elif comp_type == 2:  # zlib compression
                 chunk_map[loc[0], loc[1]] = Chunk(
-                    loc[0], loc[1], nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))), timestamp_table[index]
+                    loc[0], loc[1], nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))), timestamp
                 )
             else:
                 raise ValueError(f"Value {comp_type} isn't a supported compression type.")

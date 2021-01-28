@@ -1,12 +1,9 @@
 import asyncio
 
+from pymine.util.stop import stop
 from pymine.server import server
 
 
 @server.api.commands.on_command(name="stop", node="minecraft.cmd.stop")
 async def stop_server(uuid: str, args: str):
-    server.server.close()
-    await server.server.wait_closed()
-
-    if server.uvloop:  # uvloop is a difficult little shit *sigh*
-        asyncio.get_event_loop().stop()
+    await stop(server)

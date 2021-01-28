@@ -1,7 +1,10 @@
-name: "Auto Black"
+name: Auto Black
+
 on: [push]
+
 jobs:
   autoblack:
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

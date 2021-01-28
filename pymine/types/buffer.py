@@ -166,18 +166,6 @@ class Buffer:
         return num - 1
 
     @classmethod
-    def pack_array(cls, f: str, array: list) -> bytes:
-        """Packs an array/list into bytes."""
-
-        return struct.pack(f">{f*len(array)}", *array)
-
-    def unpack_array(self, f: str, length: int) -> list:
-        """Unpacks an array/list from the buffer."""
-
-        data = self.read(struct.calcsize(f">{f}") * length)
-        return list(struct.unpack(f">{f*length}", data))
-
-    @classmethod
     def pack_string(cls, text: str) -> bytes:
         """Packs a string into bytes."""
 

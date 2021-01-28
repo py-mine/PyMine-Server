@@ -103,6 +103,7 @@ def test_nbt():
     buf.write(Buffer.pack_nbt(None))
     buf.write(Buffer.pack_nbt(tag))
 
+    tag = buf.unpack_nbt()
     assert isinstance(tag, nbt.TAG_Compound)
     assert tag.name is None
     assert len(tag) == 0

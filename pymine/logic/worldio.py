@@ -16,9 +16,11 @@ def chunk_to_block_coords(chunk_x: int, chunk_z: int):
 def chunk_to_region_coords(chunk_x: int, chunk_z: int):
     return chunk_x // 32, chunk_z // 32
 
+
 # @functools.lru_cache(maxsize=16)
 def fetch_chunk(chunk_x: int, chunk_z: int) -> Chunk:
     raise NotImplementedError
+
 
 def fetch_region(chunk_x: int, chunk_z: int) -> Region:
     raise NotImplementedError

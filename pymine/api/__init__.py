@@ -97,7 +97,9 @@ class PyMineAPI:
         proc = await asyncio.subprocess.create_subprocess_shell(
             f"pip install -U -r {req_path}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
         )
+        
         _, stderr = await proc.communicate()
+
         if proc.returncode != 0:
             raise RuntimeError(stderr.decode())
 

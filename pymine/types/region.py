@@ -1,4 +1,5 @@
 from __future__ import annotations
+import aiofile
 import zlib
 import os
 
@@ -49,9 +50,9 @@ class Region(dict):
         return dict(map(unpack_chunk, zip(location_table, timestamp_table)))
 
     @classmethod
-    def from_file(cls, file: str) -> Region:
-        with open(file, "rb") as region_file:
-            buf = Buffer(region_file.read())
+    async def from_file(cls, file: str) -> Region:
+        with aiofile.async_open(file, "rb") as region_file:
+            buf = Buffer(await region_file.read())
 
         region_x, region_z = os.path.split(file)[1].split(".")[1:3]
         chunk_map = cls.unpack_chunk_map(buf)

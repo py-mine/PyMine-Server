@@ -101,7 +101,7 @@ class PyMineAPI:
                 f"pip install -U -r {req_path}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
             )
 
-            _, stderr = await proc.communicate()
+            _, stderr = await asyncio.wait_for(proc.communicate(), 120)
 
             try:  # ensure process goes bye bye
                 proc.kill()

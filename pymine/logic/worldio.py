@@ -22,12 +22,15 @@ def region_file_name(chunk_x: int, chunk_z: int) -> str:
     return ".".join(["r", *chunk_to_region_coords(chunk_x, chunk_z), "mca"])
 
 
-def fetch_chunk(chunk_x: int, chunk_z: int) -> Chunk:
-    raise NotImplementedError
+class WorldIO:
+    def __init__(self, server):
+        self.server = server
+    
+    async def fetch_region(self, region_file: str, chunk_x: int, chunk_z: int) -> Region:
+        if not os.path.isdir(region_file):
+            raise NotImplementedError("Region file doesn't exist (and worldgen hasn't been done yet...)")
 
+        return await Region.from_file(region_file)
 
-async def fetch_region(region_file: str, chunk_x: int, chunk_z: int) -> Region:
-    if not os.path.isdir(region_file):
-        raise NotImplementedError("Region file doesn't exist (and worldgen hasn't been done yet...)")
-
-    return await Region.from_file(region_file)
+    def fetch_chunk(self, chunk_x: int, chunk_z: int) -> Chunk:
+        raise NotImplementedError

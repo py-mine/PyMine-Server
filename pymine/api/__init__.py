@@ -103,6 +103,11 @@ class PyMineAPI:
 
             _, stderr = await proc.communicate()
 
+            try:  # ensure process goes bye bye
+                proc.kill()
+            except BaseException:
+                pass
+
             if proc.returncode != 0:
                 raise RuntimeError(stderr.decode())
 

@@ -35,7 +35,7 @@ class WorldIO:
     def cache_region(self, region: Region, key: tuple) -> Region:
         self.region_cache[key] = region
 
-        if len(region_cache) > self.region_cache_max:
+        if len(self.region_cache) > self.region_cache_max:
             self.region_cache.popitem(False)
 
         return region

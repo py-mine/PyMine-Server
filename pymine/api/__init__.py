@@ -98,10 +98,12 @@ class PyMineAPI:
 
         if os.path.isfile(requirements_file):
             if not os.path.isfile(sys.executable):
-                raise RuntimeError('Couldn\'t find system executable to update dependencies.')
+                raise RuntimeError("Couldn't find system executable to update dependencies.")
 
             proc = await asyncio.subprocess.create_subprocess_shell(
-                f"{sys.executable} -m pip install -U -r {requirements_file}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+                f"{sys.executable} -m pip install -U -r {requirements_file}",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
             )
 
             _, stderr = await asyncio.wait_for(proc.communicate(), 120)

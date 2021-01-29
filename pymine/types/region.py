@@ -8,23 +8,24 @@ from pymine.types.chunk import Chunk
 import pymine.types.nbt as nbt
 
 
+# finds the location of the chunk in the file
+def find_chunk_pos_in_buffer(loc: int) -> tuple:
+    offset = (loc >> 8) & 0xFFFFFF
+    # size = loc & 0xFF
+
+    return offset * 4096  # , size * 4096
+
+
+def region_coords_from_file(file: str) -> tuple:
+    return os.path.split(file)[1].split(".")[1:3]
+
+
 class Region(dict):
     def __init__(self, chunk_map: dict, region_x: int, region_z: int) -> None:
         dict.__init__(self, chunk_map)
 
         self.region_x = region_x
         self.region_z = region_z
-
-    @staticmethod  # finds the location of the chunk in the file
-    def find_chunk_pos_in_buffer(loc: int) -> tuple:
-        offset = (loc >> 8) & 0xFFFFFF
-        # size = loc & 0xFF
-
-        return offset * 4096  # , size * 4096
-
-    @staticmethod
-    def region_coords_from_file(file: str) -> tuple:
-        return os.path.split(file)[1].split(".")[1:3]
 
     @classmethod
     def unpack_chunk_map(cls, buf: Buffer) -> dict:

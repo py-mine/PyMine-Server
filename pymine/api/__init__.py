@@ -99,7 +99,7 @@ class PyMineAPI:
         )
         _, stderr = await proc.communicate()
         if proc.returncode != 0:
-            raise BaseException(stderr.decode())  # maybe raise something else?
+            raise RuntimeError(stderr.decode())
 
     async def load_plugin(self, git_dir, plugin_name):
         if plugin_name.startswith("."):

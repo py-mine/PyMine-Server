@@ -1,4 +1,4 @@
-import functools
+from collections import OrderedDict
 import os
 
 from pymine.types.buffer import Buffer
@@ -23,14 +23,31 @@ def region_file_name(chunk_x: int, chunk_z: int) -> str:
 
 
 class WorldIO:
-    def __init__(self, server):
+    def __init__(self, server, region_cache_max):
         self.server = server
-    
-    async def fetch_region(self, region_file: str, chunk_x: int, chunk_z: int) -> Region:
-        if not os.path.isdir(region_file):
+
+        self.region_cache_max = region_cache_max
+        self.region_cache = OrderedDict()
+
+    def cache_region(self, region: Region, key: tuple) -> Region:
+        self.region_cache[key] = region
+
+        if len(region_cache) > self.region_cache_max:
+            self.region_cache.popitem(False)
+
+        return region
+
+    async def fetch_region(self, file: str, chunk_x: int, chunk_z: int) -> Region:
+        if not os.path.isdir(file):
             raise NotImplementedError("Region file doesn't exist (and worldgen hasn't been done yet...)")
 
-        return await Region.from_file(region_file)
+        key = Region.region_coords_from_file(file)
+
+        try:
+            self.region_cache.move_to_end(key)
+            return self.region_cache[key]
+        except KeyError:
+            return self.cache_region(await Region.from_file(file), key)
 
     def fetch_chunk(self, chunk_x: int, chunk_z: int) -> Chunk:
         raise NotImplementedError

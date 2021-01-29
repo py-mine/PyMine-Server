@@ -129,13 +129,15 @@ class PyMineAPI:
 
         req_path = os.path.join(root, "requirements.txt")
         if os.path.isfile(req_path):
-            try: 
+            try:
                 self.logger.info(f"Installing dependencies for {plugin_name}.")
                 await self.install_deps(req_path)
             except BaseException as e:
-                self.logger.error(f"Failed to load {plugin_name} due to dependency installation failure. \n {self.logger.f_traceback(e)}")
+                self.logger.error(
+                    f"Failed to load {plugin_name} due to dependency installation failure. \n {self.logger.f_traceback(e)}"
+                )
                 return
-        
+
         if conf.get("git_url"):
             self.logger.info(f"Checking for updates for {plugin_name}...")
 
@@ -168,11 +170,11 @@ class PyMineAPI:
     @staticmethod
     async def install_deps(req_path):
         proc = await asyncio.subprocess.create_subprocess_shell(
-                    f'pip install -U -r {req_path}', stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
-                )
+            f"pip install -U -r {req_path}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+        )
         _, stderr = await proc.communicate()
         if proc.returncode != 0:
-            raise BaseException(stderr.decode()) # maybe raise something else? 
+            raise BaseException(stderr.decode())  # maybe raise something else?
 
     async def init(self):  # called when server starts up
         self.commands.load_commands()

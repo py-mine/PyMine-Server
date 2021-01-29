@@ -102,11 +102,6 @@ class PyMineAPI:
 
             _, stderr = await asyncio.wait_for(proc.communicate(), 120)
 
-            try:  # ensure process goes bye bye
-                proc.kill()
-            except BaseException:
-                pass
-
             if proc.returncode != 0:
                 raise RuntimeError(stderr.decode())
 

@@ -56,7 +56,7 @@ class Region(dict):
 
     @classmethod
     async def from_file(cls, file: str) -> Region:
-        with aiofile.async_open(file, "rb") as region_file:
+        async with aiofile.async_open(file, "rb") as region_file:
             buf = Buffer(await region_file.read())
 
         region_x, region_z = cls.region_coords_from_file(file)

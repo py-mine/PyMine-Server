@@ -92,6 +92,15 @@ class PyMineAPI:
 
         return conf
 
+    @staticmethod
+    async def install_deps(req_path):
+        proc = await asyncio.subprocess.create_subprocess_shell(
+            f"pip install -U -r {req_path}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+        )
+        _, stderr = await proc.communicate()
+        if proc.returncode != 0:
+            raise BaseException(stderr.decode())  # maybe raise something else?
+
     async def load_plugin(self, git_dir, plugin_name):
         if plugin_name.startswith("."):
             return
@@ -164,15 +173,6 @@ class PyMineAPI:
             return
 
         self.plugins[plugin_path] = plugin_module
-
-    @staticmethod
-    async def install_deps(req_path):
-        proc = await asyncio.subprocess.create_subprocess_shell(
-            f"pip install -U -r {req_path}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
-        )
-        _, stderr = await proc.communicate()
-        if proc.returncode != 0:
-            raise BaseException(stderr.decode())  # maybe raise something else?
 
     async def init(self):  # called when server starts up
         self.commands.load_commands()

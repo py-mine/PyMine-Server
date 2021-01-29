@@ -4,6 +4,7 @@ import zipfile
 import time
 import yaml
 import git
+import sys
 import os
 
 from pymine.util.immutable import make_immutable
@@ -96,8 +97,11 @@ class PyMineAPI:
         requirements_file = os.path.join(root, "requirements.txt")
 
         if os.path.isfile(requirements_file):
+            if not os.path.isfile(sys.executable):
+                raise RuntimeError('Couldn\'t find system executable to update dependencies.')
+
             proc = await asyncio.subprocess.create_subprocess_shell(
-                f"pip install -U -r {requirements_file}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+                f"{sys.executable} -m pip install -U -r {requirements_file}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
             )
 
             _, stderr = await asyncio.wait_for(proc.communicate(), 120)

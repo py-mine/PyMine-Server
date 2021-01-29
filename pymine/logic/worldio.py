@@ -23,11 +23,11 @@ def region_file_name(region_x: int, region_z: int) -> str:
 
 
 class WorldIO:
-    def __init__(self, server, world_name: str, region_cache_max: int) -> None:
+    def __init__(self, server, world_name: str, world_path: str, region_cache_max: int) -> None:
         self.server = server
 
         self.world_name = world_name
-        self.world_path = os.path.join("worlds", world_name)
+        self.world_path = world_path
 
         self.region_cache_max = region_cache_max
         self.region_cache = OrderedDict()

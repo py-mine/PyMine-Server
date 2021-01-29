@@ -125,7 +125,27 @@ class PyMineAPI:
         except BaseException as e:
             self.logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. Error: {self.logger.f_traceback(e)}")
             return
+        
+        dependencies = conf.get("dependencies")
+        if dependencies:
+            for i, dependency in enumerate(dependencies):
+                if dependency.strip('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_=<>1234567890') != '': 
+                    self.logger.critical(f"Possible malicious code found in {plugin_name}!")
+                    self.logger.warn(f"Failed to load {plugin_name} due to possible malicious code in plugin.yml")
+                    return
+                else:
+                    self.logger.info(f"Installing {dependency} for {plugin_name} [{i}/{len(dependencies)}]")
 
+                    proc = await asyncio.subprocess.create_subprocess_shell(f'pip install -U "{dependency}"', stdout=asyncio.subprocess.PIPE, 
+                                                                        stderr=asyncio.subprocess.PIPE)
+                    _, stderr = await proc.communicate()
+                    if proc.returncode != 0:
+                        self.logger.error(f"Cannot install {dependency} due to \n {stderr.decode()}")
+                        self.logger.error(f"Failed to load {plugin_name} due to dependency installation failure!")
+                        return
+
+            self.logger.info(f"All dependencies have been installed for {plugin_name}")
+        
         if conf.get("git_url"):
             self.logger.info(f"Checking for updates for {plugin_name}...")
 

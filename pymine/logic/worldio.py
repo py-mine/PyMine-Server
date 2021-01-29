@@ -27,7 +27,7 @@ class WorldIO:
         self.server = server
 
         self.world_name = world_name
-        self.world_path = world_path
+        self.world_path = world_path  # should be "worlds/world_name_dim/" in production probably
 
         self.region_cache_max = region_cache_max
         self.region_cache = OrderedDict()

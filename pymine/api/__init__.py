@@ -138,15 +138,16 @@ class PyMineAPI:
                 except pkg_resources.DistributionNotFound:
                     pass
 
-                if dependency.strip('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_=<>1234567890') != '': 
+                if dependency.strip("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_=<>1234567890") != "":
                     self.logger.critical(f"Possible malicious code found in {plugin_name}!")
                     self.logger.warn(f"Failed to load {plugin_name} due to possible malicious code in plugin.yml")
                     return
 
                 self.logger.info(f"Installing {dependency} for {plugin_name} [{i}/{len(dependencies)}]")
 
-                proc = await asyncio.subprocess.create_subprocess_shell(f'pip install -U "{dependency}"', stdout=asyncio.subprocess.PIPE, 
-                                                                    stderr=asyncio.subprocess.PIPE)
+                proc = await asyncio.subprocess.create_subprocess_shell(
+                    f'pip install -U "{dependency}"', stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+                )
                 _, stderr = await proc.communicate()
                 if proc.returncode != 0:
                     self.logger.error(f"Cannot install {dependency} due to \n {stderr.decode()}")

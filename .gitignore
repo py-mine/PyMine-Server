@@ -2,6 +2,7 @@
 server.yml
 server-icon.png
 plugins/*
+worlds/*
 
 # VirtualEnv
 venv/

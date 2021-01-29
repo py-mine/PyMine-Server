@@ -27,7 +27,7 @@ class WorldIO:
         self.server = server
 
         self.world_name = world_name
-        self.world_path = os.path.join('worlds', world_name)
+        self.world_path = os.path.join("worlds", world_name)
 
         self.region_cache_max = region_cache_max
         self.region_cache = OrderedDict()
@@ -47,7 +47,7 @@ class WorldIO:
             self.region_cache.move_to_end(key)
             return self.region_cache[key]
         except KeyError:
-            file = os.path.join(self.world_path, 'region', region_file_name(*key))
+            file = os.path.join(self.world_path, "region", region_file_name(*key))
             return self.cache_region(await Region.from_file(file), key)
 
     def fetch_chunk(self, chunk_x: int, chunk_z: int) -> Chunk:

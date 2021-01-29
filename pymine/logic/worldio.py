@@ -41,15 +41,13 @@ class WorldIO:
         return region
 
     async def fetch_region(self, chunk_x: int, chunk_z: int) -> Region:
-        if not os.path.isdir(file):
-            raise NotImplementedError("Region file doesn't exist (and worldgen hasn't been done yet...)")
-
         key = chunk_to_region_coords(chunk_x, chunk_z)
 
         try:
             self.region_cache.move_to_end(key)
             return self.region_cache[key]
         except KeyError:
+            file = os.path.join(self.world_path, 'region', region_file_name(*key))
             return self.cache_region(await Region.from_file(file), key)
 
     def fetch_chunk(self, chunk_x: int, chunk_z: int) -> Chunk:

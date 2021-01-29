@@ -94,7 +94,7 @@ class PyMineAPI:
 
     @staticmethod
     async def install_plugin_deps(root):
-        requirements_file = os.path.join(root, 'requirements.txt')
+        requirements_file = os.path.join(root, "requirements.txt")
 
         if os.path.isfile(requirements_file):
             proc = await asyncio.subprocess.create_subprocess_shell(
@@ -144,7 +144,7 @@ class PyMineAPI:
         try:
             await self.install_plugin_deps(root)
         except BaseException as e:
-            self.logger.error(f'Failed to load {plugin_name} due to: {self.logger.f_traceback(e)}')
+            self.logger.error(f"Failed to load {plugin_name} due to: {self.logger.f_traceback(e)}")
             return
 
         if conf.get("git_url"):

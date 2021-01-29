@@ -93,15 +93,18 @@ class PyMineAPI:
         return conf
 
     @staticmethod
-    async def install_deps(req_path):
-        proc = await asyncio.subprocess.create_subprocess_shell(
-            f"pip install -U -r {req_path}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
-        )
-        
-        _, stderr = await proc.communicate()
+    async def install_plugin_deps(root):
+        requirements_file = os.path.join(root, 'requirements.txt')
 
-        if proc.returncode != 0:
-            raise RuntimeError(stderr.decode())
+        if os.path.isfile(requirements_file):
+            proc = await asyncio.subprocess.create_subprocess_shell(
+                f"pip install -U -r {req_path}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+            )
+
+            _, stderr = await proc.communicate()
+
+            if proc.returncode != 0:
+                raise RuntimeError(stderr.decode())
 
     async def load_plugin(self, git_dir, plugin_name):
         if plugin_name.startswith("."):
@@ -138,14 +141,11 @@ class PyMineAPI:
             self.logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. Error: {self.logger.f_traceback(e)}")
             return
 
-        req_path = os.path.join(root, "requirements.txt")
-        if os.path.isfile(req_path):
-            try:
-                self.logger.info(f"Installing dependencies for {plugin_name}.")
-                await self.install_deps(req_path)
-            except BaseException as e:
-                self.logger.error(f"Failed to load {plugin_name} due to dependency installation failure. \n {e}")
-                return
+        try:
+            await self.install_plugin_deps(root)
+        except BaseException as e:
+            self.logger.error(f'Failed to load {plugin_name} due to: {self.logger.f_traceback(e)}')
+            return
 
         if conf.get("git_url"):
             self.logger.info(f"Checking for updates for {plugin_name}...")

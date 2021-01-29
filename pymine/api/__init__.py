@@ -1,6 +1,6 @@
+import pkg_resources
 import importlib
 import asyncio
-import pkg_resources
 import zipfile
 import time
 import yaml

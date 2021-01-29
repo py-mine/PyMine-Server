@@ -22,6 +22,10 @@ class Region(dict):
 
         return offset * 4096  # , size * 4096
 
+    @staticmethod
+    def region_coords_from_file(file: str) -> tuple:
+        return os.path.split(file)[1].split(".")[1:3]
+
     @classmethod
     def unpack_chunk_map(cls, buf: Buffer) -> dict:
         location_table = [buf.unpack("i") for _ in range(1024)]
@@ -54,7 +58,7 @@ class Region(dict):
         with aiofile.async_open(file, "rb") as region_file:
             buf = Buffer(await region_file.read())
 
-        region_x, region_z = os.path.split(file)[1].split(".")[1:3]
+        region_x, region_z = cls.region_coords_from_file(file)
         chunk_map = cls.unpack_chunk_map(buf)
 
         return Region(chunk_map, region_x, region_z)

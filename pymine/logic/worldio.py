@@ -54,4 +54,4 @@ class WorldIO:
         try:
             return region[chunk_x, chunk_z]
         except KeyError:
-            raise NotImplementedError('Nice try bucko, but world gen hasn\'t been implemented yet...')
+            raise NotImplementedError("Nice try bucko, but world gen hasn't been implemented yet...")

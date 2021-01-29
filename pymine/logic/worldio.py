@@ -47,3 +47,11 @@ class WorldIO:
         except KeyError:
             file = os.path.join(self.world_path, "region", region_file_name(*region_coords))
             return self.cache_region(await Region.from_file(file), region_coords)
+
+    async def fetch_chunk(self, chunk_x: int, chunk_z: int) -> Chunk:
+        region = await self.fetch_region(chunk_to_region_coords(chunk_x, chunk_z))
+
+        try:
+            return region[chunk_x, chunk_z]
+        except KeyError:
+            raise NotImplementedError('Nice try bucko, but world gen hasn\'t been implemented yet...')

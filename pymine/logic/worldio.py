@@ -18,14 +18,16 @@ def chunk_to_region_coords(chunk_x: int, chunk_z: int) -> tuple:
     return chunk_x // 32, chunk_z // 32
 
 
-def region_file_name(chunk_x: int, chunk_z: int) -> tuple:
-    raise NotImplementedError
+def region_file_name(chunk_x: int, chunk_z: int) -> str:
+    return '.'.join(['r', *chunk_to_region_coords(chunk_x, chunk_z), 'mca'])
 
 
 def fetch_chunk(chunk_x: int, chunk_z: int) -> Chunk:
     raise NotImplementedError
 
 
-def fetch_region(world: str, chunk_x: int, chunk_z: int) -> Region:
-    region_file_name = f'' '.'.join(chunk_to_region_coords(chunk_x, chunk_z))
-    with open(os.path.join())
+def fetch_region(region_file: str, chunk_x: int, chunk_z: int) -> Region:
+    if not os.path.isdir(region_file):
+        raise NotImplementedError('Region file doesn\'t exist (and worldgen hasn\'t been done yet...)')
+
+    return Region.from_file(region_file)

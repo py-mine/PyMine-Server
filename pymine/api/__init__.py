@@ -98,7 +98,7 @@ class PyMineAPI:
 
         if os.path.isfile(requirements_file):
             proc = await asyncio.subprocess.create_subprocess_shell(
-                f"pip install -U -r {req_path}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+                f"pip install -U -r {requirements_file}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
             )
 
             _, stderr = await asyncio.wait_for(proc.communicate(), 120)

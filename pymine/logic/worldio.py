@@ -19,7 +19,7 @@ def chunk_to_region_coords(chunk_x: int, chunk_z: int) -> tuple:
 
 
 def region_file_name(chunk_x: int, chunk_z: int) -> str:
-    return '.'.join(['r', *chunk_to_region_coords(chunk_x, chunk_z), 'mca'])
+    return ".".join(["r", *chunk_to_region_coords(chunk_x, chunk_z), "mca"])
 
 
 def fetch_chunk(chunk_x: int, chunk_z: int) -> Chunk:
@@ -28,6 +28,6 @@ def fetch_chunk(chunk_x: int, chunk_z: int) -> Chunk:
 
 def fetch_region(region_file: str, chunk_x: int, chunk_z: int) -> Region:
     if not os.path.isdir(region_file):
-        raise NotImplementedError('Region file doesn\'t exist (and worldgen hasn\'t been done yet...)')
+        raise NotImplementedError("Region file doesn't exist (and worldgen hasn't been done yet...)")
 
     return Region.from_file(region_file)

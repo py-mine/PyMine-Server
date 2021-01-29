@@ -40,15 +40,10 @@ class WorldIO:
 
         return region
 
-    async def fetch_region(self, chunk_x: int, chunk_z: int) -> Region:
-        key = chunk_to_region_coords(chunk_x, chunk_z)
-
+    async def fetch_region(self, region_coords: tuple) -> Region:
         try:
-            self.region_cache.move_to_end(key)
-            return self.region_cache[key]
+            self.region_cache.move_to_end(region_coords)
+            return self.region_cache[region_coords]
         except KeyError:
-            file = os.path.join(self.world_path, "region", region_file_name(*key))
-            return self.cache_region(await Region.from_file(file), key)
-
-    def fetch_chunk(self, chunk_x: int, chunk_z: int) -> Chunk:
-        raise NotImplementedError
+            file = os.path.join(self.world_path, "region", region_file_name(*region_coords))
+            return self.cache_region(await Region.from_file(file), region_coords)

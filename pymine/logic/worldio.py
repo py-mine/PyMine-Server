@@ -18,8 +18,8 @@ def chunk_to_region_coords(chunk_x: int, chunk_z: int) -> tuple:
     return chunk_x // 32, chunk_z // 32
 
 
-def region_file_name(chunk_x: int, chunk_z: int) -> str:
-    return ".".join(["r", *chunk_to_region_coords(chunk_x, chunk_z), "mca"])
+def region_file_name(region_x: int, region_z: int) -> str:
+    return ".".join(("r", str(region_x), str(region_z), "mca"))
 
 
 class WorldIO:

@@ -133,7 +133,7 @@ class PyMineAPI:
                 self.logger.info(f"Installing dependencies for {plugin_name}.")
                 await self.install_deps(req_path)
             except BaseException as e:
-                self.logger.error(f"Failed to load {plugin_name} due to dependency installation failure. \n {self.logger.f_traceback(e)}")
+                self.logger.error(f"Failed to load {plugin_name} due to dependency installation failure. \n {e}")
                 return
         
         if conf.get("git_url"):
@@ -160,7 +160,7 @@ class PyMineAPI:
         try:
             await plugin_module.setup(self.server, conf)
         except BaseException as e:
-            self.logger.error(f"Failed to setup {plugin_name} due to: {e}")
+            self.logger.error(f"Failed to setup {plugin_name} due to: {self.logger.f_traceback(e)}")
             return
 
         self.plugins[plugin_path] = plugin_module

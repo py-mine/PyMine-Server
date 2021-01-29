@@ -26,8 +26,8 @@ def fetch_chunk(chunk_x: int, chunk_z: int) -> Chunk:
     raise NotImplementedError
 
 
-def fetch_region(region_file: str, chunk_x: int, chunk_z: int) -> Region:
+async def fetch_region(region_file: str, chunk_x: int, chunk_z: int) -> Region:
     if not os.path.isdir(region_file):
         raise NotImplementedError("Region file doesn't exist (and worldgen hasn't been done yet...)")
 
-    return Region.from_file(region_file)
+    return await Region.from_file(region_file)

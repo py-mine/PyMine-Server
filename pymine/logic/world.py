@@ -22,7 +22,7 @@ def region_file_name(region_x: int, region_z: int) -> str:
     return ".".join(("r", str(region_x), str(region_z), "mca"))
 
 
-class WorldIO:
+class World:
     def __init__(self, server, world_name: str, world_path: str, region_cache_max: int) -> None:
         self.server = server
 

@@ -23,8 +23,10 @@ def region_file_name(chunk_x: int, chunk_z: int) -> str:
 
 
 class WorldIO:
-    def __init__(self, server, region_cache_max):
+    def __init__(self, server, world_name: str, region_cache_max: int) -> None:
         self.server = server
+
+        self.world_name = world_name
 
         self.region_cache_max = region_cache_max
         self.region_cache = OrderedDict()
@@ -37,11 +39,11 @@ class WorldIO:
 
         return region
 
-    async def fetch_region(self, file: str, chunk_x: int, chunk_z: int) -> Region:
+    async def fetch_region(self, chunk_x: int, chunk_z: int) -> Region:
         if not os.path.isdir(file):
             raise NotImplementedError("Region file doesn't exist (and worldgen hasn't been done yet...)")
 
-        key = Region.region_coords_from_file(file)
+        key = chunk_to_region_coords(chunk_x, chunk_z)
 
         try:
             self.region_cache.move_to_end(key)

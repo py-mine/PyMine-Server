@@ -216,7 +216,13 @@ class PlayWindowItems(Packet):
 
 
 class PlayWindowProperty(Packet):
-    """This packet is used to inform the client that part of a GUI window should be updated. ClientboundServer -> Client"""
+    """This packet is used to inform the client that part of a GUI window should be updated.
+    Clientbound (Server -> Client).
+    :param int window_id: The ID of the window to be updated.
+    :param int property: The property to be updated.
+    :param int value: The new value for the property.
+    :attr int to: The intended recipient.
+    :attr int id: The unique ID of the packet."""
 
     id = 0x14
     to = 1

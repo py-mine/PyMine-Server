@@ -22,6 +22,16 @@ def region_file_name(region_x: int, region_z: int) -> str:
     return ".".join(("r", str(region_x), str(region_z), "mca"))
 
 
+def load_worlds(server, level_name: str, region_cache_max_per: int) -> dict:
+    worlds = {}
+
+    for ext in ('', '_nether', '_the_end'):
+        name = level_name + ext
+        worlds[name] = World(server, name, os.path.join('worlds', name), region_cache_max_per)
+
+    return worlds
+
+
 class World:
     def __init__(self, server, world_name: str, world_path: str, region_cache_max: int) -> None:
         self.server = server

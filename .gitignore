@@ -2,6 +2,7 @@
 server.yml
 server-icon.png
 plugins/*
+worlds/*
 
 # VirtualEnv
 venv/
@@ -20,3 +21,6 @@ docs/_build/
 # Sh-wayz's shit
 /tags
 .tmuxinator.yml
+
+# Ewww
+.vscode/

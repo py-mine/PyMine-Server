@@ -4,6 +4,7 @@ import zipfile
 import time
 import yaml
 import git
+import sys
 import os
 
 from pymine.util.immutable import make_immutable
@@ -91,6 +92,25 @@ class PyMineAPI:
 
         return conf
 
+    @staticmethod
+    async def install_plugin_deps(root):
+        requirements_file = os.path.join(root, "requirements.txt")
+
+        if os.path.isfile(requirements_file):
+            if not os.path.isfile(sys.executable):
+                raise RuntimeError("Couldn't find system executable to update dependencies.")
+
+            proc = await asyncio.subprocess.create_subprocess_shell(
+                f"{sys.executable} -m pip install -U -r {requirements_file}",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+
+            _, stderr = await asyncio.wait_for(proc.communicate(), 120)
+
+            if proc.returncode != 0:
+                raise RuntimeError(stderr.decode())
+
     async def load_plugin(self, git_dir, plugin_name):
         if plugin_name.startswith("."):
             return
@@ -124,6 +144,12 @@ class PyMineAPI:
             return
         except BaseException as e:
             self.logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. Error: {self.logger.f_traceback(e)}")
+            return
+
+        try:
+            await self.install_plugin_deps(root)
+        except BaseException as e:
+            self.logger.error(f"Failed to load {plugin_name} due to: {self.logger.f_traceback(e)}")
             return
 
         if conf.get("git_url"):

@@ -22,7 +22,8 @@ def region_file_name(region_x: int, region_z: int) -> str:
     return ".".join(("r", str(region_x), str(region_z), "mca"))
 
 
-def load_worlds(server, level_name: str, region_cache_max_per: int) -> dict:
+def load_worlds(server, region_cache_max_per: int) -> dict:
+    level_name = server.conf['level_name']
     worlds = {}
 
     for ext in ('', '_nether', '_the_end'):

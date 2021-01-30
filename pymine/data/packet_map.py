@@ -14,13 +14,13 @@ def load_packets():
     packet_map = {}
     packet_map_clientbound = {}
 
-    for state_name in os.listdir("pymine/types/packets"):
+    for state_name in os.listdir("pymine/net/packets"):
         state = STATES.decode(state_name)
         packet_map[state] = {}
         packet_map_clientbound[state] = {}
 
-        for file in filter((lambda f: f.endswith(".py")), os.listdir(f"pymine/types/packets/{state_name}")):
-            module = importlib.import_module(f"pymine.types.packets.{state_name}.{file[:-3]}")
+        for file in filter((lambda f: f.endswith(".py")), os.listdir(f"pymine/net/packets/{state_name}")):
+            module = importlib.import_module(f"pymine.net.packets.{state_name}.{file[:-3]}")
 
             for name in module.__all__:
                 packet = module.__dict__.get(name)

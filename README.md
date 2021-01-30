@@ -54,6 +54,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/ashwinvin"><img src="https://avatars.githubusercontent.com/u/38067089?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ashwin Vinod</b></sub></a><br /><a href="#ideas-ashwinvin" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/py-mine/PyMine/commits?author=ashwinvin" title="Code">💻</a> <a href="https://github.com/py-mine/PyMine/commits?author=ashwinvin" title="Documentation">📖</a></td>
     <td align="center"><a href="https://sofi.codes"><img src="https://avatars.githubusercontent.com/u/20756843?v=4?s=100" width="100px;" alt=""/><br /><sub><b>imSofi</b></sub></a><br /><a href="https://github.com/py-mine/PyMine/issues?q=author%3Aimsofi" title="Bug reports">🐛</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://kevinthomas.codes/"><img src="https://avatars.githubusercontent.com/u/46242684?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kevin Thomas</b></sub></a><br /><a href="#ideas-TrustedMercury" title="Ideas, Planning, & Feedback">🤔</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->

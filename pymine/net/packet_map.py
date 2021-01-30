@@ -11,8 +11,8 @@ __all__ = (
 
 
 def load_packets():
-    packet_path = os.path.join('pymine', 'net', 'packets')
-    packet_dot_path = packet_path.replace('\\', '/').replace('/', '.')
+    packet_path = os.path.join("pymine", "net", "packets")
+    packet_dot_path = packet_path.replace("\\", "/").replace("/", ".")
 
     packet_map = {}
     packet_map_clientbound = {}

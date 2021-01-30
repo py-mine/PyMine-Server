@@ -11,16 +11,20 @@ __all__ = (
 
 
 def load_packets():
+    packet_path = os.path.join('pymine', 'net', 'packets')
+    packet_dot_path = packet_path.replace('\\', '/').replace('/', '.')
+
     packet_map = {}
     packet_map_clientbound = {}
 
-    for state_name in os.listdir("pymine/net/packets"):
+    for state_name in os.listdir(packet_path):
         state = STATES.decode(state_name)
+
         packet_map[state] = {}
         packet_map_clientbound[state] = {}
 
-        for file in filter((lambda f: f.endswith(".py")), os.listdir(f"pymine/net/packets/{state_name}")):
-            module = importlib.import_module(f"pymine.net.packets.{state_name}.{file[:-3]}")
+        for file in filter((lambda f: f.endswith(".py")), os.listdir(os.path.join(packet_path, state_name))):
+            module = importlib.import_module(f"{packet_dot_path}.{state_name}.{file[:-3]}")
 
             for name in module.__all__:
                 packet = module.__dict__.get(name)

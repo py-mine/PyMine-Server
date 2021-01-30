@@ -4,6 +4,7 @@ import random
 import socket
 import struct
 
+from pymine.types.world import World, load_worlds
 from pymine.types.buffer import Buffer
 from pymine.types.stream import Stream
 from pymine.types.packet import Packet
@@ -12,7 +13,6 @@ from pymine.util.logging import task_exception_handler, Logger
 from pymine.util.encryption import gen_rsa_keys
 
 from pymine.logic.config import load_config, load_favicon
-from pymine.logic.worldio import World, load_worlds
 
 from pymine.net.packet_map import PACKET_MAP
 from pymine.api import PyMineAPI, StopStream

@@ -10,8 +10,8 @@ from pymine.types.stream import Stream, EncryptedStream
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-from pymine.types.packets.login.set_comp import LoginSetCompression
-import pymine.types.packets.login.login as login_packets
+from pymine.net.packets.login.set_comp import LoginSetCompression
+import pymine.net.packets.login.login as login_packets
 
 from pymine.logic.join import join
 from pymine.api import StopStream

@@ -3,7 +3,7 @@ from pymine.types.buffer import Buffer
 from pymine.types.stream import Stream
 from pymine.types.chat import Chat
 
-import pymine.types.packets.status.status as status_packets
+import pymine.net.packets.status.status as status_packets
 
 from pymine.api import StopStream
 from pymine.server import server

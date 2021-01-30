@@ -26,9 +26,13 @@ def load_worlds(server, region_cache_max_per: int) -> dict:
     level_name = server.conf['level_name']
     worlds = {}
 
+    server.logger.info(f'Loading worlds for level {level_name}...')
+
     for ext in ('', '_nether', '_the_end'):
         name = level_name + ext
         worlds[name] = World(server, name, os.path.join('worlds', name), region_cache_max_per)
+
+    server.logger.info(f'Loaded worlds: {"".join(worlds.keys())}.')
 
     return worlds
 

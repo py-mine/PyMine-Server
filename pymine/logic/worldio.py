@@ -32,7 +32,7 @@ def load_worlds(server, region_cache_max_per: int) -> dict:
         name = level_name + ext
         worlds[name] = World(server, name, os.path.join('worlds', name), region_cache_max_per)
 
-    server.logger.info(f'Loaded worlds: {"".join(worlds.keys())}.')
+    server.logger.info(f'Loaded worlds: {", ".join(worlds.keys())}.')
 
     return worlds
 

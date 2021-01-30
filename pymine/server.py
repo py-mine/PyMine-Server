@@ -8,7 +8,7 @@ from pymine.types.buffer import Buffer
 from pymine.types.stream import Stream
 from pymine.types.packet import Packet
 
-from pymine.data.packet_map import PACKET_MAP
+from pymine.net.packet_map import PACKET_MAP
 
 from pymine.util.logging import task_exception_handler, Logger
 from pymine.util.config import load_config, load_favicon

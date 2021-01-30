@@ -8,12 +8,11 @@ from pymine.types.buffer import Buffer
 from pymine.types.stream import Stream
 from pymine.types.packet import Packet
 
-from pymine.net.packet_map import PACKET_MAP
-
 from pymine.util.logging import task_exception_handler, Logger
-from pymine.util.config import load_config, load_favicon
 from pymine.util.encryption import gen_rsa_keys
 
+from pymine.logic.config import load_config, load_favicon
+from pymine.net.packet_map import PACKET_MAP
 from pymine.api import PyMineAPI, StopStream
 
 # Used for parts of PyMine that utilize the server instance without being a plugin themselves

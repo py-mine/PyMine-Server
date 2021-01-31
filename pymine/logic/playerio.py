@@ -2,6 +2,7 @@ import uuid
 import os
 
 from pymine.types.buffer import Buffer
+from pymine.types.player import Player
 import pymine.types.nbt as nbt
 
 

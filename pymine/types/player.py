@@ -17,6 +17,7 @@ class Player:
         spawn_dimension: str,
         spawn_x: int,
         spawn_y: int,
+        spawn_z: int,
         spawn_forced: bool,
         sleep_timer: int,
         food_level: int,
@@ -37,7 +38,52 @@ class Player:
         seen_credits: bool,
         recipe_book: nbt.TAG_Compound,
     ) -> None:
-        pass
+        self.data_version = data_version
+
+
+        self.player_game_type = player_game_type
+        self.prev_player_game_type = prev_player_game_type
+
+        self.score = score
+
+        self.dimension = dimension
+
+        self.selected_item_slot = selected_item_slot
+        self.selected_item = selected_item
+
+        self.spawn_dimension = spawn_dimension
+        self.spawn_x = spawn_x
+        self.spawn_y = spawn_y
+        self.spawn_z = spawn_z
+        self.spawn_forced = spawn_forced
+
+        self.sleep_timer = sleep_timer
+
+        self.food_level = food_level
+        self.food_exhaustion_level = food_exhaustion_level
+        self.food_saturation_level = food_saturation_level
+        self.food_tick_timer = food_tick_timer
+
+        self.xp_level = xp_level
+        self.xp_percent = xp_percent
+        self.xp_total = xp_total
+        self.xp_seed = xp_seed
+
+        self.inventory = inventory
+        self.ender_chest = ender_chest
+
+        self.abilities = abilities
+
+        self.entered_nether_position = entered_nether_position
+
+        self.root_vehicle = root_vehicle
+
+        self.shoulder_entity_left = shoulder_entity_left
+        self.shoulder_entity_right = shoulder_entity_right
+
+        self.seen_credits = seen_credits
+
+        self.recipe_book = recipe_book
 
     @classmethod
     def from_nbt(cls, tag: nbt.TAG) -> Player:
@@ -52,6 +98,7 @@ class Player:
             spawn_dimension=tag.get("SpawnDimension"),  # str
             spawn_x=tag.get("SpawnX"),  # int
             spawn_y=tag.get("SpawnY"),  # int
+            spawn_z=tag.get("SpawnZ"),  # int
             spawn_forced=tag.get("SpawnForced"),  # byte
             sleep_timer=tag.get("SleepTimer"),  # short
             food_level=tag.get("foodLevel"),  # int

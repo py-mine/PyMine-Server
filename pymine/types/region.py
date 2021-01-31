@@ -1,5 +1,5 @@
 from __future__ import annotations
-import multiprocessing as mp
+import concurrent.futures
 import aiofile
 import asyncio
 import zlib
@@ -22,7 +22,7 @@ def region_coords_from_file(file: str) -> tuple:
     return os.path.split(file)[1].split(".")[1:3]
 
 
-def unpack_chunk_map(buf: Buffer, queue: mp.Queue) -> dict:
+def unpack_chunk_map(buf: Buffer) -> dict:
     location_table = [buf.unpack("i") for _ in range(1024)]
     timestamp_table = [buf.unpack("i") for _ in range(1024)]
 
@@ -36,7 +36,7 @@ def unpack_chunk_map(buf: Buffer, queue: mp.Queue) -> dict:
         # we use mod here to convert to chunk coords INSIDE the region
         return (chunk.chunk_x % 32, chunk.chunk_z % 32), chunk
 
-    queue.put(dict(map(unpack_chunk, location_table, timestamp_table)))
+    return dict(map(unpack_chunk, location_table, timestamp_table))
 
 
 class Region(dict):
@@ -53,13 +53,9 @@ class Region(dict):
 
         region_x, region_z = region_coords_from_file(file)
 
-        queue = mp.Queue()
-        process = mp.Process(target=unpack_chunk_map, args=(buf, queue))
-
-        loop = asyncio.get_event_loop()
-
-        await loop.run_in_executor(None, process.start)
-        chunk_map = await loop.run_in_executor(None, queue.get)
-        await loop.run_in_executor(None, process.join)
+        chunk_map = await asyncio.get_event_loop().run_in_executor(
+            concurrent.futures.ProcessPoolExecutor(),
+            unpack_chunk_map, buf
+        )
 
         return Region(chunk_map, region_x, region_z)

@@ -22,7 +22,7 @@ def region_coords_from_file(file: str) -> tuple:
     return os.path.split(file)[1].split(".")[1:3]
 
 
-def unpack_chunk_map(buf: Buffer, q: mp.Queue) -> dict:
+def unpack_chunk_map(buf: Buffer, queue: mp.Queue) -> dict:
     location_table = [buf.unpack("i") for _ in range(1024)]
     timestamp_table = [buf.unpack("i") for _ in range(1024)]
 
@@ -39,7 +39,7 @@ def unpack_chunk_map(buf: Buffer, q: mp.Queue) -> dict:
         # we use mod here to convert to chunk coords INSIDE the region
         return (chunk.chunk_x % 32, chunk.chunk_z % 32), chunk
 
-    q.put(dict(map(unpack_chunk, zip(location_table, timestamp_table))))
+    queue.put(dict(map(unpack_chunk, zip(location_table, timestamp_table))))
 
 
 class Region(dict):
@@ -56,13 +56,13 @@ class Region(dict):
 
         region_x, region_z = region_coords_from_file(file)
 
-        q = mp.Queue()
-        p = mp.Process(target=unpack_chunk_map, args=(buf, q))
+        queue = mp.Queue()
+        process = mp.Process(target=unpack_chunk_map, args=(buf, queue))
 
         loop = asyncio.get_event_loop()
 
-        await loop.run_in_executor(None, p.start)
-        chunk_map = await loop.run_in_executor(None, q.get)
-        await loop.run_in_executor(None, p.join)
+        await loop.run_in_executor(None, process.start)
+        chunk_map = await loop.run_in_executor(None, queue.get)
+        await loop.run_in_executor(None, process.join)
 
         return Region(chunk_map, region_x, region_z)

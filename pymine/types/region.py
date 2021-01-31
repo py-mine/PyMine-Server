@@ -47,12 +47,12 @@ class Region(dict):
         self.region_z = region_z
 
     @classmethod
-    async def from_file(cls, executor, file: str) -> Region:
+    async def from_file(cls, server, file: str) -> Region:
         async with aiofile.async_open(file, "rb") as region_file:
             buf = Buffer(await region_file.read())
 
         region_x, region_z = region_coords_from_file(file)
 
-        chunk_map = await asyncio.get_event_loop().run_in_executor(executor, unpack_chunk_map, buf)
+        chunk_map = await server.call_async(unpack_chunk_map, buf)
 
         return Region(chunk_map, region_x, region_z)

@@ -14,7 +14,7 @@ from pymine.net.packets.login.set_comp import LoginSetCompression
 import pymine.net.packets.login.login as login_packets
 
 from pymine.logic.join import join
-from pymine.api import StopStream
+from pymine.api import StopHandling
 from pymine.server import server
 
 
@@ -53,7 +53,7 @@ async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
 
     if not auth:  # If authentication failed, disconnect client
         await server.send_packet(stream, login_packets.LoginDisconnect("Failed to authenticate your connection."))
-        raise StopStream
+        raise StopHandling
 
     # Generate a cipher for that client using the shared key from the client
     cipher = encryption.gen_aes_cipher(shared_key)

@@ -15,7 +15,7 @@ from pymine.util.encryption import gen_rsa_keys
 from pymine.logic.config import load_config, load_favicon
 
 from pymine.net.packet_map import PACKET_MAP
-from pymine.api import PyMineAPI, StopStream
+from pymine.api import PyMineAPI, StopHandling
 
 # Used for parts of PyMine that utilize the server instance without being a plugin themselves
 server = None
@@ -136,15 +136,15 @@ class Server:
                 read = await asyncio.wait_for(stream.read(1), 5)
             except asyncio.TimeoutError:
                 self.logger.debug("Closing due to timeout on read...")
-                raise StopStream
+                raise StopHandling
 
             if read == b"":
                 self.logger.debug("Closing due to invalid read....")
-                raise StopStream
+                raise StopHandling
 
             if i == 0 and read == b"\xFE":
                 self.logger.warn("Legacy ping attempted, legacy ping is not supported.")
-                raise StopStream
+                raise StopHandling
 
             b = struct.unpack("B", read)[0]
             packet_length |= (b & 0x7F) << 7 * i
@@ -172,7 +172,7 @@ class Server:
 
                 if isinstance(res, Stream):
                     stream = res
-            except StopStream:
+            except StopHandling:
                 raise
             except BaseException as e:
                 self.logger.error(
@@ -188,7 +188,7 @@ class Server:
         while True:
             try:
                 stream = await self.handle_packet(stream)
-            except StopStream:
+            except StopHandling:
                 break
             except BaseException as e:
                 self.logger.error(self.logger.f_traceback(e))

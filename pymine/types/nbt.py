@@ -269,8 +269,8 @@ class TAG_Byte_Array(TAG, bytearray):
         TAG.__init__(self, name)
 
         if isinstance(data, str):
-            print(f'WARNING: data passed was not bytes ({repr(data)})')
-            data = data.encode('utf8')
+            print(f"WARNING: data passed was not bytes ({repr(data)})")
+            data = data.encode("utf8")
 
         bytearray.__init__(self, data)
 

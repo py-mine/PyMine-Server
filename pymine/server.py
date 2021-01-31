@@ -93,6 +93,9 @@ class Server:
 
         self.logger.info("Server closed.")
 
+    async def call_async(self, func, *args, **kwargs):
+        await asyncio.get_event_loop().run_in_executor(self.executor, func, *args, **kwargs)
+
     async def close_connection(self, stream: Stream):  # Close a connection to a client
         await stream.drain()
 

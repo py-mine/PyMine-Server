@@ -32,7 +32,7 @@ def unpack_chunk_map(buf: Buffer, q: mp.Queue) -> dict:
         buf.pos = find_chunk_pos_in_buffer(entry)
 
         chunk_len = buf.unpack("i")
-        comp_type = buf.unpack("b")
+        buf.read(1)  # comp_type = buf.unpack("b")
         chunk = buf.read(chunk_len)
 
         if comp_type == 2:  # zlib
@@ -40,9 +40,9 @@ def unpack_chunk_map(buf: Buffer, q: mp.Queue) -> dict:
             # we use mod here to convert to chunk coords INSIDE the region
             return (chunk.chunk_x % 32, chunk.chunk_z % 32), chunk
 
-        if comp_type == 0:
-            chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp)
-            return (chunk.chunk_x % 32, chunk.chunk_z % 32), chunk
+        # if comp_type == 0:
+        #     chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(chunk)), timestamp)
+        #     return (chunk.chunk_x % 32, chunk.chunk_z % 32), chunk
 
         raise ValueError(f"Value {comp_type} isn't a supported compression type.")
 

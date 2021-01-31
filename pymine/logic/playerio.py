@@ -1,6 +1,7 @@
 import uuid
 import os
 
+from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
 
 

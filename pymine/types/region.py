@@ -1,4 +1,5 @@
 from __future__ import annotations
+import multiprocessing as mp
 import aiofile
 import zlib
 import os
@@ -20,7 +21,7 @@ def region_coords_from_file(file: str) -> tuple:
     return os.path.split(file)[1].split(".")[1:3]
 
 
-def unpack_chunk_map(buf: Buffer) -> dict:
+def unpack_chunk_map(buf: Buffer, q: mp.Queue) -> dict:
     location_table = [buf.unpack("i") for _ in range(1024)]
     timestamp_table = [buf.unpack("i") for _ in range(1024)]
 
@@ -44,7 +45,7 @@ def unpack_chunk_map(buf: Buffer) -> dict:
 
         raise ValueError(f"Value {comp_type} isn't a supported compression type.")
 
-    return dict(map(unpack_chunk, zip(location_table, timestamp_table)))
+    q.put(dict(map(unpack_chunk, zip(location_table, timestamp_table))))
 
 
 class Region(dict):
@@ -60,6 +61,12 @@ class Region(dict):
             buf = Buffer(await region_file.read())
 
         region_x, region_z = region_coords_from_file(file)
-        chunk_map = unpack_chunk_map(buf)
+
+        q = mp.Queue()
+        p = mp.Process(target=unpack_chunk_map, args=(buf, q,))
+
+        p.start()
+        chunk_map = q.get()
+        p.join()
 
         return Region(chunk_map, region_x, region_z)

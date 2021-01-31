@@ -1,6 +1,7 @@
 from __future__ import annotations
 import multiprocessing as mp
 import aiofile
+import asyncio
 import zlib
 import os
 
@@ -65,8 +66,10 @@ class Region(dict):
         q = mp.Queue()
         p = mp.Process(target=unpack_chunk_map, args=(buf, q,))
 
-        p.start()
-        chunk_map = q.get()
-        p.join()
+        loop = asyncio.get_event_loop()
+
+        await loop.run_in_executor(None, p.start)
+        chunk_map = await loop.run_in_executor(None, q.get)
+        await loop.run_in_executor(None, p.join)
 
         return Region(chunk_map, region_x, region_z)

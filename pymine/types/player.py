@@ -40,7 +40,6 @@ class Player:
     ) -> None:
         self.data_version = data_version
 
-
         self.player_game_type = player_game_type
         self.prev_player_game_type = prev_player_game_type
 

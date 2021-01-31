@@ -22,16 +22,16 @@ def region_file_name(region_x: int, region_z: int) -> str:
     return ".".join(("r", str(region_x), str(region_z), "mca"))
 
 
-def load_worlds(logger, level_name: str, region_cache_max_per: int) -> dict:
+def load_worlds(server, level_name: str, region_cache_max_per: int) -> dict:
     worlds = {}
 
-    logger.info(f"Loading worlds for level {level_name}...")
+    server.logger.info(f"Loading worlds for level {level_name}...")
 
     for ext in ("", "_nether", "_the_end"):
         name = level_name + ext
         worlds[name] = World(server, name, os.path.join("worlds", name), region_cache_max_per)
 
-    logger.info(f'Loaded worlds: {", ".join(worlds.keys())}.')
+    server.logger.info(f'Loaded worlds: {", ".join(worlds.keys())}.')
 
     return worlds
 

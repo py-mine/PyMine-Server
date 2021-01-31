@@ -64,13 +64,7 @@ class Region(dict):
         region_x, region_z = region_coords_from_file(file)
 
         q = mp.Queue()
-        p = mp.Process(
-            target=unpack_chunk_map,
-            args=(
-                buf,
-                q
-            )
-        )
+        p = mp.Process(target=unpack_chunk_map, args=(buf, q))
 
         loop = asyncio.get_event_loop()
 

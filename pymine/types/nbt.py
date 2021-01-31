@@ -267,6 +267,11 @@ class TAG_Byte_Array(TAG, bytearray):
 
     def __init__(self, name: str, data: bytearray) -> None:
         TAG.__init__(self, name)
+
+        if isinstance(data, str):
+            print(f'WARNING: data passed was not bytes ({repr(data)})')
+            data = data.encode('utf8')
+
         bytearray.__init__(self, data)
 
     def pack_data(self) -> bytes:

@@ -26,7 +26,7 @@ def unpack_chunk_map(buf: Buffer) -> dict:
     location_table = [buf.unpack("i") for _ in range(1024)]
     timestamp_table = [buf.unpack("i") for _ in range(1024)]
 
-    def unpack_chunk(location, timestamp) -> tuple:
+    def unpack_chunk(location: int, timestamp: int) -> tuple:
         buf.pos = find_chunk_pos_in_buffer(location)
 
         chunk_len = buf.unpack("i")

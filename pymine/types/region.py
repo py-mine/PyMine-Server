@@ -68,8 +68,8 @@ class Region(dict):
             target=unpack_chunk_map,
             args=(
                 buf,
-                q,
-            ),
+                q
+            )
         )
 
         loop = asyncio.get_event_loop()

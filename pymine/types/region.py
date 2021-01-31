@@ -26,20 +26,17 @@ def unpack_chunk_map(buf: Buffer, queue: mp.Queue) -> dict:
     location_table = [buf.unpack("i") for _ in range(1024)]
     timestamp_table = [buf.unpack("i") for _ in range(1024)]
 
-    def unpack_chunk(entry_timestamp) -> tuple:
-        entry, timestamp = entry_timestamp
-
-        buf.pos = find_chunk_pos_in_buffer(entry)
+    def unpack_chunk(location, timestamp) -> tuple:
+        buf.pos = find_chunk_pos_in_buffer(location)
 
         chunk_len = buf.unpack("i")
         buf.read(1)  # comp type, should always be 2 so ignore
-        chunk = buf.read(chunk_len)
 
-        chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk))), timestamp)
+        chunk = Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(buf.read(chunk_len)))), timestamp)
         # we use mod here to convert to chunk coords INSIDE the region
         return (chunk.chunk_x % 32, chunk.chunk_z % 32), chunk
 
-    queue.put(dict(map(unpack_chunk, zip(location_table, timestamp_table))))
+    queue.put(dict(map(unpack_chunk, location_table, timestamp_table)))
 
 
 class Region(dict):

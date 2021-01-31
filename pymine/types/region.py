@@ -54,8 +54,7 @@ class Region(dict):
         region_x, region_z = region_coords_from_file(file)
 
         chunk_map = await asyncio.get_event_loop().run_in_executor(
-            concurrent.futures.ProcessPoolExecutor(),
-            unpack_chunk_map, buf
+            concurrent.futures.ProcessPoolExecutor(), unpack_chunk_map, buf
         )
 
         return Region(chunk_map, region_x, region_z)

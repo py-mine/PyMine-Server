@@ -48,7 +48,7 @@ class Player:
                 nbt.TAG_Byte("Glowing", 0),
                 nbt.TAG_List("Tags", []),
                 nbt.TAG_Float("Health", 20),
-                NBT.TAG_Float("AbsorptionAmount", 0),
+                nbt.TAG_Float("AbsorptionAmount", 0),
                 nbt.TAG_Short("HurtTime", 0),
                 nbt.TAG_Int("HurtByTimestamp", 0),
                 nbt.TAG_Short("DeathTime", 0),

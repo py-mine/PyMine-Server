@@ -1,4 +1,5 @@
 import aiofile
+import struct
 import time
 import uuid
 import os

@@ -10,5 +10,5 @@ class Player:
         self.entity_id = entity_id
         self.data = data
 
-        self.uuid = uuid.UUID(bytes=struct.pack('>iiii', *data['uuid']))
+        self.uuid = uuid.UUID(bytes=struct.pack(">iiii", *data["uuid"]))
         self.x, self.y, self.z = self.pos = data["Pos"]

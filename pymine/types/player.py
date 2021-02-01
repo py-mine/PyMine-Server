@@ -21,6 +21,10 @@ class Player:
         self.username = username
         self.remote = remote
 
+    @classmethod
+    def new(cls, entity_id: int, uuid_: uuid.UUID, spawn: tuple) -> Player:
+        return cls(entity_id, cls.default_nbt(uuid_, spawn))
+
     @staticmethod
     def default_nbt(uuid_: uuid.UUID, spawn: tuple) -> nbt.TAG:
         return nbt.TAG_Compound(

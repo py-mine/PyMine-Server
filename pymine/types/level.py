@@ -125,6 +125,7 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
         self.wandering_trader_spawn_chance = wandering_trader_spawn_chance
         self.wandering_trader_spawn_delay = wandering_trader_spawn_delay
 
+    @classmethod
     def from_nbt(cls, tag: nbt.TAG) -> LevelData:
         tag = tag.get("Data")  # compound
 

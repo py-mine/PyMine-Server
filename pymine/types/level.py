@@ -51,7 +51,77 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
         wandering_trader_spawn_chance: int,
         wandering_trader_spawn_delay: int,
     ) -> None:
-        pass
+        self.allow_commands = allow_commands
+
+        self.border_center_x = border_center_x
+        self.border_center_z = border_center_z
+        self.border_damage_per_block = border_damage_per_block
+        self.border_size = border_size
+        self.border_safe_zone = border_safe_zone
+        self.border_size_lerp_target = border_size_lerp_target
+        self.border_size_lerp_time = border_size_lerp_time
+        self.border_warning_blocks = border_warning_blocks
+        self.border_warning_time = border_warning_time
+
+        self.clear_weather_time = clear_weather_time
+
+        self.custom_boss_events = custom_boss_events
+
+        self.datapacks = datapacks
+
+        self.data_version = data_version
+
+        self.day_time = day_time
+
+        self.difficulty = difficulty
+        self.difficulty_locked = difficulty_locked
+
+        self.dimension_data = dimension_data
+
+        self.gamerules = gamerules
+
+        self.world_gen_settings = world_gen_settings
+
+        self.game_type = game_type
+
+        self.generator_name = generator_name
+        self.generator_options = generator_options
+        self.generator_version = generator_version
+
+        self.hardcore = hardcore
+
+        self.initialized = initialized
+
+        self.last_played = last_played
+
+        self.level_name = level_name
+
+        self.map_features = map_features
+
+        self.player = player
+
+        self.raining = raining
+        self.rain_time = rain_time
+
+        self.random_seed = random_seed
+
+        self.size_on_disk = size_on_disk
+
+        self.spawn_x = spawn_x
+        self.spawn_y = spawn_y
+        self.spawn_z = spawn_z
+
+        self.thundering = thundering
+        self.thunder_time = thunder_time
+
+        self.time = time
+
+        self.version = version
+        self.version_data = version_data
+
+        self.wandering_trader_id = wandering_trader_id
+        self.wandering_trader_spawn_chance = wandering_trader_spawn_chance
+        self.wandering_trader_spawn_delay = wandering_trader_spawn_delay
 
     def __init__(self, tag: nbt.TAG) -> None:
         tag = tag.get("Data")  # compound

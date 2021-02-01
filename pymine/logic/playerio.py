@@ -25,7 +25,7 @@ class PlayerDataIO:
             file = os.path.join(self.data_dir, f"{uuid_}.dat")
 
             if not os.path.isfile(file):
-                raise NotImplementedError("Player creation hasn't been implemented yet...")
+                player = Player.new(self.server.eid(), uuid_, self.server.worlds[self.server.conf['level_name']].)
 
             async with aiofile.async_open(file, "rb") as player_file:
                 player = Player(self.server.eid(), nbt.TAG_Compound.unpack(Buffer(await player_file.read())))

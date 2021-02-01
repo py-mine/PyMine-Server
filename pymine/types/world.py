@@ -29,7 +29,7 @@ def load_worlds(logger, level_name: str, region_cache_max_per: int) -> dict:
 
     for ext in ("", "_nether", "_the_end"):
         name = level_name + ext
-        worlds[name] = World(server, name, os.path.join("worlds", name), region_cache_max_per)
+        worlds[name] = World(name, os.path.join("worlds", name), region_cache_max_per)
 
     logger.info(f'Loaded worlds: {", ".join(worlds.keys())}.')
 
@@ -37,9 +37,9 @@ def load_worlds(logger, level_name: str, region_cache_max_per: int) -> dict:
 
 
 class World:
-    def __init__(self, world_name: str, world_path: str, region_cache_max: int) -> None:
-        self.world_name = world_name
-        self.world_path = world_path  # should be "worlds/world_name_dim/" in production probably
+    def __init__(self, name: str, path: str, region_cache_max: int) -> None:
+        self.name = name
+        self.path = path  # should be "worlds/world_name_dim/" in production probably
 
         self.region_cache_max = region_cache_max
         self.region_cache = OrderedDict()

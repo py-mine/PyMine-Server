@@ -6,15 +6,15 @@ from pymine.types.region import Region
 from pymine.types.chunk import Chunk
 
 
-def block_to_chunk_coords(block_x: int, block_z: int) -> tuple:
+def block_to_chunk_coords(block_x: int, block_z: int) -> tuple[int, int]:
     return block_x // 16, block_z // 16
 
 
-def chunk_to_block_coords(chunk_x: int, chunk_z: int) -> tuple:
+def chunk_to_block_coords(chunk_x: int, chunk_z: int) -> tuple[int, int]:
     return chunk_x * 16, chunk_z * 16
 
 
-def chunk_to_region_coords(chunk_x: int, chunk_z: int) -> tuple:
+def chunk_to_region_coords(chunk_x: int, chunk_z: int) -> tuple[int, int]:
     return chunk_x // 32, chunk_z // 32
 
 

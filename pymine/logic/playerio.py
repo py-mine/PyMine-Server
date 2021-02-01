@@ -28,6 +28,6 @@ class PlayerDataIO:
 
             async with aiofile.async_open(file, "rb") as player_file:
                 player = Player(self.server.eid(), nbt.TAG_Compound.unpack(Buffer(await player_file.read())))
-                self.cache[int(uuid_)] = player
+                self.cache[player.uuid] = player
 
                 return player

@@ -1,4 +1,5 @@
 import aiofile
+import time
 import uuid
 import os
 
@@ -8,9 +9,12 @@ import pymine.types.nbt as nbt
 
 
 class PlayerDataIO:
-    def __init__(self, level_name: str):
+    def __init__(self, server, level_name: str):
+        self.server = server
         self.level_name = level_name
+
         self.data_dir = os.path.join("worlds", level_name, "playerdata")
+
         self.cache = {}
 
     async def fetch_player(self, uuid_: uuid.UUID) -> Player:
@@ -23,8 +27,7 @@ class PlayerDataIO:
                 raise NotImplementedError("Player creation hasn't been implemented yet...")
 
             async with aiofile.async_open(file, "rb") as player_file:
-                player = Player.from_nbt(nbt.TAG_Compound.unpack(Buffer(await player_file.read())))
-
+                player = Player(self.server.eid(), nbt.TAG_Compound.unpack(Buffer(await player_file.read())))
                 self.cache[int(uuid_)] = player
 
                 return player

@@ -24,7 +24,6 @@ class Player:
         return nbt.TAG_Compound(
             "",
             [
-                nbt.TAG_String("id", "minecraft:player"),
                 nbt.TAG_List("Pos", [nbt.TAG_Double(None, 0), nbt.TAG_Double(None, 0), nbt.TAG_Double(None, 0)]),
                 nbt.TAG_List("Motion", [nbt.TAG_Double(None, 0), nbt.TAG_Double(None, 0), nbt.TAG_Double(None, 0)]),
                 nbt.TAG_List("Rotation", [nbt.TAG_Float(None, 0), nbt.TAG_Float(None, 0)]),
@@ -51,6 +50,7 @@ class Player:
                 # nbt.TAG_Int('SleepingX', 0),
                 # nbt.TAG_Int('SleepingY', 0),
                 # nbt.TAG_Int('SleepingZ', 0),
+                nbt.TAG_Compound("Brain", [nbt.TAG_Compound('memories', [])]),
                 nbt.TAG_List(
                     "Attributes",
                     [
@@ -132,6 +132,55 @@ class Player:
                         ),
                     ],
                 ),
+                nbt.TAG_List('ActiveEffects', []),
+                nbt.TAG_Int('DataVersion', 2586),
+                nbt.TAG_Int('playerGameType', 0),
+                nbt.TAG_Int('previousPlayerGameType', -1),
+                nbt.TAG_Int('Score', 0),
+                nbt.TAG_String('Dimension', 'minecraft:overworld'),
+                nbt.TAG_Int('SelectedItemSlot', 0),
+                nbt.TAG_Compound('SelectedItem', [
+                    nbt.TAG_Byte('Count', 1),
+                    nbt.TAG_String('id', 'minecraft:air'),
+                    nbt.TAG_Compound('tag', [])
+                ]),
+                nbt.TAG_String('SpawnDimension', 'overworld'),
+                nbt.TAG_Int('SpawnX', 0),
+                nbt.TAG_Int('SpawnY', 100),
+                nbt.TAG_Int('SpawnZ', 0),
+                nbt.TAG_Byte('SpawnForced', 0),
+                nbt.TAG_Int('foodLevel', 20),
+                nbt.TAG_Float('foodExhaustionLevel', 0),
+                nbt.TAG_Float('foodSaturationLevel', 5),
+                nbt.TAG_Int('foodTickTimer', 0),
+                nbt.TAG_Int('XpLevel', 0),
+                nbt.TAG_Float('XpP', 0),
+                nbt.TAG_Int('XpTotal', 0),
+                nbt.TAG_Int('XpSeed', 0),
+                nbt.TAG_List('Inventory', []),
+                nbt.TAG_List('EnderItems', []),
+                nbt.TAG_Compound('abilities', [
+                    nbt.TAG_Float('walkSpeed', 0.1),
+                    nbt.TAG_Float('flySpeed', .05),
+                    nbt.TAG_Byte('mayfly', 0),
+                    nbt.TAG_Byte('flying', 0),
+                    nbt.TAG_Byte('invulnerable', 0),
+                    nbt.TAG_Byte('mayBuild', 1),
+                    nbt.TAG_Byte('instabuild', 0)
+                ]),
+                nbt.TAG_Byte('seenCredits', 0),
+                nbt.TAG_Compound('recipeBook', [
+                    nbt.TAG_List('recipes', []),
+                    nbt.TAG_List('toBeDisplayed', []),
+                    nbt.TAG_Byte('isFilteringCraftable', 0),
+                    nbt.TAG_Byte('isGuiOpen', 0),
+                    nbt.TAG_Byte('isFurnaceFilteringCraftable', 0),
+                    nbt.TAG_Byte('isFurnaceGuiOpen', 0),
+                    nbt.TAG_Byte('isBlastingFurnaceFilteringCraftable', 0),
+                    nbt.TAG_Byte('isBlastingFurnaceGuiOpen', 0),
+                    nbt.TAG_Byte('isSmokerFilteringCraftable', 0),
+                    nbt.TAG_Byte('isSmokerGuiOpen', 0)
+                ])
             ],
         )
 

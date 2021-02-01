@@ -17,6 +17,9 @@ except BaseException:
 # ensure the pymine modules are accessible
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+# ensure the current working directory is correct
+os.chdir(os.path.split(__file__)[0])
+
 from pymine.util.logging import Logger, task_exception_handler
 import pymine.server
 

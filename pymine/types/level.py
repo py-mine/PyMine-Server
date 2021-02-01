@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import aiofile
+
 import pymine.types.nbt as nbt
 
 
@@ -124,6 +126,11 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
         self.wandering_trader_id = wandering_trader_id
         self.wandering_trader_spawn_chance = wandering_trader_spawn_chance
         self.wandering_trader_spawn_delay = wandering_trader_spawn_delay
+
+    @classmethod
+    async def from_file(cls, file: str) -> LevelData:
+        async with aiofile.async_open(file, 'rb') as level_data_file:
+            return cls.from_nbt(nbt.TAG_Compound.unpack(Buffer(await level_data_file.read())))
 
     @classmethod
     def from_nbt(cls, tag: nbt.TAG) -> LevelData:

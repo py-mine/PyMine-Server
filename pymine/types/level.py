@@ -4,6 +4,7 @@ import pymine.types.nbt as nbt
 class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#level.dat_format
     def __init__(
         self,
+        *,
         allow_commands: bool,
         border_center_x: float,
         border_center_z: float,

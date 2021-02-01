@@ -24,26 +24,26 @@ class Stream(StreamWriter):
 
 
 class EncryptedStream(Stream):
-    def __init__(self, stream: Stream, cipher: Cipher):
+    def __init__(self, stream: Stream, cipher: Cipher) -> None:
         super().__init__(stream._reader, stream)
 
         self.decryptor = cipher.decryptor()
         self.encryptor = cipher.encryptor()
 
-    async def read(self, n: int = -1):
+    async def read(self, n: int = -1) -> bytes:
         return self.decryptor.update(await super().read(n))
 
-    async def readline(self):
+    async def readline(self) -> bytes:
         return self.decryptor.update(await super().readline())
 
-    async def readexactly(self, n: int):
+    async def readexactly(self, n: int) -> bytes:
         return self.decryptor.update(await super().readexactly(n))
 
-    async def readuntil(self, separator=b"\n"):
+    async def readuntil(self, separator: bytes = b"\n") -> bytes:
         return self.decryptor.update(await super().readuntil(separator))
 
-    def write(self, data: bytes):
+    def write(self, data: bytes) -> None:
         return super().write(self.encryptor.update(data))
 
-    def writelines(self, data: bytes):
+    def writelines(self, data: bytes) -> None:
         return super().writelines(self.encryptor.update(data))

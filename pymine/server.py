@@ -77,7 +77,7 @@ class Server:
 
         # 5 / the second arg (the max region cache size per world instance), should be dynamically changed based on the
         # amount of players online on each world, probably something like (len(players) + 1)
-        self.worlds = load_worlds(self, 5)
+        self.worlds = load_worlds(self.logger, self.conf['level_name'], 5)
 
         self.logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
 

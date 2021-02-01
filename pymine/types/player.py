@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random
 import uuid
 
 import pymine.types.nbt as nbt
@@ -156,7 +157,7 @@ class Player:
                 nbt.TAG_Int("XpLevel", 0),
                 nbt.TAG_Float("XpP", 0),
                 nbt.TAG_Int("XpTotal", 0),
-                nbt.TAG_Int("XpSeed", 0),
+                nbt.TAG_Int("XpSeed", random.randint(-2147483648, 2147483647)),
                 nbt.TAG_List("Inventory", []),
                 nbt.TAG_List("EnderItems", []),
                 nbt.TAG_Compound(

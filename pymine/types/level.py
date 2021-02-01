@@ -53,7 +53,7 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
         wandering_trader_spawn_chance: int,
         wandering_trader_spawn_delay: int,
     ) -> None:
-        self.allow_commands = allow_commands
+        allow_commands = allow_commands
 
         self.border_center_x = border_center_x
         self.border_center_z = border_center_z
@@ -128,48 +128,50 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
     def from_nbt(cls, tag: nbt.TAG) -> LevelData:
         tag = tag.get("Data")  # compound
 
-        self.allow_commands = bool(tag.get("allowCommands"))  # default: 0 (byte)
-        self.border_center_x = tag.get("BorderCenterX")  # default: 0 (double)
-        self.border_center_z = tag.get("BorderCenterZ")  # default: 0 (double)
-        self.border_damage_per_block = tag.get("BorderDamagePerBlock")  # default: 0.2 (double)
-        self.border_size = tag.get("BorderSize")  # default: 60000000 (double)
-        self.border_safe_zone = tag.get("BorderSafeZone")  # default: 5 (double)
-        self.border_size_lerp_target = tag.get("BorderSizeLerpTarget")  # default: 60000000 (double)
-        self.border_size_lerp_time = tag.get("BorderSizeLerpTime")  # default: 0 (long)
-        self.border_warning_blocks = tag.get("BorderWarningBlocks")  # default: 5 (double)
-        self.border_warning_time = tag.get("BorderWarningTime")  # default: 15 (double)
-        self.clear_weather_time = tag.get("clearWeatherTime")  # default: 0 (int)
-        self.custom_boss_events = tag.get("CustomBossEvents")  # compound
-        self.datapacks = tag.get("DataPacks")  # compound
-        self.data_version = tag.get("DataVersion")  # int
-        self.day_time = tag.get("DayTime")  # long
-        self.difficulty = tag.get("Difficulty")  # byte
-        self.difficulty_locked = bool(tag.get("DifficultyLocked"))  # byte
-        self.dimension_data = tag.get("DimensionData")  # compound
-        self.gamerules = tag.get("GameRules")  # compound
-        self.world_gen_settings = tag.get("WorldGenSettings")  # compound
-        self.game_type = tag.get("GameType")  # int
-        self.generator_name = tag.get("generatorName")  # string
-        self.generator_options = tag.get("generatorOptions")  # compound
-        self.generator_version = tag.get("generatorVersion")  # int
-        self.hardcore = bool(tag.get("hardcore"))  # byte
-        self.initialized = bool(tag.get("initialized"))  # byte
-        self.last_played = tag.get("LastPlayed")  # long
-        self.level_name = tag.get("LevelName")  # string
-        self.map_features = tag.get("MapFeatures")  # byte
-        self.player = tag.get("Player")  # compound, probably not used
-        self.raining = bool(tag.get("raining"))  # byte
-        self.rain_time = tag.get("rainTime")  # int
-        random_seed = tag.get("RandomSeed")  # long
-        size_on_disk = tag.get("SizeOnDisk")  # long
-        spawn_x = tag.get("SpawnX")  # int
-        spawn_y = tag.get("SpawnY")  # int
-        spawn_z = tag.get("SpawnZ")  # int
-        thundering = bool(tag.get("thundering"))  # byte
-        thunder_time = tag.get("thunderTime")  # int
-        time = tag.get("Time")  # long
-        version = tag.get("version")  # int, the "nbt version of the level"
-        version_data = tag.get("Version")  # compound
-        wandering_trader_id = tag.get("WanderingTraderId")  # int array
-        wandering_trader_spawn_chance = tag.get("WanderingTraderSpawnChance")  # int
-        wandering_trader_spawn_delay = tag.get("WanderingTraderSpawnDelay")  # int
+        return cls(
+            allow_commands=bool(tag.get("allowCommands")),  # default: 0 (byte)
+            border_center_x=tag.get("BorderCenterX"),  # default: 0 (double)
+            border_center_z=tag.get("BorderCenterZ"),  # default: 0 (double)
+            border_damage_per_block=tag.get("BorderDamagePerBlock"),  # default: 0.2 (double)
+            border_size=tag.get("BorderSize"),  # default: 60000000 (double)
+            border_safe_zone=tag.get("BorderSafeZone"),  # default: 5 (double)
+            border_size_lerp_target=tag.get("BorderSizeLerpTarget"),  # default: 60000000 (double)
+            border_size_lerp_time=tag.get("BorderSizeLerpTime"),  # default: 0 (long)
+            border_warning_blocks=tag.get("BorderWarningBlocks"),  # default: 5 (double)
+            border_warning_time=tag.get("BorderWarningTime"),  # default: 15 (double)
+            clear_weather_time=tag.get("clearWeatherTime"),  # default: 0 (int)
+            custom_boss_events=tag.get("CustomBossEvents"),  # compound
+            datapacks=tag.get("DataPacks"),  # compound
+            data_version=tag.get("DataVersion"),  # int
+            day_time=tag.get("DayTime"),  # long
+            difficulty=tag.get("Difficulty"),  # byte
+            difficulty_locked=bool(tag.get("DifficultyLocked")),  # byte
+            dimension_data=tag.get("DimensionData"),  # compound
+            gamerules=tag.get("GameRules"),  # compound
+            world_gen_settings=tag.get("WorldGenSettings"),  # compound
+            game_type=tag.get("GameType"),  # int
+            generator_name=tag.get("generatorName"),  # string
+            generator_options=tag.get("generatorOptions"),  # compound
+            generator_version=tag.get("generatorVersion"),  # int
+            hardcore=bool(tag.get("hardcore")),  # byte
+            initialized=bool(tag.get("initialized")),  # byte
+            last_played=tag.get("LastPlayed"),  # long
+            level_name=tag.get("LevelName"),  # string
+            map_features=tag.get("MapFeatures"),  # byte
+            player=tag.get("Player"),  # compound, probably not used
+            raining=bool(tag.get("raining")),  # byte
+            rain_time=tag.get("rainTime"),  # int
+            random_seed=tag.get("RandomSeed"),  # long
+            size_on_disk=tag.get("SizeOnDisk"),  # long
+            spawn_x=tag.get("SpawnX"),  # int
+            spawn_y=tag.get("SpawnY"),  # int
+            spawn_z=tag.get("SpawnZ"),  # int
+            thundering=bool(tag.get("thundering")),  # byte
+            thunder_time=tag.get("thunderTime"),  # int
+            time=tag.get("Time"),  # long
+            version=tag.get("version"),  # int, the "nbt version of the level"
+            version_data=tag.get("Version"),  # compound
+            wandering_trader_id=tag.get("WanderingTraderId"),  # int array
+            wandering_trader_spawn_chance=tag.get("WanderingTraderSpawnChance"),  # int
+            wandering_trader_spawn_delay=tag.get("WanderingTraderSpawnDelay"),  # int
+        )

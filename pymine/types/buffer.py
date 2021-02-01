@@ -234,7 +234,7 @@ class Buffer:
             ">Q", sum((to_twos_complement(x, 26) << 38, to_twos_complement(z, 26) << 12, to_twos_complement(y, 12)))
         )
 
-    def unpack_pos(self) -> tuple:
+    def unpack_pos(self) -> tuple[int, int, int]:
         """Unpacks a Minecraft position (x, y, z) from the buffer."""
 
         def from_twos_complement(num, bits):
@@ -252,7 +252,7 @@ class Buffer:
         return x, y, z
 
     @classmethod
-    def pack_slot(cls, item: str = None, count: int = 1, tag: nbt.TAG = None):
+    def pack_slot(cls, item: str = None, count: int = 1, tag: nbt.TAG = None) -> bytes:
         """Packs an inventory/container slot into bytes."""
 
         item_id = ITEM_REGISTRY.encode(item)  # needed to support recipes
@@ -262,7 +262,7 @@ class Buffer:
 
         return cls.pack("?", True) + cls.pack_varint(item_id) + cls.pack("b", count) + cls.pack_nbt(tag)
 
-    def unpack_slot(self):
+    def unpack_slot(self) -> dict:
         """Unpacks an inventory/container slot from the buffer."""
 
         has_item_id = self.unpack_optional()
@@ -278,7 +278,7 @@ class Buffer:
 
         return cls.pack("fff", x, y, z)
 
-    def unpack_rotation(self):
+    def unpack_rotation(self) -> tuple[float, float, float]:
         """Unpacks a rotation (of an entity) from the buffer."""
 
         return self.unpack("fff")
@@ -454,7 +454,7 @@ class Buffer:
         )
 
     @classmethod
-    def pack_particle(cls, **particle):
+    def pack_particle(cls, **particle) -> bytes:
         particle_id = particle["id"]
         out = cls.pack_varint(particle_id)
 
@@ -470,7 +470,7 @@ class Buffer:
 
         return out
 
-    def unpack_particle(self):
+    def unpack_particle(self) -> dict:
         particle = {}
         particle_id = particle["id"] = self.unpack_varint()
 
@@ -547,5 +547,5 @@ class Buffer:
     def pack_modifier(cls, uuid_: uuid.UUID, amount: float, operation: int) -> bytes:
         return cls.pack_uuid(uuid_) + Buffer.pack("d", amount) + Buffer.pack("b", operation)
 
-    def unpack_modifier(self) -> tuple:
+    def unpack_modifier(self) -> tuple[uuid.UUID, float, int]:
         return self.unpack_uuid(), self.unpack("d"), self.unpack("b")

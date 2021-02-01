@@ -22,7 +22,7 @@ class Player:
         self.remote = remote
 
     @staticmethod
-    def default_nbt(uuid_: uuid.UUID) -> nbt.TAG:
+    def default_nbt(uuid_: uuid.UUID, spawn: tuple) -> nbt.TAG:
         return nbt.TAG_Compound(
             "",
             [
@@ -172,6 +172,11 @@ class Player:
                         nbt.TAG_Byte("instabuild", 0),
                     ],
                 ),
+                # nbt.TAG_Compound('enteredNetherPosition', [nbt.TAG_Double('x', 0), nbt.TAG_Double('y', 0), nbt.TAG_Double('z', 0)]),
+                # nbt.TAG_Compound('RootVehicle', [
+                #     nbt.TAG_Int_Array('Attach', [0, 0, 0, 0]),
+                #     nbt.TAG_Compound('Entity', [])
+                # ]),
                 nbt.TAG_Byte("seenCredits", 0),
                 nbt.TAG_Compound(
                     "recipeBook",

@@ -1,3 +1,4 @@
+import aiofile
 import uuid
 import os
 
@@ -21,8 +22,8 @@ class PlayerDataIO:
             if not os.path.isfile(file):
                 raise NotImplementedError("Player creation hasn't been implemented yet...")
 
-            with open(file, "rb") as f:
-                player = Player.from_nbt(nbt.TAG_Compound.unpack(Buffer(f.read())))
+            async with aiofile.async_open(file, "rb") as player_file:
+                player = Player.from_nbt(nbt.TAG_Compound.unpack(Buffer(await player_file.read())))
 
                 self.cache[int(uuid_)] = player
 

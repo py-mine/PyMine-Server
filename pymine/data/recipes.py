@@ -6,7 +6,7 @@ from pymine.util.immutable import make_immutable
 
 __all__ = ("RECIPES",)
 
-if 'sphinx' in sys.modules:
+if "sphinx" in sys.modules:
     os.chdir(os.path.join(os.path.dirname(__file__), "../.."))
 
 RECIPES = {}

@@ -13,7 +13,7 @@ __all__ = (
     "ENTITY_REGISTRY",
 )
 
-if 'sphinx' in sys.modules:
+if "sphinx" in sys.modules:
     os.chdir(os.path.join(os.path.dirname(__file__), "../.."))
 
 with open(os.path.join("pymine", "data", "registries.json"), "r") as registry:  # generated from server jar

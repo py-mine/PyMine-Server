@@ -13,6 +13,7 @@ from pymine.util.logging import task_exception_handler, Logger
 from pymine.util.encryption import gen_rsa_keys
 
 from pymine.logic.config import load_config, load_favicon
+from pymine.logic.playerio import PlayerDataIO
 
 from pymine.net.packet_map import PACKET_MAP
 from pymine.api import PyMineAPI, StopHandling
@@ -55,6 +56,7 @@ class Server:
         asyncio.get_event_loop().set_debug(self.conf["debug"])
 
         self.eid_current = 0
+        self.playerio = None
         self.worlds = None
 
         self.aiohttp = None
@@ -77,6 +79,9 @@ class Server:
         # 5 / the second arg (the max region cache size per world instance), should be dynamically changed based on the
         # amount of players online on each world, probably something like (len(players) + 1)
         self.worlds = load_worlds(self.logger, self.conf["level_name"], 5)
+
+        # Player data IO
+        self.playerio = PlayerDataIO(self, self.conf['level_name'])
 
         self.logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
 

@@ -2,6 +2,8 @@ import pymine.types.nbt as nbt
 
 
 class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#level.dat_format
+    def __init__(self, allow_commands: bool, border_center_x: float, border_center_z: float, border_damage_per_block: float, border_size: float, border_safe_zone: float, border_size_lerp_target: float, border_size_lerp_time: int, border_warning_blocks: float, border_warning_time: float, clear_weather_time: int, custom_boss_events: nbt.TAG_Compound, datapacks: nbt.TAG_Compound, data_version: int, day_time: int, difficulty: int, difficulty_locked: bool, dimension_data: nbt.TAG_Compound, gamerules: nbt.TAG_Compound, world_gen_settings: nbt.TAG_Compound, game_type: )
+
     def __init__(self, tag: nbt.TAG) -> None:
         tag = tag.get("Data")  # compound
 

@@ -1,9 +1,12 @@
 from collections import OrderedDict
+import aiofile
 import os
 
+from pymine.types.level import LevelData
 from pymine.types.buffer import Buffer
 from pymine.types.region import Region
 from pymine.types.chunk import Chunk
+import pymine.types.nbt as nbt
 
 
 def block_to_chunk_coords(block_x: int, block_z: int) -> tuple:
@@ -41,8 +44,13 @@ class World:
         self.name = name
         self.path = path  # should be "worlds/world_name_dim/" in production probably
 
+        self.data = None
+
         self.region_cache_max = region_cache_max
         self.region_cache = OrderedDict()
+
+    async def init():
+        self.data = await LevelData.from_file(os.path.join(self.path, 'level.dat'))
 
     def cache_region(self, region: Region, key: tuple) -> Region:
         self.region_cache[key] = region

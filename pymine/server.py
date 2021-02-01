@@ -54,6 +54,7 @@ class Server:
         self.logger.debug_ = self.conf["debug"]
         asyncio.get_event_loop().set_debug(self.conf["debug"])
 
+        self.eid_current = 0
         self.worlds = None
 
         self.aiohttp = None
@@ -93,6 +94,10 @@ class Server:
 
     async def call_async(self, func, *args, **kwargs):
         await asyncio.get_event_loop().run_in_executor(self.executor, func, *args, **kwargs)
+
+    def eid(self):
+        self.eid_current += 1
+        return self.eid_current
 
     async def close_connection(self, stream: Stream):  # Close a connection to a client
         await stream.drain()

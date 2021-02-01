@@ -81,7 +81,7 @@ class Server:
         self.worlds = load_worlds(self.logger, self.conf["level_name"], 5)
 
         # Player data IO
-        self.playerio = PlayerDataIO(self, self.conf['level_name'])
+        self.playerio = PlayerDataIO(self, self.conf["level_name"])
 
         self.logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
 

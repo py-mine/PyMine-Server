@@ -12,7 +12,7 @@ __all__ = (
     "ENTITY_REGISTRY",
 )
 
-with open(os.path.join('pymine', 'data', 'registries.json'), 'r') as registry:  # generated from server jar
+with open(os.path.join("pymine", "data", "registries.json"), "r") as registry:  # generated from server jar
     REGISTRY = make_immutable(json.load(registry))
 
 ITEM_REGISTRY = Registry(REGISTRY["minecraft:item"]["entries"])

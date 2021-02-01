@@ -25,7 +25,7 @@ def region_file_name(region_x: int, region_z: int) -> str:
     return ".".join(("r", str(region_x), str(region_z), "mca"))
 
 
-def load_worlds(logger, level_name: str, region_cache_max_per: int) -> dict:
+async def load_worlds(logger, level_name: str, region_cache_max_per: int) -> dict:
     worlds = {}
 
     logger.info(f"Loading worlds for level {level_name}...")
@@ -51,6 +51,8 @@ class World:
 
     async def init():
         self.data = await LevelData.from_file(os.path.join(self.path, 'level.dat'))
+
+        return self  # for fluent style chaining
 
     def cache_region(self, region: Region, key: tuple) -> Region:
         self.region_cache[key] = region

@@ -1,3 +1,6 @@
+import os
+
+from pymine.types.world import World
 
 
 async def load_worlds(logger, level_name: str, region_cache_max_per: int) -> dict:

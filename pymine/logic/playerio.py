@@ -25,8 +25,8 @@ class PlayerDataIO:
             file = os.path.join(self.data_dir, f"{uuid_}.dat")
 
             if not os.path.isfile(file):
-                level_data = self.server.worlds[self.server.conf['level_name']].data
-                
+                level_data = self.server.worlds[self.server.conf["level_name"]].data
+
                 player = Player.new(self.server.eid(), uuid_, (level_data.spawn_x, level_data.spawn_y, level_data.spawn_z))
                 self.cache[player.uuid] = player
 

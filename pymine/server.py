@@ -37,8 +37,6 @@ class Server:
         def __init__(self):
             self.states = {}  # {remote: state}
             self.login = {}  # {remote: {username: username, verify: verify token}}
-            self.entity_id = {}  # {remote: entity_id}
-            self.user_cache = {}  # {entity_id: {remote: tuple, uuid: str}}
 
     def __init__(self, logger, executor, uvloop):
         self.logger = logger

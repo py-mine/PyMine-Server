@@ -51,58 +51,87 @@ class Player:
                 # nbt.TAG_Int('SleepingX', 0),
                 # nbt.TAG_Int('SleepingY', 0),
                 # nbt.TAG_Int('SleepingZ', 0),
-                nbt.TAG_List("Attributes", [
-                    nbt.TAG_Compound(None, [
-                        nbt.TAG_String('Name', 'generic.max_health'),
-                        nbt.TAG_Double('Base', 20),
-                        nbt.TAG_List('Modifiers', [])
-                    ]),
-                    nbt.TAG_Compound(None, [
-                        nbt.TAG_String('Name', 'generic.follow_range'),
-                        nbt.TAG_Double('Base', 32),
-                        nbt.TAG_List('Modifiers', [])
-                    ]),
-                    nbt.TAG_Compound(None, [
-                        nbt.TAG_String('Name', 'generic.knockback_resistance'),
-                        nbt.TAG_Double('Base', 0),
-                        nbt.TAG_List('Modifiers', [])
-                    ]),
-                    nbt.TAG_Compound(None, [
-                        nbt.TAG_String('Name', 'generic.movement_speed'),
-                        nbt.TAG_Double('Base', 1),
-                        nbt.TAG_List('Modifiers', [])
-                    ]),
-                    nbt.TAG_Compound(None, [
-                        nbt.TAG_String('Name', 'generic.attack_damage'),
-                        nbt.TAG_Double('Base', 2),
-                        nbt.TAG_List('Modifiers', [])
-                    ]),
-                    nbt.TAG_Compound(None, [
-                        nbt.TAG_String('Name', 'generic.armor'),
-                        nbt.TAG_Double('Base', 0),
-                        nbt.TAG_List('Modifiers', [])
-                    ]),
-                    nbt.TAG_Compound(None, [
-                        nbt.TAG_String('Name', 'generic.armor_toughness'),
-                        nbt.TAG_Double('Base', 0),
-                        nbt.TAG_List('Modifiers', [])
-                    ]),
-                    nbt.TAG_Compound(None, [
-                        nbt.TAG_String('Name', 'generic.attack_knockback'),
-                        nbt.TAG_Double('Base', 0),
-                        nbt.TAG_List('Modifiers', [])
-                    ]),
-                    nbt.TAG_Compound(None, [
-                        nbt.TAG_String('Name', 'generic.attack_speed'),
-                        nbt.TAG_Double('Base', 4),
-                        nbt.TAG_List('Modifiers', [])
-                    ]),
-                    nbt.TAG_Compound(None, [
-                        nbt.TAG_String('Name', 'generic.luck'),
-                        nbt.TAG_Double('Base', 0),
-                        nbt.TAG_List('Modifiers', [])
-                    ])
-                ]),
+                nbt.TAG_List(
+                    "Attributes",
+                    [
+                        nbt.TAG_Compound(
+                            None,
+                            [
+                                nbt.TAG_String("Name", "generic.max_health"),
+                                nbt.TAG_Double("Base", 20),
+                                nbt.TAG_List("Modifiers", []),
+                            ],
+                        ),
+                        nbt.TAG_Compound(
+                            None,
+                            [
+                                nbt.TAG_String("Name", "generic.follow_range"),
+                                nbt.TAG_Double("Base", 32),
+                                nbt.TAG_List("Modifiers", []),
+                            ],
+                        ),
+                        nbt.TAG_Compound(
+                            None,
+                            [
+                                nbt.TAG_String("Name", "generic.knockback_resistance"),
+                                nbt.TAG_Double("Base", 0),
+                                nbt.TAG_List("Modifiers", []),
+                            ],
+                        ),
+                        nbt.TAG_Compound(
+                            None,
+                            [
+                                nbt.TAG_String("Name", "generic.movement_speed"),
+                                nbt.TAG_Double("Base", 1),
+                                nbt.TAG_List("Modifiers", []),
+                            ],
+                        ),
+                        nbt.TAG_Compound(
+                            None,
+                            [
+                                nbt.TAG_String("Name", "generic.attack_damage"),
+                                nbt.TAG_Double("Base", 2),
+                                nbt.TAG_List("Modifiers", []),
+                            ],
+                        ),
+                        nbt.TAG_Compound(
+                            None,
+                            [
+                                nbt.TAG_String("Name", "generic.armor"),
+                                nbt.TAG_Double("Base", 0),
+                                nbt.TAG_List("Modifiers", []),
+                            ],
+                        ),
+                        nbt.TAG_Compound(
+                            None,
+                            [
+                                nbt.TAG_String("Name", "generic.armor_toughness"),
+                                nbt.TAG_Double("Base", 0),
+                                nbt.TAG_List("Modifiers", []),
+                            ],
+                        ),
+                        nbt.TAG_Compound(
+                            None,
+                            [
+                                nbt.TAG_String("Name", "generic.attack_knockback"),
+                                nbt.TAG_Double("Base", 0),
+                                nbt.TAG_List("Modifiers", []),
+                            ],
+                        ),
+                        nbt.TAG_Compound(
+                            None,
+                            [
+                                nbt.TAG_String("Name", "generic.attack_speed"),
+                                nbt.TAG_Double("Base", 4),
+                                nbt.TAG_List("Modifiers", []),
+                            ],
+                        ),
+                        nbt.TAG_Compound(
+                            None,
+                            [nbt.TAG_String("Name", "generic.luck"), nbt.TAG_Double("Base", 0), nbt.TAG_List("Modifiers", [])],
+                        ),
+                    ],
+                ),
             ],
         )
 

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import uuid
+
 import pymine.types.nbt as nbt
 
 
@@ -8,5 +10,5 @@ class Player:
         self.entity_id = entity_id
         self.data = data
 
-        self.uuid = int("".join(str(n) for n in data["uuid"]))
+        self.uuid = uuid.UUID(bytes=struct.pack('>iiii', *data['uuid']))
         self.x, self.y, self.z = self.pos = data["Pos"]

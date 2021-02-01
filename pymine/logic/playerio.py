@@ -10,7 +10,7 @@ import pymine.types.nbt as nbt
 class PlayerDataIO:
     def __init__(self, level_name: str):
         self.level_name = level_name
-        self.data_dir = os.path.join('worlds', level_name, 'playerdata')
+        self.data_dir = os.path.join("worlds", level_name, "playerdata")
         self.cache = {}
 
     async def fetch_player(self, uuid_: uuid.UUID) -> Player:

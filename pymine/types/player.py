@@ -20,7 +20,8 @@ class Player:
         self.username = username
         self.remote = remote
 
-    def new_nbt_data(self, uuid_: uuid.UUID) -> nbt.TAG:
+    @staticmethod
+    def default_nbt(uuid_: uuid.UUID) -> nbt.TAG:
         return nbt.TAG_Compound(
             "",
             [

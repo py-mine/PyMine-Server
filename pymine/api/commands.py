@@ -67,6 +67,9 @@ class CommandHandler:
                 # asyncio.create_task(handle_command(in_text))
 
                 await self.server_command(in_text)
+
+                if in_text.startswith("stop"):
+                    break
         except (KeyboardInterrupt, asyncio.CancelledError):
             pass
         except EOFError:

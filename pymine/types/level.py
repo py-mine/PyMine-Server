@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import aiofile
 
+from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
 
 

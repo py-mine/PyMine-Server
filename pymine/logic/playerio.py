@@ -27,7 +27,9 @@ class PlayerDataIO:
             if not os.path.isfile(file):
                 level_data = self.server.worlds[self.server.conf["level_name"]].data
 
-                player = Player.new(self.server.eid(), uuid_, (level_data.spawn_x, level_data.spawn_y, level_data.spawn_z), self.level_name)
+                player = Player.new(
+                    self.server.eid(), uuid_, (level_data.spawn_x, level_data.spawn_y, level_data.spawn_z), self.level_name
+                )
                 self.cache[player.uuid] = player
 
                 return player

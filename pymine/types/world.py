@@ -41,9 +41,9 @@ class World:
         level_file_path = os.path.join(self.path, "level.dat")
 
         if not os.path.isfile(level_file_path):
-            self.data = LevelData.new_nbt(2586, self.name, 19133, (0, 100, 0), )
-
-        self.data = await LevelData.from_file(level_file_path)
+            self.data = LevelData.new_nbt((2586, server.meta.version, 19133), self.name, (0, 100, 0), self.server.conf['seed'])
+        else:
+            self.data = await LevelData.from_file(level_file_path)
 
         return self  # for fluent style chaining
 

@@ -130,7 +130,7 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
 
     @classmethod
     async def from_file(cls, file: str) -> LevelData:
-        async with aiofile.async_open(file, 'rb') as level_data_file:
+        async with aiofile.async_open(file, "rb") as level_data_file:
             return cls.from_nbt(nbt.TAG_Compound.unpack(Buffer(await level_data_file.read())))
 
     @classmethod

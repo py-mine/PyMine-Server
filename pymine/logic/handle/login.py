@@ -13,8 +13,8 @@ from pymine.types.buffer import Buffer
 from pymine.net.packets.login.set_comp import LoginSetCompression
 import pymine.net.packets.login.login as login_packets
 
+from pymine.api.exceptions import StopHandling
 from pymine.logic.join import join
-from pymine.api import StopHandling
 from pymine.server import server
 
 

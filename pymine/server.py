@@ -78,7 +78,7 @@ class Server:
 
         # 5 / the second arg (the max region cache size per world instance), should be dynamically changed based on the
         # amount of players online on each world, probably something like (len(players) + 1)
-        self.worlds = await load_worlds(self.logger, self.conf["level_name"], 5)
+        self.worlds = await load_worlds(self, self.conf["level_name"], 5)
 
         # Player data IO
         self.playerio = PlayerDataIO(self, self.conf["level_name"])

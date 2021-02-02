@@ -184,3 +184,52 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
             wandering_trader_spawn_chance=tag.get("WanderingTraderSpawnChance"),  # int
             wandering_trader_spawn_delay=tag.get("WanderingTraderSpawnDelay"),  # int
         )
+
+    @staticmethod
+    def default_nbt():
+        return nbt.TAG_Compound('', nbt.TAG_Compound('Data', [
+            nbt.TAG_Byte('allowCommands', 0),
+            nbt.TAG_Double('BorderCenterX', 0),
+            nbt.TAG_Double('BorderCenterZ', 0),
+            nbt.TAG_Double('BorderDamagePerBlock', 0.2),
+            nbt.TAG_Double('BorderSize', 60000000),
+            nbt.TAG_Double('BorderSafeZone', 5),
+            nbt.TAG_Double('BorderSizeLerpTarget', 60000000),
+            nbt.TAG_Long('BorderSizeLerpTime', 0),
+            nbt.TAG_Double('BorderWarningBlocks', 5),
+            nbt.TAG_Double('BorderWarningTime', 15),
+            nbt.TAG_Double('clearWeatherTime', 0),
+            nbt.TAG_Compound('CustomBossEvents', []),
+            nbt.TAG_Compound('DataPacks', []),
+            nbt.TAG_Int('DataVersion', 2586),
+            nbt.TAG_Long('DayTime', 0),
+            nbt.TAG_Byte('Difficulty', 2),
+            nbt.TAG_Byte('DifficultyLocked', 0),
+            nbt.TAG_Compound('DimensionData', [
+                nbt.TAG_Compound('1', [
+                    nbt.TAG_Compound('DragonFight', [
+                        nbt.TAG_Compound('ExitPortalLocation', [
+                            nbt.TAG_Byte('X', 0),
+                            nbt.TAG_Byte('Y', 100),
+                            nbt.TAG_Byte('Z', 0),
+                        ]),
+                        nbt.TAG_List('Gateways', [nbt.TAG_Int(i) for i in range(19)]),
+                        nbt.TAG_Byte('DragonKilled', 0),
+                        nbt.TAG_Long('DragonUUIDLeast', 0),
+                        nbt.TAG_Long('DragonKilledUUIDMost', 0),
+                        nbt.TAG_Byte('PreviouslyKilled', 0)
+                    ])
+                ])
+            ]),
+            nbt.TAG_Compound('GameRules', [
+                nbt.TAG_String('announceAdvancements', 'true'),
+                nbt.TAG_String('commandBlockOutput', 'true'),
+                nbt.TAG_String('disableElytraMovementCheck', 'false'),
+                nbt.TAG_String('disableRaids', 'false'),
+                nbt.TAG_String('doDaylightCycle', 'true'),
+                nbt.TAG_String('doEntityDrops', 'true'),
+                nbt.TAG_String('doFireTick', 'true'),
+                nbt.TAG_String('doInsomnia', 'true'),
+                nbt.TAG_String('doImmediateRespawn', 'false')
+            ])
+        ]))

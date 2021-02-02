@@ -26,7 +26,9 @@ def region_file_name(region_x: int, region_z: int) -> str:
 
 
 class World:
-    def __init__(self, name: str, path: str, region_cache_max: int) -> None:
+    def __init__(self, server, name: str, path: str, region_cache_max: int) -> None:
+        self.server = server
+
         self.name = name
         self.path = path  # should be "worlds/world_name_dim/" in production probably
 
@@ -39,7 +41,7 @@ class World:
         level_file_path = os.path.join(self.path, "level.dat")
 
         if not os.path.isfile(level_file_path):
-            raise NotImplementedError
+            self.data = LevelData.new_nbt(2586, self.name, 19133, (0, 100, 0), )
 
         self.data = await LevelData.from_file(level_file_path)
 

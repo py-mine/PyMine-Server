@@ -1,9 +1,13 @@
 from collections import OrderedDict
+import aiofile
 import os
 
 from pymine.types.buffer import Buffer
 from pymine.types.region import Region
 from pymine.types.chunk import Chunk
+import pymine.types.nbt as nbt
+
+from pymine.data.nbtdefaults.level import new_level_nbt
 
 
 def block_to_chunk_coords(block_x: int, block_z: int) -> tuple:
@@ -23,14 +27,29 @@ def region_file_name(region_x: int, region_z: int) -> str:
 
 
 class World:
-    def __init__(self, server, world_name: str, world_path: str, region_cache_max: int) -> None:
+    def __init__(self, server, name: str, path: str, region_cache_max: int) -> None:
         self.server = server
 
-        self.world_name = world_name
-        self.world_path = world_path  # should be "worlds/world_name_dim/" in production probably
+        self.name = name
+        self.path = path  # should be "worlds/world_name_dim/" in production probably
+
+        self.data = None
 
         self.region_cache_max = region_cache_max
         self.region_cache = OrderedDict()
+
+    async def init(self):
+        self.data = await self.load_level_data()
+        return self  # for fluent style chaining
+
+    async def load_level_data(self):
+        file = os.path.join(self.path, "level.dat")
+
+        if os.path.isfile(file):
+            async with aiofile.async_open(file, "rb") as level_data_file:
+                return nbt.TAG_Compound.unpack(Buffer(await level_data_file.read()))
+
+        return new_level_nbt((2586, self.server.meta.version, 19133), self.name, (0, 100, 0), self.server.conf["seed"])
 
     def cache_region(self, region: Region, key: tuple) -> Region:
         self.region_cache[key] = region

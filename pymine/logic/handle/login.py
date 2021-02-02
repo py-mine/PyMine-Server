@@ -14,7 +14,7 @@ from pymine.net.packets.login.set_comp import LoginSetCompression
 import pymine.net.packets.login.login as login_packets
 
 from pymine.logic.join import join
-from pymine.api import StopStream
+from pymine.api import StopHandling
 from pymine.server import server
 
 
@@ -42,7 +42,7 @@ async def login_start(stream: Stream, packet: Packet) -> None:
         await server.send_packet(stream, login_packets.LoginSuccess(uuid_, packet.username))
 
         server.cache.states[stream.remote] = 3  # Update state to play
-        await join(stream, packet)
+        await join(server, stream, uuid_, packet.username)
 
 
 @server.api.events.on_packet("login", 0x01)
@@ -53,7 +53,7 @@ async def encrypted_login(stream: Stream, packet: Packet) -> Stream:
 
     if not auth:  # If authentication failed, disconnect client
         await server.send_packet(stream, login_packets.LoginDisconnect("Failed to authenticate your connection."))
-        raise StopStream
+        raise StopHandling
 
     # Generate a cipher for that client using the shared key from the client
     cipher = encryption.gen_aes_cipher(shared_key)
@@ -68,7 +68,7 @@ async def encrypted_login(stream: Stream, packet: Packet) -> Stream:
     await server.send_packet(stream, login_packets.LoginSuccess(*auth))
 
     server.cache.states[stream.remote] = 3  # Update state to play
-    await join(stream, packet)
+    await join(server, stream, *auth)
 
     return stream
 

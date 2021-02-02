@@ -14,7 +14,7 @@ from pymine.api.commands import CommandHandler
 from pymine.api.events import EventHandler
 
 
-class StopStream(BaseException):
+class StopHandling(BaseException):
     pass
 
 

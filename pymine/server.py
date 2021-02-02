@@ -12,8 +12,11 @@ from pymine.util.logging import task_exception_handler, Logger
 from pymine.util.encryption import gen_rsa_keys
 
 from pymine.logic.config import load_config, load_favicon
+from pymine.logic.playerio import PlayerDataIO
+from pymine.logic.worldio import load_worlds
+
 from pymine.net.packet_map import PACKET_MAP
-from pymine.api import PyMineAPI, StopStream
+from pymine.api import PyMineAPI, StopHandling
 
 # Used for parts of PyMine that utilize the server instance without being a plugin themselves
 server = None
@@ -35,11 +38,10 @@ class Server:
         def __init__(self):
             self.states = {}  # {remote: state}
             self.login = {}  # {remote: {username: username, verify: verify token}}
-            self.entity_id = {}  # {remote: entity_id}
-            self.user_cache = {}  # {entity_id: {remote: tuple, uuid: str}}
 
-    def __init__(self, logger, uvloop):
+    def __init__(self, logger, executor, uvloop):
         self.logger = logger
+        self.executor = executor
         self.uvloop = uvloop
 
         self.meta = self.Meta()
@@ -52,6 +54,10 @@ class Server:
 
         self.logger.debug_ = self.conf["debug"]
         asyncio.get_event_loop().set_debug(self.conf["debug"])
+
+        self.eid_current = 0
+        self.playerio = None
+        self.worlds = None
 
         self.aiohttp = None
         self.server = None
@@ -70,6 +76,13 @@ class Server:
 
         await self.api.init()
 
+        # 5 / the second arg (the max region cache size per world instance), should be dynamically changed based on the
+        # amount of players online on each world, probably something like (len(players) + 1)
+        self.worlds = await load_worlds(self, self.conf["level_name"], 5)
+
+        # Player data IO
+        self.playerio = PlayerDataIO(self, self.conf["level_name"])
+
         self.logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
 
         self.api.taskify_handlers(self.api.events._server_ready)
@@ -83,6 +96,13 @@ class Server:
         await asyncio.gather(self.server.wait_closed(), self.api.stop(), self.aiohttp.close())
 
         self.logger.info("Server closed.")
+
+    async def call_async(self, func, *args, **kwargs):
+        await asyncio.get_event_loop().run_in_executor(self.executor, func, *args, **kwargs)
+
+    def eid(self):
+        self.eid_current += 1
+        return self.eid_current
 
     async def close_connection(self, stream: Stream):  # Close a connection to a client
         await stream.drain()
@@ -124,15 +144,15 @@ class Server:
                 read = await asyncio.wait_for(stream.read(1), 5)
             except asyncio.TimeoutError:
                 self.logger.debug("Closing due to timeout on read...")
-                raise StopStream
+                raise StopHandling
 
             if read == b"":
                 self.logger.debug("Closing due to invalid read....")
-                raise StopStream
+                raise StopHandling
 
             if i == 0 and read == b"\xFE":
                 self.logger.warn("Legacy ping attempted, legacy ping is not supported.")
-                raise StopStream
+                raise StopHandling
 
             b = struct.unpack("B", read)[0]
             packet_length |= (b & 0x7F) << 7 * i
@@ -160,7 +180,7 @@ class Server:
 
                 if isinstance(res, Stream):
                     stream = res
-            except StopStream:
+            except StopHandling:
                 raise
             except BaseException as e:
                 self.logger.error(
@@ -176,7 +196,7 @@ class Server:
         while True:
             try:
                 stream = await self.handle_packet(stream)
-            except StopStream:
+            except StopHandling:
                 break
             except BaseException as e:
                 self.logger.error(self.logger.f_traceback(e))

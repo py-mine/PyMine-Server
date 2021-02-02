@@ -144,7 +144,7 @@ class Player:
                 nbt.TAG_Int("playerGameType", 0),
                 nbt.TAG_Int("previousPlayerGameType", -1),
                 nbt.TAG_Int("Score", 0),
-                nbt.TAG_String("Dimension", level_name),
+                nbt.TAG_String("Dimension", world_name),
                 nbt.TAG_Int("SelectedItemSlot", 0),
                 nbt.TAG_Compound(
                     "SelectedItem",

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import aiofile
+import time
 
 from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
@@ -31,15 +32,11 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
         gamerules: nbt.TAG_Compound,
         world_gen_settings: nbt.TAG_Compound,
         game_type: int,
-        generator_name: str,
-        generator_options: nbt.TAG_Compound,
-        generator_version: int,
         hardcore: bool,
         initialized: bool,
         last_played: int,
         level_name: str,
         map_features: bool,
-        player: nbt.TAG_Compound,
         raining: bool,
         rain_time: int,
         random_seed: int,
@@ -89,10 +86,6 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
 
         self.game_type = game_type
 
-        self.generator_name = generator_name
-        self.generator_options = generator_options
-        self.generator_version = generator_version
-
         self.hardcore = hardcore
 
         self.initialized = initialized
@@ -102,8 +95,6 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
         self.level_name = level_name
 
         self.map_features = map_features
-
-        self.player = player
 
         self.raining = raining
         self.rain_time = rain_time
@@ -159,15 +150,11 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
             gamerules=tag.get("GameRules"),  # compound
             world_gen_settings=tag.get("WorldGenSettings"),  # compound
             game_type=tag.get("GameType"),  # int
-            generator_name=tag.get("generatorName"),  # string
-            generator_options=tag.get("generatorOptions"),  # compound
-            generator_version=tag.get("generatorVersion"),  # int
             hardcore=bool(tag.get("hardcore")),  # byte
             initialized=bool(tag.get("initialized")),  # byte
             last_played=tag.get("LastPlayed"),  # long
             level_name=tag.get("LevelName"),  # string
             map_features=tag.get("MapFeatures"),  # byte
-            player=tag.get("Player"),  # compound, probably not used
             raining=bool(tag.get("raining")),  # byte
             rain_time=tag.get("rainTime"),  # int
             random_seed=tag.get("RandomSeed"),  # long
@@ -186,7 +173,7 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
         )
 
     @staticmethod
-    def default_nbt():
+    def new_nbt():
         return nbt.TAG_Compound(
             "",
             nbt.TAG_Compound(
@@ -278,7 +265,37 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
                             nbt.TAG_String("universalAnger", "false"),
                         ],
                     ),
-                    nbt.
+                    nbt.TAG_Compound('WorldGenSettings', [
+                        nbt.TAG_Byte('bonus_chest', 0),
+                        nbt.TAG_Long('seed', seed),
+                        nbt.TAG_Byte('generate_features', 1),
+                        nbt.TAG_Compound('dimensions', []),
+                    ]),
+                    nbt.TAG_Int('GameType', 0),
+                    nbt.TAG_Byte('hardcore', 0),
+                    nbt.TAG_Byte('initialized', 0),
+                    nbt.TAG_Long('LastPlayed', int(time.time() * 1000)),
+                    nbt.TAG_Long('LevelName', level_name),
+                    nbt.TAG_Byte('MapFeatures', 1),
+                    nbt.TAG_Byte('raining', 0),
+                    nbt.TAG_Int('rainTime', random.randint(10000, 99999)),
+                    nbt.TAG_Long('RandomSeed', seed),
+                    nbt.TAG_Long('SizeOnDisk', size),
+                    nbt.TAG_Int('SpawnX', spawn[0]),
+                    nbt.TAG_Int('SpawnY', spawn[1]),
+                    nbt.TAG_Int('SpawnZ', spawn[2]),
+                    nbt.TAG_Byte('thundering', 0),
+                    nbt.TAG_Int('thunderTime', random.randint(10000, 99999)),
+                    nbt.TAG_Long('Time', 0),
+                    nbt.TAG_Int('version', 19133),
+                    nbt.TAG_Compound('Version', [
+                        nbt.TAG_Int('Id', 2586),
+                        nbt.TAG_String('Name', '1.16.5'),
+                        nbt.TAG_Byte('Snapshot', 0)
+                    ]),
+                    nbt.TAG_Int_Array('WanderingTraderId', [0, 0, 0, 0]),
+                    nbt.TAG_Int('WanderingTraderSpawnChance', 50),
+                    nbt.TAG_Int('WanderingTraderSpawnDelay', 10000)
                 ],
             ),
         )

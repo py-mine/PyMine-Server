@@ -1,4 +1,3 @@
-
 class StopHandling(BaseException):
     pass
 

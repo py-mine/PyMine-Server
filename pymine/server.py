@@ -176,7 +176,7 @@ class Server:
         try:
             packet = buf.unpack_packet(state, PACKET_MAP)
         except InvalidPacketID:
-            self.logger.warn('Invalid packet ID received.')
+            self.logger.warn("Invalid packet ID received.")
             return stream
 
         self.logger.debug(f"IN : state: {state} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")

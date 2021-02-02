@@ -27,9 +27,16 @@ def new_dim_codec_nbt() -> nbt.TAG_Compound:
                 nbt.TAG_Compound(None, [
                     nbt.TAG_String('name', 'minecraft:overworld'),
                     nbt.TAG_Int('id', 0),
-                    nbt.TAG_Compound('element', [
-                        nbt.TAG_Byte()
-                    ])
+                    nbt.TAG_Compound('element', new_dim_codec_value_elem(
+                        0, 1, 0, "minecraft:infiniburn_overworld", 0, 1, 1, "minecraft:overworld", 1, 256, 1, 0, 0
+                    ))
+                ]),
+                nbt.TAG_Compound(None, [
+                    nbt.TAG_String('name', 'minecraft:overworld_caves'),
+                    nbt.TAG_Int('id', 0),
+                    nbt.TAG_Compound('element', new_dim_codec_value_elem(
+                        0, 1, 0, "minecraft:infiniburn_overworld", 0, 1, 1, "minecraft:overworld", 1, 256, 1, 0, 1
+                    ))
                 ])
             ])
         ]),

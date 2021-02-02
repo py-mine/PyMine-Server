@@ -8,6 +8,7 @@ import pymine.types.nbt as nbt
 def new_level_nbt(version: tuple, level_name: str, spawn: tuple, seed: int):
     return nbt.TAG_Compound(
         "",
+        [
         nbt.TAG_Compound(
             "Data",
             [
@@ -128,4 +129,4 @@ def new_level_nbt(version: tuple, level_name: str, spawn: tuple, seed: int):
                 nbt.TAG_Int("WanderingTraderSpawnDelay", 10000),
             ],
         ),
-    )
+    ])

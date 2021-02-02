@@ -204,7 +204,10 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
                     nbt.TAG_Double("BorderWarningTime", 15),
                     nbt.TAG_Double("clearWeatherTime", 0),
                     nbt.TAG_Compound("CustomBossEvents", []),
-                    nbt.TAG_Compound("DataPacks", []),
+                    nbt.TAG_Compound("DataPacks", [
+                        nbt.TAG_List('Disabled', []),
+                        nbt.TAG_List('Enabled', [])
+                    ]),
                     nbt.TAG_Int("DataVersion", 2586),
                     nbt.TAG_Long("DayTime", 0),
                     nbt.TAG_Byte("Difficulty", 2),
@@ -275,6 +278,7 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
                             nbt.TAG_String("universalAnger", "false"),
                         ],
                     ),
+                    nbt.
                 ],
             ),
         )

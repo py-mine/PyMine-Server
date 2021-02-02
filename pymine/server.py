@@ -112,7 +112,12 @@ class Server:
 
         try:
             del self.cache.states[stream.remote]
-        except BaseException:
+        except KeyError:
+            pass
+
+        try:
+            del self.cache.login[stream.remote]
+        except KeyError:
             pass
 
         self.logger.debug(f"Disconnected nicely from {stream.remote[0]}:{stream.remote[1]}.")

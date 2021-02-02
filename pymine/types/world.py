@@ -36,7 +36,12 @@ class World:
         self.region_cache = OrderedDict()
 
     async def init(self):
-        self.data = await LevelData.from_file(os.path.join(self.path, "level.dat"))
+        level_file_path = os.path.join(self.path, "level.dat")
+
+        if not os.path.isfile(level_file_path):
+            raise NotImplementedError
+
+        self.data = await LevelData.from_file(level_file_path)
 
         return self  # for fluent style chaining
 

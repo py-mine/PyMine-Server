@@ -1,5 +1,6 @@
 import hashlib
 import time
+import uuid
 
 from pymine.types.packet import Packet
 from pymine.types.stream import Stream
@@ -8,14 +9,12 @@ import pymine.types.nbt as nbt
 import pymine.net.packets.play.player as packets_player
 
 from pymine.util.misc import seed_hash
-from pymine.server import server
 
 
-async def join(stream: Stream, packet: Packet) -> None:
-    lvl_name = server.conf["level_name"]
+async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
+    level_name = server.conf["level_name"]
 
-    # should be loaded from a cache on the disk or level.dat I think
-    entity_id = server.cache.entity_id[stream.remote] = int(time.time())
+    player = server.playerio.fetch_player()
 
     server.send_packet(
         stream,

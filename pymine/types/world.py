@@ -7,7 +7,7 @@ from pymine.types.region import Region
 from pymine.types.chunk import Chunk
 import pymine.types.nbt as nbt
 
-from pymine.data.level import new_level_nbt
+from pymine.data.nbtdefaults.level import new_level_nbt
 
 
 def block_to_chunk_coords(block_x: int, block_z: int) -> tuple:

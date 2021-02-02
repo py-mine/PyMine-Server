@@ -15,8 +15,9 @@ def new_dim_codec_value_elem(
     coordinate_scale: float,
     ultrawarm: int,
     has_ceiling: int,
+    *, fixed_time: int = None
 ) -> nbt.TAG_List:
-    return [
+    out = [
         nbt.TAG_Byte("piglin_safe", piglin_safe),
         nbt.TAG_Byte("natural", natural),
         nbt.TAG_Float("ambient_light", ambient_light),
@@ -31,6 +32,11 @@ def new_dim_codec_value_elem(
         nbt.TAG_Byte("ultrawarm", ultrawarm),
         nbt.TAG_Byte("has_ceiling", has_ceiling),
     ]
+
+    if fixed_time:
+        out.append(nbt.TAG_Long('fixed_time', fixed_time))
+
+    return out
 
 
 def new_dim_codec_nbt() -> nbt.TAG_Compound:
@@ -73,7 +79,7 @@ def new_dim_codec_nbt() -> nbt.TAG_Compound:
                                 None,
                                 [
                                     nbt.TAG_String("name", "minecraft:overworld_caves"),
-                                    nbt.TAG_Int("id", 0),
+                                    nbt.TAG_Int("id", 1),
                                     nbt.TAG_Compound(
                                         "element",
                                         new_dim_codec_value_elem(
@@ -90,6 +96,32 @@ def new_dim_codec_nbt() -> nbt.TAG_Compound:
                                             1,
                                             0,
                                             1,
+                                        ),
+                                    ),
+                                ],
+                            ),
+                            nbt.TAG_Compound(
+                                None,
+                                [
+                                    nbt.TAG_String("name", "minecraft:the_nether"),
+                                    nbt.TAG_Int("id", 2),
+                                    nbt.TAG_Compound(
+                                        "element",
+                                        new_dim_codec_value_elem(
+                                            1,
+                                            0,
+                                            0.1,
+                                            "minecraft:infiniburn_nether",
+                                            1,
+                                            0,
+                                            0,
+                                            "minecraft:the_nether",
+                                            0,
+                                            128,
+                                            8,
+                                            1,
+                                            1,
+                                            fixed_time=18000
                                         ),
                                     ),
                                 ],

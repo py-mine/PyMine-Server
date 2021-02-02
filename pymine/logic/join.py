@@ -15,6 +15,7 @@ async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
     level_name = server.conf["level_name"]
 
     player = server.playerio.fetch_player(uuid_)
+    world = server.worlds[player.data['Dimension']]
 
     server.send_packet(
         stream,
@@ -31,7 +32,7 @@ async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
             server.conf["max_players"],
             server.conf["view_distance"],
             (not server.conf["debug"]),
-            True,  # should be (not doImmediateRespawn gamerule)
+            (world.data['GameRules']['doImmediateRespawn'] != 'true'),  # (not doImmediateRespawn gamerule)
             False,
             False,  # Should be true if world is superflat
         ),

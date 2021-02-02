@@ -45,7 +45,7 @@ def new_level_nbt(version: tuple, level_name: str, spawn: tuple, seed: int):
                                                 nbt.TAG_Byte("Z", 0),
                                             ],
                                         ),
-                                        nbt.TAG_List("Gateways", [*map(nbt.TAG_Int, range(19))]),
+                                        nbt.TAG_List("Gateways", [nbt.TAG_Int(None, i) for i in range(19)]),
                                         nbt.TAG_Byte("DragonKilled", 0),
                                         nbt.TAG_Long("DragonUUIDLeast", 0),
                                         nbt.TAG_Long("DragonKilledUUIDMost", 0),

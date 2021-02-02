@@ -15,8 +15,9 @@ from pymine.logic.config import load_config, load_favicon
 from pymine.logic.playerio import PlayerDataIO
 from pymine.logic.worldio import load_worlds
 
+from pymine.api.exceptions import StopHandling, InvalidPacketID
 from pymine.net.packet_map import PACKET_MAP
-from pymine.api import PyMineAPI, StopHandling
+from pymine.api import PyMineAPI
 
 # Used for parts of PyMine that utilize the server instance without being a plugin themselves
 server = None
@@ -171,7 +172,11 @@ class Server:
         buf = Buffer(await stream.read(packet_length))
 
         state = self.cache.states.get(stream.remote, 0)
-        packet = buf.unpack_packet(state, PACKET_MAP)
+
+        try:
+            packet = buf.unpack_packet(state, PACKET_MAP)
+        except :
+            pass
 
         self.logger.debug(f"IN : state: {state} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 

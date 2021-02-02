@@ -172,8 +172,8 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
             wandering_trader_spawn_delay=tag.get("WanderingTraderSpawnDelay"),  # int
         )
 
-    @staticmethod
-    def new_nbt():
+    @staticmethod  # version (data_version, mc_version, nbt_version)
+    def new_nbt(version: tuple, level_name: str, spawn: tuple, seed: int):
         return nbt.TAG_Compound(
             "",
             nbt.TAG_Compound(
@@ -195,7 +195,7 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
                         nbt.TAG_List('Disabled', []),
                         nbt.TAG_List('Enabled', [])
                     ]),
-                    nbt.TAG_Int("DataVersion", 2586),
+                    nbt.TAG_Int("DataVersion", version[0]),
                     nbt.TAG_Long("DayTime", 0),
                     nbt.TAG_Byte("Difficulty", 2),
                     nbt.TAG_Byte("DifficultyLocked", 0),
@@ -280,17 +280,17 @@ class LevelData:  # https://minecraft.gamepedia.com/Java_Edition_level_format#le
                     nbt.TAG_Byte('raining', 0),
                     nbt.TAG_Int('rainTime', random.randint(10000, 99999)),
                     nbt.TAG_Long('RandomSeed', seed),
-                    nbt.TAG_Long('SizeOnDisk', size),
+                    nbt.TAG_Long('SizeOnDisk', 0),
                     nbt.TAG_Int('SpawnX', spawn[0]),
                     nbt.TAG_Int('SpawnY', spawn[1]),
                     nbt.TAG_Int('SpawnZ', spawn[2]),
                     nbt.TAG_Byte('thundering', 0),
                     nbt.TAG_Int('thunderTime', random.randint(10000, 99999)),
                     nbt.TAG_Long('Time', 0),
-                    nbt.TAG_Int('version', 19133),
+                    nbt.TAG_Int('version', version[2]),
                     nbt.TAG_Compound('Version', [
-                        nbt.TAG_Int('Id', 2586),
-                        nbt.TAG_String('Name', '1.16.5'),
+                        nbt.TAG_Int('Id', version[0]),
+                        nbt.TAG_String('Name', version[1]),
                         nbt.TAG_Byte('Snapshot', 0)
                     ]),
                     nbt.TAG_Int_Array('WanderingTraderId', [0, 0, 0, 0]),

@@ -177,13 +177,13 @@ class Server:
             packet = buf.unpack_packet(state, PACKET_MAP)
         except InvalidPacketID:
             self.logger.warn('Invalid packet ID received.')
-            return
+            return stream
 
         self.logger.debug(f"IN : state: {state} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
         if self.api.events._packet[state].get(packet.id) is None:
             self.logger.warn(f"No valid packet handler found for packet {state} 0x{packet.id:02X} {type(packet).__name__}")
-            return
+            return stream
 
         for handler in self.api.events._packet[state][packet.id]:
             try:

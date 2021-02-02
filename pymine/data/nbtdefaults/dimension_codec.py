@@ -15,7 +15,8 @@ def new_dim_codec_value_elem(
     coordinate_scale: float,
     ultrawarm: int,
     has_ceiling: int,
-    *, fixed_time: int = None
+    *,
+    fixed_time: int = None,
 ) -> nbt.TAG_List:
     out = [
         nbt.TAG_Byte("piglin_safe", piglin_safe),
@@ -34,7 +35,7 @@ def new_dim_codec_value_elem(
     ]
 
     if fixed_time:
-        out.append(nbt.TAG_Long('fixed_time', fixed_time))
+        out.append(nbt.TAG_Long("fixed_time", fixed_time))
 
     return out
 
@@ -121,7 +122,7 @@ def new_dim_codec_nbt() -> nbt.TAG_Compound:
                                             8,
                                             1,
                                             1,
-                                            fixed_time=18000
+                                            fixed_time=18000,
                                         ),
                                     ),
                                 ],

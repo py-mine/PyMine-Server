@@ -19,7 +19,7 @@ from pymine.server import server
 
 
 @server.api.events.on_packet("login", 0x00)
-async def login_start(stream: Stream, packet: Packet) -> tuple:
+async def login_start(stream: Stream, packet: Packet) -> None:
     if server.conf["online_mode"]:  # Online mode is enabled, so we request encryption
         lc = server.cache.login[stream.remote] = {"username": packet.username, "verify": None}
 
@@ -46,7 +46,7 @@ async def login_start(stream: Stream, packet: Packet) -> tuple:
 
 
 @server.api.events.on_packet("login", 0x01)
-async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
+async def encrypted_login(stream: Stream, packet: Packet) -> Stream:
     shared_key, auth = await server_auth(packet, stream.remote, server.cache.login[stream.remote])
 
     del server.cache.login[stream.remote]  # No longer needed

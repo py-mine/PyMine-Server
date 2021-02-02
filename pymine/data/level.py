@@ -1,4 +1,3 @@
-
 # version (data_version, mc_version, nbt_version)
 def new_level_nbt(version: tuple, level_name: str, spawn: tuple, seed: int):
     return nbt.TAG_Compound(
@@ -18,10 +17,7 @@ def new_level_nbt(version: tuple, level_name: str, spawn: tuple, seed: int):
                 nbt.TAG_Double("BorderWarningTime", 15),
                 nbt.TAG_Double("clearWeatherTime", 0),
                 nbt.TAG_Compound("CustomBossEvents", []),
-                nbt.TAG_Compound("DataPacks", [
-                    nbt.TAG_List('Disabled', []),
-                    nbt.TAG_List('Enabled', [])
-                ]),
+                nbt.TAG_Compound("DataPacks", [nbt.TAG_List("Disabled", []), nbt.TAG_List("Enabled", [])]),
                 nbt.TAG_Int("DataVersion", version[0]),
                 nbt.TAG_Long("DayTime", 0),
                 nbt.TAG_Byte("Difficulty", 2),
@@ -92,37 +88,38 @@ def new_level_nbt(version: tuple, level_name: str, spawn: tuple, seed: int):
                         nbt.TAG_String("universalAnger", "false"),
                     ],
                 ),
-                nbt.TAG_Compound('WorldGenSettings', [
-                    nbt.TAG_Byte('bonus_chest', 0),
-                    nbt.TAG_Long('seed', seed),
-                    nbt.TAG_Byte('generate_features', 1),
-                    nbt.TAG_Compound('dimensions', []),
-                ]),
-                nbt.TAG_Int('GameType', 0),
-                nbt.TAG_Byte('hardcore', 0),
-                nbt.TAG_Byte('initialized', 0),
-                nbt.TAG_Long('LastPlayed', int(time.time() * 1000)),
-                nbt.TAG_Long('LevelName', level_name),
-                nbt.TAG_Byte('MapFeatures', 1),
-                nbt.TAG_Byte('raining', 0),
-                nbt.TAG_Int('rainTime', random.randint(10000, 99999)),
-                nbt.TAG_Long('RandomSeed', seed),
-                nbt.TAG_Long('SizeOnDisk', 0),
-                nbt.TAG_Int('SpawnX', spawn[0]),
-                nbt.TAG_Int('SpawnY', spawn[1]),
-                nbt.TAG_Int('SpawnZ', spawn[2]),
-                nbt.TAG_Byte('thundering', 0),
-                nbt.TAG_Int('thunderTime', random.randint(10000, 99999)),
-                nbt.TAG_Long('Time', 0),
-                nbt.TAG_Int('version', version[2]),
-                nbt.TAG_Compound('Version', [
-                    nbt.TAG_Int('Id', version[0]),
-                    nbt.TAG_String('Name', version[1]),
-                    nbt.TAG_Byte('Snapshot', 0)
-                ]),
-                nbt.TAG_Int_Array('WanderingTraderId', [0, 0, 0, 0]),
-                nbt.TAG_Int('WanderingTraderSpawnChance', 50),
-                nbt.TAG_Int('WanderingTraderSpawnDelay', 10000)
+                nbt.TAG_Compound(
+                    "WorldGenSettings",
+                    [
+                        nbt.TAG_Byte("bonus_chest", 0),
+                        nbt.TAG_Long("seed", seed),
+                        nbt.TAG_Byte("generate_features", 1),
+                        nbt.TAG_Compound("dimensions", []),
+                    ],
+                ),
+                nbt.TAG_Int("GameType", 0),
+                nbt.TAG_Byte("hardcore", 0),
+                nbt.TAG_Byte("initialized", 0),
+                nbt.TAG_Long("LastPlayed", int(time.time() * 1000)),
+                nbt.TAG_Long("LevelName", level_name),
+                nbt.TAG_Byte("MapFeatures", 1),
+                nbt.TAG_Byte("raining", 0),
+                nbt.TAG_Int("rainTime", random.randint(10000, 99999)),
+                nbt.TAG_Long("RandomSeed", seed),
+                nbt.TAG_Long("SizeOnDisk", 0),
+                nbt.TAG_Int("SpawnX", spawn[0]),
+                nbt.TAG_Int("SpawnY", spawn[1]),
+                nbt.TAG_Int("SpawnZ", spawn[2]),
+                nbt.TAG_Byte("thundering", 0),
+                nbt.TAG_Int("thunderTime", random.randint(10000, 99999)),
+                nbt.TAG_Long("Time", 0),
+                nbt.TAG_Int("version", version[2]),
+                nbt.TAG_Compound(
+                    "Version", [nbt.TAG_Int("Id", version[0]), nbt.TAG_String("Name", version[1]), nbt.TAG_Byte("Snapshot", 0)]
+                ),
+                nbt.TAG_Int_Array("WanderingTraderId", [0, 0, 0, 0]),
+                nbt.TAG_Int("WanderingTraderSpawnChance", 50),
+                nbt.TAG_Int("WanderingTraderSpawnDelay", 10000),
             ],
         ),
     )

@@ -42,10 +42,11 @@ class PlayPluginMessageServerBound(Packet):
     id = 0x0B
     to = 0
 
-    def __init__(self, data: bytes) -> None:
+    def __init__(self, channel: str, data: bytes) -> None:
         super().__init__()
 
+        self.channel = channel
         self.data = data
 
     def decode(self, buf: Buffer) -> PlayPluginMessageServerBound:
-        return PlayPluginMessageServerBound(buf.read())
+        return PlayPluginMessageServerBound(buf.unpack_string(), buf.read())

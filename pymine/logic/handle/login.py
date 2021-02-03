@@ -42,7 +42,7 @@ async def login_start(stream: Stream, packet: Packet) -> None:
         await server.send_packet(stream, login_packets.LoginSuccess(uuid_, packet.username))
 
         server.cache.states[stream.remote] = 3  # Update state to play
-        await join(server, stream, uuid_, packet.username)
+        await join(stream, uuid_, packet.username)
 
 
 @server.api.events.on_packet("login", 0x01)
@@ -68,7 +68,7 @@ async def encrypted_login(stream: Stream, packet: Packet) -> Stream:
     await server.send_packet(stream, login_packets.LoginSuccess(*auth))
 
     server.cache.states[stream.remote] = 3  # Update state to play
-    await join(server, stream, *auth)
+    await join(stream, *auth)
 
     return stream
 

@@ -28,7 +28,10 @@ class PlayerDataIO:
                 level_data = self.server.worlds[self.server.conf["level_name"]].data
 
                 player = Player.new(
-                    self.server.eid(), uuid_, (level_data.spawn_x, level_data.spawn_y, level_data.spawn_z), 'minecraft:overworld'
+                    self.server.eid(),
+                    uuid_,
+                    (level_data.spawn_x, level_data.spawn_y, level_data.spawn_z),
+                    "minecraft:overworld",
                 )
                 self.cache[player.uuid] = player
 

@@ -27,8 +27,8 @@ async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
             player.data["previousPlayerGameType"],  # previous gamemode
             [level_name, f"{level_name}_nether", f"{level_name}_the_end"],  # world names
             new_dim_codec_nbt(),
-            get_dimension_data(player.data['Dimension']),  # player.data['Dimension'] should be like minecraft:overworld
-            server.conf['level_name'],  # level name of the world the player is spawning into
+            get_dimension_data(player.data["Dimension"]),  # player.data['Dimension'] should be like minecraft:overworld
+            server.conf["level_name"],  # level name of the world the player is spawning into
             seed_hash(server.conf["seed"]),
             server.conf["max_players"],
             server.conf["view_distance"],

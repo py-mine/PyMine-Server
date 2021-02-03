@@ -1,7 +1,7 @@
 import pymine.types.nbt as nbt
 
 
-def new_dim_codec_value_elem(
+def new_dim_codec_dim_props(
     piglin_safe: int,
     natural: int,
     ambient_light: float,
@@ -58,7 +58,7 @@ def new_dim_codec_nbt() -> nbt.TAG_Compound:
                                     nbt.TAG_Int("id", 0),
                                     nbt.TAG_Compound(
                                         "element",
-                                        new_dim_codec_value_elem(
+                                        new_dim_codec_dim_props(
                                             0,
                                             1,
                                             0,
@@ -83,7 +83,7 @@ def new_dim_codec_nbt() -> nbt.TAG_Compound:
                                     nbt.TAG_Int("id", 1),
                                     nbt.TAG_Compound(
                                         "element",
-                                        new_dim_codec_value_elem(
+                                        new_dim_codec_dim_props(
                                             0,
                                             1,
                                             0,
@@ -108,7 +108,7 @@ def new_dim_codec_nbt() -> nbt.TAG_Compound:
                                     nbt.TAG_Int("id", 2),
                                     nbt.TAG_Compound(
                                         "element",
-                                        new_dim_codec_value_elem(
+                                        new_dim_codec_dim_props(
                                             1,
                                             0,
                                             0.1,
@@ -134,7 +134,7 @@ def new_dim_codec_nbt() -> nbt.TAG_Compound:
                                     nbt.TAG_Int("id", 3),
                                     nbt.TAG_Compound(
                                         "element",
-                                        new_dim_codec_value_elem(
+                                        new_dim_codec_dim_props(
                                             0,
                                             0,
                                             0,

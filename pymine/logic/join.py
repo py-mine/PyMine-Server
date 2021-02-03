@@ -56,17 +56,19 @@ async def send_join_game_packet(server, stream: Stream, world: World, player: Pl
     )
 
 
-# send server branch via plugin channels
+# send server brand + version via plugin channels
 async def send_server_brand(server, stream: Stream) -> None:
     await server.send_packet(stream, packets_plugin.PlayPluginMessageClientBound("minecraft:brand", server.pymine))
 
 
+# shown in the menu options for the client
 async def send_server_difficulty(server, stream: Stream, world: World) -> None:
     await server.send_packet(
         stream, packets_difficulty.PlayServerDifficulty(world.data["Difficulty"], world.data["DifficultyLocked"])
     )
 
 
+# send what the player can/can't do
 async def send_player_abilities(server, stream: Stream, player: Player) -> None:
     abilities = player.data["abilities"]
     flags = BitField(4)
@@ -83,6 +85,6 @@ async def send_player_abilities(server, stream: Stream, player: Player) -> None:
     if abilities["instabuild"]:
         flags.add(0x08)
 
-    await server.send_packet(
+    await server.send_packet(  # yes the last arg is supposed to be fov, but the values are actually the same
         stream, packets_player.PlayPlayerAbilitiesClientBound(flags, abilities["flySpeed"], abilities["walkSpeed"])
     )

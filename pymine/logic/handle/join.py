@@ -3,6 +3,7 @@ import time
 import uuid
 
 from pymine.types.bitfield import BitField
+from pymine.types.buffer import Buffer
 from pymine.types.packet import Packet
 from pymine.types.player import Player
 from pymine.types.stream import Stream

@@ -22,9 +22,9 @@ class PlayerDataIO:
         try:
             return self.cache[int(uuid_)]
         except KeyError:
-            file = os.path.join(self.data_dir, f"{uuid_}.dat")
+            file = os.path.join(self.data_dir, f"{uuid_}.dat")  # filename of the player
 
-            if not os.path.isfile(file):
+            if not os.path.isfile(file):  # create new player if needed
                 level_data = self.server.worlds[self.server.conf["level_name"]].data
 
                 player = Player.new(
@@ -37,7 +37,7 @@ class PlayerDataIO:
 
                 return player
 
-            async with aiofile.async_open(file, "rb") as player_file:
+            async with aiofile.async_open(file, "rb") as player_file:  # load preexisting
                 player = Player(self.server.eid(), nbt.TAG_Compound.unpack(Buffer(await player_file.read())))
                 self.cache[player.uuid] = player
 

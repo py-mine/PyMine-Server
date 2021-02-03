@@ -11,6 +11,14 @@ def new_dim_codec_nbt() -> nbt.TAG_Compound:
     return copy.deepcopy(DEFAULT_DIM_CODEC_NBT)
 
 
+def get_dimension_data(dimension: str) -> nbt.TAG_Compound:
+    dims = DEFAULT_DIM_CODEC_NBT['minecraft:dimension_type']['value']
+
+    for dim in dims:
+        if dim['name'].endswith(dimension):
+            return copy.deepcopy(dim)
+
+
 # def new_dim_codec_dim_props(
 #     piglin_safe: int,
 #     natural: int,

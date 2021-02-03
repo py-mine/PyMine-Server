@@ -3,7 +3,12 @@ from asyncio import StreamReader, StreamWriter
 
 
 class Stream(StreamWriter):
-    """Used for reading and writing from/to a connected client, merges a StreamReader and StreamWriter."""
+    """Used for reading and writing from/to a connected client, merges a StreamReader and StreamWriter.
+
+    :param StreamReader reader: An asyncio.StreamReader instance.
+    :param StreamWriter writer: An asyncio.StreamWriter instance.
+    :ivar tuple remote: A tuple which stores the remote client's address and port.
+    """
 
     def __init__(self, reader: StreamReader, writer: StreamWriter) -> None:
         super().__init__(writer._transport, writer._protocol, writer._reader, writer._loop)

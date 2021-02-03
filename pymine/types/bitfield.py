@@ -12,9 +12,9 @@ class BitField:
 
         for i, v in enumerate(values):
             if v:
-                field |= 2**i
+                field |= 2 ** i
             else:
-                field &= ~(2**i)
+                field &= ~(2 ** i)
 
         return cls(len(values), field)
 

@@ -10,11 +10,12 @@ __all__ = ("PlaySetCooldown",)
 
 class PlaySetCooldown(Packet):
     """Applies a cooldown period to all items with the given type.
+    
     Client bound(Server -> Client)
     :param int item_id: The unique id of the type of affected items.
     :param int cooldown_ticks: The length of the cooldown in in-game ticks.
-    :attr int to: The intended recipient.
-    :attr int id: The unique ID of the packet.
+    :ivar int to: The intended recipient.
+    :ivar int id: The unique ID of the packet.
     """
 
     id = 0x16

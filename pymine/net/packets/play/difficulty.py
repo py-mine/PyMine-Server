@@ -16,9 +16,9 @@ class PlayServerDifficulty(Packet):
     """Used by the server to update the difficulty in the client's menu. (Server -> Client)
 
     :param int difficulty: The difficulty level, see here: https://wiki.vg/Protocol#Server_Difficulty.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr difficulty:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar difficulty:
     """
 
     id = 0x0D
@@ -37,9 +37,9 @@ class PlaySetDifficulty(Packet):
     """Used by the client to set difficulty. Not used normally. (Client -> Server)
 
     :param int new_difficulty: The new difficulty.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr new_difficulty:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar new_difficulty:
     """
 
     id = 0x02
@@ -59,9 +59,9 @@ class PlayLockDifficulty(Packet):
     """Used to lock the difficulty. Only used on singleplayer. (Client -> Server)
 
     :param bool locked: Whether the difficulty is locked or not.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr locked:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar locked:
     """
 
     id = 0x11

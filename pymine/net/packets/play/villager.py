@@ -15,9 +15,9 @@ class PlaySelectTrade(Packet):
     """Used when a player selects a specific trade offered by a villager. (Client -> Server)
 
     :param int selected_slot: The selected slot in the player's trade inventory.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr selected_slot:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar selected_slot:
     """
 
     id = 0x23
@@ -42,14 +42,14 @@ class PlayTradeList(Packet):
     :param int xp: Total experience for that villager, 0 if the villager is a wandering one.
     :param bool is_regular: Whether the villager is a normal one or a wandering one.
     :param bool can_restock: True for regular villagers, false for wandering ones.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr window_id:
-    :attr trades:
-    :attr villager_lvl:
-    :attr xp:
-    :attr is_regular:
-    :attr can_restock:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar window_id:
+    :ivar trades:
+    :ivar villager_lvl:
+    :ivar xp:
+    :ivar is_regular:
+    :ivar can_restock:
     """
 
     id = 0x26

@@ -16,13 +16,13 @@ class PlayGenerateStructure(Packet):
     :param int z: The z coordinate of the jigsaw block.
     :param int levels: The value of the levels slider in the block interface.
     :param bool keep_jigsaws: Unknown.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr levels:
-    :attr keep_jigsaws:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar levels:
+    :ivar keep_jigsaws:
     """
 
     id = 0x0F
@@ -51,16 +51,16 @@ class PlayUpdateJigsawBlock(Packet):
     :param str pool: The pool.
     :param str final_state: "Turns into" on the GUI, final_state in NBT.
     :param str joint_type: rollable if the attached piece can be rotated, else aligned.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr name:
-    :attr target:
-    :attr pool:
-    :attr final_state:
-    :attr joint_type:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar name:
+    :ivar target:
+    :ivar pool:
+    :ivar final_state:
+    :ivar joint_type:
     """
 
     id = 0x29  # Might be 0x28?? See here: https://wiki.vg/Protocol#Update_Jigsaw_Block
@@ -109,26 +109,26 @@ class PlayUpdateStructureBlock(Packet):
     :param float integrity: Integrity between 0 and 1.
     :param int seed: Unknown.
     :param int flags: Additional flags, see here: https://wiki.vg/Protocol#Update_Structure_Block.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr action:
-    :attr mode:
-    :attr name:
-    :attr offset_x:
-    :attr offset_y:
-    :attr offset_z:
-    :attr size_x:
-    :attr size_y:
-    :attr size_z:
-    :attr mirror:
-    :attr rotation:
-    :attr metadata:
-    :attr integrity:
-    :attr seed:
-    :attr flags:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar action:
+    :ivar mode:
+    :ivar name:
+    :ivar offset_x:
+    :ivar offset_y:
+    :ivar offset_z:
+    :ivar size_x:
+    :ivar size_y:
+    :ivar size_z:
+    :ivar mirror:
+    :ivar rotation:
+    :ivar metadata:
+    :ivar integrity:
+    :ivar seed:
+    :ivar flags:
     """
 
     id = 0x2A

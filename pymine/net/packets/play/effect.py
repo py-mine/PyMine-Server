@@ -21,14 +21,14 @@ class PlayEffect(Packet):
     :param int z: The z coordinate where the sound/particle is played.
     :param int data: Extra data for certain effects.
     :param bool disable_relative_volume: If false, sound effects fade away with distance.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr effect_id:
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr data:
-    :attr disable_relative_volume:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar effect_id:
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar data:
+    :ivar disable_relative_volume:
     """
 
     id = 0x21
@@ -80,15 +80,15 @@ class PlaySoundEffect(Packet):
     :param int z: The z coordinate of where the effect is to be played.
     :param float volume: Volume of the sound to be played, between 0.0 and 1.0.
     :param float pitch: The pitch that the sound should be played at, between 0.5 and 2.0.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr sound_id:
-    :attr category:
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr volume:
-    :attr pitch:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar sound_id:
+    :ivar category:
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar volume:
+    :ivar pitch:
     """
 
     id = 0x51

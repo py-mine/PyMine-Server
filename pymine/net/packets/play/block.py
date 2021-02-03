@@ -25,14 +25,14 @@ class PlayBlockAction(Packet):
     :param int action_id: Block action ID, see here: https://wiki.vg/Block_Actions.
     :param int action_param: Action param of the action, see here: https://wiki.vg/Block_Actions.
     :param int block_type: The type of block which the action is for.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr action_id:
-    :attr action_param:
-    :attr block_type:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar action_id:
+    :ivar action_param:
+    :ivar block_type:
     """
 
     id = 0x0A
@@ -62,11 +62,11 @@ class PlayBlockChange(Packet):
     :param int y: The y coordinate of the location where this occurs.
     :param int z: The z coordinate of the location where this occurs.
     :param int block_id: Block ID of what to change the block to.
-    :attr int id: Unique packet ID.
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr block_id:
+    :ivar int id: Unique packet ID.
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar block_id:
     """
 
     id = 0x0B
@@ -89,12 +89,12 @@ class PlayQueryBlockNBT(Packet):
     :param int x: The x coordinate of the block.
     :param int y: The y coordinate of the block.
     :param int z: The z coordinate of the block.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr transaction_id:
-    :attr x:
-    :attr y:
-    :attr z:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar transaction_id:
+    :ivar x:
+    :ivar y:
+    :ivar z:
     """
 
     id = 0x01
@@ -123,17 +123,17 @@ class PlayBlockPlacement(Packet):
     :param float cur_pos_y: The y position of the crosshair on the block.
     :param float cur_pos_z: The z position of the crosshair on the block.
     :param bool inside_block: True if the player's head is inside the block.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr hand:
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr face:
-    :attr cur_pos_x:
-    :attr cur_pos_y:
-    :attr cur_pos_z:
-    :attr inside_block:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar hand:
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar face:
+    :ivar cur_pos_x:
+    :ivar cur_pos_y:
+    :ivar cur_pos_z:
+    :ivar inside_block:
     """
 
     id = 0x2E
@@ -198,13 +198,13 @@ class PlayMultiBlockChange(Packet):
     :param int chunk_sect_z: The z coordinate of the chunk section.
     :param bool trust_edges: The inverse of preceding PlayUpdateLight packet's trust_edges bool
     :param list blocks: The changed blocks, formatted like [block_id, local_x, local_y, local_z].
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr chunk_sect_x:
-    :attr chunk_sect_y:
-    :attr chunk_sect_z:
-    :attr trust_edges:
-    :attr blocks:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar chunk_sect_x:
+    :ivar chunk_sect_y:
+    :ivar chunk_sect_z:
+    :ivar trust_edges:
+    :ivar blocks:
     """
 
     id = 0x3B

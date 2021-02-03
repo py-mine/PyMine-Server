@@ -56,8 +56,8 @@ class TAG:
     """Base class for an NBT tag.
 
     :param str name: The name of the TAG.
-    :attr int id: The type ID.
-    :attr name
+    :ivar int id: The type ID.
+    :ivar name
     """
 
     id = None
@@ -116,7 +116,7 @@ class TAG_Byte(TAG):
     :param str name: The name of the TAG.
     :param int data: A signed byte.
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 1
@@ -140,7 +140,7 @@ class TAG_Short(TAG):
     :param str name: The name of the TAG.
     :param int data: A short (2 byte int).
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 2
@@ -164,7 +164,7 @@ class TAG_Int(TAG):
     :param str name: The name of the TAG.
     :param int data: A int (4 bytes).
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 3
@@ -188,7 +188,7 @@ class TAG_Long(TAG):
     :param str name: The name of the TAG.
     :param int data: A long long (8 byte int).
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 4
@@ -212,7 +212,7 @@ class TAG_Float(TAG):
     :param str name: The name of the TAG.
     :param float data: A float (4 bytes).
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 5
@@ -236,7 +236,7 @@ class TAG_Double(TAG):
     :param str name: The name of the TAG.
     :param float data: A double (8 byte float).
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 6
@@ -260,7 +260,7 @@ class TAG_Byte_Array(TAG, bytearray):
     :param str name: The name of the TAG.
     :param bytearray data: Some bytes.
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 7
@@ -295,7 +295,7 @@ class TAG_String(TAG):
     :param str name: The name of the TAG.
     :param str data: A string.
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 8
@@ -323,7 +323,7 @@ class TAG_List(TAG, list):
     :param str name: The name of the TAG.
     :param list data: A uniform list of TAGs.
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 9
@@ -363,7 +363,7 @@ class TAG_Compound(TAG, dict):
     :param str name: The name of the TAG.
     :param list data: A list of tags.
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 10
@@ -402,7 +402,7 @@ class TAG_Int_Array(TAG, list):
     :param str name: The name of the TAG.
     :param list data: A list of ints (4 bytes each).
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 11
@@ -432,7 +432,7 @@ class TAG_Long_Array(TAG, list):
     :param str name: The name of the TAG.
     :param list value: A list of long longs (8 byte ints).
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 12

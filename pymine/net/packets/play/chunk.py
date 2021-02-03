@@ -38,16 +38,16 @@ class PlayChunkData(Packet):
     :param bytes data: See chunk data format: https://wiki.vg/Chunk_Format#Full_chunk.
     :param list block_entities: Array of nbt.TAGs.
     :param int biomes: Unknown, see here: https://wiki.vg/Protocol#Chunk_Data.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr chunk_x:
-    :attr chunk_z:
-    :attr full_chunk:
-    :attr prim_bit_mask:
-    :attr heightmaps:
-    :attr data:
-    :attr block_entities:
-    :attr biomes:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar chunk_x:
+    :ivar chunk_z:
+    :ivar full_chunk:
+    :ivar prim_bit_mask:
+    :ivar heightmaps:
+    :ivar data:
+    :ivar block_entities:
+    :ivar biomes:
     """
 
     id = 0x20

@@ -28,11 +28,11 @@ class PlayOpenWindow(Packet):
     :param int window_id: The ID of the window being opened.
     :param int window_type: The type of window, see here: https://wiki.vg/Inventory.
     :param Chat title: The title of the window.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr window_id:
-    :attr window_type:
-    :attr title:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar window_id:
+    :ivar window_type:
+    :ivar title:
     """
 
     id = 0x2D
@@ -73,11 +73,11 @@ class PlayWindowConfirmationServerBound(Packet):
     :param int window_id: The ID of the window/open inventory.
     :param int action_number: The unique number of the action.
     :param bool accepted: Whether the action was allowed or denied.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr window_id:
-    :attr action_number:
-    :attr accepted:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar window_id:
+    :ivar action_number:
+    :ivar accepted:
     """
 
     id = 0x07
@@ -104,14 +104,14 @@ class PlayClickWindow(Packet):
     :param int action_number: Unique number, see here: https://wiki.vg/Protocol#Click_Window_Button.
     :param int mode: The inventory operation mode.
     :param dict slot: The slot item.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr window_id:
-    :attr slot_number:
-    :attr button:
-    :attr action_number:
-    :attr mode:
-    :attr slot:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar window_id:
+    :ivar slot_number:
+    :ivar button:
+    :ivar action_number:
+    :ivar mode:
+    :ivar slot:
     """
 
     id = 0x09
@@ -137,10 +137,10 @@ class PlayCloseWindowButton(Packet):
 
     :param int window_id: The ID of the window sent by an open window packet.
     :param int button_id: Meaning depends on window type, see here: https://wiki.vg/Protocol#Click_Window_Button.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr window_id:
-    :attr button_id:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar window_id:
+    :ivar button_id:
     """
 
     id = 0x08
@@ -161,9 +161,9 @@ class PlayCloseWindowServerBound(Packet):
     """Packet sent by the client when it closes a container window. (Client -> Server)
 
     :param int window_id: The ID of the window that was closed, 0 for player's inventory.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr window_id:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar window_id:
     """
 
     id = 0x0A
@@ -198,9 +198,9 @@ class PlayWindowItems(Packet):
     """Sent by the server when multiple slots in an inventory window are updated (Server -> Client)
 
     :param list slots: The updated inventory slots.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr slots:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar slots:
     """
 
     id = 0x13
@@ -218,11 +218,12 @@ class PlayWindowItems(Packet):
 class PlayWindowProperty(Packet):
     """This packet is used to inform the client that part of a GUI window should be updated.
     Clientbound (Server -> Client).
+    
     :param int window_id: The ID of the window to be updated.
     :param int property: The property to be updated.
     :param int value: The new value for the property.
-    :attr int to: The intended recipient.
-    :attr int id: The unique ID of the packet."""
+    :ivar int to: The intended recipient.
+    :ivar int id: The unique ID of the packet."""
 
     id = 0x14
     to = 1
@@ -261,11 +262,11 @@ class PlayOpenHorseWindow(Packet):
     :param int window_id: Window ID of the GUI window.
     :param int num_slots: Number of slots available for use.
     :param int entity_id: The entity ID of the horse.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr window_id:
-    :attr num_slots:
-    :attr entity_id:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar window_id:
+    :ivar num_slots:
+    :ivar entity_id:
     """
 
     id = 0x1E
@@ -288,11 +289,11 @@ class PlayOpenSignEditor(Packet):
     :param int x: The x coordinate of the position of the sign.
     :param int y: The y coordinate of the position of the sign.
     :param int z: The z coordinate of the position of the sign.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr y:
-    :attr z:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar y:
+    :ivar z:
     """
 
     id = 0x2E

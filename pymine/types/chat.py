@@ -8,7 +8,7 @@ class Chat:
     """A Minecraft chat message.
 
     :param object msg: dict or list or str object representing chat message json data.
-    :attr msg:
+    :ivar msg:
     """
 
     def __init__(self, msg: object) -> None:

@@ -1,6 +1,14 @@
-# import pymine.types.nbt as nbt
-#
-#
+import copy
+import os
+
+import pymine.types.nbt as nbt
+
+with open(os.path.join('pymine', 'data', 'default_nbt', 'dimension_codec.nbt'), 'rb') as dim_codec_file:
+    DEFAULT_DIM_CODEC_NBT = nbt.unpack(dim_codec_file.read())
+
+def new_dim_codec_nbt() -> nbt.TAG_Compound:
+    return copy.deepcopy(DEFAULT_DIM_CODEC_NBT)
+
 # def new_dim_codec_dim_props(
 #     piglin_safe: int,
 #     natural: int,

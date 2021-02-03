@@ -25,6 +25,7 @@ async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
     await send_join_game_packet(server, stream, world, player)
     await send_server_brand(server, stream)
     await send_server_difficulty(server, stream, world)
+    await send_player_abilities(server, stream, player)
 
 
 # crucial info pertaining to the world and player status
@@ -63,3 +64,7 @@ async def send_server_difficulty(server, stream: Stream, world: World) -> None:
     await server.send_packet(
         stream, packets_difficulty.PlayServerDifficulty(world.data["Difficulty"], world.data["DifficultyLocked"])
     )
+
+
+async def send_player_abilities(server, stream: Stream, player: Player) -> None:
+    raise NotImplementedError

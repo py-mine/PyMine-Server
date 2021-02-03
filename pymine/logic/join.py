@@ -13,10 +13,10 @@ from pymine.util.misc import seed_hash
 
 
 async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
-    level_name = server.conf["level_name"]
+    level_name = server.conf["level_name"]  # level name, i.e. Xenon
 
     player = server.playerio.fetch_player(uuid_)
-    world = server.worlds[player.data["Dimension"]]
+    world = server.worlds[player.data["Dimension"]]  # the world player *should* be spawning into
 
     await server.send_packet(
         stream,
@@ -26,7 +26,8 @@ async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
             player.data["playerGameType"],  # gamemode
             player.data["previousPlayerGameType"],  # previous gamemode
             [level_name, f"{level_name}_nether", f"{level_name}_the_end"],  # world names
-            new_dim_codec_nbt(),
+            new_dim_codec_nbt(),  # Shouldn't change unless CUSTOM DIMENSIONS are added fml
+            # This is like the the dimension data for the dim the player is currently spawning into
             get_dimension_data(player.data["Dimension"]),  # player.data['Dimension'] should be like minecraft:overworld
             server.conf["level_name"],  # level name of the world the player is spawning into
             seed_hash(server.conf["seed"]),
@@ -34,7 +35,7 @@ async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
             server.conf["view_distance"],
             (not server.conf["debug"]),
             (world.data["GameRules"]["doImmediateRespawn"] != "true"),  # (not doImmediateRespawn gamerule)
-            False,
+            False,  # If world is a debug world iirc
             False,  # Should be true if world is superflat
         ),
     )

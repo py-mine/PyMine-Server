@@ -18,7 +18,7 @@ async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
     player = server.playerio.fetch_player(uuid_)
     world = server.worlds[player.data["Dimension"]]
 
-    server.send_packet(
+    await server.send_packet(
         stream,
         packets_player.PlayJoinGame(
             player.entity_id,

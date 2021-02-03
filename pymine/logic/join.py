@@ -6,7 +6,7 @@ from pymine.types.packet import Packet
 from pymine.types.stream import Stream
 import pymine.types.nbt as nbt
 
-from pymine.data.default_nbt.dimension_codec import new_dim_codec_nbt
+from pymine.data.default_nbt.dimension_codec import new_dim_codec_nbt, get_dimension_data
 
 import pymine.net.packets.play.player as packets_player
 from pymine.util.misc import seed_hash
@@ -27,8 +27,8 @@ async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
             player.data["previousPlayerGameType"],  # previous gamemode
             [level_name, f"{level_name}_nether", f"{level_name}_the_end"],  # world names
             new_dim_codec_nbt(),
-            nbt.TAG_Int(name="bruh", value=1),
-            player.data["Dimension"],  # Dimension/player the player is spawning in to
+            get_dimension_data(player.data['Dimension']),  # player.data['Dimension'] should be like minecraft:overworld
+            server.conf['level_name'],  # level name of the world the player is spawning into
             seed_hash(server.conf["seed"]),
             server.conf["max_players"],
             server.conf["view_distance"],

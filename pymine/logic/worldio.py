@@ -12,6 +12,6 @@ async def load_worlds(server, level_name: str, region_cache_max_per: int) -> dic
         name = level_name + ext
         worlds[proper_name] = await World(server, name, os.path.join("worlds", name), region_cache_max_per).init()
 
-    server.logger.info(f'Loaded default worlds: {", ".join(worlds.keys())}.')
+    server.logger.info(f'Loaded default worlds: {", ".join([w.name for w in worlds.values()])}.')
 
     return worlds

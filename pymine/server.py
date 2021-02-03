@@ -40,6 +40,7 @@ class Server:
         def __init__(self):
             self.states = {}  # {remote: state}
             self.login = {}  # {remote: {username: username, verify: verify token}}
+            self.uuid = {}  # {remote: uuid as int}
 
     def __init__(self, logger, executor, uvloop):
         self.logger = logger  # logger instance

@@ -282,3 +282,38 @@ World
 
 .. automodule:: pymine.net.packets.play.world
     :members:
+
+
+Login Reference
+================
+
+Login
+------
+.. automodule:: pymine.net.packets.login.login 
+    :members:
+
+Compression
+------------
+
+.. automodule:: pymine.net.packets.login.set_comp
+    :members:
+
+Handshake
+------------
+
+.. automodule:: pymine.net.packets.handshaking.handshake
+    :members:
+
+Legacy Ping 
+------------
+.. automodule:: pymine.net.packets.handshaking.legacy_ping
+    :members:
+
+Status Reference
+=================
+
+Status
+-------
+
+.. automodule:: pymine.net.packets.status.status
+    :members:

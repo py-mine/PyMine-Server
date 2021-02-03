@@ -161,7 +161,7 @@ class PlayEntityStatus(Packet):
 
 class PlayEntityAction(Packet):
     """Sent by the client to indicate it has performed a certain action. (Client -> Server)
-    
+
     :param int entity_id: The ID of the entity.
     :param int action_id: The action occurring, see here: https://wiki.vg/Protocol#Entity_Action.
     :param int jump_boost: Used with jumping while riding a horse.
@@ -487,10 +487,10 @@ class PlayEntityMetadata(Packet):
 
 
 class PlayEntityEquipment(Packet):
-    """Sends data about the entity's equipped equipment _ 
+    """Sends data about the entity's equipped equipment _
 
     :param int entity_id: The ID of the entity the equipment data is for.
-    :param list equipment: An array of equipment,see here: <https://wiki.vg/Protocol> 
+    :param list equipment: An array of equipment,see here: <https://wiki.vg/Protocol>
     :ivar int id: Unique packet ID.
     :ivar int to: Packet direction.
     :ivar entity_id:

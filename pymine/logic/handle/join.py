@@ -28,10 +28,10 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
 
     world = server.worlds[player.data["Dimension"].data]  # the world player *should* be spawning into
 
-    await send_join_game_packet(server, stream, world, player)
-    await send_server_brand(server, stream)
-    await send_server_difficulty(server, stream, world)
-    await send_player_abilities(server, stream, player)
+    await send_join_game_packet(stream, world, player)
+    await send_server_brand(stream)
+    await send_server_difficulty(stream, world)
+    await send_player_abilities(stream, player)
 
 
 @server.api.events.on_packet("play", 0x0B)

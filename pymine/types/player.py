@@ -27,7 +27,7 @@ class Player:
         return cls(entity_id, cls.new_nbt(uuid_, spawn))
 
     @staticmethod
-    def new_nbt(uuid_: uuid.UUID, spawn: tuple, world_name: str) -> nbt.TAG:
+    def new_nbt(uuid_: uuid.UUID, spawn: tuple, dimension: str) -> nbt.TAG:
         return nbt.TAG_Compound(
             "",
             [
@@ -144,7 +144,7 @@ class Player:
                 nbt.TAG_Int("playerGameType", 0),
                 nbt.TAG_Int("previousPlayerGameType", -1),
                 nbt.TAG_Int("Score", 0),
-                nbt.TAG_String("Dimension", world_name),
+                nbt.TAG_String("Dimension", dimension),
                 nbt.TAG_Int("SelectedItemSlot", 0),
                 nbt.TAG_Compound(
                     "SelectedItem",

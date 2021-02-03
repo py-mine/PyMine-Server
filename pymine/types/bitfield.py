@@ -19,7 +19,7 @@ class BitField:
         return cls(len(values), field)
 
     def unpack(self) -> tuple:
-        return tuple((self.field >> i) & 1 for i in range(self.length))
+        return tuple(bool((self.field >> i) & 1) for i in range(self.length))
 
     def __str__(self):
         return str(self.unpack())

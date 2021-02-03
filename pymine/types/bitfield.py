@@ -18,7 +18,7 @@ class BoolBitField:
 
         return cls(len(values), field)
 
-    def unpack(self) -> tuple:
+    def get_values(self) -> tuple:
         return tuple(bool((self.field >> i) & 1) for i in range(self.length))
 
     def __str__(self):
@@ -44,3 +44,6 @@ class BitField:
 
     def get(self, flag: int):
         return (self.field >> flag) & 1
+
+    def get_flags(self, *flags: int) -> tuple:
+        return [self.get(flag) for flag in flags]

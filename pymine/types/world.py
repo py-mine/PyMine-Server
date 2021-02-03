@@ -22,7 +22,7 @@ def chunk_to_region_coords(chunk_x: int, chunk_z: int) -> tuple:
     return chunk_x // 32, chunk_z // 32
 
 
-def region_file_name(region_x: int, region_z: int) -> str:
+def region_file_name(region_x: int, region_z: int) -> str:  # Gens the name for the region file in the format r.x.y.mca
     return ".".join(("r", str(region_x), str(region_z), "mca"))
 
 

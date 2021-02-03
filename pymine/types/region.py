@@ -18,6 +18,7 @@ def find_chunk_pos_in_buffer(loc: int) -> tuple:
     return offset * 4096  # , size * 4096
 
 
+# parses a region file name for the region coords
 def region_coords_from_file(file: str) -> tuple:
     return os.path.split(file)[1].split(".")[1:3]
 
@@ -53,6 +54,7 @@ class Region(dict):
 
         region_x, region_z = region_coords_from_file(file)
 
+        # runs a blocking call in a seperate process to not block the event loop
         chunk_map = await server.call_async(unpack_chunk_map, buf)
 
         return Region(chunk_map, region_x, region_z)

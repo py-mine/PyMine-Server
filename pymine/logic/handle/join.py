@@ -26,7 +26,7 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
     player = await server.playerio.fetch_player(uuid_)  # fetch player data from disk
     player.set_meta(username, stream.remote)
 
-    world = server.worlds[player.data["Dimension"]]  # the world player *should* be spawning into
+    world = server.worlds[player.data["Dimension"].data]  # the world player *should* be spawning into
 
     await send_join_game_packet(server, stream, world, player)
     await send_server_brand(server, stream)

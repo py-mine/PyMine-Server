@@ -22,7 +22,10 @@ from pymine.server import server
 # Used to finish the process of allowing a client to actually enter the server
 async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
     server.cache.uuid[stream.remote] = int(uuid_)  # update uuid cache
+
     player = server.playerio.fetch_player(uuid_)  # fetch player data from disk
+    player.set_meta(username, stream.remote)
+
     world = server.worlds[player.data["Dimension"]]  # the world player *should* be spawning into
 
     await send_join_game_packet(server, stream, world, player)

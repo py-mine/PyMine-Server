@@ -34,7 +34,7 @@ class PlayerDataIO:
                     (level_data.spawn_x, level_data.spawn_y, level_data.spawn_z),
                     "minecraft:overworld",
                 )
-                self.cache[player.uuid] = player
+                self.cache[int(player.uuid)] = player
 
                 return player
 

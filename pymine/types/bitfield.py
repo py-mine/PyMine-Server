@@ -15,7 +15,7 @@ class BitField:
         self.field = field
 
     @classmethod
-    def from_flags(cls, length: int, *flags: int) -> BitField:
+    def new(cls, length: int, *flags: int) -> BitField:
         field = 0
 
         for flag in flags:

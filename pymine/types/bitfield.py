@@ -26,3 +26,21 @@ class BoolBitField:
 
     def __repr__(self):
         return f"BitField(0x{self.field:0X}, length={self.length})"
+
+
+class BitField:
+    def __init__(self, length: int, field: int):
+        self.length = length
+        self.field = field
+
+    @classmethod
+    def from_flags(cls, length: int, *flags: int) -> BitField:
+        field = 0
+
+        for flag in flags:
+            field |= 2 ** flag
+
+        return cls(length, field)
+
+    def get(self, flag: int):
+        return (self.field >> flag) & 1

@@ -24,4 +24,4 @@ class BoolBitField:
         return tuple((self.table & i & self.length != 0) for i in range(self.length))
 
     def __str__(self):
-        return f'BoolBitField(0x{self.field:0X}, length={self.length})'
+        return f"BoolBitField(0x{self.field:0X}, length={self.length})"

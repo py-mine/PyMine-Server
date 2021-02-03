@@ -15,7 +15,7 @@ from pymine.util.misc import seed_hash
 # Used to finish the process of allowing a client to actually enter the server
 async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
     await send_join_game_packet(server, stream, uuid_)
-    await
+    await send_server_brand(server, stream)
 
 
 # crucial info pertaining to the world and player status

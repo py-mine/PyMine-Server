@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 
-class BitField:
+class BoolBitField:
     def __init__(self, length: int, field: int):
         self.length = length
         self.field = field
 
     @classmethod
-    def from_values(cls, *values: bool) -> BitField:
+    def from_values(cls, *values: bool) -> BoolBitField:
         field = 0
 
         for i, v in enumerate(values):

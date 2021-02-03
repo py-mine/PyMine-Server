@@ -22,4 +22,7 @@ class BitField:
         return tuple((self.field >> i) & 1 for i in range(self.length))
 
     def __str__(self):
-        return f"BoolBitField(0x{self.field:0X}, length={self.length})"
+        return str(self.unpack())
+
+    def __repr__(self):
+        return f"BitField(0x{self.field:0X}, length={self.length})"

@@ -2,6 +2,14 @@ from __future__ import annotations
 
 
 class BitField:
+    """Used to store boolean flags based on their values. If I were to create a bit field with flags 1 and 2, getting those flags would return True and True, getting a flag that wasn't put in results in a False
+
+    :param int length: Length of the bit field.
+    :param int field: The actual field data (as an int).
+    :ivar length:
+    :ivar field:
+    """
+
     def __init__(self, length: int, field: int):
         self.length = length
         self.field = field

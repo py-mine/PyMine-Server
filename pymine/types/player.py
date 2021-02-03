@@ -17,6 +17,7 @@ class Player:
 
         self.username = None
         self.remote = None
+        self.brand = None
 
     # Used to associate a remote client with a specific Player object
     def set_meta(self, username: str, remote: tuple) -> None:

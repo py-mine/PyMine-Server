@@ -47,3 +47,9 @@ class BitField:
 
     def get_flags(self, *flags: int) -> tuple:
         return [self.get(flag) for flag in flags]
+
+    def __str__(self):
+        return str(self.field)
+
+    def __repr__(self):
+        return f"BitField(0x{self.field:0X}, length={self.length})"

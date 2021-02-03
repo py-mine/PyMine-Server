@@ -10,7 +10,7 @@ class BitField:
     :ivar field:
     """
 
-    def __init__(self, length: int, field: int):
+    def __init__(self, length: int, field: int) -> None:
         self.length = length
         self.field = field
 
@@ -23,19 +23,19 @@ class BitField:
 
         return cls(length, field)
 
-    def add(self, flag: int):
+    def add(self, flag: int) -> None:
         self.field |= 2 ** flag
 
-    def get(self, flag: int):
+    def get(self, flag: int) -> int:
         return (self.field >> flag) & 1
 
     def get_flags(self, *flags: int) -> tuple:
         return [self.get(flag) for flag in flags]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.field)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"BitField(0x{self.field:0X}, length={self.length})"
 
 

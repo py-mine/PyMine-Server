@@ -16,10 +16,11 @@ import pymine.net.packets.play.plugin_msg as packets_plugin
 import pymine.net.packets.play.player as packets_player
 
 from pymine.util.misc import seed_hash
+from pymine.server import server
 
 
 # Used to finish the process of allowing a client to actually enter the server
-async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
+async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
     player = server.playerio.fetch_player(uuid_)
     world = server.worlds[player.data["Dimension"]]  # the world player *should* be spawning into
 
@@ -30,7 +31,7 @@ async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
 
 
 # crucial info pertaining to the world and player status
-async def send_join_game_packet(server, stream: Stream, world: World, player: Player) -> None:
+async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:
     level_name = server.conf["level_name"]  # level name, i.e. Xenon
 
     await server.send_packet(
@@ -57,19 +58,19 @@ async def send_join_game_packet(server, stream: Stream, world: World, player: Pl
 
 
 # send server brand + version via plugin channels
-async def send_server_brand(server, stream: Stream) -> None:
+async def send_server_brand(stream: Stream) -> None:
     await server.send_packet(stream, packets_plugin.PlayPluginMessageClientBound("minecraft:brand", server.pymine))
 
 
 # shown in the menu options for the client
-async def send_server_difficulty(server, stream: Stream, world: World) -> None:
+async def send_server_difficulty(stream: Stream, world: World) -> None:
     await server.send_packet(
         stream, packets_difficulty.PlayServerDifficulty(world.data["Difficulty"], world.data["DifficultyLocked"])
     )
 
 
 # send what the player can/can't do
-async def send_player_abilities(server, stream: Stream, player: Player) -> None:
+async def send_player_abilities(stream: Stream, player: Player) -> None:
     abilities = player.data["abilities"]
     flags = BitField(4)
 

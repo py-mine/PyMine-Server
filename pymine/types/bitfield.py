@@ -23,6 +23,9 @@ class BitField:
 
         return cls(length, field)
 
+    def add(self, flag: int):
+        self.field |= 2 ** flag
+
     def get(self, flag: int):
         return (self.field >> flag) & 1
 

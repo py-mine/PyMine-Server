@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 class SingleByteBitField:
     def __init__(self, length: int, field: int):
         self.length = length

@@ -41,9 +41,9 @@ class Server:
             self.login = {}  # {remote: {username: username, verify: verify token}}
 
     def __init__(self, logger, executor, uvloop):
-        self.logger = logger
-        self.executor = executor
-        self.uvloop = uvloop
+        self.logger = logger  # logger instance
+        self.executor = executor  # the process pool executor instance
+        self.uvloop = uvloop  # bool whether uvloop is being used or not
 
         self.meta = self.Meta()
         self.cache = self.Cache()
@@ -51,24 +51,24 @@ class Server:
 
         self.conf = load_config()
         self.favicon = load_favicon()
-        self.comp_thresh = self.conf["comp_thresh"]
+        self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold
 
         self.logger.debug_ = self.conf["debug"]
         asyncio.get_event_loop().set_debug(self.conf["debug"])
 
-        self.eid_current = 0
-        self.playerio = None
-        self.worlds = None
+        self.eid_current = 0  # used to not generate duplicate entity ids
+        self.playerio = None  # used to fetch/dump players
+        self.worlds = None  # world dictionary
 
-        self.aiohttp = None
-        self.server = None
-        self.api = None
+        self.aiohttp = None  # the aiohttp session
+        self.server = None  # the actual underlying asyncio server
+        self.api = None  # the api instance
 
     async def start(self):
         addr = self.conf["server_ip"]
         port = self.conf["server_port"]
 
-        if not addr:
+        if not addr:  # find local ip if none was supplied
             addr = socket.gethostbyname(socket.gethostname())
 
         self.aiohttp = aiohttp.ClientSession()
@@ -81,7 +81,7 @@ class Server:
         # amount of players online on each world, probably something like (len(players) + 1)
         self.worlds = await load_worlds(self, self.conf["level_name"], 5)
 
-        # Player data IO
+        # Player data IO, used to load/dump player info
         self.playerio = PlayerDataIO(self, self.conf["level_name"])
 
         self.logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
@@ -98,10 +98,10 @@ class Server:
 
         self.logger.info("Server closed.")
 
-    async def call_async(self, func, *args, **kwargs):
+    async def call_async(self, func, *args, **kwargs):  # used to run a blocking function in a process pool
         await asyncio.get_event_loop().run_in_executor(self.executor, func, *args, **kwargs)
 
-    def eid(self):
+    def eid(self):  # used to generate entity ids
         self.eid_current += 1
         return self.eid_current
 

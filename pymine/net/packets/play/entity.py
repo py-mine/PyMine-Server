@@ -512,3 +512,27 @@ class PlayEntityEquipment(Packet):
             + Buffer.pack_varint(len(self.equipment))
             + b"".join([Buffer.pack("b", e[0]) + Buffer.pack_slot(**e[1]) for e in self.equipment])
         )
+
+
+class PlayEntityProperties(Packet):
+    """Sends information about certain attributes on an entity. (Server -> Client)"""
+
+    id = 0x58
+    to = 1
+
+    def __init__(self, entity_id: int, properties: list) -> None:
+        super().__init__()
+
+        self.entity_id = entity_id
+        self.properties = properties
+
+    def encode(self) -> bytes:
+        out = Buffer.pack_varint(self.entity_id)
+
+        for prop in self.properties:
+            out += (
+                Buffer.pack_string(prop["key"])
+                + Buffer.pack("d", prop["value"])
+                + Buffer.pack_varint(len(prop["modifiers"]))
+                + b"".join([Buffer.pack_modifier(m) for m in prop["modifiers"]])
+            )

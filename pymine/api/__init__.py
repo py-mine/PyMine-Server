@@ -14,10 +14,6 @@ from pymine.api.commands import CommandHandler
 from pymine.api.events import EventHandler
 
 
-class StopHandling(BaseException):
-    pass
-
-
 class PyMineAPI:
     def __init__(self, server):
         self.server = server

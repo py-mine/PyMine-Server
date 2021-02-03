@@ -5,7 +5,7 @@ from pymine.types.chat import Chat
 
 import pymine.net.packets.status.status as status_packets
 
-from pymine.api import StopHandling
+from pymine.api.exceptions import StopHandling
 from pymine.server import server
 
 

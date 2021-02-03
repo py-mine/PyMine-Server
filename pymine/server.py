@@ -15,8 +15,9 @@ from pymine.logic.config import load_config, load_favicon
 from pymine.logic.playerio import PlayerDataIO
 from pymine.logic.worldio import load_worlds
 
+from pymine.api.exceptions import StopHandling, InvalidPacketID
 from pymine.net.packet_map import PACKET_MAP
-from pymine.api import PyMineAPI, StopHandling
+from pymine.api import PyMineAPI
 
 # Used for parts of PyMine that utilize the server instance without being a plugin themselves
 server = None
@@ -28,6 +29,7 @@ class Server:
             self.server = 0.1
             self.version = "1.16.5"
             self.protocol = 754
+            self.pymine = f"PyMine {self.server}"
 
     class Secrets:
         def __init__(self, rsa_private, rsa_public):
@@ -40,9 +42,9 @@ class Server:
             self.login = {}  # {remote: {username: username, verify: verify token}}
 
     def __init__(self, logger, executor, uvloop):
-        self.logger = logger
-        self.executor = executor
-        self.uvloop = uvloop
+        self.logger = logger  # logger instance
+        self.executor = executor  # the process pool executor instance
+        self.uvloop = uvloop  # bool whether uvloop is being used or not
 
         self.meta = self.Meta()
         self.cache = self.Cache()
@@ -50,24 +52,24 @@ class Server:
 
         self.conf = load_config()
         self.favicon = load_favicon()
-        self.comp_thresh = self.conf["comp_thresh"]
+        self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold
 
         self.logger.debug_ = self.conf["debug"]
         asyncio.get_event_loop().set_debug(self.conf["debug"])
 
-        self.eid_current = 0
-        self.playerio = None
-        self.worlds = None
+        self.eid_current = 0  # used to not generate duplicate entity ids
+        self.playerio = None  # used to fetch/dump players
+        self.worlds = None  # world dictionary
 
-        self.aiohttp = None
-        self.server = None
-        self.api = None
+        self.aiohttp = None  # the aiohttp session
+        self.server = None  # the actual underlying asyncio server
+        self.api = None  # the api instance
 
     async def start(self):
         addr = self.conf["server_ip"]
         port = self.conf["server_port"]
 
-        if not addr:
+        if not addr:  # find local ip if none was supplied
             addr = socket.gethostbyname(socket.gethostname())
 
         self.aiohttp = aiohttp.ClientSession()
@@ -80,7 +82,7 @@ class Server:
         # amount of players online on each world, probably something like (len(players) + 1)
         self.worlds = await load_worlds(self, self.conf["level_name"], 5)
 
-        # Player data IO
+        # Player data IO, used to load/dump player info
         self.playerio = PlayerDataIO(self, self.conf["level_name"])
 
         self.logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
@@ -97,10 +99,10 @@ class Server:
 
         self.logger.info("Server closed.")
 
-    async def call_async(self, func, *args, **kwargs):
+    async def call_async(self, func, *args, **kwargs):  # used to run a blocking function in a process pool
         await asyncio.get_event_loop().run_in_executor(self.executor, func, *args, **kwargs)
 
-    def eid(self):
+    def eid(self):  # used to generate entity ids
         self.eid_current += 1
         return self.eid_current
 
@@ -112,7 +114,12 @@ class Server:
 
         try:
             del self.cache.states[stream.remote]
-        except BaseException:
+        except KeyError:
+            pass
+
+        try:
+            del self.cache.login[stream.remote]
+        except KeyError:
             pass
 
         self.logger.debug(f"Disconnected nicely from {stream.remote[0]}:{stream.remote[1]}.")
@@ -128,7 +135,7 @@ class Server:
         stream.write(Buffer.pack_packet(packet, comp_thresh))
         await stream.drain()
 
-    async def broadcast_packet(self, packet: Packet):
+    async def broadcast_packet(self, packet: Packet):  # should broadcast a packet to all connected clients in the play state
         self.logger.debug(f"BROADCAST:      id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
         raise NotImplementedError
@@ -166,13 +173,18 @@ class Server:
         buf = Buffer(await stream.read(packet_length))
 
         state = self.cache.states.get(stream.remote, 0)
-        packet = buf.unpack_packet(state, PACKET_MAP)
+
+        try:
+            packet = buf.unpack_packet(state, PACKET_MAP)
+        except InvalidPacketID:
+            self.logger.warn("Invalid packet ID received.")
+            return stream
 
         self.logger.debug(f"IN : state: {state} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
         if self.api.events._packet[state].get(packet.id) is None:
             self.logger.warn(f"No valid packet handler found for packet {state} 0x{packet.id:02X} {type(packet).__name__}")
-            return
+            return stream
 
         for handler in self.api.events._packet[state][packet.id]:
             try:

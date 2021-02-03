@@ -33,7 +33,7 @@ class PlayAdvancementTab(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayAdvancementTab:
-        return cls(buf.unpack_varint(), (buf.unpack_varint() if buf.unpack("?") else None))
+        return cls(buf.unpack_varint(), buf.unpack_optional(buf.unpack_varint))
 
 
 class PlaySelectAdvancementTab(Packet):

@@ -11,6 +11,8 @@ import pymine.types.nbt as nbt
 from pymine.data.registry import ITEM_REGISTRY
 import pymine.data.misc as misc_data
 
+from pymine.api.exceptions import InvalidPacketID
+
 
 class Buffer:
     """
@@ -73,7 +75,12 @@ class Buffer:
             if uncomp_len > 0:
                 data = zlib.decompress(self.read())
 
-        return PACKET_MAP[state][self.unpack_varint()].decode(self)
+        try:
+            packet_class = PACKET_MAP[state][self.unpack_varint()]
+        except KeyError:
+            raise InvalidPacketID
+
+        return packet_class.decode(self)
 
     def unpack(self, f: str) -> object:
         unpacked = struct.unpack(">" + f, self.read(struct.calcsize(f)))
@@ -96,7 +103,7 @@ class Buffer:
 
         return cls.pack("?", True) + packer(data)
 
-    def unpack_optional(self, unpacker: object) -> bool:
+    def unpack_optional(self, unpacker: object) -> object:
         """Unpacks an optional field from the buffer."""
 
         present = self.unpack("?")

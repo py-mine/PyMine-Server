@@ -7,7 +7,7 @@ from pymine.types.region import Region
 from pymine.types.chunk import Chunk
 import pymine.types.nbt as nbt
 
-from pymine.data.nbtdefaults.level import new_level_nbt
+from pymine.data.default_nbt.level import new_level_nbt
 
 
 def block_to_chunk_coords(block_x: int, block_z: int) -> tuple:
@@ -22,7 +22,7 @@ def chunk_to_region_coords(chunk_x: int, chunk_z: int) -> tuple:
     return chunk_x // 32, chunk_z // 32
 
 
-def region_file_name(region_x: int, region_z: int) -> str:
+def region_file_name(region_x: int, region_z: int) -> str:  # Gens the name for the region file in the format r.x.y.mca
     return ".".join(("r", str(region_x), str(region_z), "mca"))
 
 

@@ -68,19 +68,21 @@ async def send_server_difficulty(server, stream: Stream, world: World) -> None:
 
 
 async def send_player_abilities(server, stream: Stream, player: Player) -> None:
-    abilities = player.data['abilities']
+    abilities = player.data["abilities"]
     flags = BitField(4)
 
-    if abilities['invulnerable']:
+    if abilities["invulnerable"]:
         flags.add(0x01)
 
-    if abilities['flying']:
+    if abilities["flying"]:
         flags.add(0x02)
 
-    if abilities['mayfly']:
+    if abilities["mayfly"]:
         flags.add(0x04)
 
-    if abilities['instabuild']:
+    if abilities["instabuild"]:
         flags.add(0x08)
 
-    await server.send_packet(stream, packets_player.PlayPlayerAbilitiesClientBound(flags, abilities['flySpeed'], abilities['walkSpeed']))
+    await server.send_packet(
+        stream, packets_player.PlayPlayerAbilitiesClientBound(flags, abilities["flySpeed"], abilities["walkSpeed"])
+    )

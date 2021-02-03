@@ -140,7 +140,7 @@ class PlayPlayerAbilitiesClientBound(Packet):
     id = 0x30
     to = 1
 
-    def __init__(self, flags: bytes, flying_speed: float, fov_modifier: float) -> None:
+    def __init__(self, flags: int, flying_speed: float, fov_modifier: float) -> None:
         super().__init__()
 
         self.flags = flags
@@ -148,7 +148,7 @@ class PlayPlayerAbilitiesClientBound(Packet):
         self.fov_modifier = fov_modifier
 
     def encode(self) -> bytes:
-        return self.flags + Buffer.pack("f", self.flying_speed) + Buffer.pack("f", self.fov_modifier)
+        return Buffer.pack('b', self.flags) + Buffer.pack("f", self.flying_speed) + Buffer.pack("f", self.fov_modifier)
 
 
 class PlayPlayerAbilitiesServerBound(Packet):

@@ -67,6 +67,4 @@ async def send_server_difficulty(server, stream: Stream, world: World) -> None:
 
 
 async def send_player_abilities(server, stream: Stream, player: Player) -> None:
-    await server.send_packet(
-        stream, packets_player.PlayPlayerAbilitiesClientBound()
-    )
+    await server.send_packet(stream, packets_player.PlayPlayerAbilitiesClientBound())

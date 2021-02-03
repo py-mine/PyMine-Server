@@ -75,7 +75,7 @@ async def send_server_brand(stream: Stream) -> None:
 # shown in the menu options for the client
 async def send_server_difficulty(stream: Stream, world: World) -> None:
     await server.send_packet(
-        stream, packets_difficulty.PlayServerDifficulty(world.data["Difficulty"], world.data["DifficultyLocked"])
+        stream, packets_difficulty.PlayServerDifficulty(world.data["Difficulty"].data, world.data["DifficultyLocked"].data)
     )
 
 
@@ -97,5 +97,5 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
         flags.add(0x08)
 
     await server.send_packet(  # yes the last arg is supposed to be fov, but the values are actually the same
-        stream, packets_player.PlayPlayerAbilitiesClientBound(flags, abilities["flySpeed"], abilities["walkSpeed"])
+        stream, packets_player.PlayPlayerAbilitiesClientBound(flags, abilities["flySpeed"].data, abilities["walkSpeed"].data)
     )

@@ -49,7 +49,7 @@ class World:
             async with aiofile.async_open(file, "rb") as level_data_file:
                 return nbt.TAG_Compound.unpack(Buffer(await level_data_file.read()))
 
-        return new_level_nbt((2586, self.server.meta.version, 19133), self.name, (0, 100, 0), self.server.conf["seed"])
+        return new_level_nbt((2586, self.server.meta.version, 19133), self.name, (0, 100, 0), self.server.conf["seed"])["Data"]
 
     def cache_region(self, region: Region, key: tuple) -> Region:
         self.region_cache[key] = region

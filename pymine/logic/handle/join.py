@@ -21,13 +21,20 @@ from pymine.server import server
 
 # Used to finish the process of allowing a client to actually enter the server
 async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
-    player = server.playerio.fetch_player(uuid_)
+    server.cache.uuid[stream.remote] = int(uuid_)  # update uuid cache
+    player = server.playerio.fetch_player(uuid_)  # fetch player data from disk
     world = server.worlds[player.data["Dimension"]]  # the world player *should* be spawning into
 
     await send_join_game_packet(server, stream, world, player)
     await send_server_brand(server, stream)
     await send_server_difficulty(server, stream, world)
     await send_player_abilities(server, stream, player)
+
+
+@server.api.events.on_packet('play', 0x0B)
+async def plugin_message_recv(stream: Stream, packet: Packet):
+    if packet.channel == 'minecraft:brand':
+        pass
 
 
 # crucial info pertaining to the world and player status

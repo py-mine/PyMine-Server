@@ -20,13 +20,14 @@ class PlayPluginMessageClientBound(Packet):
     id = 0x17
     to = 1
 
-    def __init__(self, data: bytes) -> None:
+    def __init__(self, channel: str, data: bytes) -> None:
         super().__init__()
 
+        self.channel = channel
         self.data = data
 
     def encode(self) -> bytes:
-        return self.data
+        return Buffer.pack_string(self.channel) + self.data
 
 
 class PlayPluginMessageServerBound(Packet):

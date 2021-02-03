@@ -16,7 +16,7 @@ def get_dimension_data(dimension: str) -> nbt.TAG_Compound:
 
     for dim in dims:
         if dim['name'].endswith(dimension):
-            return copy.deepcopy(dim)
+            return dim
 
 
 # def new_dim_codec_dim_props(

@@ -14,6 +14,12 @@ from pymine.util.misc import seed_hash
 
 # Used to finish the process of allowing a client to actually enter the server
 async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
+    await send_join_game_packet(server, stream, uuid_)
+    await
+
+
+# crucial info pertaining to the world and player status
+async def send_join_game_packet(server, stream: Stream, uuid_: uuid.UUID) -> None:
     level_name = server.conf["level_name"]  # level name, i.e. Xenon
 
     player = server.playerio.fetch_player(uuid_)
@@ -40,3 +46,7 @@ async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
             False,  # Should be true if world is superflat
         ),
     )
+
+# send server branch via plugin channels
+async def send_server_brand(server, stream: Stream) -> None:
+    pass

@@ -34,7 +34,7 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
 @server.api.events.on_packet('play', 0x0B)
 async def plugin_message_recv(stream: Stream, packet: Packet):
     if packet.channel == 'minecraft:brand':
-        pass
+        server.cache.uuid[stream.remote].brand = packet.data.unpack_string()
 
 
 # crucial info pertaining to the world and player status

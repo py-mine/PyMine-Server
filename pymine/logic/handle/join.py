@@ -85,7 +85,7 @@ async def send_server_difficulty(stream: Stream, world: World) -> None:
 # send what the player can/can't do
 async def send_player_abilities(stream: Stream, player: Player) -> None:
     abilities = player.data["abilities"]
-    flags = BitField(4)
+    flags = BitField.new(4)
 
     if abilities["invulnerable"]:
         flags.add(0x01)
@@ -100,5 +100,5 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
         flags.add(0x08)
 
     await server.send_packet(  # yes the last arg is supposed to be fov, but the values are actually the same
-        stream, packets_player.PlayPlayerAbilitiesClientBound(flags, abilities["flySpeed"].data, abilities["walkSpeed"].data)
+        stream, packets_player.PlayPlayerAbilitiesClientBound(flags.field, abilities["flySpeed"].data, abilities["walkSpeed"].data)
     )

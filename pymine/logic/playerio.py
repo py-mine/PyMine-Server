@@ -18,6 +18,7 @@ class PlayerDataIO:
 
         self.cache = {}
 
+    # Fetch a player by their uuid, this is cached to avoid duplicate Player objects and de-synced saving (possible future problem)
     async def fetch_player(self, uuid_: uuid.UUID) -> Player:
         try:
             return self.cache[int(uuid_)]

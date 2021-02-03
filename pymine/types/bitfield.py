@@ -14,17 +14,23 @@ class BitField:
         self.length = length
         self.field = field
 
-    @classmethod
-    def new(cls, length: int, *flags: int) -> BitField:
+    @classmethod  # [(flag, bool), (flag, bool)]
+    def new(cls, length: int, *flags) -> BitField:
         field = 0
 
         for flag in flags:
-            field |= 2 ** flag
+            if flag[1]:
+                field |= 2 ** flag[0]
+            else:
+                field &= ~flag[0]
 
         return cls(length, field)
 
-    def add(self, flag: int) -> None:
-        self.field |= 2 ** flag
+    def add(self, flag: int, state: bool) -> None:
+        if state:
+            self.field |= 2 ** flag
+        else:
+            self.field &= ~flag
 
     def get(self, flag: int) -> int:
         return (self.field >> flag) & 1

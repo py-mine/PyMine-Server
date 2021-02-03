@@ -60,4 +60,6 @@ async def send_server_brand(server, stream: Stream) -> None:
 
 
 async def send_server_difficulty(server, stream: Stream, world: World) -> None:
-    await server.send_packet(stream, packets_difficulty.PlayServerDifficulty(world.data['Difficulty'], world.data['DifficultyLocked']))
+    await server.send_packet(
+        stream, packets_difficulty.PlayServerDifficulty(world.data["Difficulty"], world.data["DifficultyLocked"])
+    )

@@ -25,8 +25,8 @@ class Player:
         self.remote = remote
 
     @classmethod
-    def new(cls, entity_id: int, uuid_: uuid.UUID, spawn: tuple) -> Player:
-        return cls(entity_id, cls.new_nbt(uuid_, spawn))
+    def new(cls, entity_id: int, uuid_: uuid.UUID, spawn: tuple, dim: str) -> Player:
+        return cls(entity_id, cls.new_nbt(uuid_, spawn, dim: str))
 
     @staticmethod
     def new_nbt(uuid_: uuid.UUID, spawn: tuple, dimension: str) -> nbt.TAG:

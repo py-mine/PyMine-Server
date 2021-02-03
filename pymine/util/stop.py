@@ -1,7 +1,7 @@
 import asyncio
 
 
-async def stop(server):
+async def stop(server):  # used to consistently stop the server
     server.server.close()
     await server.server.wait_closed()
 

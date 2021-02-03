@@ -26,5 +26,5 @@ def gen_verify_hash(shared_key: bytes, public_key: bytes):
     return format(int.from_bytes(verify_hash.digest(), byteorder="big", signed=True), "x")
 
 
-def gen_aes_cipher(shared_key: bytes):
+def gen_aes_cipher(shared_key: bytes):  # cipher used to encrypt + decrypt data sent via an encrypted socket
     return Cipher(algorithms.AES(shared_key), modes.CFB8(shared_key))

@@ -42,7 +42,7 @@ class Logger:
         message = " ".join([str(m) for m in message])
         print(f"{BRIGHT}{WHITE}[{f_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{message}{END}")
 
-    warning = warn
+    warning = warn  # for slight compatibility with the built-in logging module
 
     def error(self, *message):
         message = " ".join([str(m) for m in message])

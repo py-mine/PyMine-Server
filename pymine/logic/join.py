@@ -12,6 +12,7 @@ import pymine.net.packets.play.player as packets_player
 from pymine.util.misc import seed_hash
 
 
+# Used to finish the process of allowing a client to actually enter the server
 async def join(server, stream: Stream, uuid_: uuid.UUID, username: str) -> None:
     level_name = server.conf["level_name"]  # level name, i.e. Xenon
 

@@ -16,7 +16,7 @@ def get_dimension_data(dimension: str) -> nbt.TAG_Compound:
     dims = DEFAULT_DIM_CODEC_NBT["value"]
 
     for dim in dims:
-        if dim["name"].endswith(dimension):  # just in case namespace (like minecraft:) isn't there
+        if dim["name"].data.endswith(dimension):  # just in case namespace (like minecraft:) isn't there
             return dim
 
 

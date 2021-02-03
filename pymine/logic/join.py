@@ -8,7 +8,9 @@ import pymine.types.nbt as nbt
 
 from pymine.data.default_nbt.dimension_codec import new_dim_codec_nbt, get_dimension_data
 
+import pymine.net.packets.play.plugin_msg as packets_plugin
 import pymine.net.packets.play.player as packets_player
+
 from pymine.util.misc import seed_hash
 
 
@@ -49,4 +51,4 @@ async def send_join_game_packet(server, stream: Stream, uuid_: uuid.UUID) -> Non
 
 # send server branch via plugin channels
 async def send_server_brand(server, stream: Stream) -> None:
-    pass
+    await server.send_packet(stream, packets_plugin.PlayPluginMessageClientBound('minecraft:brand', server.pymine))

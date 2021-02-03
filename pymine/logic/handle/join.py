@@ -69,7 +69,7 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
 
 # send server brand + version via plugin channels
 async def send_server_brand(stream: Stream) -> None:
-    await server.send_packet(stream, packets_plugin.PlayPluginMessageClientBound("minecraft:brand", server.meta.pymine))
+    await server.send_packet(stream, packets_plugin.PlayPluginMessageClientBound("minecraft:brand", Buffer.pack_string(server.meta.pymine)))
 
 
 # shown in the menu options for the client

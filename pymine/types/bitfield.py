@@ -1,4 +1,3 @@
-
 class SingleByteBitField:
     def __init__(self, length: int, field: int):
         self.length = length
@@ -9,7 +8,7 @@ class SingleByteBitField:
         field = 0
 
         for i, v in enumerate(values):
-            i = 2**i
+            i = 2 ** i
 
             if v:
                 field |= i

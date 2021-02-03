@@ -26,7 +26,7 @@ class Player:
 
     @classmethod
     def new(cls, entity_id: int, uuid_: uuid.UUID, spawn: tuple, dim: str) -> Player:
-        return cls(entity_id, cls.new_nbt(uuid_, spawn, dim: str))
+        return cls(entity_id, cls.new_nbt(uuid_, spawn, dim))
 
     @staticmethod
     def new_nbt(uuid_: uuid.UUID, spawn: tuple, dimension: str) -> nbt.TAG:

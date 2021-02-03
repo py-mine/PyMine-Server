@@ -24,6 +24,14 @@ class Stream(StreamWriter):
 
 
 class EncryptedStream(Stream):
+    """An encrypted version of a Stream, automatically encrypts and decrypts outgoing and incoming data.
+
+    :param Stream stream: The original, stream-compatible object.
+    :param Cipher cipher: The cipher object, used to encrypt + decrypt data.
+    :ivar _CipherContext decryptor: Description of parameter `_CipherContext`.
+    :ivar _CipherContext encryptor: Description of parameter `_CipherContext`.
+    """
+
     def __init__(self, stream: Stream, cipher: Cipher) -> None:
         super().__init__(stream._reader, stream)
 

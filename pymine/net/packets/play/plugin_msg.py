@@ -35,7 +35,7 @@ class PlayPluginMessageServerBound(Packet):
     """Used to send plugin data to the server (Client -> Server)
 
     :param str channel: The plugin channel being used.
-    :param bytes data: Data to be sent to the client.
+    :param Buffer data: Data to be sent to the client.
     :attr int id: Unique packet ID.
     :attr int to: Packet direction.
     :attr data:
@@ -51,4 +51,4 @@ class PlayPluginMessageServerBound(Packet):
         self.data = data
 
     def decode(self, buf: Buffer) -> PlayPluginMessageServerBound:
-        return PlayPluginMessageServerBound(buf.unpack_string(), buf.read())
+        return PlayPluginMessageServerBound(buf.unpack_string(), Buffer(buf.read()))

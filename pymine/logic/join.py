@@ -49,6 +49,7 @@ async def send_join_game_packet(server, stream: Stream, uuid_: uuid.UUID) -> Non
         ),
     )
 
+
 # send server branch via plugin channels
 async def send_server_brand(server, stream: Stream) -> None:
-    await server.send_packet(stream, packets_plugin.PlayPluginMessageClientBound('minecraft:brand', server.pymine))
+    await server.send_packet(stream, packets_plugin.PlayPluginMessageClientBound("minecraft:brand", server.pymine))

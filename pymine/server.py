@@ -134,7 +134,7 @@ class Server:
         stream.write(Buffer.pack_packet(packet, comp_thresh))
         await stream.drain()
 
-    async def broadcast_packet(self, packet: Packet):
+    async def broadcast_packet(self, packet: Packet):  # should broadcast a packet to all connected clients in the play state
         self.logger.debug(f"BROADCAST:      id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
         raise NotImplementedError

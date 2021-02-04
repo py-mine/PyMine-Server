@@ -12,6 +12,7 @@ from pymine.util.misc import run_in_executor
 
 from pymine.api.commands import CommandHandler
 from pymine.api.events import EventHandler
+from pymine.api.register import Register
 
 
 class PyMineAPI:
@@ -24,6 +25,7 @@ class PyMineAPI:
 
         self.events = EventHandler(server)
         self.commands = CommandHandler(server)
+        self.register = Register()
 
     def taskify_handlers(self, handlers: list):
         for handler in handlers:

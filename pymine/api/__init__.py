@@ -205,6 +205,8 @@ class PyMineAPI:
         # start console command handler task
         self.tasks.append(asyncio.create_task(self.commands.handle_console()))
 
+        return self
+
     async def stop(self):  # called when server is stopping
         for task in self.tasks:
             try:

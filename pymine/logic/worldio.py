@@ -46,11 +46,11 @@ class ChunkIO(AbstractChunkIO):
     @classmethod
     def fetch_chunk(cls, world_name: str, chunk_x: int, chunk_z: int) -> Chunk:
         rx, ry = chunk_x // 32, chunk_z // 32
-        region_path = os.path.join('worlds', world_name, 'region', f'r.{rx}.{ry}.mca')
+        region_path = os.path.join("worlds", world_name, "region", f"r.{rx}.{ry}.mca")
 
         loc_table_loc = cls.calc_offset(chunk_x, chunk_z)
 
-        with open(region_path, 'rb') as region_file:
+        with open(region_path, "rb") as region_file:
             region_file.seek(loc_table_loc)
 
             offset, length = cls.find_chunk(region_file.read(4))
@@ -58,18 +58,20 @@ class ChunkIO(AbstractChunkIO):
             region_file.seek(loc_table_loc + 4096)
             timestamp = region_file.read(4)
 
-            region_file.seek(offset+5)
+            region_file.seek(offset + 5)
 
-            return Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(region_file.read(length-5)))), struct.unpack('>i', timestamp))
+            return Chunk(
+                nbt.TAG_Compound.unpack(Buffer(zlib.decompress(region_file.read(length - 5)))), struct.unpack(">i", timestamp)
+            )
 
     @classmethod
     async def fetch_chunk_async(cls, world_name: str, chunk_x: int, chunk_z: int) -> Chunk:
         rx, ry = chunk_x // 32, chunk_z // 32
-        region_path = os.path.join('worlds', world_name, 'region', f'r.{rx}.{ry}.mca')
+        region_path = os.path.join("worlds", world_name, "region", f"r.{rx}.{ry}.mca")
 
         loc_table_loc = cls.calc_offset(chunk_x, chunk_z)
 
-        async with aiofile.async_open(region_path, 'rb') as region_file:
+        async with aiofile.async_open(region_path, "rb") as region_file:
             region_file.seek(loc_table_loc)
 
             offset, length = cls.find_chunk(await region_file.read(4))
@@ -77,5 +79,8 @@ class ChunkIO(AbstractChunkIO):
             region_file.seek(loc_table_loc + 4096)
             timestamp = await region_file.read(4)
 
-            region_file.seek(offset+5)
-            return Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(await region_file.read(length-5)))), struct.unpack('>i', timestamp))
+            region_file.seek(offset + 5)
+            return Chunk(
+                nbt.TAG_Compound.unpack(Buffer(zlib.decompress(await region_file.read(length - 5)))),
+                struct.unpack(">i", timestamp),
+            )

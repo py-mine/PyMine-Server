@@ -14,8 +14,8 @@ class Registry:
         else:
             raise TypeError("Creating a registry from something other than a dict, Map, tuple, or list isn't supported")
 
-    def encode(self, key: object) -> object:
+    def encode(self, key: object) -> object:  # most likely an identifier to an int
         return self.data[key]
 
-    def decode(self, value: object) -> object:
+    def decode(self, value: object) -> object:  # most likely a numeric id to a string identifier
         return self.data_reversed[value]

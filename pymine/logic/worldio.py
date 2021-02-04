@@ -22,9 +22,7 @@ async def load_worlds(server, level_name: str, chunk_cache_max_per: int) -> dict
     # Worlds must be .init()ed, this loads their level.dat data and maybe other stuff later
     for ext, proper_name in zip(("", "_nether", "_the_end"), ("overworld", "nether", "the_end")):
         name = level_name + ext
-        worlds[f"minecraft:{proper_name}"] = await World(
-            server, name, os.path.join("worlds", name), chunk_cache_max
-        ).init()
+        worlds[f"minecraft:{proper_name}"] = await World(server, name, os.path.join("worlds", name), chunk_cache_max).init()
 
     server.logger.info(f'Loaded default worlds: {", ".join([w.name for w in worlds.values()])}.')
 

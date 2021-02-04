@@ -27,6 +27,7 @@
 
 
 ## Installation / Usage
+*Check out [the docs](https://pymine.readthedocs.io/) for more info*
 ### Installing from source
 - First, clone the repository `git clone https://github.com/py-mine/PyMine.git` and move into that directory (`cd PyMine`)
 - Next, install the required Python packages via pip (`python3 -m pip install -r requirements.txt`)
@@ -37,8 +38,8 @@
 ## API/Plugin Examples
 - [example-plugin](https://github.com/py-mine/example-plugin) - *the official example plugin*
 
-## Contributors ✨
 
+## Contributors ✨
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->

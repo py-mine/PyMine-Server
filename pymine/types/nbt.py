@@ -397,10 +397,9 @@ class TAG_Compound(TAG, dict):
         out = []
 
         while True:
-            try:
-                tag = TYPES[buf.unpack("b")]
-            except BaseException as e:
-                print(e)
+            tag = TYPES[buf.unpack("b")]
+
+            if tag is TAG_End:
                 break
 
             out.append(tag(tag.unpack_name(buf), tag.unpack_data(buf)))

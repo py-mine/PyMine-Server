@@ -2,7 +2,7 @@ import os
 
 from pymine.types.world import World
 
-
+# Setup world dict and load basic level data for each world
 async def load_worlds(server, level_name: str, region_cache_max_per: int) -> dict:
     worlds = {}
 

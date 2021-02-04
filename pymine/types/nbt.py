@@ -107,7 +107,7 @@ class TAG_End(TAG):
     id = 0
 
     def __init__(self, *args) -> None:
-        pass
+        super().__init__(None)
 
     def pack_name(self) -> bytes:
         return b''

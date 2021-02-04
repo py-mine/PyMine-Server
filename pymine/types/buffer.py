@@ -203,7 +203,7 @@ class Buffer:
         if tag is None:
             return b"\x00"
 
-        return tag.pack()
+        return tag.pack_data()
 
     def unpack_nbt(self):
         return nbt.unpack(self)

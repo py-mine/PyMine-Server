@@ -12,7 +12,7 @@ from pymine.util.logging import task_exception_handler, Logger
 from pymine.util.encryption import gen_rsa_keys
 
 from pymine.logic.config import load_config, load_favicon
-from pymine.logic.worldio import load_worlds, WorldIO
+from pymine.logic.worldio import load_worlds, ChunkIO
 from pymine.logic.playerio import PlayerDataIO
 
 from pymine.api.exceptions import StopHandling, InvalidPacketID

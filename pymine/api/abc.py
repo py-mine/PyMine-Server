@@ -22,8 +22,8 @@ class AbstractChunkIO:
 
     @classmethod
     def fetch_chunk(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:
-        raise NotImplementedError(cls.__class__.__name__)
+        raise NotImplementedError(cls.__name__)
 
     @classmethod
     async def fetch_chunk_async(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:
-        raise NotImplementedError(cls.__class__.__name__)
+        raise NotImplementedError(cls.__name__)

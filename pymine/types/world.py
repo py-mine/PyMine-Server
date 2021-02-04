@@ -64,4 +64,10 @@ class World:
         try:
             return self._chunk_cache[key]
         except KeyError:
+            pass
+
+        try:
             return self.cache_chunk(await self.server.chunkio.fetch_chunk_async(self.path, *key), key)
+        except FileNotFoundError:
+            # return self.server.generator.generate_chunk()
+            pass

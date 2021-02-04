@@ -64,7 +64,7 @@ class TAG:
 
     def __init__(self, name: str = None) -> None:
         self.id = self.__class__.id
-        self.name = name
+        self.name = "" if name is None else name
 
     def pack_id(self) -> bytes:
         return BufferUtil.pack("b", self.id)

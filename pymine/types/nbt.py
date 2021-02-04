@@ -26,13 +26,17 @@ __all__ = (
 TYPES = []
 
 
-def unpack(buf) -> TAG_Compound:
+def unpack(buf, root_is_full: bool = False) -> TAG_Compound:
     try:
         data = gzip.decompress(buf.buf[buf.pos :])
         buf.buf = data
         buf.reset()
     except BaseException:
         pass
+
+    if root_is_full:
+        buf.read(1)
+        return TAG_Compound(TAG.unpack_name(buf), TAG_Compound.unpack_data(buf))
 
     return TAG_Compound(None, TAG_Compound.unpack_data(buf))
 

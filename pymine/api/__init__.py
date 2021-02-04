@@ -23,7 +23,7 @@ class PyMineAPI:
         self.plugins = {}
         self.tasks = []
 
-        self.events = EventHandler(server)
+        self.events = EventHandler()
         self.commands = CommandHandler(server)
         self.register = Register()
 

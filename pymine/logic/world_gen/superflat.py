@@ -3,8 +3,8 @@ import numpy
 
 from pymine.types.chunk import Chunk
 
+from pymine.api.abc import AbstractWorldGenerator
 from pymine.data.registries import BLOCK_REGISTRY
-from pymine.api.world_gen import AbstractWorldGenerator
 
 
 class SuperFlatWorldGenerator(AbstractWorldGenerator):

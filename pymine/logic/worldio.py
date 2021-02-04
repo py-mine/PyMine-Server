@@ -38,8 +38,8 @@ class ChunkIO(AbstractChunkIO):
 
     @staticmethod
     def find_chunk(location: int) -> tuple:
-        offset = (loc >> 8) & 0xFFFFFF
-        size = loc & 0xFF
+        offset = (location >> 8) & 0xFFFFFF
+        size = location & 0xFF
 
         return offset * 4096, size * 4096
 

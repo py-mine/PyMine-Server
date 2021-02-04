@@ -44,9 +44,9 @@ class ChunkIO(AbstractChunkIO):
         return offset * 4096, size * 4096
 
     @classmethod
-    def fetch_chunk(cls, world_name: str, chunk_x: int, chunk_z: int) -> Chunk:
+    def fetch_chunk(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:
         rx, ry = chunk_x // 32, chunk_z // 32
-        region_path = os.path.join("worlds", world_name, "region", f"r.{rx}.{ry}.mca")
+        region_path = os.path.join(world_path, "region", f"r.{rx}.{ry}.mca")
 
         loc_table_loc = cls.calc_offset(chunk_x, chunk_z)
 
@@ -62,9 +62,9 @@ class ChunkIO(AbstractChunkIO):
             return Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(region_file.read(length - 5)))), timestamp)
 
     @classmethod
-    async def fetch_chunk_async(cls, world_name: str, chunk_x: int, chunk_z: int) -> Chunk:
+    async def fetch_chunk_async(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:
         rx, ry = chunk_x // 32, chunk_z // 32
-        region_path = os.path.join("worlds", world_name, "region", f"r.{rx}.{ry}.mca")
+        region_path = os.path.join(world_path, "region", f"r.{rx}.{ry}.mca")
 
         loc_table_loc = cls.calc_offset(chunk_x, chunk_z)
 

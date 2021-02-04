@@ -5,7 +5,7 @@ from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
 
 with open(os.path.join("pymine", "data", "default_nbt", "dimension_codec.nbt"), "rb") as dim_codec_file:
-    DEFAULT_DIM_CODEC_NBT = nbt.unpack(Buffer(dim_codec_file.read()))
+    DEFAULT_DIM_CODEC_NBT = nbt.unpack(Buffer(dim_codec_file.read()), root_is_full=False)
 
 
 def new_dim_codec_nbt() -> nbt.TAG_Compound:

@@ -75,9 +75,7 @@ class Server:
 
         self.aiohttp = aiohttp.ClientSession()
         self.server = await asyncio.start_server(self.handle_connection, host=addr, port=port)
-        self.api = PyMineAPI(self)
-
-        await self.api.init()
+        self.api = await PyMineAPI(self).init()
 
         # 5 / the second arg (the max region cache size per world instance), should be dynamically changed based on the
         # amount of players online on each world, probably something like (len(players) + 1)

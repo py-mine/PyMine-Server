@@ -8,7 +8,6 @@ import sys
 import os
 
 from pymine.util.immutable import make_immutable
-from pymine.util.misc import run_in_executor
 
 from pymine.api.commands import CommandHandler
 from pymine.api.events import EventHandler

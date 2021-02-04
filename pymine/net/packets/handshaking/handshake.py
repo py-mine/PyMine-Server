@@ -15,12 +15,12 @@ class HandshakeHandshake(Packet):
     :param str address: The host/address the client is connecting to.
     :param int port: The port the client is connection on.
     :param int next_state: The next state which the server should transfer to. 1 for status, 2 for login.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr protocol:
-    :attr address:
-    :attr port:
-    :attr next_state:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar protocol:
+    :ivar address:
+    :ivar port:
+    :ivar next_state:
     """
 
     id = 0x00

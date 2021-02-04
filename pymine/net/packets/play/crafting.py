@@ -20,11 +20,11 @@ class PlayCraftRecipeRequest(Packet):
     :param int window_id: ID of the crafting table window.
     :param str recipe_identifier: The recipe identifier.
     :param bool make_all: Whether maximum amount that can be crafted is crafted.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr window_id:
-    :attr recipe_identifier:
-    :attr make_all:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar window_id:
+    :ivar recipe_identifier:
+    :ivar make_all:
     """
 
     id = 0x19
@@ -46,9 +46,9 @@ class PlaySetDisplayedRecipe(Packet):
     """Replaces Recipe Book Data, type 0. See here: https://wiki.vg/Protocol#Set_Displayed_Recipe (Client -> Server)
 
     :param str recipe_id: The identifier for the recipe.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr recipe_id:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar recipe_id:
     """
 
     id = 0x1E
@@ -70,11 +70,11 @@ class PlaySetRecipeBookState(Packet):
     :param int book_id: One of the following: crafting (0), furnace (1), blast furnace (2), smoker (3).
     :param bool book_open: Whether the crafting book is open or not.
     :param bool filter_active: Unknown.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr book_id:
-    :attr book_open:
-    :attr filter_active:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar book_id:
+    :ivar book_open:
+    :ivar filter_active:
     """
 
     id = 0x1F
@@ -112,9 +112,9 @@ class PlayDeclareRecipes(Packet):
     """Sends all registered recipes to the client. (Server -> Client)
 
     :param list recipes: The recipes to be sent, should probably be the RECIPES Map (pymine/data/recipes.py).
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr recipes:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar recipes:
     """
 
     id = 0x5A

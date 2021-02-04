@@ -22,19 +22,19 @@ class PlayUnlockRecipes(Packet):
     :param bool smoker_book_filter_active: If true, then the filtering option is active when the players opens its inventory.
     :param list recipe_ids_1: First list of recipe identifiers.
     :param list recipe_ids_2: Second list of recipe identifiers.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr action:
-    :attr crafting_book_open:
-    :attr crafting_book_filter_active:
-    :attr smelting_book_open:
-    :attr smelting_book_filter_active:
-    :attr blast_furnace_book_open:
-    :attr blast_furnace_book_filter_active:
-    :attr smoker_book_open:
-    :attr smoker_book_filter_active:
-    :attr recipe_ids_1:
-    :attr recipe_ids_2:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar action:
+    :ivar crafting_book_open:
+    :ivar crafting_book_filter_active:
+    :ivar smelting_book_open:
+    :ivar smelting_book_filter_active:
+    :ivar blast_furnace_book_open:
+    :ivar blast_furnace_book_filter_active:
+    :ivar smoker_book_open:
+    :ivar smoker_book_filter_active:
+    :ivar recipe_ids_1:
+    :ivar recipe_ids_2:
     """
 
     id = 0x35

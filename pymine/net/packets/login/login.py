@@ -21,9 +21,9 @@ class LoginStart(Packet):
     """Packet from client asking to start login process. (Client -> Server)
 
     :param str username: Username of the client who sent the request.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr username:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar username:
     """
 
     id = 0x00
@@ -43,10 +43,10 @@ class LoginEncryptionRequest(Packet):
     """Used by the server to ask the client to encrypt the login process. (Server -> Client)
 
     :param bytes public_key: Public key.
-    :attr type verify_token: Verify token, randomly generated.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr public_key:
+    :ivar type verify_token: Verify token, randomly generated.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar public_key:
     """
 
     id = 0x01
@@ -73,10 +73,10 @@ class LoginEncryptionResponse(Packet):
 
     :param bytes shared_key: The shared key used in the login process.
     :param bytes verify_token: The verify token used in the login process.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr shared_key:
-    :attr verify_token:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar shared_key:
+    :ivar verify_token:
     """
 
     id = 0x01
@@ -98,10 +98,10 @@ class LoginSuccess(Packet):
 
     :param uuid.UUID uuid: The UUID of the connecting player/client.
     :param str username: The username of the connecting player/client.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr uuid:
-    :attr username:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar uuid:
+    :ivar username:
     """
 
     id = 0x02
@@ -121,9 +121,9 @@ class LoginDisconnect(Packet):
     """Sent by the server to kick a player while in the login state. (Server -> Client)
 
     :param str reason: The reason for the disconnect.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr username:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar username:
     """
 
     id = 0x00

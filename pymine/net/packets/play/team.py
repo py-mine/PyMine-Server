@@ -15,11 +15,11 @@ class PlayTeams(Packet):
     :param str team_name: The name of the team.
     :param int mode: The mode, either create team (0), remove team (1), update info (2), add entities (3), or remove entities (4)
     :param dict data: Depends on the mode, see here: https://wiki.vg/Protocol#Teams
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr team_name:
-    :attr mode:
-    :attr data:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar team_name:
+    :ivar mode:
+    :ivar data:
     """
 
     id = 0x4C

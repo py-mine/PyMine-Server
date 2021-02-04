@@ -1,4 +1,6 @@
 import json
+import sys
+import os
 
 from pymine.util.immutable import make_immutable
 from pymine.types.registry import Registry
@@ -11,7 +13,10 @@ __all__ = (
     "ENTITY_REGISTRY",
 )
 
-with open("pymine/data/registries.json") as registry:  # generated from server jar
+if "sphinx" in sys.modules:
+    os.chdir(os.path.join(os.path.dirname(__file__), "../.."))
+
+with open(os.path.join("pymine", "data", "registries.json"), "r") as registry:  # generated from server jar
     REGISTRY = make_immutable(json.load(registry))
 
 ITEM_REGISTRY = Registry(REGISTRY["minecraft:item"]["entries"])

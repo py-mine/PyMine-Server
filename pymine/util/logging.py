@@ -23,7 +23,7 @@ class Logger:
     """Custom logging implementation.
 
     :param bool debug: Whether to show debug messages or not.
-    :attr type debug_: The value of the debug parameter.
+    :ivar type debug_: The value of the debug parameter.
     """
 
     def __init__(self, debug: bool = True) -> None:
@@ -54,7 +54,7 @@ class Logger:
 
     @staticmethod
     def f_traceback(e: BaseException):
-        return "\n" + "".join(traceback.format_exception(type(e), e, e.__traceback__, 4)).rstrip("\n")
+        return "\n" + "".join(traceback.format_exception(type(e), e, e.__traceback__, 10)).rstrip("\n")
 
 
 def task_exception_handler(loop, ctx):

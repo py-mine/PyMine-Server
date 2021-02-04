@@ -16,11 +16,11 @@ class PlayBossBar(Packet):
     :param uuid.UUID uuid: UUID of the boss bar.
     :param int action: Action to take.
     :param type **data: Data corresponding to the action.
-    :attr type data: Data corresponding to the action.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr uuid:
-    :attr action:
+    :ivar type data: Data corresponding to the action.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar uuid:
+    :ivar action:
     """
 
     id = 0x0C

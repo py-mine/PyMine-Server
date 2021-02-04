@@ -11,6 +11,8 @@ import pymine.types.nbt as nbt
 from pymine.data.registry import ITEM_REGISTRY
 import pymine.data.misc as misc_data
 
+from pymine.api.exceptions import InvalidPacketID
+
 
 class Buffer:
     """
@@ -73,7 +75,12 @@ class Buffer:
             if uncomp_len > 0:
                 data = zlib.decompress(self.read())
 
-        return PACKET_MAP[state][self.unpack_varint()].decode(self)
+        try:
+            packet_class = PACKET_MAP[state][self.unpack_varint()]
+        except KeyError:
+            raise InvalidPacketID
+
+        return packet_class.decode(self)
 
     def unpack(self, f: str) -> object:
         unpacked = struct.unpack(">" + f, self.read(struct.calcsize(f)))
@@ -96,7 +103,7 @@ class Buffer:
 
         return cls.pack("?", True) + packer(data)
 
-    def unpack_optional(self, unpacker: object) -> bool:
+    def unpack_optional(self, unpacker: object) -> object:
         """Unpacks an optional field from the buffer."""
 
         present = self.unpack("?")
@@ -252,7 +259,7 @@ class Buffer:
         return x, y, z
 
     @classmethod
-    def pack_slot(cls, item: str = None, count: int = 1, tag: nbt.TAG = None):
+    def pack_slot(cls, item: str = None, count: int = 1, tag: nbt.TAG = None) -> bytes:
         """Packs an inventory/container slot into bytes."""
 
         item_id = ITEM_REGISTRY.encode(item)  # needed to support recipes
@@ -262,7 +269,7 @@ class Buffer:
 
         return cls.pack("?", True) + cls.pack_varint(item_id) + cls.pack("b", count) + cls.pack_nbt(tag)
 
-    def unpack_slot(self):
+    def unpack_slot(self) -> dict:
         """Unpacks an inventory/container slot from the buffer."""
 
         has_item_id = self.unpack_optional()
@@ -278,7 +285,7 @@ class Buffer:
 
         return cls.pack("fff", x, y, z)
 
-    def unpack_rotation(self):
+    def unpack_rotation(self) -> tuple:
         """Unpacks a rotation (of an entity) from the buffer."""
 
         return self.unpack("fff")
@@ -454,7 +461,7 @@ class Buffer:
         )
 
     @classmethod
-    def pack_particle(cls, **particle):
+    def pack_particle(cls, **particle) -> bytes:
         particle_id = particle["id"]
         out = cls.pack_varint(particle_id)
 
@@ -470,7 +477,7 @@ class Buffer:
 
         return out
 
-    def unpack_particle(self):
+    def unpack_particle(self) -> dict:
         particle = {}
         particle_id = particle["id"] = self.unpack_varint()
 

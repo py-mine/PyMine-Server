@@ -16,10 +16,10 @@ class PlayAdvancementTab(Packet):
 
     :param int action: Either opened tab (0), or closed screen (1).
     :param int tab_id: The ID of the tab, only present if action is 0 (opened tab)
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr action:
-    :attr tab_id:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar action:
+    :ivar tab_id:
     """
 
     id = 0x22
@@ -33,7 +33,7 @@ class PlayAdvancementTab(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayAdvancementTab:
-        return cls(buf.unpack_varint(), (buf.unpack_varint() if buf.unpack("?") else None))
+        return cls(buf.unpack_varint(), buf.unpack_optional(buf.unpack_varint))
 
 
 class PlaySelectAdvancementTab(Packet):

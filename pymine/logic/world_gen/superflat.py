@@ -1,4 +1,3 @@
-
 from pymine.types.Region import Region
 from pymine.types.chunk import Chunk
 

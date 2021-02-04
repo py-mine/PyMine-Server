@@ -74,9 +74,11 @@ class TAG:
         return buf.unpack("b")
 
     def pack_name(self) -> bytes:
-        if self.name is not None:
+        if self.name:
             mutf8_name = encode_modified_utf8(self.name)
             return BufferUtil.pack("H", len(mutf8_name)) + mutf8_name
+
+        return b""
 
     @staticmethod
     def unpack_name(buf) -> str:

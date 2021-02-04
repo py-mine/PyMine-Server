@@ -3,7 +3,6 @@ import aiofile
 import os
 
 from pymine.types.buffer import Buffer
-from pymine.types.region import Region
 from pymine.types.chunk import Chunk
 import pymine.types.nbt as nbt
 
@@ -27,7 +26,7 @@ def region_file_name(region_x: int, region_z: int) -> str:  # Gens the name for 
 
 
 class World:
-    def __init__(self, server, name: str, path: str, region_cache_max: int) -> None:
+    def __init__(self, server, name: str, path: str, chunk_cache_max: int) -> None:
         self.server = server
 
         self.name = name
@@ -35,8 +34,8 @@ class World:
 
         self.data = None
 
-        self.region_cache_max = region_cache_max
-        self.region_cache = OrderedDict()
+        self._chunk_cache_max = chunk_cache_max
+        self._chunk_cache = OrderedDict()
 
     async def init(self):
         self.data = await self.load_level_data()
@@ -51,26 +50,18 @@ class World:
 
         return new_level_nbt((2586, self.server.meta.version, 19133), self.name, (0, 100, 0), self.server.conf["seed"])["Data"]
 
-    def cache_region(self, region: Region, key: tuple) -> Region:
-        self.region_cache[key] = region
+    def cache_chunk(self, chunk: Chunk, key: tuple) -> Chunk:
+        self._chunk_cache[key] = chunk
 
-        if len(self.region_cache) > self.region_cache_max:
-            self.region_cache.popitem(False)
+        if len(self.chunk_cache) > self._chunk_cache_max:
+            self._chunk_cache.popitem(False)
 
-        return region
-
-    async def fetch_region(self, region_coords: tuple) -> Region:
-        try:
-            self.region_cache.move_to_end(region_coords)
-            return self.region_cache[region_coords]
-        except KeyError:
-            file = os.path.join(self.world_path, "region", region_file_name(*region_coords))
-            return self.cache_region(await Region.from_file(file), region_coords)
+        return chunk
 
     async def fetch_chunk(self, chunk_x: int, chunk_z: int) -> Chunk:
-        region = await self.fetch_region(chunk_to_region_coords(chunk_x, chunk_z))
+        key = (chunk_x, chunk_z)
 
         try:
-            return region[chunk_x, chunk_z]
+            return self._chunk_cache[key]
         except KeyError:
-            raise NotImplementedError("Nice try bucko, but world gen hasn't been implemented yet...")
+            return self.cache_chunk(await self.server.chunkio.fetch_chunk_async(self.path, *key), key)

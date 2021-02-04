@@ -67,7 +67,10 @@ class TAG:
         self.name = name
 
     def pack_id(self) -> bytes:
-        return BufferUtil.pack("b", self.id)
+        if self.name:
+            return BufferUtil.pack("b", self.id)
+
+        return b""
 
     @staticmethod
     def unpack_id(buf) -> int:

@@ -184,7 +184,7 @@ class Server:
         self.logger.debug(f"IN : state: {state} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
         if self.api.events._packet[state].get(packet.id) is None:
-            self.logger.warn(f"No valid packet handler found for packet {state} 0x{packet.id:02X} {type(packet).__name__}")
+            self.logger.warn(f"No packet handler found for packet: 0x{packet.id:02X} {type(packet).__name__}")
             return stream
 
         for handler in self.api.events._packet[state][packet.id]:

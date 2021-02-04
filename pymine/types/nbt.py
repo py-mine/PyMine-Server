@@ -393,6 +393,16 @@ class TAG_Compound(TAG, dict):
         TAG.__init__(self, name)
         dict.__init__(self, [(t.name, t) for t in data])
 
+    def __setitem__(self, key, value):
+        value.name = key
+        dict.__setitem__(self, key, value)
+
+    def update(self, *args, **kwargs):
+        dict.update(self, *args, **kwargs)
+
+        for k, v in self.items():
+            v.name = k
+
     def pack_data(self) -> bytes:
         return b"".join([tag.pack() for tag in self.values()]) + b"\x00"
 

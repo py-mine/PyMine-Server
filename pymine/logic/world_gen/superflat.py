@@ -8,7 +8,9 @@ from pymine.data.registries import BLOCK_REGISTRY
 
 
 class SuperFlatWorldGenerator(AbstractWorldGenerator):
-    def generate_chunk(self, chunk_x: int, chunk_z: int) -> Chunk:
+
+    @staticmethod
+    def generate_chunk(seed: int, chunk_x: int, chunk_z: int) -> Chunk:
 
         # actual blocks in the chunk
         chunk_blocks = numpy.ndarray((256, 16, 16), numpy.uint16)

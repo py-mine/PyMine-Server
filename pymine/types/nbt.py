@@ -106,6 +106,23 @@ class TAG:
 class TAG_End(TAG):
     id = 0
 
+    def __init__(self, *args) -> None:
+        pass
+
+    def pack_name(self) -> bytes:
+        return b''
+
+    @staticmethod
+    def unpack_name(buf) -> None:
+        return None
+
+    def pack_data(self) -> bytes:
+        return b''
+
+    @staticmethod
+    def unpack_data(buf) -> None:
+        pass
+
     def pretty(self, indent: int = 0) -> str:
         return ("    " * indent) + "TAG_End(): 0"
 
@@ -380,9 +397,10 @@ class TAG_Compound(TAG, dict):
         out = []
 
         while True:
-            tag = TYPES[buf.unpack("b")]
-
-            if tag == TAG_End:
+            try:
+                tag = TYPES[buf.unpack("b")]
+            except BaseException as e:
+                print(e)
                 break
 
             out.append(tag(tag.unpack_name(buf), tag.unpack_data(buf)))

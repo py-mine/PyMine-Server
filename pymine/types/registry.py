@@ -4,13 +4,13 @@ from pymine.util.immutable import make_immutable
 
 
 class Registry:
-    def __init__(self, data: object):
+    def __init__(self, data: object) -> None:
         if isinstance(data, (dict, Map)):
             self.data = make_immutable(data)
             self.data_reversed = make_immutable({v: k for k, v in data.items()})
         elif isinstance(data, (list, tuple)):
-            self.data = data
-            self.data_reversed = make_immutable({v: i for i, v in enumerate(data)})
+            self.data_reversed = data
+            self.data = make_immutable({v: i for i, v in enumerate(self.data_reversed)})
         else:
             raise TypeError("Creating a registry from something other than a dict, Map, tuple, or list isn't supported")
 

@@ -34,7 +34,7 @@ def unpack(buf) -> TAG_Compound:
     except BaseException:
         pass
 
-    return TAG_Compound.unpack_data(buf)
+    return TAG_Compound(None, TAG_Compound.unpack_data(buf))
 
 
 class BufferUtil:

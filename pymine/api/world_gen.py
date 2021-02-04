@@ -1,3 +1,7 @@
+from pymine.types.region import Region
+from pymine.types.chunk import Chunk
+
+
 class AbstractWorldGenerator:
     """Abstract class used to create a world generator.
 

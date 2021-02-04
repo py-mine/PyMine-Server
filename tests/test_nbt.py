@@ -11,7 +11,11 @@ import pymine.types.nbt as nbt
 
 def test_bigtest():  # tests that loading bigtest.nbt works without errors
     with open(os.path.join("tests", "sample_data", "bigtest.nbt"), "rb") as nbt_file:
-        data = nbt.unpack(Buffer(nbt_file.read()))
+        buf = Buffer(nbt_file.read())
+
+    tag = nbt.unpack(buf, True)
+
+    assert tag.pack() == buf.buf
 
 
 # def test_values_nantest():  # tests that the values for loading the nantest are accurate

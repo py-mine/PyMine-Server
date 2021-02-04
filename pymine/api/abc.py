@@ -1,5 +1,3 @@
-import aiofile
-
 from pymine.types.chunk import Chunk
 
 

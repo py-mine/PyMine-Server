@@ -9,22 +9,6 @@ import pymine.types.nbt as nbt
 from pymine.data.default_nbt.level import new_level_nbt
 
 
-def block_to_chunk_coords(block_x: int, block_z: int) -> tuple:
-    return block_x // 16, block_z // 16
-
-
-def chunk_to_block_coords(chunk_x: int, chunk_z: int) -> tuple:
-    return chunk_x * 16, chunk_z * 16
-
-
-def chunk_to_region_coords(chunk_x: int, chunk_z: int) -> tuple:
-    return chunk_x // 32, chunk_z // 32
-
-
-def region_file_name(region_x: int, region_z: int) -> str:  # Gens the name for the region file in the format r.x.y.mca
-    return ".".join(("r", str(region_x), str(region_z), "mca"))
-
-
 class World:
     def __init__(self, server, name: str, path: str, chunk_cache_max: int) -> None:
         self.server = server

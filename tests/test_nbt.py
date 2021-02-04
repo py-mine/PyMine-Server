@@ -13,14 +13,14 @@ def test_bigtest():  # tests that loading bigtest.nbt works without errors
     with open(os.path.join("tests", "sample_data", "bigtest.nbt"), "rb") as nbt_file:
         buf = Buffer(nbt_file.read())
 
-    tag = nbt.unpack(buf, True)
+    tag = nbt.unpack(buf)
 
     assert tag.pack() == buf.buf
 
 
 def test_values_nantest():  # tests that the values for loading the nantest are accurate
     with open(os.path.join("tests", "sample_data", "nantest.nbt"), "rb") as nbt_file:
-        tag = nbt.unpack(Buffer(nbt_file.read()), True)
+        tag = nbt.unpack(Buffer(nbt_file.read()))
 
         assert tag["Air"].data == 300
         assert tag["AttackTime"].data == 0

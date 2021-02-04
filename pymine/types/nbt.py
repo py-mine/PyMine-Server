@@ -26,7 +26,7 @@ __all__ = (
 TYPES = []
 
 
-def unpack(buf, root_is_full: bool = False) -> TAG_Compound:
+def unpack(buf, root_is_full: bool = True) -> TAG_Compound:
     try:
         data = gzip.decompress(buf.buf[buf.pos :])
         buf.buf = data

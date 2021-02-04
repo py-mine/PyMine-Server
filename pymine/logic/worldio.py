@@ -60,9 +60,7 @@ class ChunkIO(AbstractChunkIO):
 
             region_file.seek(offset + 5)
 
-            return Chunk(
-                nbt.TAG_Compound.unpack(Buffer(zlib.decompress(region_file.read(length - 5)))), timestamp
-            )
+            return Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(region_file.read(length - 5)))), timestamp)
 
     @classmethod
     async def fetch_chunk_async(cls, world_name: str, chunk_x: int, chunk_z: int) -> Chunk:
@@ -80,6 +78,4 @@ class ChunkIO(AbstractChunkIO):
             timestamp = struct.unpack(">i", await region_file.read(4))
 
             region_file.seek(offset + 5)
-            return Chunk(
-                nbt.TAG_Compound.unpack(Buffer(zlib.decompress(await region_file.read(length - 5)))), timestamp
-            )
+            return Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(await region_file.read(length - 5)))), timestamp)

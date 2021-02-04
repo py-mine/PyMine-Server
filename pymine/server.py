@@ -60,7 +60,7 @@ class Server:
 
         self.eid_current = 0  # used to not generate duplicate entity ids
         self.playerio = None  # used to fetch/dump players
-        self.chunkio = ChunkIO
+        self.chunkio = ChunkIO  # used to generate new chunks
         self.worlds = None  # world dictionary
 
         self.aiohttp = None  # the aiohttp session

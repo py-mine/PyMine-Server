@@ -51,9 +51,9 @@ class Server:
         self.cache = self.Cache()
         self.secrets = self.Secrets(*gen_rsa_keys())
 
-        self.conf = load_config()
-        self.favicon = load_favicon()
-        self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold
+        self.conf = load_config()  # contents of server.yml in the root dir
+        self.favicon = load_favicon()  # server-icon.png in the root dir, displayed in clients' server lists
+        self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold since it's used so much
 
         self.logger.debug_ = self.conf["debug"]
         asyncio.get_event_loop().set_debug(self.conf["debug"])

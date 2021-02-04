@@ -1,11 +1,9 @@
-from pymine.types.chunk import Chunk
-
 
 class AbstractWorldGenerator:
     """Abstract class used to create a world generator."""
 
     @staticmethod
-    def generate_chunk(seed: int, chunk_x: int, chunk_z: int) -> Chunk:
+    def generate_chunk(seed: int, chunk_x: int, chunk_z: int):  # -> Chunk
         raise NotImplementedError
 
 
@@ -21,9 +19,9 @@ class AbstractChunkIO:
         raise NotImplementedError
 
     @classmethod
-    def fetch_chunk(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:
+    def fetch_chunk(cls, world_path: str, chunk_x: int, chunk_z: int):  # -> Chunk
         raise NotImplementedError(cls.__name__)
 
     @classmethod
-    async def fetch_chunk_async(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:
+    async def fetch_chunk_async(cls, world_path: str, chunk_x: int, chunk_z: int):  # -> Chunk
         raise NotImplementedError(cls.__name__)

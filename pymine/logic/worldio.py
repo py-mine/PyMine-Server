@@ -11,7 +11,7 @@ import pymine.types.nbt as nbt
 from pymine.api.abc import AbstractChunkIO
 
 # Setup world dict and load basic level data for each world
-async def load_worlds(server, level_name: str, region_cache_max_per: int) -> dict:
+async def load_worlds(server, level_name: str, chunk_cache_max_per: int) -> dict:
     worlds = {}
 
     server.logger.info(f"Loading default worlds for level {level_name}...")
@@ -23,7 +23,7 @@ async def load_worlds(server, level_name: str, region_cache_max_per: int) -> dic
     for ext, proper_name in zip(("", "_nether", "_the_end"), ("overworld", "nether", "the_end")):
         name = level_name + ext
         worlds[f"minecraft:{proper_name}"] = await World(
-            server, name, os.path.join("worlds", name), region_cache_max_per
+            server, name, os.path.join("worlds", name), chunk_cache_max
         ).init()
 
     server.logger.info(f'Loaded default worlds: {", ".join([w.name for w in worlds.values()])}.')

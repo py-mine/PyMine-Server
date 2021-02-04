@@ -67,21 +67,15 @@ class TAG:
         self.name = name
 
     def pack_id(self) -> bytes:
-        if self.name:
-            return BufferUtil.pack("b", self.id)
-
-        return b""
+        return BufferUtil.pack("b", self.id)
 
     @staticmethod
     def unpack_id(buf) -> int:
         return buf.unpack("b")
 
     def pack_name(self) -> bytes:
-        if self.name:
-            mutf8_name = encode_modified_utf8(self.name)
-            return BufferUtil.pack("H", len(mutf8_name)) + mutf8_name
-
-        return b""
+        mutf8_name = encode_modified_utf8(self.name)
+        return BufferUtil.pack("H", len(mutf8_name)) + mutf8_name
 
     @staticmethod
     def unpack_name(buf) -> str:

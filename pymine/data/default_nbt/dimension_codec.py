@@ -13,7 +13,7 @@ def new_dim_codec_nbt() -> nbt.TAG_Compound:
 
 
 def get_dimension_data(dimension: str) -> nbt.TAG_Compound:
-    dims = DEFAULT_DIM_CODEC_NBT["value"]
+    dims = DEFAULT_DIM_CODEC_NBT["minecraft:dimension_type"]["value"]
 
     for dim in dims:
         if dim["name"].data.endswith(dimension):  # just in case namespace (like minecraft:) isn't there

@@ -110,14 +110,14 @@ class TAG_End(TAG):
         super().__init__(None)
 
     def pack_name(self) -> bytes:
-        return b''
+        return b""
 
     @staticmethod
     def unpack_name(buf) -> None:
         return None
 
     def pack_data(self) -> bytes:
-        return b''
+        return b""
 
     @staticmethod
     def unpack_data(buf) -> None:

@@ -93,6 +93,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "TrustedMercury",
+      "name": "Kevin Thomas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46242684?v=4",
+      "profile": "https://kevinthomas.codes/",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,

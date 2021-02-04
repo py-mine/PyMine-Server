@@ -34,7 +34,7 @@ def unpack(buf) -> TAG_Compound:
     except BaseException:
         pass
 
-    return TAG_Compound.unpack(buf)
+    return TAG_Compound(None, TAG_Compound.unpack_data(buf))
 
 
 class BufferUtil:
@@ -64,7 +64,7 @@ class TAG:
 
     def __init__(self, name: str = None) -> None:
         self.id = self.__class__.id
-        self.name = name
+        self.name = "" if name is None else name
 
     def pack_id(self) -> bytes:
         return BufferUtil.pack("b", self.id)
@@ -105,6 +105,23 @@ class TAG:
 
 class TAG_End(TAG):
     id = 0
+
+    def __init__(self, *args) -> None:
+        super().__init__(None)
+
+    def pack_name(self) -> bytes:
+        return b""
+
+    @staticmethod
+    def unpack_name(buf) -> None:
+        return None
+
+    def pack_data(self) -> bytes:
+        return b""
+
+    @staticmethod
+    def unpack_data(buf) -> None:
+        pass
 
     def pretty(self, indent: int = 0) -> str:
         return ("    " * indent) + "TAG_End(): 0"
@@ -267,6 +284,11 @@ class TAG_Byte_Array(TAG, bytearray):
 
     def __init__(self, name: str, data: bytearray) -> None:
         TAG.__init__(self, name)
+
+        if isinstance(data, str):
+            print(f"WARNING: data passed was not bytes ({repr(data)})")
+            data = data.encode("utf8")
+
         bytearray.__init__(self, data)
 
     def pack_data(self) -> bytes:
@@ -377,7 +399,7 @@ class TAG_Compound(TAG, dict):
         while True:
             tag = TYPES[buf.unpack("b")]
 
-            if tag == TAG_End:
+            if tag is TAG_End:
                 break
 
             out.append(tag(tag.unpack_name(buf), tag.unpack_data(buf)))

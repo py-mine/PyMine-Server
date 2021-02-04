@@ -14,10 +14,6 @@ from pymine.api.commands import CommandHandler
 from pymine.api.events import EventHandler
 
 
-class StopStream(BaseException):
-    pass
-
-
 class PyMineAPI:
     def __init__(self, server):
         self.server = server
@@ -208,6 +204,8 @@ class PyMineAPI:
 
         # start console command handler task
         self.tasks.append(asyncio.create_task(self.commands.handle_console()))
+
+        return self
 
     async def stop(self):  # called when server is stopping
         for task in self.tasks:

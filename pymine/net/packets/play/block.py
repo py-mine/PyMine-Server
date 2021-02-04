@@ -180,7 +180,7 @@ class PlayNBTQueryResponse(Packet):
     id = 0x54
     to = 1
 
-    def __init__(self, transaction_id: int, nbt: nbt.Tag) -> None:
+    def __init__(self, transaction_id: int, nbt: nbt.TAG) -> None:
         super().__init__()
 
         self.transaction_id = transaction_id

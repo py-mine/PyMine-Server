@@ -1,3 +1,4 @@
+import concurrent.futures
 import asyncio
 import sys
 import os
@@ -16,6 +17,9 @@ except BaseException:
 # ensure the pymine modules are accessible
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+# ensure the current working directory is correct
+os.chdir(os.path.join(os.path.dirname(__file__), ".."))
+
 from pymine.util.logging import Logger, task_exception_handler
 import pymine.server
 
@@ -28,20 +32,21 @@ if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.set_exception_handler(task_exception_handler)
 
-    server = pymine.server.Server(logger, uvloop)
-    pymine.server.server = server
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        server = pymine.server.Server(logger, executor, bool(uvloop))
+        pymine.server.server = server
 
-    try:
-        loop.run_until_complete(server.start())
-    except (asyncio.CancelledError, KeyboardInterrupt):
-        pass
-    except BaseException as e:
-        logger.critical(logger.f_traceback(e))
+        try:
+            loop.run_until_complete(server.start())
+        except (asyncio.CancelledError, KeyboardInterrupt):
+            pass
+        except BaseException as e:
+            logger.critical(logger.f_traceback(e))
 
-    try:
-        loop.run_until_complete(server.stop())
-    except BaseException as e:
-        logger.critical(logger.f_traceback(e))
+        try:
+            loop.run_until_complete(server.stop())
+        except BaseException as e:
+            logger.critical(logger.f_traceback(e))
 
     loop.stop()
     loop.close()

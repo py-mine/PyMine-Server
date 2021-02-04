@@ -140,7 +140,7 @@ class PlayPlayerAbilitiesClientBound(Packet):
     id = 0x30
     to = 1
 
-    def __init__(self, flags: bytes, flying_speed: float, fov_modifier: float) -> None:
+    def __init__(self, flags: int, flying_speed: float, fov_modifier: float) -> None:
         super().__init__()
 
         self.flags = flags
@@ -148,7 +148,7 @@ class PlayPlayerAbilitiesClientBound(Packet):
         self.fov_modifier = fov_modifier
 
     def encode(self) -> bytes:
-        return self.flags + Buffer.pack("f", self.flying_speed) + Buffer.pack("f", self.fov_modifier)
+        return Buffer.pack("b", self.flags) + Buffer.pack("f", self.flying_speed) + Buffer.pack("f", self.fov_modifier)
 
 
 class PlayPlayerAbilitiesServerBound(Packet):
@@ -181,8 +181,8 @@ class PlayJoinGame(Packet):
     :param int gamemode: The player's gamemode.
     :param int prev_gamemode: The player's previous gamemode.
     :param list world_names: All of the worlds loaded on the server.
-    :param nbt.Tag dim_codec: Represents a dimension and biome registry, see here: https://wiki.vg/Protocol#Join_Game.
-    :param nbt.Tag dimension: A dimension type, see here: https://wiki.vg/Protocol#Join_Game.
+    :param nbt.TAG dim_codec: Represents a dimension and biome registry, see here: https://wiki.vg/Protocol#Join_Game.
+    :param nbt.TAG dimension: A dimension type, see here: https://wiki.vg/Protocol#Join_Game.
     :param str world_name: The name of the world the player is joining.
     :param int hashed_seed: First 8 bytes of SHA-256 hash of the world's seed.
     :param int max_players: Max players allowed on the server, now ignored.
@@ -220,8 +220,8 @@ class PlayJoinGame(Packet):
         gamemode: int,
         prev_gamemode: int,
         world_names: list,
-        dim_codec: nbt.Tag,
-        dimension: nbt.Tag,
+        dim_codec: nbt.TAG,
+        dimension: nbt.TAG,
         world_name: str,
         hashed_seed: int,
         max_players: int,

@@ -4,9 +4,9 @@ from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
 
 
-class Chunk(dict):
+class Chunk(nbt.TAG_Compound):
     def __init__(self, tag: nbt.TAG, timestamp: int) -> None:
-        dict.__init__(self, tag["Level"])
+        super().__init__("Level", tag["Level"].data)
 
         self.data_version = tag["DataVersion"]
 

@@ -11,7 +11,7 @@ class AbstractWorldGenerator:
 
 class AbstractChunkIO:
     """Abstract class used to create chunk io."""
-
-    @staticmethod
-    async def fetch_chunk(path: str, chunk_x: int, chunk_z: int) -> Chunk:
+    
+    @classmethod
+    async def fetch_chunk(cls, world_name: str, chunk_x: int, chunk_z: int) -> Chunk:
         raise NotImplementedError(self.__class__.__name__)

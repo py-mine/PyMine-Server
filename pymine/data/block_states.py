@@ -12,7 +12,7 @@ def reversed_bs_data(bs_data):
         for sv in block["states"]:
             reverse_data[sv["id"]] = {"name": k, "properties": sv.get("properties", {})}
 
-    return reverse_data
+    return make_immutable(reverse_data)
 
 
 with open(os.path.join("pymine", "data", "blocks.json"), "r") as block_data:

@@ -18,4 +18,7 @@ ENTITY_REGISTRY = Registry({k: v["protocol_id"] for k, v in REGISTRY_DATA["minec
 with open(os.path.join("pymine", "data", "blocks.json"), "r") as block_data:
     block_state_data = make_immutable(json.load(block_data))
 
-BLOCK_STATE = Registry(block_state_data, {state_val["id"]: {"name": k, "properties": state_val["properties"]} for k, state_val in block_state_data.items()})
+BLOCK_STATE = Registry(
+    block_state_data,
+    {state_val["id"]: {"name": k, "properties": state_val["properties"]} for k, state_val in block_state_data.items()},
+)

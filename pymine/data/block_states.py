@@ -18,4 +18,4 @@ def reversed_bs_data(bs_data):
 with open(os.path.join("pymine", "data", "blocks.json"), "r") as block_data:
     bs_data = make_immutable(json.load(block_data))
 
-BLOCK_STATE = Registry(bs_data, reversed_bs_data(bs_data))
+BLOCK_STATES = Registry(bs_data, reversed_bs_data(bs_data))

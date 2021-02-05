@@ -15,6 +15,7 @@ class Chunk(nbt.TAG_Compound):
 
         self.timestamp = timestamp
 
+    @staticmethod
     def new_nbt(chunk_x: int, chunk_z: int) -> nbt.TAG_Compound:
         return nbt.TAG_Compound("", [
             nbt.TAG_Int("DataVersion", 2586),

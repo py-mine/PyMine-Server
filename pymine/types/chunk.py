@@ -67,7 +67,7 @@ class Chunk(nbt.TAG_Compound):
 
     @classmethod
     def write_chunk_section(buf: Buffer, chunk_section: list) -> None:  # 0..16[0..16[0..16[]]]
-        buf.write(Buffer.pack('b', math.log2()))
+        buf.write(Buffer.pack("b", math.log2()))
 
     @classmethod
     def write_chunk_data_packet(cls, buf: Buffer, chunk_data: list) -> None:  # (16, 256, 16)?
@@ -76,12 +76,12 @@ class Chunk(nbt.TAG_Compound):
         SECTION_WIDTH = 16
 
         # write chunk coordinates and say that it's a full chunk
-        buf.write(Buffer.pack('i', chunk.chunk_x) + Buffer.pack('i', chunk.chunk_z) + Buffer.pack('?', True))
+        buf.write(Buffer.pack("i", chunk.chunk_x) + Buffer.pack("i", chunk.chunk_z) + Buffer.pack("?", True))
 
         mask = 0
         column_buffer = Buffer()
 
         for i, chunk_section in enumerate(chunk_data):  # iterate through chunk sections
             if any(chunk_section):  # check if chunk section is empty or not
-                mask |= (1 << i)
+                mask |= 1 << i
                 cls.write_chunk_section(buf, chunk_section)

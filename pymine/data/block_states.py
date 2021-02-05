@@ -10,7 +10,7 @@ def reversed_bs_data(bs_data):
 
     for k, block in bs_data.items():
         for sv in block["states"]:
-            reverse_data[sv["id"]] = {"name": k, "properties": sv["properties"]}
+            reverse_data[sv["id"]] = {"name": k, "properties": sv.get("properties", {})}
 
     return reverse_data
 

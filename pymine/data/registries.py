@@ -4,7 +4,7 @@ import os
 from pymine.util.immutable import make_immutable
 from pymine.types.registry import Registry
 
-__all__ = ("ITEM_REGISTRY", "PARTICLE_REGISTRY", "FLUID_REGISTRY", "BLOCK_REGISTRY", "ENTITY_REGISTRY", "BLOCK_DATA")
+__all__ = ("ITEM_REGISTRY", "PARTICLE_REGISTRY", "FLUID_REGISTRY", "BLOCK_REGISTRY", "ENTITY_REGISTRY")
 
 with open(os.path.join("pymine", "data", "registries.json"), "r") as registry:  # generated from server jar
     REGISTRY_DATA = make_immutable(json.load(registry))

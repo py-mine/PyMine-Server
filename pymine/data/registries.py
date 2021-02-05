@@ -14,11 +14,3 @@ PARTICLE_REGISTRY = Registry({k: v["protocol_id"] for k, v in REGISTRY_DATA["min
 FLUID_REGISTRY = Registry({k: v["protocol_id"] for k, v in REGISTRY_DATA["minecraft:fluid"]["entries"].items()})
 BLOCK_REGISTRY = Registry({k: v["protocol_id"] for k, v in REGISTRY_DATA["minecraft:block"]["entries"].items()})
 ENTITY_REGISTRY = Registry({k: v["protocol_id"] for k, v in REGISTRY_DATA["minecraft:entity_type"]["entries"].items()})
-
-with open(os.path.join("pymine", "data", "blocks.json"), "r") as block_data:
-    block_state_data = make_immutable(json.load(block_data))
-
-BLOCK_STATE = Registry(
-    block_state_data,
-    {**{sv["id"]: {"name": k, "properties": sv["properties"]} for sv in states} for k, states in block_state_data.items()},
-)

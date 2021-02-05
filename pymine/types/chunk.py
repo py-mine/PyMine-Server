@@ -15,6 +15,10 @@ class Chunk(nbt.TAG_Compound):
 
         self.timestamp = timestamp
 
+    @classmethod
+    def new(cls, chunk_x: int, chunk_z: int, timestamp: int) -> Chunk:
+        return cls(cls.new_nbt(chunk_x, chunk_z), timestamp)
+
     @staticmethod
     def new_nbt(chunk_x: int, chunk_z: int) -> nbt.TAG_Compound:
         return nbt.TAG_Compound("", [

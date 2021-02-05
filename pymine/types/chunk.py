@@ -6,7 +6,8 @@ import math
 from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
 
-from pymine.data.registries import BLOCK_REGISTRY, BLOCK_DATA
+from pymine.data.registries import BLOCK_REGISTRY
+from pymine.data.block_states import BLOCK_STATES
 
 
 class Chunk(nbt.TAG_Compound):
@@ -89,9 +90,10 @@ class Chunk(nbt.TAG_Compound):
 
 
 class DirectPalette:
-    def __init__(self, bits_per_block=14):
-        self.bits_per_block = 14
-
     @staticmethod
     def get_bits_per_block():
         return math.ceil(math.log2(sum(len(b["states"]) for b in BLOCK_DATA.items())))
+
+    @staticmethod
+    def id_for_state(block: str, prop: str, value: object) -> int:
+        return [BLOCK_DATA[block]]

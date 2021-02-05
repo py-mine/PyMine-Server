@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy
+import math
 
 from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
@@ -85,3 +86,12 @@ class Chunk(nbt.TAG_Compound):
             if any(chunk_section):  # check if chunk section is empty or not
                 mask |= 1 << i
                 cls.write_chunk_section(buf, chunk_section)
+
+
+class DirectPalette:
+    def __init__(self, bits_per_block=14):
+        self.bits_per_block = 14
+
+    @staticmethod
+    def get_bits_per_block():
+        return math.ceil(math.log2(sum(len(b["states"]) for b in BLOCK_DATA.items())))

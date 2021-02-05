@@ -4,10 +4,12 @@ from pymine.util.immutable import make_immutable
 
 
 class Registry:
-    def __init__(self, data: object) -> None:
+    def __init__(self, data: object, data_reversed: object = None) -> None:
         if isinstance(data, (dict, Map)):
             self.data = make_immutable(data)
-            self.data_reversed = make_immutable({v: k for k, v in data.items()})
+            
+            if data_reversed is None:
+                self.data_reversed = make_immutable({v: k for k, v in data.items()})
         elif isinstance(data, (list, tuple)):
             self.data_reversed = data
             self.data = make_immutable({v: i for i, v in enumerate(self.data_reversed)})

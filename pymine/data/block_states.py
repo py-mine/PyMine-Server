@@ -1,3 +1,4 @@
+import json
 import os
 
 from pymine.util.immutable import make_immutable

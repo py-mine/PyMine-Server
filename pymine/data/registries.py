@@ -10,6 +10,7 @@ __all__ = (
     "FLUID_REGISTRY",
     "BLOCK_REGISTRY",
     "ENTITY_REGISTRY",
+    "BLOCK_DATA"
 )
 
 with open(os.path.join("pymine", "data", "registries.json"), "r") as registry:  # generated from server jar
@@ -20,3 +21,6 @@ PARTICLE_REGISTRY = Registry({k: v["protocol_id"] for k, v in REGISTRY_DATA["min
 FLUID_REGISTRY = Registry({k: v["protocol_id"] for k, v in REGISTRY_DATA["minecraft:fluid"]["entries"].items()})
 BLOCK_REGISTRY = Registry({k: v["protocol_id"] for k, v in REGISTRY_DATA["minecraft:block"]["entries"].items()})
 ENTITY_REGISTRY = Registry({k: v["protocol_id"] for k, v in REGISTRY_DATA["minecraft:entity_type"]["entries"].items()})
+
+with open(os.path.join("pymine", "data", "blocks.json"), "r") as block_data:
+    BLOCK_DATA = make_immutable(json.load(block_data))

@@ -13,8 +13,8 @@ class SuperFlatWorldGenerator(AbstractWorldGenerator):
         chunk = Chunk.new(chunk_x, chunk_z, int(time.time()))
 
         # actual blocks in the chunk
-        # chunk_blocks = numpy.ndarray((256, 16, 16), numpy.uint16)
-        # chunk_blocks.fill(BLOCK_REGISTRY.encode("minecraft:air"))
-        # chunk_blocks[0].fill(BLOCK_REGISTRY.encode("minecraft:bedrock"))
-        # chunk_blocks[1:3].fill(BLOCK_REGISTRY.encode("minecraft:dirt"))
-        # chunk_blocks[4].fill(BLOCK_REGISTRY.encode("minecraft:grass_block"))
+        chunk_blocks = numpy.ndarray((256, 16, 16), numpy.uint16)
+        chunk_blocks.fill(BLOCK_REGISTRY.encode("minecraft:air"))
+        chunk_blocks[0].fill(BLOCK_REGISTRY.encode("minecraft:bedrock"))
+        chunk_blocks[1:3].fill(BLOCK_REGISTRY.encode("minecraft:dirt"))
+        chunk_blocks[4].fill(BLOCK_REGISTRY.encode("minecraft:grass_block"))

@@ -4,6 +4,8 @@ import os
 from pymine.util.immutable import make_immutable
 from pymine.types.registry import Registry
 
+__all__ = ("BLOCK_STATES",)
+
 
 def reversed_bs_data(bs_data):
     reverse_data = {}

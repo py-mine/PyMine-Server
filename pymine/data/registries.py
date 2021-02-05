@@ -20,5 +20,5 @@ with open(os.path.join("pymine", "data", "blocks.json"), "r") as block_data:
 
 BLOCK_STATE = Registry(
     block_state_data,
-    {state_val["id"]: {"name": k, "properties": state_val["properties"]} for k, state_val in block_state_data.items()},
+    {**{sv["id"]: {"name": k, "properties": sv["properties"]} for sv in states} for k, states in block_state_data.items()},
 )

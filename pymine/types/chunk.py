@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import immutables
 import numpy
 import math
 
@@ -103,3 +104,7 @@ class DirectPalette:
                 return state["id"]
 
         raise ValueError(f"{block} doesn't have a state with those properties.")
+
+    @staticmethod
+    def decode(state: int) -> immutables.Map:
+        return BLOCK_STATES.decode(state)

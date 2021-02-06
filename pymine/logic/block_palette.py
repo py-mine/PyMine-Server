@@ -3,6 +3,7 @@ import math
 
 from pymine.data.block_states import BLOCK_STATES
 
+
 class DirectPalette:
     @staticmethod
     def get_bits_per_block():

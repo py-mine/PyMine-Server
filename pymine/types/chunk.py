@@ -93,7 +93,7 @@ class Chunk(nbt.TAG_Compound):
 class DirectPalette:
     @staticmethod
     def get_bits_per_block():
-        return math.ceil(math.log2(sum(len(b["states"]) for b in BLOCK_DATA.items())))  # should be 14 or 15
+        return math.ceil(math.log2(sum(len(b["states"]) for b in BLOCK_STATES.items())))  # should be 14 or 15
 
     @staticmethod
     def encode(block: str, props: dict) -> int:

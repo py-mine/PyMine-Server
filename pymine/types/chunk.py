@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import immutables
 import numpy
-import math
 
 from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
@@ -88,23 +86,3 @@ class Chunk(nbt.TAG_Compound):
             if any(chunk_section):  # check if chunk section is empty or not
                 mask |= 1 << i
                 cls.write_chunk_section(buf, chunk_section)
-
-
-class DirectPalette:
-    @staticmethod
-    def get_bits_per_block():
-        return math.ceil(math.log2(sum(len(b["states"]) for b in BLOCK_STATES.items())))  # should be 14 or 15
-
-    @staticmethod
-    def encode(block: str, props: dict) -> int:
-        block_data = BLOCK_STATES.encode(block)
-
-        for state in block_data["states"]:
-            if state["properties"] == props:
-                return state["id"]
-
-        raise ValueError(f"{block} doesn't have a state with those properties.")
-
-    @staticmethod
-    def decode(state: int) -> immutables.Map:
-        return BLOCK_STATES.decode(state)

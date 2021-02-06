@@ -5,8 +5,8 @@ import numpy
 from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
 
+from pymine.data.block_palette import DirectPalette
 from pymine.data.registries import BLOCK_REGISTRY
-from pymine.data.block_states import BLOCK_STATES
 
 
 class Chunk(nbt.TAG_Compound):
@@ -68,7 +68,7 @@ class Chunk(nbt.TAG_Compound):
 
     @classmethod
     def write_chunk_section(buf: Buffer, chunk_section: list) -> None:  # 0..16[0..16[0..16[]]]
-        buf.write(Buffer.pack("b", math.log2()))
+        buf.write(Buffer.pack("b", DirectPalette.get_bits_per_block()))
 
     @classmethod
     def write_chunk_data_packet(cls, buf: Buffer, cx: int, cz: int, chunk: list) -> None:  # (16, 256, 16)?

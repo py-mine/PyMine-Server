@@ -50,6 +50,18 @@ class Buffer:
 
         self.pos = 0
 
+    def unpack(self, f: str) -> object:
+        unpacked = struct.unpack(">" + f, self.read(struct.calcsize(f)))
+
+        if len(unpacked) == 1:
+            return unpacked[0]
+
+        return unpacked
+
+    @classmethod
+    def pack(cls, f: str, *data: object) -> bytes:
+        return struct.pack(">" + f, *data)
+
     @classmethod
     def pack_packet(cls, packet: Packet, comp_thresh: int = -1) -> bytes:
         """
@@ -81,18 +93,6 @@ class Buffer:
             raise InvalidPacketID
 
         return packet_class.decode(self)
-
-    def unpack(self, f: str) -> object:
-        unpacked = struct.unpack(">" + f, self.read(struct.calcsize(f)))
-
-        if len(unpacked) == 1:
-            return unpacked[0]
-
-        return unpacked
-
-    @classmethod
-    def pack(cls, f: str, *data: object) -> bytes:
-        return struct.pack(">" + f, *data)
 
     @classmethod
     def pack_optional(cls, packer: object, data: object = None) -> bytes:

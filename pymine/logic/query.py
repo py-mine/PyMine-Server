@@ -53,5 +53,5 @@ class QueryBuffer:
         return struct.pack(">i", num)
 
     @staticmethod
-    def pack_byte(char: int) -> bytes:
-        return struct.pack(">c", char)
+    def pack_byte(byte: int) -> bytes:
+        return struct.pack(">b", byte)

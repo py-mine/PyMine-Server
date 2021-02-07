@@ -37,21 +37,21 @@ class QueryBuffer:
         self.pos = 0
 
     @staticmethod
-    def pack_short(short: int):
+    def pack_short(short: int) -> bytes:
         return struct.pack("<h", short)
 
     @staticmethod
-    def pack_magic():
+    def pack_magic() -> bytes:
         return b"\xFE\xFD"
 
     @staticmethod
-    def pack_string(string: str):
+    def pack_string(string: str) -> bytes:
         return bytes(string, "latin-1") + b"\x00"
 
     @staticmethod
-    def pack_int32(num: int):
+    def pack_int32(num: int) -> bytes:
         return struct.pack(">i", num)
 
     @staticmethod
-    def pack_byte(char: int):
+    def pack_byte(char: int) -> bytes:
         return struct.pack(">c", char)

@@ -26,7 +26,7 @@ class PyMineAPI:
         self.events = EventHandler()
         self.commands = CommandHandler(server)
         self.register = Register()
-        
+
         self.eid_current = 0  # used to not generate duplicate entity ids
 
     def taskify_handlers(self, handlers: list):

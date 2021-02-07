@@ -10,11 +10,11 @@ class AbstractChunkIO:
     """Abstract class used to create chunk io."""
 
     @classmethod
-    def calc_offset(chunk_x: int, chunk_z: int) -> int:
+    def calc_offset(cls, chunk_x: int, chunk_z: int) -> int:
         raise NotImplementedError(cls.__name__)
 
     @classmethod
-    def find_chunk(location: int) -> tuple:
+    def find_chunk(cls, location: int) -> tuple:
         raise NotImplementedError(cls.__name__)
 
     @classmethod

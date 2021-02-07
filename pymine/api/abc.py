@@ -1,21 +1,22 @@
+
 class AbstractWorldGenerator:
     """Abstract class used to create a world generator."""
 
-    @staticmethod
-    def generate_chunk(seed: int, chunk_x: int, chunk_z: int):  # -> Chunk
-        raise NotImplementedError
+    @classmethod
+    def generate_chunk(cls, seed: int, chunk_x: int, chunk_z: int):  # -> Chunk
+        raise NotImplementedError(cls.__name__)
 
 
 class AbstractChunkIO:
     """Abstract class used to create chunk io."""
 
-    @staticmethod
+    @classmethod
     def calc_offset(chunk_x: int, chunk_z: int) -> int:
-        raise NotImplementedError
+        raise NotImplementedError(cls.__name__)
 
-    @staticmethod
+    @classmethod
     def find_chunk(location: int) -> tuple:
-        raise NotImplementedError
+        raise NotImplementedError(cls.__name__)
 
     @classmethod
     def fetch_chunk(cls, world_path: str, chunk_x: int, chunk_z: int):  # -> Chunk

@@ -1,6 +1,7 @@
 from __future__ import annotations
-from pymine.server import server
 import struct
+
+from pymine.server import server
 
 
 class QueryBuffer:

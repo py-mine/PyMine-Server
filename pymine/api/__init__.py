@@ -26,6 +26,8 @@ class PyMineAPI:
         self.events = EventHandler()
         self.commands = CommandHandler(server)
         self.register = Register()
+        
+        self.eid_current = 0  # used to not generate duplicate entity ids
 
     def taskify_handlers(self, handlers: list):
         for handler in handlers:
@@ -35,6 +37,13 @@ class PyMineAPI:
                 self.logger.error(
                     f"Failed to call handler {handler.__module__}.{handler.__qualname__} due to: {self.logger.f_traceback(e)}"
                 )
+
+    async def call_async(self, func, *args, **kwargs):  # used to run a blocking function in a process pool
+        await asyncio.get_event_loop().run_in_executor(self.executor, func, *args, **kwargs)
+
+    def eid(self):  # used to generate entity ids
+        self.eid_current += 1
+        return self.eid_current
 
     def update_repo(self, git_dir, git_url, root, plugin_name, do_clone=False):
         if do_clone:

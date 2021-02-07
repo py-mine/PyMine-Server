@@ -29,7 +29,7 @@ class PlayerDataIO:
                 level_data = self.server.worlds["minecraft:overworld"].data
 
                 player = Player.new(
-                    self.server.eid(),
+                    self.server.api.eid(),
                     uuid_,
                     (level_data["SpawnX"], level_data["SpawnY"], level_data["SpawnX"]),
                     "minecraft:overworld",

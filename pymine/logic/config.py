@@ -25,6 +25,8 @@ DEFAULT_CONFIG = {
     "spawn_animals": True,
     "spawn_monsters": True,
     "generate_structures": True,
+    "enable_query": True,
+    "query_port": 25565,
 }
 
 

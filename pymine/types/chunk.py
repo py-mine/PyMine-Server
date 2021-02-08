@@ -8,6 +8,8 @@ import pymine.types.nbt as nbt
 
 class Chunk(nbt.TAG_Compound):
     def __init__(self, tag: nbt.TAG_Compound, timestamp: int) -> None:
+        print(tag.pretty())
+
         super().__init__("Level", tag["Level"].data)
 
         self.data_version = tag["DataVersion"]
@@ -44,21 +46,21 @@ class Chunk(nbt.TAG_Compound):
                                 nbt.TAG_Long_Array("WORLD_SURFACE_WG", []),
                             ],
                         ),
+                        nbt.TAG_Long("LastUpdate", 0),
+                        nbt.TAG_List("Lights", [nbt.TAG_List(None, []) for _ in range(16)]),
+                        nbt.TAG_List("LiquidsToBeTicked", [nbt.TAG_List(None, []) for _ in range(16)]),
+                        nbt.TAG_List("LiquidTicks", []),
+                        nbt.TAG_Long("InhabitedTime", 0),
+                        nbt.TAG_List("PostProcessing", [nbt.TAG_List(None, []) for _ in range(16)]),
+                        nbt.TAG_List("Sections", []),
+                        nbt.TAG_String("Status", "empty"),
+                        nbt.TAG_List("TileEntities", []),
+                        nbt.TAG_List("TileTicks", []),
+                        nbt.TAG_List("ToBeTicked", [nbt.TAG_List(None, []) for _ in range(16)]),
+                        nbt.TAG_Compound("Structures", [nbt.TAG_Compound("References", []), nbt.TAG_Compound("Starts", [])]),
+                        nbt.TAG_Int("xPos", chunk_x),
+                        nbt.TAG_Int("zPos", chunk_z)
                     ],
                 ),
-                nbt.TAG_Long("LastUpdate", 0),
-                nbt.TAG_List("Lights", [nbt.TAG_List(None, []) for _ in range(16)]),
-                nbt.TAG_List("LiquidsToBeTicked", [nbt.TAG_List(None, []) for _ in range(16)]),
-                nbt.TAG_List("LiquidTicks", []),
-                nbt.TAG_Long("InhabitedTime", 0),
-                nbt.TAG_List("PostProcessing", [nbt.TAG_List(None, []) for _ in range(16)]),
-                nbt.TAG_List("Sections", []),
-                nbt.TAG_String("Status", "empty"),
-                nbt.TAG_List("TileEntities", []),
-                nbt.TAG_List("TileTicks", []),
-                nbt.TAG_List("ToBeTicked", [nbt.TAG_List(None, []) for _ in range(16)]),
-                nbt.TAG_Compound("Structures", [nbt.TAG_Compound("References", []), nbt.TAG_Compound("Starts", [])]),
-                nbt.TAG_Int("xPos", chunk_x),
-                nbt.TAG_Int("zPos", chunk_z),
             ],
         )

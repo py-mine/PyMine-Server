@@ -44,5 +44,7 @@ class SuperFlatWorldGenerator(AbstractWorldGenerator):
             chunk_blocks[1:4] = (DirectPalette.encode("minecraft:netherrack"), 0, 6)  # idk what nether sky light level is
         elif dimension == "minecraft:the_end":
             chunk_blocks[0:4] = (DirectPalette.encode("minecraft:end_stone"), 0, 6)  # idk what the end sky light level is
+        else:
+            raise ValueError(f"Unsupported dimension: {dimension}")
 
         return chunk_blocks

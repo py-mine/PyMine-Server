@@ -35,11 +35,11 @@ class SuperFlatWorldGenerator(AbstractWorldGenerator):
         #     chunk_blocks[0].fill(DirectPalette.encode("minecraft:bedrock"))
         #     chunk_blocks[1:4].fill(DirectPalette.encode("minecraft:end_stone"))
 
-        if dimension == 'minecraft:overworld':
+        if dimension == "minecraft:overworld":
             chunk_blocks[0] = (DirectPalette.encode("minecraft:bedrock"), 0, 0)
             chunk_blocks[1:3] = (DirectPalette.encode("minecraft:dirt"), 0, 0)
             chunk_blocks[4] = (DirectPalette.encode("minecraft:grass_block", {"snowy": "false"}), 0, 15)
-        elif dimension == 'minecraft:nether':
+        elif dimension == "minecraft:nether":
             chunk_blocks[0] = (DirectPalette.encode("minecraft:bedrock"), 0, 0)
             chunk_blocks[1:4] = (DirectPalette.encode("minecraft:netherrack"), 0, 6)  # idk what nether sky light level is
         elif dimension == "minecraft:the_end":

@@ -14,7 +14,12 @@ class DirectPalette:
         block_data = BLOCK_STATES.encode(block)
 
         for state in block_data["states"]:
-            if dict(state["properties"]) == props or (not props and state.get("default") == "true"):
+            if (not props and state.get("default")):
+                return state["id"]
+
+            state_props = state.get("properties")
+
+            if state_props and dict(state_props.items()) == props:
                 return state["id"]
 
         raise ValueError(f"{block} doesn't have a state with those properties.")

@@ -566,10 +566,10 @@ class Buffer:
         # So we don't actually have to deal with encoding/decoding them!
 
         bits_per_block = DirectPalette.get_bits_per_block()
-        out = cls.pack('b', bits_per_block)  # pack bits per block
+        out = cls.pack("b", bits_per_block)  # pack bits per block
 
-        data_len = (16*16*16) * bits_per_block / 64
-        data = [0]*data_len
+        data_len = (16 * 16 * 16) * bits_per_block / 64
+        data = [0] * data_len
 
         individual_value_mask = (1 << bits_per_block) - 1
 
@@ -584,7 +584,7 @@ class Buffer:
                     value = chunk_section[x][y][z][0]  # take the block state id
                     value &= individual_value_mask
 
-                    data[start_long] |= (value << start_offset)
+                    data[start_long] |= value << start_offset
 
                     if start_long != end_long:
                         data[end_long] = value >> (64 - start_offset)
@@ -596,19 +596,17 @@ class Buffer:
         for y in range(SECTION_WIDTH):
             for z in range(SECTION_WIDTH):
                 for x in range(0, SECTION_WIDTH, 2):
-                    value = chunk_section[x][y][z][1] | (chunk_section[x+1][y][z][1] << 4)
+                    value = chunk_section[x][y][z][1] | (chunk_section[x + 1][y][z][1] << 4)
                     out += cls.pack("b", value)
 
         # calculate and write each sky light value
         for y in range(SECTION_WIDTH):
             for z in range(SECTION_WIDTH):
                 for x in range(0, SECTION_WIDTH, 2):
-                    value = chunk_section[x][y][z][2] | (chunk_section[x+1][y][z][2] << 4)
+                    value = chunk_section[x][y][z][2] | (chunk_section[x + 1][y][z][2] << 4)
                     out += cls.pack("b", value)
 
         return out
-
-
 
     @classmethod  # see here: https://wiki.vg/Chunk_Format
     def pack_chunk_data(cls, chunk_x: int, chunk_z: int, chunk: object) -> bytes:  # (256, 16, 16)?

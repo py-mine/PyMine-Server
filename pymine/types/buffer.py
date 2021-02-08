@@ -8,6 +8,7 @@ from pymine.types.packet import Packet
 from pymine.types.chat import Chat
 import pymine.types.nbt as nbt
 
+from pymine.data.block_palette import DirectPalette
 from pymine.data.registries import ITEM_REGISTRY
 import pymine.data.misc as misc_data
 
@@ -559,7 +560,13 @@ class Buffer:
 
     @classmethod
     def pack_chunk_section(cls, chunk_section: object) -> bytes:  # 0..16[0..16[0..16[]]]
-        pass
+        # Blocks and their types should already be encoded into a palette when they're generated
+        # So we don't actually have to deal with encoding/decoding them!
+
+        bits_per_block = DirectPalette.get_bits_per_block()
+        out = b""
+
+        out += cls.pack('b', bits_per_block)
 
     @classmethod
     def pack_chunk_data(cls, chunk_x: int, chunk_z: int, chunk: object) -> bytes:  # (256, 16, 16)?

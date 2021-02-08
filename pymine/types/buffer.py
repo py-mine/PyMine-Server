@@ -560,15 +560,57 @@ class Buffer:
 
     @classmethod
     def pack_chunk_section(cls, chunk_section: object) -> bytes:  # 0..16[0..16[0..16[]]]
+        SECTION_WIDTH = 16
+
         # Blocks and their types should already be encoded into a palette when they're generated
         # So we don't actually have to deal with encoding/decoding them!
 
         bits_per_block = DirectPalette.get_bits_per_block()
-        out = b""
+        out = cls.pack('b', bits_per_block)  # pack bits per block
 
-        out += cls.pack('b', bits_per_block)
+        data_len = (16*16*16) * bits_per_block / 64
+        data = [0]*data_len
 
-    @classmethod
+        individual_value_mask = (1 << bits_per_block) - 1
+
+        for y in range(SECTION_WIDTH):
+            for z in range(SECTION_WIDTH):
+                for x in range(SECTION_WIDTH):
+                    block_num = (((y * SECTION_WIDTH) + z) * SECTION_WIDTH) + x
+                    start_long = (block_num * bits_per_block) / 64
+                    start_offset = (block_num * bits_per_block) % 64
+                    end_long = ((block_num + 1) * bits_per_block - 1) / 64
+
+                    value = chunk_section[x][y][z][0]  # take the block state id
+                    value &= individual_value_mask
+
+                    data[start_long] |= (value << start_offset)
+
+                    if start_long != end_long:
+                        data[end_long] = value >> (64 - start_offset)
+
+        # pack length of data + data
+        out += cls.pack_varint(data_len) + b"".join([cls.pack("q", num) for num in data])
+
+        # calculate and write each block light value
+        for y in range(SECTION_WIDTH):
+            for z in range(SECTION_WIDTH):
+                for x in range(0, SECTION_WIDTH, 2):
+                    value = chunk_section[x][y][z][1] | (chunk_section[x+1][y][z][1] << 4)
+                    out += cls.pack("b", value)
+
+        # calculate and write each sky light value
+        for y in range(SECTION_WIDTH):
+            for z in range(SECTION_WIDTH):
+                for x in range(0, SECTION_WIDTH, 2):
+                    value = chunk_section[x][y][z][2] | (chunk_section[x+1][y][z][2] << 4)
+                    out += cls.pack("b", value)
+
+        return out
+
+
+
+    @classmethod  # see here: https://wiki.vg/Chunk_Format
     def pack_chunk_data(cls, chunk_x: int, chunk_z: int, chunk: object) -> bytes:  # (256, 16, 16)?
         CHUNK_HEIGHT = 256
         SECTION_WIDTH = 16

@@ -3,6 +3,7 @@ import time
 
 from pymine.types.chunk import Chunk
 
+from pymine.data.block_palette import DirectPalette
 from pymine.api.abc import AbstractWorldGenerator
 from pymine.data.registries import BLOCK_REGISTRY
 
@@ -14,17 +15,17 @@ class SuperFlatWorldGenerator(AbstractWorldGenerator):
 
         # actual blocks in the chunk
         chunk_blocks = numpy.ndarray((256, 16, 16), numpy.uint16)
-        chunk_blocks.fill(BLOCK_REGISTRY.encode("minecraft:air"))
+        chunk_blocks.fill(DirectPalette.encode("minecraft:air"))
 
         if dimension == "minecraft:overworld":
-            chunk_blocks[0].fill(BLOCK_REGISTRY.encode("minecraft:bedrock"))
-            chunk_blocks[1:3].fill(BLOCK_REGISTRY.encode("minecraft:dirt"))
-            chunk_blocks[4].fill(BLOCK_REGISTRY.encode("minecraft:grass_block"))
+            chunk_blocks[0].fill(DirectPalette.encode("minecraft:bedrock"))
+            chunk_blocks[1:3].fill(DirectPalette.encode("minecraft:dirt"))
+            chunk_blocks[4].fill(DirectPalette.encode("minecraft:grass_block", {"snowy": "false"}))
         elif dimension == "minecraft:nether":
-            chunk_blocks[0].fill(BLOCK_REGISTRY.encode("minecraft:bedrock"))
-            chunk_blocks[1:4].fill(BLOCK_REGISTRY.encode("minecraft:netherrack"))
+            chunk_blocks[0].fill(DirectPalette.encode("minecraft:bedrock"))
+            chunk_blocks[1:4].fill(DirectPalette.encode("minecraft:netherrack"))
         elif dimension == "minecraft:the_end":
-            chunk_blocks[0].fill(BLOCK_REGISTRY.encode("minecraft:bedrock"))
-            chunk_blocks[1:4].fill(BLOCK_REGISTRY.encode("minecraft:end_stone"))
+            chunk_blocks[0].fill(DirectPalette.encode("minecraft:bedrock"))
+            chunk_blocks[1:4].fill(DirectPalette.encode("minecraft:end_stone"))
 
         return chunk_blocks

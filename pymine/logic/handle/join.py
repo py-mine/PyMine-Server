@@ -24,7 +24,8 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
     server.cache.uuid[stream.remote] = int(uuid_)  # update uuid cache
 
     player = await server.playerio.fetch_player(uuid_)  # fetch player data from disk
-    player.set_meta(username, stream.remote)
+    player.remote = stream.remote
+    player.username = username
 
     world = server.worlds[player.data["Dimension"].data]  # the world player *should* be spawning into
 
@@ -35,7 +36,7 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
 
 
 @server.api.events.on_packet("play", 0x0B)
-async def plugin_message_recv(stream: Stream, packet: Packet):
+async def plugin_message_recv(stream: Stream, packet: Packet) -> None:
     if packet.channel == "minecraft:brand":
         server.cache.uuid[stream.remote].brand = packet.data.unpack_string()
 

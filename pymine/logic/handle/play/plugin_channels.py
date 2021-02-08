@@ -1,3 +1,7 @@
+
+from pymine.types.packet import Packet
+from pymine.types.stream import Stream
+
 from pymine.server import server
 
 

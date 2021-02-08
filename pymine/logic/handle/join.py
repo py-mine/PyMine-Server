@@ -52,6 +52,7 @@ async def client_settings_recv(stream: Stream, packet: Packet) -> None:
     player.displayed_skin_parts = packet.displayed_skin_parts
     player.main_hand = packet.main_hand
 
+
 # crucial info pertaining to the world and player status
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:
     level_name = server.conf["level_name"]  # level name, i.e. Xenon

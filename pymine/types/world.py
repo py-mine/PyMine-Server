@@ -21,6 +21,23 @@ class World:
         self._chunk_cache_max = chunk_cache_max
         self._chunk_cache = OrderedDict()
 
+        self._proper_name = None
+        self._dimension = None
+
+    @property
+    def proper_name(self):
+        if self._proper_name is None:
+            self._proper_name = list(self.server.worlds.keys())[list(self.server.worlds.values()).index(self)]
+
+        return self._proper_name
+
+    @property
+    def dimension(self):
+        if self._dimension is None:
+            self._dimension = "minecraft:" + self.proper_name.replace(self.name + "_", "")
+
+        return self._dimension
+
     async def init(self):
         self.data = await self.load_level_data()
         return self  # for fluent style chaining
@@ -53,5 +70,4 @@ class World:
         try:
             return self.cache_chunk(await self.server.chunkio.fetch_chunk_async(self.path, *key), key)
         except FileNotFoundError:
-            # return self.server.generator.generate_chunk()
-            pass
+            self.server.generator.generate_chunk(self.data["RandomSeed"], self.name, self.dimension)

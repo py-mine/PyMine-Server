@@ -562,7 +562,7 @@ class Buffer:
         pass
 
     @classmethod
-    def pack_chunk_data(cls, chunk_x: int, chunk_z: int, chunk: object) -> bytes:  # (16, 256, 16)?
+    def pack_chunk_data(cls, chunk_x: int, chunk_z: int, chunk: object) -> bytes:  # (256, 16, 16)?
         CHUNK_HEIGHT = 256
         SECTION_WIDTH = 16
 

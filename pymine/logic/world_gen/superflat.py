@@ -13,9 +13,6 @@ class SuperFlatWorldGenerator(AbstractWorldGenerator):
     # Blocks *should* be packed something like this:
     # 256*[16*[16*[block_state_id, block_light, sky_light]]]
 
-    class Break(BaseException):
-        pass
-
     @staticmethod
     def generate_chunk(seed: int, dimension: str, chunk_x: int, chunk_z: int) -> numpy.ndarray:
         chunk_data = numpy.ndarray((256, 16, 16, 3), numpy.uint16)  # (block_state_id, block_light, sky_light)

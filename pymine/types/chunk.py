@@ -65,36 +65,3 @@ class Chunk(nbt.TAG_Compound):
                 nbt.TAG_iNT("zPos", chunk_z),
             ],
         )
-
-    @classmethod
-    def write_chunk_section(buf: Buffer, chunk_section: object) -> None:  # 0..16[0..16[0..16[]]]
-        buf.write(Buffer.pack("b", DirectPalette.get_bits_per_block()))
-
-    @classmethod
-    def write_chunk_data_packet(cls, buf: Buffer, cx: int, cz: int, chunk: object) -> None:  # (16, 256, 16)?
-        CHUNK_HEIGHT = 256
-        SECTION_WIDTH = 16
-
-        # write chunk coordinates and say that it's a full chunk
-        buf.write(Buffer.pack("i", cx) + Buffer.pack("i", cz) + Buffer.pack("?", True))
-
-        mask = 0
-        column_buf = Buffer()
-
-        for i in range(0, len(chunk), 16):  # iterate through chunk sections (16x16x16 area of blocks)
-            chunk_section = chunk[i : i + 16]
-
-            if any(chunk_section):  # check if chunk section is empty or not
-                mask |= 1 << i
-                cls.write_chunk_section(column_buf, chunk_section)
-
-        for z in range(0, len(SECTION_WIDTH)):
-            for x in range(0, len(SECTION_WIDTH)):
-                buf.write(Buffer.pack("i", 127))  # 127 is void, and we don't support biomes yet so 127 it is
-
-        buf.write(Buffer.pack_varint(mask))
-        buf.write(Buffer.pack_varint(len(column_buf.buf)))
-        buf.write(column_buf.read())
-
-        # Here we would send block entities, but there's no support for them yet so we just send an array with length of 0
-        buf.write(Buffer.pack_varint(0))

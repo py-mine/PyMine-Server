@@ -90,3 +90,10 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
         stream,
         packets_player.PlayPlayerAbilitiesClientBound(flags.field, abilities["flySpeed"].data, abilities["walkSpeed"].data),
     )
+
+
+# change held item to last held item
+async def send_last_held_item(stream: Stream, player: Player) -> None:
+    await server.send_packet(
+        stream, packets_player.PlayHeldItemChangeClientBound(player.data["SelectedItemSlot"].data)
+    )

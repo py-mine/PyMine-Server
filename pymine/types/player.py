@@ -15,14 +15,16 @@ class Player:
         self.uuid = uuid.UUID(bytes=struct.pack(">iiii", *data["UUID"]))
         self.x, self.y, self.z = self.pos = data["Pos"]
 
-        self.username = None
         self.remote = None
-        self.brand = None
 
-    # Used to associate a remote client with a specific Player object
-    def set_meta(self, username: str, remote: tuple) -> None:
-        self.username = username
-        self.remote = remote
+        self.username = None
+        self.brand = None
+        self.locale = None
+        self.view_distance = None
+        self.chat_mode = None
+        self.chat_colors = None
+        self.displayed_skin_parts = None
+        self.main_hand = None
 
     @classmethod
     def new(cls, entity_id: int, uuid_: uuid.UUID, spawn: tuple, dimension: str) -> Player:

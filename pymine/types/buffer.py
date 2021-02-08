@@ -569,7 +569,7 @@ class Buffer:
         out = b""
 
         # write chunk coordinates and say that it's a full chunk
-        out += Buffer.pack("i", cx) + Buffer.pack("i", cz) + Buffer.pack("?", True)
+        out += Buffer.pack("i", chunk_x) + Buffer.pack("i", chunk_z) + Buffer.pack("?", True)
 
         mask = 0
         column_data = b""

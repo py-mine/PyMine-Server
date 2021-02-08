@@ -10,11 +10,11 @@ class DirectPalette:
         return math.ceil(math.log2(sum(len(b["states"]) for b in BLOCK_STATES.items())))  # should be 14 or 15
 
     @staticmethod
-    def encode(block: str, props: dict) -> int:
+    def encode(block: str, props: dict = None) -> int:
         block_data = BLOCK_STATES.encode(block)
 
         for state in block_data["states"]:
-            if dict(state["properties"]) == props:
+            if dict(state["properties"]) == props or (not props and state.get("default") == "true"):
                 return state["id"]
 
         raise ValueError(f"{block} doesn't have a state with those properties.")

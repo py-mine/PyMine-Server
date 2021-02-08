@@ -14,7 +14,7 @@ class DirectPalette:
         block_data = BLOCK_STATES.encode(block)
 
         for state in block_data["states"]:
-            if (not props and state.get("default")):
+            if not props and state.get("default"):
                 return state["id"]
 
             state_props = state.get("properties")

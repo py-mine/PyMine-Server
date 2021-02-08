@@ -57,7 +57,7 @@ class Chunk(nbt.TAG_Compound):
                         nbt.TAG_List("ToBeTicked", [nbt.TAG_List(None, []) for _ in range(16)]),
                         nbt.TAG_Compound("Structures", [nbt.TAG_Compound("References", []), nbt.TAG_Compound("Starts", [])]),
                         nbt.TAG_Int("xPos", chunk_x),
-                        nbt.TAG_Int("zPos", chunk_z)
+                        nbt.TAG_Int("zPos", chunk_z),
                     ],
                 ),
             ],

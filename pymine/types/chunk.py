@@ -5,9 +5,6 @@ import numpy
 from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
 
-from pymine.data.block_palette import DirectPalette
-from pymine.data.registries import BLOCK_REGISTRY
-
 
 class Chunk(nbt.TAG_Compound):
     def __init__(self, tag: nbt.TAG_Compound, timestamp: int) -> None:

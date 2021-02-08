@@ -576,7 +576,7 @@ class Buffer:
         out = b""
 
         # write chunk coordinates and say that it's a full chunk
-        out += Buffer.pack("i", chunk_x) + Buffer.pack("i", chunk_z) + Buffer.pack("?", True)
+        out += cls.pack("i", chunk_x) + cls.pack("i", chunk_z) + cls.pack("?", True)
 
         mask = 0
         column_data = b""
@@ -590,11 +590,11 @@ class Buffer:
 
         for z in range(0, len(SECTION_WIDTH)):
             for x in range(0, len(SECTION_WIDTH)):
-                out += Buffer.pack("i", 127)  # 127 is void, and we don't support biomes yet so 127 it is
+                out += cls.pack("i", 127)  # 127 is void, and we don't support biomes yet so 127 it is
 
-        out += Buffer.pack_varint(mask) + Buffer.pack_varint(len(column_data)) + column_data
+        out += cls.pack_varint(mask) + cls.pack_varint(len(column_data)) + column_data
 
         # Here we would send block entities, but there's no support for them yet so we just send an array with length of 0
-        out += Buffer.pack_varint(0)
+        out += cls.pack_varint(0)
 
         return out

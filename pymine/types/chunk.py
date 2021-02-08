@@ -83,7 +83,7 @@ class Chunk(nbt.TAG_Compound):
         column_buffer = Buffer()
 
         for i in range(0, len(chunk), 16):  # iterate through chunk sections (16x16x16 area of blocks)
-            chunk_section = chunk[i:i+16]
+            chunk_section = chunk[i : i + 16]
 
             if any(chunk_section):  # check if chunk section is empty or not
                 mask |= 1 << i

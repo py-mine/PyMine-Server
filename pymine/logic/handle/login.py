@@ -14,7 +14,7 @@ from pymine.net.packets.login.set_comp import LoginSetCompression
 import pymine.net.packets.login.login as login_packets
 
 from pymine.api.exceptions import StopHandling
-from pymine.logic.handle.join import join
+from pymine.logic.join import join
 from pymine.server import server
 
 

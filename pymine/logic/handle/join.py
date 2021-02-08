@@ -34,6 +34,7 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
     await send_server_difficulty(stream, world)
     await send_player_abilities(stream, player)
 
+
 # crucial info pertaining to the world and player status
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:
     level_name = server.conf["level_name"]  # level name, i.e. Xenon

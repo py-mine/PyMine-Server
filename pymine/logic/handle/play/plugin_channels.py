@@ -1,4 +1,3 @@
-
 from pymine.types.packet import Packet
 from pymine.types.stream import Stream
 

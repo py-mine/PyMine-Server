@@ -16,13 +16,13 @@ class SuperFlatWorldGenerator(AbstractWorldGenerator):
         chunk_blocks = numpy.ndarray((256, 16, 16), numpy.uint16)
         chunk_blocks.fill(BLOCK_REGISTRY.encode("minecraft:air"))
 
-        if dimension == 'minecraft:overworld':
+        if dimension == "minecraft:overworld":
             chunk_blocks[0].fill(BLOCK_REGISTRY.encode("minecraft:bedrock"))
             chunk_blocks[1:3].fill(BLOCK_REGISTRY.encode("minecraft:dirt"))
             chunk_blocks[4].fill(BLOCK_REGISTRY.encode("minecraft:grass_block"))
-        elif dimension == 'minecraft:nether':
+        elif dimension == "minecraft:nether":
             chunk_blocks[0].fill(BLOCK_REGISTRY.encode("minecraft:bedrock"))
             chunk_blocks[1:4].fill(BLOCK_REGISTRY.encode("minecraft:netherrack"))
-        elif dimension == 'minecraft:the_end':
+        elif dimension == "minecraft:the_end":
             chunk_blocks[0].fill(BLOCK_REGISTRY.encode("minecraft:bedrock"))
             chunk_blocks[1:4].fill(BLOCK_REGISTRY.encode("minecraft:end_stone"))

@@ -59,7 +59,7 @@ class Server:
         asyncio.get_event_loop().set_debug(self.conf["debug"])
 
         self.playerio = None  # used to fetch/dump players
-        self.chunkio = ChunkIO  # used to generate new chunks
+        self.chunkio = ChunkIO  # used to fetch chunks from the disk
         self.worlds = None  # world dictionary
 
         self.aiohttp = None  # the aiohttp session

@@ -1,6 +1,8 @@
 from pymine.types.packet import Packet
 from pymine.types.stream import Stream
 
+from pymine.logic.join import send_last_held_item
+
 from pymine.server import server
 
 
@@ -14,3 +16,5 @@ async def client_settings_recv(stream: Stream, packet: Packet) -> None:
     player.chat_colors = packet.chat_colors
     player.displayed_skin_parts = packet.displayed_skin_parts
     player.main_hand = packet.main_hand
+
+    await send_last_held_item(stream, player)

@@ -18,10 +18,7 @@ class SuperFlatWorldGenerator(AbstractWorldGenerator):
 
     @staticmethod
     def generate_chunk(seed: int, dimension: str, chunk_x: int, chunk_z: int) -> numpy.ndarray:
-        chunk = Chunk.new(chunk_x, chunk_z, int(time.time()))
-
-        # actual blocks in the chunk
-        chunk_blocks = numpy.ndarray((256, 16, 16, 3), numpy.uint16)
+        chunk_blocks = numpy.ndarray((256, 16, 16, 3), numpy.uint16)  # actual blocks in the chunk
         chunk_blocks.fill(DirectPalette.encode("minecraft:air"))  # should be 0
 
         # if dimension == "minecraft:overworld":

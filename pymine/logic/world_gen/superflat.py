@@ -9,7 +9,7 @@ from pymine.data.registries import BLOCK_REGISTRY
 
 class SuperFlatWorldGenerator(AbstractWorldGenerator):
     @staticmethod
-    def generate_chunk(seed: int, dimension: str, chunk_x: int, chunk_z: int) -> Chunk:
+    def generate_chunk(seed: int, dimension: str, chunk_x: int, chunk_z: int) -> object:
         chunk = Chunk.new(chunk_x, chunk_z, int(time.time()))
 
         # actual blocks in the chunk

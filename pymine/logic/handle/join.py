@@ -35,12 +35,6 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
     await send_player_abilities(stream, player)
 
 
-@server.api.events.on_packet("play", 0x0B)
-async def plugin_message_recv(stream: Stream, packet: Packet) -> None:
-    if packet.channel == "minecraft:brand":
-        server.cache.uuid[stream.remote].brand = packet.data.unpack_string()
-
-
 @server.api.events.on_packet("play", 0x05)
 async def client_settings_recv(stream: Stream, packet: Packet) -> None:
     player = await server.playerio.fetch_player(server.cache.uuid[stream.remote])

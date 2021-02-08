@@ -26,3 +26,5 @@ class SuperFlatWorldGenerator(AbstractWorldGenerator):
         elif dimension == "minecraft:the_end":
             chunk_blocks[0].fill(BLOCK_REGISTRY.encode("minecraft:bedrock"))
             chunk_blocks[1:4].fill(BLOCK_REGISTRY.encode("minecraft:end_stone"))
+
+        return chunk_blocks

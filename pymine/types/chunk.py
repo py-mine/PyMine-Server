@@ -67,11 +67,11 @@ class Chunk(nbt.TAG_Compound):
         )
 
     @classmethod
-    def write_chunk_section(buf: Buffer, chunk_section: list) -> None:  # 0..16[0..16[0..16[]]]
+    def write_chunk_section(buf: Buffer, chunk_section: object) -> None:  # 0..16[0..16[0..16[]]]
         buf.write(Buffer.pack("b", DirectPalette.get_bits_per_block()))
 
     @classmethod
-    def write_chunk_data_packet(cls, buf: Buffer, cx: int, cz: int, chunk: list) -> None:  # (16, 256, 16)?
+    def write_chunk_data_packet(cls, buf: Buffer, cx: int, cz: int, chunk: object) -> None:  # (16, 256, 16)?
         CHUNK_HEIGHT = 256
         SECTION_HEIGHT = 16
         SECTION_WIDTH = 16
@@ -82,7 +82,9 @@ class Chunk(nbt.TAG_Compound):
         mask = 0
         column_buffer = Buffer()
 
-        for i, chunk_section in enumerate(chunk):  # iterate through chunk sections
+        for i in range(0, len(chunk), 16):  # iterate through chunk sections (16x16x16 area of blocks)
+            chunk_section = chunk[i:i+16]
+
             if any(chunk_section):  # check if chunk section is empty or not
                 mask |= 1 << i
                 cls.write_chunk_section(buf, chunk_section)

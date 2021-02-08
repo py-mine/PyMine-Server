@@ -558,7 +558,7 @@ class Buffer:
         return self.unpack_uuid(), self.unpack("d"), self.unpack("b")
 
     @classmethod
-    def pack_chunk_section(cls, chunk_section: object) -> bytes:   # 0..16[0..16[0..16[]]]
+    def pack_chunk_section(cls, chunk_section: object) -> bytes:  # 0..16[0..16[0..16[]]]
         pass
 
     @classmethod

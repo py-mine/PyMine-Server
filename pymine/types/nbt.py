@@ -393,6 +393,10 @@ class TAG_Compound(TAG, dict):
         TAG.__init__(self, name)
         dict.__init__(self, [(t.name, t) for t in data])
 
+    @property
+    def data(self):
+        return self.values()
+
     def __setitem__(self, key, value):
         value.name = key
         dict.__setitem__(self, key, value)

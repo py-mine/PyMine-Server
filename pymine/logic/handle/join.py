@@ -41,6 +41,17 @@ async def plugin_message_recv(stream: Stream, packet: Packet) -> None:
         server.cache.uuid[stream.remote].brand = packet.data.unpack_string()
 
 
+@server.api.events.on_packet("play", 0x05)
+async def client_settings_recv(stream: Stream, packet: Packet) -> None:
+    player = await server.playerio.fetch_player(server.cache.uuid[stream.remote])
+
+    player.locale = packet.locale
+    player.view_distance = packet.view_distance
+    player.chat_mode = packet.chat_mode
+    player.chat_colors = packet.chat_colors
+    player.displayed_skin_parts = packet.displayed_skin_parts
+    player.main_hand = packet.main_hand
+
 # crucial info pertaining to the world and player status
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:
     level_name = server.conf["level_name"]  # level name, i.e. Xenon

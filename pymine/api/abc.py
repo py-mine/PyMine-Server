@@ -2,7 +2,7 @@ class AbstractWorldGenerator:
     """Abstract class used to create a world generator."""
 
     @classmethod
-    def generate_chunk(cls, seed: int, chunk_x: int, chunk_z: int):  # -> Chunk
+    def generate_chunk(cls, seed: int, dimension: str, chunk_x: int, chunk_z: int):  # -> Chunk
         raise NotImplementedError(cls.__name__)
 
 

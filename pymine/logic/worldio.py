@@ -48,6 +48,9 @@ class ChunkIO(AbstractChunkIO):
         rx, ry = chunk_x // 32, chunk_z // 32
         region_path = os.path.join(world_path, "region", f"r.{rx}.{ry}.mca")
 
+        if not os.path.isfile(region_path):
+            raise FileNotFoundError(region_path)
+
         loc_table_loc = cls.calc_offset(chunk_x, chunk_z)
 
         with open(region_path, "rb") as region_file:
@@ -65,6 +68,9 @@ class ChunkIO(AbstractChunkIO):
     async def fetch_chunk_async(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:
         rx, ry = chunk_x // 32, chunk_z // 32
         region_path = os.path.join(world_path, "region", f"r.{rx}.{ry}.mca")
+
+        if not os.path.isfile(region_path):
+            raise FileNotFoundError(region_path)
 
         loc_table_loc = cls.calc_offset(chunk_x, chunk_z)
 

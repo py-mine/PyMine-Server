@@ -36,3 +36,17 @@ class Float:
             pass
 
         raise ValueError
+
+
+class Integer:
+    @staticmethod
+    def parse(s: str, max_=2147483647, min_=-2147483648) -> int:
+        try:
+            value = int(s)
+
+            if max_ >= value >= min_:
+                return value
+        except BaseException:
+            pass
+
+        raise ValueError

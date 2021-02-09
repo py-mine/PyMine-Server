@@ -10,7 +10,6 @@ class CommandHandler:
     def __init__(self, server):
         self.server = server
         self.logger = server.logger
-        str.ca
         self._commands = {}  # {name: (func, node)}
 
     # loads default built in commands

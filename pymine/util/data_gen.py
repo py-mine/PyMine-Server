@@ -10,14 +10,14 @@ if "--packets" in sys.argv or "-P" in sys.argv:
     if len(sys.argv) < 3:
         to_dump = "all"
     else:
-        to_dump = [STATES.decode(state) for state in sys.argv[2:]]
+        to_dump = [STATES.encode(state) for state in sys.argv[2:]]
 
     for pmap, dir_ in ((PACKET_MAP, "serverbound"), (PACKET_MAP_CLIENTBOUND, "clientbound")):
         for state, map_ in pmap.items():
             done = []
 
             if to_dump == "all" or state in to_dump:
-                print(f"\n{STATES.encode(state)} DONE ({dir_}): ", end="")
+                print(f"\n{STATES.decode(state)} DONE ({dir_}): ", end="")
 
                 done_local = []
 
@@ -31,7 +31,7 @@ if "--packets" in sys.argv or "-P" in sys.argv:
                 print(", ".join([f"0x{id_:02X}" for id_ in done_local]))
 
                 if len(done) < max(done) - 1 and max(done) not in (0xFF, 0xFE):
-                    print(f"{STATES.encode(state)} MISSING ({dir_}): ", end="")
+                    print(f"{STATES.decode(state)} MISSING ({dir_}): ", end="")
 
                     missing = []
 

@@ -5,7 +5,7 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-from pymine.data.registry import BLOCK_REGISTRY, ITEM_REGISTRY, FLUID_REGISTRY, ENTITY_REGISTRY
+from pymine.data.registries import BLOCK_REGISTRY, ITEM_REGISTRY, FLUID_REGISTRY, ENTITY_REGISTRY
 
 __all__ = ("PlayTags",)
 

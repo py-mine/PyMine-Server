@@ -12,20 +12,23 @@ class Player:
         self.entity_id = entity_id
         self.data = data
 
-        self.uuid = uuid.UUID(bytes=struct.pack(">iiii", *data["uuid"]))
+        self.uuid = uuid.UUID(bytes=struct.pack(">iiii", *data["UUID"]))
         self.x, self.y, self.z = self.pos = data["Pos"]
 
-        self.username = None
         self.remote = None
 
-    # Used to associate a remote client with a specific Player object
-    def set_meta(self, username: str, remote: tuple) -> None:
-        self.username = username
-        self.remote = remote
+        self.username = None
+        self.brand = None
+        self.locale = None
+        self.view_distance = None
+        self.chat_mode = None
+        self.chat_colors = None
+        self.displayed_skin_parts = None
+        self.main_hand = None
 
     @classmethod
-    def new(cls, entity_id: int, uuid_: uuid.UUID, spawn: tuple) -> Player:
-        return cls(entity_id, cls.new_nbt(uuid_, spawn))
+    def new(cls, entity_id: int, uuid_: uuid.UUID, spawn: tuple, dimension: str) -> Player:
+        return cls(entity_id, cls.new_nbt(uuid_, spawn, dimension))
 
     @staticmethod
     def new_nbt(uuid_: uuid.UUID, spawn: tuple, dimension: str) -> nbt.TAG:

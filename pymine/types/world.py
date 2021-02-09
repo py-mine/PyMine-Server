@@ -3,31 +3,14 @@ import aiofile
 import os
 
 from pymine.types.buffer import Buffer
-from pymine.types.region import Region
 from pymine.types.chunk import Chunk
 import pymine.types.nbt as nbt
 
 from pymine.data.default_nbt.level import new_level_nbt
 
 
-def block_to_chunk_coords(block_x: int, block_z: int) -> tuple:
-    return block_x // 16, block_z // 16
-
-
-def chunk_to_block_coords(chunk_x: int, chunk_z: int) -> tuple:
-    return chunk_x * 16, chunk_z * 16
-
-
-def chunk_to_region_coords(chunk_x: int, chunk_z: int) -> tuple:
-    return chunk_x // 32, chunk_z // 32
-
-
-def region_file_name(region_x: int, region_z: int) -> str:  # Gens the name for the region file in the format r.x.y.mca
-    return ".".join(("r", str(region_x), str(region_z), "mca"))
-
-
 class World:
-    def __init__(self, server, name: str, path: str, region_cache_max: int) -> None:
+    def __init__(self, server, name: str, path: str, chunk_cache_max: int) -> None:
         self.server = server
 
         self.name = name
@@ -35,8 +18,25 @@ class World:
 
         self.data = None
 
-        self.region_cache_max = region_cache_max
-        self.region_cache = OrderedDict()
+        self._chunk_cache_max = chunk_cache_max
+        self._chunk_cache = OrderedDict()
+
+        self._proper_name = None
+        self._dimension = None
+
+    @property
+    def proper_name(self):
+        if self._proper_name is None:
+            self._proper_name = list(self.server.worlds.keys())[list(self.server.worlds.values()).index(self)]
+
+        return self._proper_name
+
+    @property
+    def dimension(self):
+        if self._dimension is None:
+            self._dimension = "minecraft:" + self.proper_name.replace(self.name + "_", "")
+
+        return self._dimension
 
     async def init(self):
         self.data = await self.load_level_data()
@@ -49,28 +49,26 @@ class World:
             async with aiofile.async_open(file, "rb") as level_data_file:
                 return nbt.TAG_Compound.unpack(Buffer(await level_data_file.read()))
 
-        return new_level_nbt((2586, self.server.meta.version, 19133), self.name, (0, 100, 0), self.server.conf["seed"])
+        return new_level_nbt((2586, self.server.meta.version, 19133), self.name, (0, 100, 0), self.server.conf["seed"])["Data"]
 
-    def cache_region(self, region: Region, key: tuple) -> Region:
-        self.region_cache[key] = region
+    def cache_chunk(self, chunk: Chunk, key: tuple) -> Chunk:
+        self._chunk_cache[key] = chunk
 
-        if len(self.region_cache) > self.region_cache_max:
-            self.region_cache.popitem(False)
+        if len(self.chunk_cache) > self._chunk_cache_max:
+            self._chunk_cache.popitem(False)
 
-        return region
-
-    async def fetch_region(self, region_coords: tuple) -> Region:
-        try:
-            self.region_cache.move_to_end(region_coords)
-            return self.region_cache[region_coords]
-        except KeyError:
-            file = os.path.join(self.world_path, "region", region_file_name(*region_coords))
-            return self.cache_region(await Region.from_file(file), region_coords)
+        return chunk
 
     async def fetch_chunk(self, chunk_x: int, chunk_z: int) -> Chunk:
-        region = await self.fetch_region(chunk_to_region_coords(chunk_x, chunk_z))
+        key = (chunk_x, chunk_z)
 
         try:
-            return region[chunk_x, chunk_z]
+            return self._chunk_cache[key]
         except KeyError:
-            raise NotImplementedError("Nice try bucko, but world gen hasn't been implemented yet...")
+            pass
+
+        try:
+            return self.cache_chunk(await self.server.chunkio.fetch_chunk_async(self.path, *key), key)
+        except FileNotFoundError:
+            chunk_data = self.server.generator.generate_chunk(self.data["RandomSeed"], self.dimension, chunk_x, chunk_z)
+            return chunk_data

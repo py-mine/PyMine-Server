@@ -51,4 +51,4 @@ class PlayPluginMessageServerBound(Packet):
         self.data = data
 
     def decode(self, buf: Buffer) -> PlayPluginMessageServerBound:
-        return PlayPluginMessageServerBound(buf.unpack_string(), buf.read())
+        return PlayPluginMessageServerBound(buf.unpack_string(), Buffer(buf.read()))

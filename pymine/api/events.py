@@ -4,9 +4,7 @@ from pymine.data.states import STATES
 
 
 class EventHandler:
-    def __init__(self, server):
-        self.server = server
-
+    def __init__(self):
         self.must_be_coroutine = "Decorated object must be a coroutine function."
 
         # handshaking, login, play, status
@@ -15,7 +13,7 @@ class EventHandler:
         self._server_stop = []  # [func, func, func,..]
 
     def on_packet(self, state: str, id_: int):
-        state = STATES.decode(state)
+        state = STATES.encode(state)
 
         def deco(func):
             if not asyncio.iscoroutinefunction(func):

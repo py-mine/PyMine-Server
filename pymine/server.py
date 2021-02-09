@@ -12,8 +12,8 @@ from pymine.util.logging import task_exception_handler, Logger
 from pymine.util.encryption import gen_rsa_keys
 
 from pymine.logic.config import load_config, load_favicon
+from pymine.logic.worldio import load_worlds, ChunkIO
 from pymine.logic.playerio import PlayerDataIO
-from pymine.logic.worldio import load_worlds
 
 from pymine.api.exceptions import StopHandling, InvalidPacketID
 from pymine.net.packet_map import PACKET_MAP
@@ -40,6 +40,7 @@ class Server:
         def __init__(self):
             self.states = {}  # {remote: state}
             self.login = {}  # {remote: {username: username, verify: verify token}}
+            self.uuid = {}  # {remote: uuid as int}
 
     def __init__(self, logger, executor, uvloop):
         self.logger = logger  # logger instance
@@ -50,15 +51,15 @@ class Server:
         self.cache = self.Cache()
         self.secrets = self.Secrets(*gen_rsa_keys())
 
-        self.conf = load_config()
-        self.favicon = load_favicon()
-        self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold
+        self.conf = load_config()  # contents of server.yml in the root dir
+        self.favicon = load_favicon()  # server-icon.png in the root dir, displayed in clients' server lists
+        self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold since it's used so much
 
         self.logger.debug_ = self.conf["debug"]
         asyncio.get_event_loop().set_debug(self.conf["debug"])
 
-        self.eid_current = 0  # used to not generate duplicate entity ids
         self.playerio = None  # used to fetch/dump players
+        self.chunkio = ChunkIO  # used to fetch chunks from the disk
         self.worlds = None  # world dictionary
 
         self.aiohttp = None  # the aiohttp session
@@ -78,9 +79,9 @@ class Server:
 
         await self.api.init()
 
-        # 5 / the second arg (the max region cache size per world instance), should be dynamically changed based on the
-        # amount of players online on each world, probably something like (len(players) + 1)
-        self.worlds = await load_worlds(self, self.conf["level_name"], 5)
+        # 24 / the second arg (the max chunk cache size per world instance), should be dynamically changed based on the
+        # amount of players online on each world, probably something like (len(players)*24)
+        self.worlds = await load_worlds(self, self.conf["level_name"], 24)
 
         # Player data IO, used to load/dump player info
         self.playerio = PlayerDataIO(self, self.conf["level_name"])
@@ -98,13 +99,6 @@ class Server:
         await asyncio.gather(self.server.wait_closed(), self.api.stop(), self.aiohttp.close())
 
         self.logger.info("Server closed.")
-
-    async def call_async(self, func, *args, **kwargs):  # used to run a blocking function in a process pool
-        await asyncio.get_event_loop().run_in_executor(self.executor, func, *args, **kwargs)
-
-    def eid(self):  # used to generate entity ids
-        self.eid_current += 1
-        return self.eid_current
 
     async def close_connection(self, stream: Stream):  # Close a connection to a client
         await stream.drain()
@@ -183,7 +177,7 @@ class Server:
         self.logger.debug(f"IN : state: {state} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
         if self.api.events._packet[state].get(packet.id) is None:
-            self.logger.warn(f"No valid packet handler found for packet {state} 0x{packet.id:02X} {type(packet).__name__}")
+            self.logger.warn(f"No packet handler found for packet: 0x{packet.id:02X} {type(packet).__name__}")
             return stream
 
         for handler in self.api.events._packet[state][packet.id]:

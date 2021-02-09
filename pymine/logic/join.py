@@ -32,8 +32,17 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
     world = server.worlds[player.data["Dimension"].data]  # the world player *should* be spawning into
 
     await send_join_game_packet(stream, world, player)
-    await send_server_brand(stream)
-    await send_server_difficulty(stream, world)
+
+    # send server brand via plugin channels
+    await server.send_packet(
+        stream, packets_plugin.PlayPluginMessageClientBound("minecraft:brand", Buffer.pack_string(server.meta.pymine))
+    )
+
+    # sends info about the server difficulty
+    await server.send_packet(
+        stream, packets_difficulty.PlayServerDifficulty(world.data["Difficulty"].data, world.data["DifficultyLocked"].data)
+    )
+
     await send_player_abilities(stream, player)
 
 
@@ -70,21 +79,6 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
             False,  # Should be true if world is superflat
         ),
     )
-
-
-# send server brand + version via plugin channels
-async def send_server_brand(stream: Stream) -> None:
-    await server.send_packet(
-        stream, packets_plugin.PlayPluginMessageClientBound("minecraft:brand", Buffer.pack_string(server.meta.pymine))
-    )
-
-
-# shown in the menu options for the client
-async def send_server_difficulty(stream: Stream, world: World) -> None:
-    await server.send_packet(
-        stream, packets_difficulty.PlayServerDifficulty(world.data["Difficulty"].data, world.data["DifficultyLocked"].data)
-    )
-
 
 # send what the player can/can't do
 async def send_player_abilities(stream: Stream, player: Player) -> None:

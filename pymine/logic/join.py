@@ -10,8 +10,10 @@ from pymine.types.world import World
 import pymine.types.nbt as nbt
 
 from pymine.data.default_nbt.dimension_codec import new_dim_codec_nbt, get_dimension_data
+from pymine.data.recipes import RECIPES
 
 import pymine.net.packets.play.difficulty as packets_difficulty
+import pymine.net.packets.play.crafting as packets_crafting
 import pymine.net.packets.play.plugin_msg as packets_plugin
 import pymine.net.packets.play.player as packets_player
 
@@ -99,3 +101,6 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
 # change held item to last held item
 async def send_last_held_item(stream: Stream, player: Player) -> None:
     await server.send_packet(stream, packets_player.PlayHeldItemChangeClientBound(player.data["SelectedItemSlot"].data))
+
+async def send_recipes(stream: Stream, player: Player) -> None:
+    await server.send_packet(stream, packets_crafting.PlayDeclareRecipes(RECIPES))

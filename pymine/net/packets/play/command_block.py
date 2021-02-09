@@ -20,14 +20,14 @@ class PlayUpdateCommandBlock(Packet):
     :param str command: The command text in the command block.
     :param int mode: The mode which the command block is in. Either sequence (0), auto (1), or redstone (2).
     :param int flags: Other flags, see here: https://wiki.vg/Protocol#Update_Command_Block.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr command:
-    :attr mode:
-    :attr flags:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar command:
+    :ivar mode:
+    :ivar flags:
     """
 
     id = 0x26
@@ -52,11 +52,11 @@ class PlayUpdateCommandBlockMinecart(Packet):
     :param int entity_id: The ID of the entity (the minecart).
     :param str command: The command text in the command block.
     :param bool track_output: Whether output from the last command is saved.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr entity_id:
-    :attr command:
-    :attr track_output:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar command:
+    :ivar track_output:
     """
 
     id = 0x27

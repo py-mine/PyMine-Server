@@ -30,18 +30,19 @@ __all__ = (
 
 class PlayBlockEntityData(Packet):
     """Sets the block entity associated with the block at the given location. (Server -> Client).
+
     :param int x: The x coordinate of the position.
     :param int y: The y coordinate of the position.
     :param int z: The z coordinate of the position.
     :param int action: The action to be carried out (see https://wiki.vg/Protocol#Block_Entity_Data).
     :param nbt.TAG nbt_data: The nbt data associated with the action/block.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr action:
-    :attr nbt_data:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar action:
+    :ivar nbt_data:
     """
 
     id = 0x09
@@ -60,12 +61,13 @@ class PlayBlockEntityData(Packet):
 
 class PlayQueryEntityNBT(Packet):
     """Sent by the client when Shift+F3+I is used. (Client -> Server)
+
     :param int transaction_id: Incremental ID used so the client can verify responses.
     :param int entity_id: The ID of the entity to query.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr transaction_id:
-    :attr entity_id:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar transaction_id:
+    :ivar entity_id:
     """
 
     id = 0x0D
@@ -84,6 +86,7 @@ class PlayQueryEntityNBT(Packet):
 
 class PlayInteractEntity(Packet):
     """Sent when a client clicks another entity, see here: https://wiki.vg/Protocol#Interact_Entity. (Client -> Server)
+
     :param int entity_id: The ID of the entity interacted with.
     :param int type_: Either interact (0), attack (1), or interact at (2).
     :param int target_x: The x coordinate of where the target is, can be None.
@@ -91,15 +94,15 @@ class PlayInteractEntity(Packet):
     :param int target_z: The z coordinate of where the target is, can be None.
     :param int hand: The hand used.
     :param bool sneaking: Whether the client was sneaking or not.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr entity_id:
-    :attr type_:
-    :attr target_x:
-    :attr target_y:
-    :attr target_z:
-    :attr hand:
-    :attr sneaking:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar type_:
+    :ivar target_x:
+    :ivar target_y:
+    :ivar target_z:
+    :ivar hand:
+    :ivar sneaking:
     """
 
     id = 0x0E
@@ -133,12 +136,14 @@ class PlayInteractEntity(Packet):
 
 class PlayEntityStatus(Packet):
     """Usually used to trigger an animation for an entity. (Server -> Client)
+
+
     :param int entity_id: The ID of the entity the status is for.
     :param int entity_status: Depends on the type of entity, see here: https://wiki.vg/Protocol#Entity_Status.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr entity_id:
-    :attr entity_status:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar entity_status:
     """
 
     id = 0x1A
@@ -156,14 +161,15 @@ class PlayEntityStatus(Packet):
 
 class PlayEntityAction(Packet):
     """Sent by the client to indicate it has performed a certain action. (Client -> Server)
+
     :param int entity_id: The ID of the entity.
     :param int action_id: The action occurring, see here: https://wiki.vg/Protocol#Entity_Action.
     :param int jump_boost: Used with jumping while riding a horse.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr entity_id:
-    :attr action_id:
-    :attr jump_boost:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar action_id:
+    :ivar jump_boost:
     """
 
     id = 0x1C
@@ -189,13 +195,13 @@ class PlayEntityPosition(Packet):
     :param int dy: Delta (change in) y, -8 <-> 8.
     :param int dz: Delta (change in) z, -8 <-> 8.
     :param bool on_ground: Whether entity is on ground or not.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr entity_id:
-    :attr dx:
-    :attr dy:
-    :attr dz:
-    :attr on_ground:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar dx:
+    :ivar dy:
+    :ivar dz:
+    :ivar on_ground:
     """
 
     id = 0x27
@@ -228,15 +234,15 @@ class PlayEntityPositionAndRotation(Packet):
     :param float yaw: The new yaw angle.
     :param float pitch: The new pitch angle.
     :param bool on_ground: Whether entity is on ground or not.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr entity_id:
-    :attr dx:
-    :attr dy:
-    :attr dz:
-    :attr yaw:
-    :attr pitch:
-    :attr on_ground:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar dx:
+    :ivar dy:
+    :ivar dz:
+    :ivar yaw:
+    :ivar pitch:
+    :ivar on_ground:
     """
 
     id = 0x28
@@ -269,12 +275,12 @@ class PlayEntityRotation(Packet):
     :param float yaw: The new yaw angle.
     :param float pitch: The new pitch angle.
     :param bool on_ground: Whether entity is on ground or not.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr entity_id:
-    :attr yaw:
-    :attr pitch:
-    :attr on_ground:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar yaw:
+    :ivar pitch:
+    :ivar on_ground:
     """
 
     id = 0x29
@@ -461,10 +467,10 @@ class PlayEntityMetadata(Packet):
 
     :param int entity_id: The ID of the entity the data is for.
     :param dict metadata: The entity metadata, see here: https://wiki.vg/Protocol#Entity_Metadata.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr entity_id:
-    :attr metadata:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar metadata:
     """
 
     id = 0x44
@@ -481,14 +487,14 @@ class PlayEntityMetadata(Packet):
 
 
 class PlayEntityEquipment(Packet):
-    """Sends data about the entity's equipped equipment
+    """Sends data about the entity's equipped equipment _
 
     :param int entity_id: The ID of the entity the equipment data is for.
-    :param list equipment: An array of equipment, see here: https://wiki.vg/Protocol#Entity_Equipment`.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr entity_id:
-    :attr equipment:
+    :param list equipment: An array of equipment,see here: <https://wiki.vg/Protocol>
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar equipment:
     """
 
     id = 0x47

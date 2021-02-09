@@ -5,7 +5,7 @@
 ![contributors](https://img.shields.io/badge/dynamic/json?color=0FAE6E&label=contributors&query=contributors.length&url=https%3A%2F%2Fraw.githubusercontent.com%2Fpy-mine%2FPyMine%2Fmain%2F.all-contributorsrc)
 ![code size](https://img.shields.io/github/languages/code-size/py-mine/PyMine?color=0FAE6E)
 ![build status](https://img.shields.io/github/workflow/status/py-mine/PyMine/Python%20App?color=0FAE6E)
-![codestyle](https://img.shields.io/badge/code%20style-black-000000.svg)
+![code style](https://img.shields.io/badge/code%20style-black-000000.svg)
 
 
 *PyMine - The fastest, easiest to use, Python-based Minecraft Server!*
@@ -27,6 +27,7 @@
 
 
 ## Installation / Usage
+*Check out [the docs](https://pymine.readthedocs.io/) for more info*
 ### Installing from source
 - First, clone the repository `git clone https://github.com/py-mine/PyMine.git` and move into that directory (`cd PyMine`)
 - Next, install the required Python packages via pip (`python3 -m pip install -r requirements.txt`)
@@ -37,8 +38,8 @@
 ## API/Plugin Examples
 - [example-plugin](https://github.com/py-mine/example-plugin) - *the official example plugin*
 
-## Contributors ✨
 
+## Contributors ✨
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -56,6 +57,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://kevinthomas.codes/"><img src="https://avatars.githubusercontent.com/u/46242684?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kevin Thomas</b></sub></a><br /><a href="#ideas-TrustedMercury" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://milanm.tk"><img src="https://avatars.githubusercontent.com/u/29466935?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Milan Mehra</b></sub></a><br /><a href="#ideas-milanmdev" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 

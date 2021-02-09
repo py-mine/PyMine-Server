@@ -18,15 +18,15 @@ class PlayUpdateSign(Packet):
     :param str line_2: Line 2 on the sign.
     :param str line_3: Line 3 on the sign.
     :param str line_4: Line 4 on the sign.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr line_1:
-    :attr line_2:
-    :attr line_3:
-    :attr line_4:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar line_1:
+    :ivar line_2:
+    :ivar line_3:
+    :ivar line_4:
     """
 
     id = 0x2B

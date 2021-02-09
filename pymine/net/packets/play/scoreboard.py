@@ -60,12 +60,12 @@ class PlayScoreboardObjective(Packet):
     :param int mode: Either create (0), remove (1), or edit (2)
     :param str objective_value: The value to put in.
     :param int type_: Either integer (0), or hearts (1)
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr objective_name:
-    :attr mode:
-    :attr objective_value:
-    :attr type_:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar objective_name:
+    :ivar mode:
+    :ivar objective_value:
+    :ivar type_:
     """
 
     id = 0x4A

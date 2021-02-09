@@ -13,10 +13,10 @@ class PlaySetBeaconEffect(Packet):
 
     :param int primary_effect: Description of parameter `primary_effect`.
     :param int secondary_effect: Description of parameter `secondary_effect`.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr primary_effect:
-    :attr secondary_effect:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar primary_effect:
+    :ivar secondary_effect:
     """
 
     id = 0x24

@@ -63,7 +63,7 @@ class Player:
                 # nbt.TAG_Int('SleepingZ', 0),
                 nbt.TAG_Compound("Brain", [nbt.TAG_Compound("memories", [])]),
                 nbt.TAG_List(
-                    "Attributes",
+                    "ivaributes",
                     [
                         nbt.TAG_Compound(
                             None,

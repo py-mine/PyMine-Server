@@ -75,11 +75,11 @@ class PlayStopSound(Packet):
     :param int flags: Tells what data is going to be sent.
     :param int source: See here: https://wiki.vg/Protocol#Stop_Sound.
     :param str sound: See here: https://wiki.vg/Protocol#Stop_Sound.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr flags:
-    :attr source:
-    :attr sound:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar flags:
+    :ivar source:
+    :ivar sound:
     """
 
     id = 0x52

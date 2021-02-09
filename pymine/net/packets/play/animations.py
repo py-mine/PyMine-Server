@@ -18,10 +18,10 @@ class PlayEntityAnimation(Packet):
 
     :param int entity_id: Entity ID of the digging entity.
     :param int animation: Value 0-5 which correspond to a specific animation (https://wiki.vg/Protocol#Entity_Animation_.28clientbound.29).
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr entity_id:
-    :attr animation:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar animation:
     """
 
     id = 0x05
@@ -45,13 +45,13 @@ class PlayBlockBreakAnimation(Packet):
     :param int y: The y coordinate of the location to play the animation.
     :param int z: The z coordinate of the location to play the animation.
     :param int stage: Stage from 0-9 in the breaking animation.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr entity_id:
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr stage:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar stage:
     """
 
     id = 0x08
@@ -72,9 +72,9 @@ class PlayAnimationServerBound(Packet):
     """Sent when a client's arm swings. (Client -> Server)
 
     :param int hand: Either main hand (0) or offhand (1).
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr hand:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar hand:
     """
 
     id = 0x2C
@@ -94,9 +94,9 @@ class PlayOpenBook(Packet):
     """Sent when a player right clicks a signed book. (Server -> Client)
 
     :param int hand: The hand used, either main (0) or offhand (1).
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr hand:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar hand:
     """
 
     id = 0x2C

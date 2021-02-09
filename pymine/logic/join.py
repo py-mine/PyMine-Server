@@ -38,8 +38,11 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
 
 
 async def join_2(stream: Stream, player: Player) -> None:
-    await send_last_held_item(stream, player)
-    await send_recipes(stream)
+    # change held item to saved last held item
+    await server.send_packet(stream, packets_player.PlayHeldItemChangeClientBound(player.data["SelectedItemSlot"].data))
+
+    # send recipes
+    await server.send_packet(stream, packets_crafting.PlayDeclareRecipes(RECIPES))
 
 
 # crucial info pertaining to the world and player status
@@ -97,12 +100,3 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
         stream,
         packets_player.PlayPlayerAbilitiesClientBound(flags.field, abilities["flySpeed"].data, abilities["walkSpeed"].data),
     )
-
-
-# change held item to last held item
-async def send_last_held_item(stream: Stream, player: Player) -> None:
-    await server.send_packet(stream, packets_player.PlayHeldItemChangeClientBound(player.data["SelectedItemSlot"].data))
-
-
-async def send_recipes(stream: Stream) -> None:
-    await server.send_packet(stream, packets_crafting.PlayDeclareRecipes(RECIPES))

@@ -39,6 +39,7 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
 
 async def join_2(stream: Stream, player: Player) -> None:
     await send_last_held_item(stream, player)
+    await send_recipes(stream)
 
 
 # crucial info pertaining to the world and player status

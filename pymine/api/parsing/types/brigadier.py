@@ -1,4 +1,3 @@
-
 class Bool:
     @staticmethod
     def parse(s: str) -> bool:

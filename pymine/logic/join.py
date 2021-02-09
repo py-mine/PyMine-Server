@@ -80,6 +80,7 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
         ),
     )
 
+
 # send what the player can/can't do
 async def send_player_abilities(stream: Stream, player: Player) -> None:
     abilities = player.data["abilities"]

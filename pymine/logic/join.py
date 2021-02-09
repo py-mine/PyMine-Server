@@ -102,5 +102,6 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
 async def send_last_held_item(stream: Stream, player: Player) -> None:
     await server.send_packet(stream, packets_player.PlayHeldItemChangeClientBound(player.data["SelectedItemSlot"].data))
 
+
 async def send_recipes(stream: Stream, player: Player) -> None:
     await server.send_packet(stream, packets_crafting.PlayDeclareRecipes(RECIPES))

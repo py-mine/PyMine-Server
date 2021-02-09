@@ -6,3 +6,4 @@ immutables
 mutf8
 PyYAML
 gitpython
+numpy

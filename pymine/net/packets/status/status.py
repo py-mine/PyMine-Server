@@ -13,8 +13,8 @@ __all__ = (
 class StatusStatusRequest(Packet):
     """Request from the client to get information on the server. (Client -> Server)
 
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
     """
 
     id = 0x00
@@ -32,9 +32,9 @@ class StatusStatusResponse(Packet):
     """Returns server status data back to the requesting client. (Server -> Client)
 
     :param dict response_data: JSON response data sent back to the client.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr response_data:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar response_data:
     """
 
     id = 0x00
@@ -75,8 +75,8 @@ class StatusStatusPingPong(Packet):
     """Ping pong? (Server -> Client AND Client -> Server)
 
     :param int payload: A long number, randomly generated or what the client sent.
-    :attr int id: Unique packet ID.
-    :attr int payload:
+    :ivar int id: Unique packet ID.
+    :ivar int payload:
     """
 
     id = 0x01

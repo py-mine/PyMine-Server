@@ -5,7 +5,7 @@ from __future__ import annotations
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 
-from pymine.data.registry import BLOCK_REGISTRY, ITEM_REGISTRY, FLUID_REGISTRY, ENTITY_REGISTRY
+from pymine.data.registries import BLOCK_REGISTRY, ITEM_REGISTRY, FLUID_REGISTRY, ENTITY_REGISTRY
 
 __all__ = ("PlayTags",)
 
@@ -17,12 +17,12 @@ class PlayTags(Packet):
     :param dict item: Item tags.
     :param dict fluid: Fluid tags.
     :param dict entity: Entity tags.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr block:
-    :attr item:
-    :attr fluid:
-    :attr entity:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar block:
+    :ivar item:
+    :ivar fluid:
+    :ivar entity:
     """
 
     id = 0x5B

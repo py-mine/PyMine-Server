@@ -13,10 +13,10 @@ class PlayWorldBorder(Packet):
 
     :param int action: One of set size (0), lerp size (1), set center (2), init (3), set warning time (4), or set warning blocks (5)
     :param dict data: Depends upon the action, see here: https://wiki.vg/Protocol#World_Border.
-    :attr type id: Unique packet ID.
-    :attr type to: Packet direction.
-    :attr action:
-    :attr data:
+    :ivar type id: Unique packet ID.
+    :ivar type to: Packet direction.
+    :ivar action:
+    :ivar data:
     """
 
     id = 0x3D

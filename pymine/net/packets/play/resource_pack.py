@@ -15,9 +15,9 @@ class PlayResourcePackStatus(Packet):
     """Used by the client to send the status of whether a resource pack was loaded or not. (Client -> Server)
 
     :param int status: One of: successfully loaded (0), declined (1), failed download (2), accepted (3).
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr status:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar status:
     """
 
     id = 0x21
@@ -38,10 +38,10 @@ class PlayResourcePackSend(Packet):
 
     :param str url: The URL for the resource pack download.
     :param str hash_: 40 char, hexadecimal, lowercase, sha1 hash of the resource pack file.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr url:
-    :attr hash_:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar url:
+    :ivar hash_:
     """
 
     id = 0x38

@@ -10,7 +10,6 @@ class CommandHandler:
     def __init__(self, server):
         self.server = server
         self.logger = server.logger
-
         self._commands = {}  # {name: (func, node)}
 
     # loads default built in commands
@@ -67,6 +66,9 @@ class CommandHandler:
                 # asyncio.create_task(handle_command(in_text))
 
                 await self.server_command(in_text)
+
+                if in_text.startswith("stop"):
+                    break
         except (KeyboardInterrupt, asyncio.CancelledError):
             pass
         except EOFError:

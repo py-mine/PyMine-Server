@@ -7,7 +7,7 @@ class Packet:
     """Base Packet class.
 
     :param int id: Packet identifaction number. Defaults to -0x1.
-    :attr id:
+    :ivar id:
     """
 
     id: int = None

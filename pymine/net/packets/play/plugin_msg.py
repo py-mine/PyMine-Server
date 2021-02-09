@@ -13,9 +13,9 @@ class PlayPluginMessageClientBound(Packet):
 
     :param str channel: The plugin channel to be used.
     :param bytes data: Data to be sent to the client.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr data:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar data:
     """
 
     id = 0x17
@@ -35,10 +35,10 @@ class PlayPluginMessageServerBound(Packet):
     """Used to send plugin data to the server (Client -> Server)
 
     :param str channel: The plugin channel being used.
-    :param Buffer data: Data to be sent to the client.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr data:
+    :param bytes data: Data to be sent to the client.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar data:
     """
 
     id = 0x0B

@@ -22,13 +22,13 @@ class PlayVehicleMoveServerBound(Packet):
     :param float z: The z coordinate of where the player is.
     :param float yaw: The yaw (absolute rotation on x axis) in degrees.
     :param float pitch: The pitch (absolute rotation on y axis) in degrees.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr yaw:
-    :attr pitch:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar yaw:
+    :ivar pitch:
     """
 
     id = 0x16
@@ -54,13 +54,13 @@ class PlayVehicleMoveClientBound(Packet):
     :param float z: The z coordinate of where the vehicle is.
     :param float yaw: The yaw (absolute rotation on x axis) in degrees.
     :param float pitch: The pitch (absolute rotation on y axis) in degrees.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr yaw:
-    :attr pitch:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar yaw:
+    :ivar pitch:
     """
 
     id = 0x2B
@@ -88,10 +88,10 @@ class PlaySteerBoat(Packet):
 
     :param bool left_paddle_turning: Whether the left paddle is turning or not.
     :param bool right_paddle_turning: Whether the right paddle is turning or not.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr left_paddle_turning:
-    :attr right_paddle_turning:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar left_paddle_turning:
+    :ivar right_paddle_turning:
     """
 
     id = 0x17
@@ -114,11 +114,11 @@ class PlaySteerVehicle(Packet):
     :param float sideways: Position to the left of the player.
     :param float forward: Positive forward? See here: https://wiki.vg/Protocol#Steer_Vehicle.
     :param int flags: Bit mask: 0x01=jump, 0x02=unmount.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr sideways:
-    :attr forward:
-    :attr flags:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar sideways:
+    :ivar forward:
+    :ivar flags:
     """
 
     id = 0x1D

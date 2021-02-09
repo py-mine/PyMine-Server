@@ -13,13 +13,13 @@ from pymine.types.buffer import Buffer
 from pymine.net.packets.login.set_comp import LoginSetCompression
 import pymine.net.packets.login.login as login_packets
 
+from pymine.api.exceptions import StopHandling
 from pymine.logic.join import join
-from pymine.api import StopStream
 from pymine.server import server
 
 
 @server.api.events.on_packet("login", 0x00)
-async def login_start(stream: Stream, packet: Packet) -> tuple:
+async def login_start(stream: Stream, packet: Packet) -> None:
     if server.conf["online_mode"]:  # Online mode is enabled, so we request encryption
         lc = server.cache.login[stream.remote] = {"username": packet.username, "verify": None}
 
@@ -42,18 +42,18 @@ async def login_start(stream: Stream, packet: Packet) -> tuple:
         await server.send_packet(stream, login_packets.LoginSuccess(uuid_, packet.username))
 
         server.cache.states[stream.remote] = 3  # Update state to play
-        await join(stream, packet)
+        await join(stream, uuid_, packet.username)
 
 
 @server.api.events.on_packet("login", 0x01)
-async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
+async def encrypted_login(stream: Stream, packet: Packet) -> Stream:
     shared_key, auth = await server_auth(packet, stream.remote, server.cache.login[stream.remote])
 
     del server.cache.login[stream.remote]  # No longer needed
 
     if not auth:  # If authentication failed, disconnect client
         await server.send_packet(stream, login_packets.LoginDisconnect("Failed to authenticate your connection."))
-        raise StopStream
+        raise StopHandling
 
     # Generate a cipher for that client using the shared key from the client
     cipher = encryption.gen_aes_cipher(shared_key)
@@ -68,7 +68,7 @@ async def encrypted_login(stream: Stream, packet: Packet) -> tuple:
     await server.send_packet(stream, login_packets.LoginSuccess(*auth))
 
     server.cache.states[stream.remote] = 3  # Update state to play
-    await join(stream, packet)
+    await join(stream, *auth)
 
     return stream
 

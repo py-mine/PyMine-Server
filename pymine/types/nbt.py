@@ -26,7 +26,7 @@ __all__ = (
 TYPES = []
 
 
-def unpack(buf) -> TAG_Compound:
+def unpack(buf, root_is_full: bool = True) -> TAG_Compound:
     try:
         data = gzip.decompress(buf.buf[buf.pos :])
         buf.buf = data
@@ -34,7 +34,11 @@ def unpack(buf) -> TAG_Compound:
     except BaseException:
         pass
 
-    return TAG_Compound.unpack(buf)
+    if root_is_full:
+        buf.read(1)
+        return TAG_Compound(TAG.unpack_name(buf), TAG_Compound.unpack_data(buf))
+
+    return TAG_Compound(None, TAG_Compound.unpack_data(buf))
 
 
 class BufferUtil:
@@ -56,15 +60,15 @@ class TAG:
     """Base class for an NBT tag.
 
     :param str name: The name of the TAG.
-    :attr int id: The type ID.
-    :attr name
+    :ivar int id: The type ID.
+    :ivar name
     """
 
     id = None
 
     def __init__(self, name: str = None) -> None:
         self.id = self.__class__.id
-        self.name = name
+        self.name = "" if name is None else name
 
     def pack_id(self) -> bytes:
         return BufferUtil.pack("b", self.id)
@@ -106,6 +110,23 @@ class TAG:
 class TAG_End(TAG):
     id = 0
 
+    def __init__(self, *args) -> None:
+        super().__init__(None)
+
+    def pack_name(self) -> bytes:
+        return b""
+
+    @staticmethod
+    def unpack_name(buf) -> None:
+        return None
+
+    def pack_data(self) -> bytes:
+        return b""
+
+    @staticmethod
+    def unpack_data(buf) -> None:
+        pass
+
     def pretty(self, indent: int = 0) -> str:
         return ("    " * indent) + "TAG_End(): 0"
 
@@ -116,7 +137,7 @@ class TAG_Byte(TAG):
     :param str name: The name of the TAG.
     :param int data: A signed byte.
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 1
@@ -140,7 +161,7 @@ class TAG_Short(TAG):
     :param str name: The name of the TAG.
     :param int data: A short (2 byte int).
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 2
@@ -164,7 +185,7 @@ class TAG_Int(TAG):
     :param str name: The name of the TAG.
     :param int data: A int (4 bytes).
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 3
@@ -188,7 +209,7 @@ class TAG_Long(TAG):
     :param str name: The name of the TAG.
     :param int data: A long long (8 byte int).
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 4
@@ -212,7 +233,7 @@ class TAG_Float(TAG):
     :param str name: The name of the TAG.
     :param float data: A float (4 bytes).
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 5
@@ -236,7 +257,7 @@ class TAG_Double(TAG):
     :param str name: The name of the TAG.
     :param float data: A double (8 byte float).
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 6
@@ -260,13 +281,18 @@ class TAG_Byte_Array(TAG, bytearray):
     :param str name: The name of the TAG.
     :param bytearray data: Some bytes.
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 7
 
     def __init__(self, name: str, data: bytearray) -> None:
         TAG.__init__(self, name)
+
+        if isinstance(data, str):
+            print(f"WARNING: data passed was not bytes ({repr(data)})")
+            data = data.encode("utf8")
+
         bytearray.__init__(self, data)
 
     def pack_data(self) -> bytes:
@@ -290,7 +316,7 @@ class TAG_String(TAG):
     :param str name: The name of the TAG.
     :param str data: A string.
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 8
@@ -318,7 +344,7 @@ class TAG_List(TAG, list):
     :param str name: The name of the TAG.
     :param list data: A uniform list of TAGs.
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 9
@@ -358,7 +384,7 @@ class TAG_Compound(TAG, dict):
     :param str name: The name of the TAG.
     :param list data: A list of tags.
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 10
@@ -366,6 +392,20 @@ class TAG_Compound(TAG, dict):
     def __init__(self, name: str, data: list) -> None:
         TAG.__init__(self, name)
         dict.__init__(self, [(t.name, t) for t in data])
+
+    @property
+    def data(self):
+        return self.values()
+
+    def __setitem__(self, key, value):
+        value.name = key
+        dict.__setitem__(self, key, value)
+
+    def update(self, *args, **kwargs):
+        dict.update(self, *args, **kwargs)
+
+        for k, v in self.items():
+            v.name = k
 
     def pack_data(self) -> bytes:
         return b"".join([tag.pack() for tag in self.values()]) + b"\x00"
@@ -377,7 +417,7 @@ class TAG_Compound(TAG, dict):
         while True:
             tag = TYPES[buf.unpack("b")]
 
-            if tag == TAG_End:
+            if tag is TAG_End:
                 break
 
             out.append(tag(tag.unpack_name(buf), tag.unpack_data(buf)))
@@ -397,7 +437,7 @@ class TAG_Int_Array(TAG, list):
     :param str name: The name of the TAG.
     :param list data: A list of ints (4 bytes each).
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 11
@@ -427,7 +467,7 @@ class TAG_Long_Array(TAG, list):
     :param str name: The name of the TAG.
     :param list value: A list of long longs (8 byte ints).
     :int id: The type ID of the TAG.
-    :attr value:
+    :ivar value:
     """
 
     id = 12

@@ -12,9 +12,9 @@ class LoginSetCompression(Packet):
     """While not directly related to logging in, this packet is sent by the server during the login process. (Server -> Client)
 
     :param int comp_thresh: Compression level of future packets, -1 to disable compression.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr comp_thresh:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar comp_thresh:
     """
 
     id = 0x03

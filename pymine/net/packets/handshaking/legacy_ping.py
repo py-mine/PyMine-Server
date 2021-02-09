@@ -17,11 +17,11 @@ class HandshakeLegacyPingRequest(Packet):
     :param int protocol: Protocol version being used, should now always be 74/4a.
     :param str hostname: The host/address the client is connecting to.
     :param int port: The port the client is connection on.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr protocol:
-    :attr hostname:
-    :attr port:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar protocol:
+    :ivar hostname:
+    :ivar port:
     """
 
     id = 0xFE
@@ -47,11 +47,11 @@ class HandshakeLegacyPingResponse(Packet):
     :param str motd: The server MOTD.
     :param int players_online: Amount of players currently on the server.
     :param int players_max: Maximum players allowed on the server.
-    :attr int id: Unique packet ID.
-    :attr version:
-    :attr motd:
-    :attr players_online:
-    :attr players_max:
+    :ivar int id: Unique packet ID.
+    :ivar version:
+    :ivar motd:
+    :ivar players_online:
+    :ivar players_max:
     """
 
     id = 0xFF

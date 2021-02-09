@@ -18,7 +18,7 @@ def load_packets():
     packet_map_clientbound = {}
 
     for state_name in os.listdir(packet_path):
-        state = STATES.decode(state_name)
+        state = STATES.encode(state_name)
 
         packet_map[state] = {}
         packet_map_clientbound[state] = {}

@@ -44,13 +44,13 @@ class PlayPlayerDigging(Packet):
     :param int y: The y coordinate of the block.
     :param int z: The z coordinate of the block.
     :param int face: The face of the block that the player is mining.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr status:
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr face:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar status:
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar face:
     """
 
     id = 0x1B
@@ -77,14 +77,14 @@ class PlayAcknowledgePlayerDigging(Packet):
     :param int block: The block state id of the block that is being broken/dug.
     :param int status: Value 0-2 to denote whether player should start, cancel, or finish.
     :param bool successful: True if the block was dug successfully.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr y:
-    :attr z:
-    :attr block:
-    :attr status:
-    :attr successful:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar block:
+    :ivar status:
+    :ivar successful:
     """
 
     id = 0x07
@@ -130,11 +130,11 @@ class PlayPlayerAbilitiesClientBound(Packet):
     :param bytes flags: Client data bitfield, see here: https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29.
     :param float flying_speed: Speed at which client is flying.
     :param float fov_modifier: FOV modifier value.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr flags:
-    :attr flying_speed:
-    :attr fov_modifier:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar flags:
+    :ivar flying_speed:
+    :ivar fov_modifier:
     """
 
     id = 0x30
@@ -155,9 +155,9 @@ class PlayPlayerAbilitiesServerBound(Packet):
     """Tells the server whether the client is flying or not. (Client -> Server)
 
     :param bool flying: Whether player is flying or not.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr flying:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar flying:
     """
 
     id = 0x1A
@@ -181,8 +181,8 @@ class PlayJoinGame(Packet):
     :param int gamemode: The player's gamemode.
     :param int prev_gamemode: The player's previous gamemode.
     :param list world_names: All of the worlds loaded on the server.
-    :param nbt.Tag dim_codec: Represents a dimension and biome registry, see here: https://wiki.vg/Protocol#Join_Game.
-    :param nbt.Tag dimension: A dimension type, see here: https://wiki.vg/Protocol#Join_Game.
+    :param nbt.TAG dim_codec: Represents a dimension and biome registry, see here: https://wiki.vg/Protocol#Join_Game.
+    :param nbt.TAG dimension: A dimension type, see here: https://wiki.vg/Protocol#Join_Game.
     :param str world_name: The name of the world the player is joining.
     :param int hashed_seed: First 8 bytes of SHA-256 hash of the world's seed.
     :param int max_players: Max players allowed on the server, now ignored.
@@ -191,23 +191,23 @@ class PlayJoinGame(Packet):
     :param bool enable_respawn_screen: Set to false when the doImmediateRespawn gamerule is true.
     :param bool is_debug: If the world is a debug world.
     :param bool is_flat: If the world is a superflat world.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr entity_id:
-    :attr is_hardcore:
-    :attr gamemode:
-    :attr prev_gamemode:
-    :attr world_names:
-    :attr dim_codec:
-    :attr dimension:
-    :attr world_name:
-    :attr hashed_seed:
-    :attr max_players:
-    :attr view_distance:
-    :attr reduced_debug_info:
-    :attr enable_respawn_screen:
-    :attr is_debug:
-    :attr is_flat:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar is_hardcore:
+    :ivar gamemode:
+    :ivar prev_gamemode:
+    :ivar world_names:
+    :ivar dim_codec:
+    :ivar dimension:
+    :ivar world_name:
+    :ivar hashed_seed:
+    :ivar max_players:
+    :ivar view_distance:
+    :ivar reduced_debug_info:
+    :ivar enable_respawn_screen:
+    :ivar is_debug:
+    :ivar is_flat:
     """
 
     id = 0x24
@@ -220,8 +220,8 @@ class PlayJoinGame(Packet):
         gamemode: int,
         prev_gamemode: int,
         world_names: list,
-        dim_codec: nbt.Tag,
-        dimension: nbt.Tag,
+        dim_codec: nbt.TAG,
+        dimension: nbt.TAG,
         world_name: str,
         hashed_seed: int,
         max_players: int,
@@ -277,12 +277,12 @@ class PlayPlayerPosition(Packet):
     :param float feet_y: The y coordinate of where the player's feet are.
     :param float z: The z coordinate of where the player is.
     :param bool on_ground: Whether the player/client is on the ground or not.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr feet_y:
-    :attr z:
-    :attr on_ground:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar feet_y:
+    :ivar z:
+    :ivar on_ground:
     """
 
     id = 0x12
@@ -310,14 +310,14 @@ class PlayPlayerPositionAndRotationServerBound(Packet):
     :param float yaw: The yaw (absolute rotation on x axis) in degrees.
     :param float pitch: The pitch (absolute rotation on y axis) in degrees.
     :param bool on_ground: Whether the player/client is on the ground or not.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr x:
-    :attr feet_y:
-    :attr z:
-    :attr yaw:
-    :attr pitch:
-    :attr on_ground:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar feet_y:
+    :ivar z:
+    :ivar yaw:
+    :ivar pitch:
+    :ivar on_ground:
     """
 
     id = 0x13
@@ -344,10 +344,10 @@ class PlayPlayerRotation(Packet):
     :param float yaw: The yaw (absolute rotation on x axis) in degrees.
     :param float pitch: The pitch (absolute rotation on y axis) in degrees.
     :param bool on_ground: Whether the player/client is on the ground or not.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr yaw:
-    :attr pitch:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar yaw:
+    :ivar pitch:
     """
 
     id = 0x14
@@ -369,9 +369,9 @@ class PlayPlayerMovement(Packet):
     """Tells server whether client/player is on ground or not. (Client -> Server)
 
     :param bool on_ground: Whether the player/client is on the ground or not.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr on_ground:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar on_ground:
     """
 
     id = 0x15
@@ -391,9 +391,9 @@ class PlayTeleportConfirm(Packet):
     """Sent by the client as a confirmation to a player position and look packet. (Client -> Server)
 
     :param int teleport_id: ID given by a player pos and look packet.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr teleport_id:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar teleport_id:
     """
 
     id = 0x00
@@ -413,9 +413,9 @@ class PlayClientStatus(Packet):
     """Used by the client to denote when the client has either (0) clicked respawn button or (1) opened the statistics menu. (Client -> Server)
 
     :param int action_id: Whether client has (0) clicked respawn or (1) opened stats menu.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr action_id:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar action_id:
     """
 
     id = 0x04
@@ -440,14 +440,14 @@ class PlayClientSettings(Packet):
     :param bool chat_colors: Whether the client has chat colors enabled or not.
     :param int displayed_skin_parts: A bit mask describing which parts of the client's skin are visible.
     :param int main_hand: Either left (0) or right (1).
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr locale:
-    :attr view_distance:
-    :attr chat_mode:
-    :attr chat_colors:
-    :attr displayed_skin_parts:
-    :attr main_hand:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar locale:
+    :ivar view_distance:
+    :ivar chat_mode:
+    :ivar chat_colors:
+    :ivar displayed_skin_parts:
+    :ivar main_hand:
     """
 
     id = 0x05
@@ -477,10 +477,10 @@ class PlayCreativeInventoryAction(Packet):
 
     :param int slot: The inventory slot that was clicked.
     :param dict clicked_item: The actual slot data for the clicked item.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr slot:
-    :attr clicked_item:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar slot:
+    :ivar clicked_item:
     """
 
     id = 0x28
@@ -501,9 +501,9 @@ class PlaySpectate(Packet):
     """Used by the client to spectate a given entity. (Client -> Server)
 
     :param uuid.UUID target: The target entity/player to teleport to and spectate.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr target:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar target:
     """
 
     id = 0x2D
@@ -604,10 +604,10 @@ class PlayCombatEvent(Packet):
 
     :param int event: The event that occurred, either enter combat (0), end combat (1), or entity dead (2).
     :param dict data: Depends on what event occurred.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr event:
-    :attr data:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar event:
+    :ivar data:
     """
 
     id = 0x31
@@ -641,10 +641,10 @@ class PlayPlayerInfo(Packet):
 
     :param int action: The action to be taken, either add player (0), update gamemode (1), update latency (2), update display name (3), or remove player (4).
     :param list players: A list of dictionaries, content varies depending on action, see here: https://wiki.vg/Protocol#Player_Info.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr action:
-    :attr players:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar action:
+    :ivar players:
     """
 
     id = 0x32
@@ -701,14 +701,14 @@ class PlayFacePlayer(Packet):
     :param bool is_entity: If true, additional info is provided.
     :param int entity_id: The entity ID.
     :param int entity_feet_or_eyes: Same as regular feet_or_eyes.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr feet_or_eyes:
-    :attr tx:
-    :attr ty:
-    :attr tz:
-    :attr entity_id:
-    :attr entity_feet_or_eyes:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar feet_or_eyes:
+    :ivar tx:
+    :ivar ty:
+    :ivar tz:
+    :ivar entity_id:
+    :ivar entity_feet_or_eyes:
     """
 
     id = 0x33
@@ -757,16 +757,16 @@ class PlayRespawn(Packet):
     :param bool is_debug: True if the world is a debug world.
     :param bool is_flat: Whether the new world/dimension is a superflat one or not.
     :param bool copy_metadata: If false, metadata is reset on the spawned player entity. Should be True for dimension changes.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr dimension:
-    :attr world_name:
-    :attr hashed_seed:
-    :attr gamemode:
-    :attr prev_gamemode:
-    :attr is_debug:
-    :attr is_flat:
-    :attr copy_metadata:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar dimension:
+    :ivar world_name:
+    :ivar hashed_seed:
+    :ivar gamemode:
+    :ivar prev_gamemode:
+    :ivar is_debug:
+    :ivar is_flat:
+    :ivar copy_metadata:
     """
 
     id = 0x39

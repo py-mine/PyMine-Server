@@ -50,7 +50,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     # send recipes
     await server.send_packet(stream, play_packets.crafting.PlayDeclareRecipes(RECIPES))
 
-    # send tags
+    # send tags (data about the different blocks and items)
     await server.send_packet(stream, play_packets.tags.PlayTags(TAGS))
 
 

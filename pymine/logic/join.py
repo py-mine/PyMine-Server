@@ -13,12 +13,7 @@ from pymine.data.default_nbt.dimension_codec import new_dim_codec_nbt, get_dimen
 from pymine.data.recipes import RECIPES
 from pymine.data.tags import TAGS
 
-import pymine.net.packets.play.difficulty as packets_difficulty
-import pymine.net.packets.play.crafting as packets_crafting
-import pymine.net.packets.play.plugin_msg as packets_plugin
-import pymine.net.packets.play.player as packets_player
-import pymine.nets.packets.play.tags as packets_tags
-
+import pymine.net.packets.play as play_packets
 from pymine.util.misc import seed_hash
 from pymine.server import server
 
@@ -37,12 +32,12 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
 
     # send server brand via plugin channels
     await server.send_packet(
-        stream, packets_plugin.PlayPluginMessageClientBound("minecraft:brand", Buffer.pack_string(server.meta.pymine))
+        stream, play_packets.plugin_msg.PlayPluginMessageClientBound("minecraft:brand", Buffer.pack_string(server.meta.pymine))
     )
 
     # sends info about the server difficulty
     await server.send_packet(
-        stream, packets_difficulty.PlayServerDifficulty(world.data["Difficulty"].data, world.data["DifficultyLocked"].data)
+        stream, play_packets.difficulty.PlayServerDifficulty(world.data["Difficulty"].data, world.data["DifficultyLocked"].data)
     )
 
     await send_player_abilities(stream, player)
@@ -50,13 +45,13 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
 
 async def join_2(stream: Stream, player: Player) -> None:
     # change held item to saved last held item
-    await server.send_packet(stream, packets_player.PlayHeldItemChangeClientBound(player.data["SelectedItemSlot"].data))
+    await server.send_packet(stream, play_packets.player.PlayHeldItemChangeClientBound(player.data["SelectedItemSlot"].data))
 
     # send recipes
-    await server.send_packet(stream, packets_crafting.PlayDeclareRecipes(RECIPES))
+    await server.send_packet(stream, play_packets.crafting.PlayDeclareRecipes(RECIPES))
 
     # send tags
-    await server.send_packet(stream, packet_tags.PlayTags(TAGS))
+    await server.send_packet(stream, play_packets.tags.PlayTags(TAGS))
 
 
 # crucial info pertaining to the world and player status
@@ -65,7 +60,7 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
 
     await server.send_packet(
         stream,
-        packets_player.PlayJoinGame(
+        play_packets.player.PlayJoinGame(
             player.entity_id,
             server.conf["hardcore"],  # whether world is hardcore or not
             player.data["playerGameType"].data,  # gamemode
@@ -98,5 +93,5 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
 
     await server.send_packet(  # yes the last arg is supposed to be fov, but the values are actually the same
         stream,
-        packets_player.PlayPlayerAbilitiesClientBound(flags.field, abilities["flySpeed"].data, abilities["walkSpeed"].data),
+        play_packets.player.PlayPlayerAbilitiesClientBound(flags.field, abilities["flySpeed"].data, abilities["walkSpeed"].data),
     )

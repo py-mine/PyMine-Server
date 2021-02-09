@@ -50,3 +50,18 @@ class Integer:
             pass
 
         raise ValueError
+
+
+class String:
+    @staticmethod
+    def parse(s: str, type_: int) -> str:
+        out = ""
+
+        if type_ == 0:
+            for c in s:
+                if c == " " or c == '"':
+                    break
+
+                out += c
+        elif type_ == 1:
+            pass

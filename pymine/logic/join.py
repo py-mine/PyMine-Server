@@ -54,6 +54,9 @@ async def join_2(stream: Stream, player: Player) -> None:
     # send tags (data about the different blocks and items)
     await server.send_packet(stream, play_packets.tags.PlayTags(TAGS))
 
+    # send entity status packet, apparently this is required, for now it'll just set player to op lvl 4 (value 28)
+    await server.send_packet(stream, play_packets.entity.PlayEntityStatus(player.entity_id, 28))
+
 
 # crucial info pertaining to the world and player status
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:

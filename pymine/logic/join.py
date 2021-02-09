@@ -37,7 +37,8 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
 
     # sends info about the server difficulty
     await server.send_packet(
-        stream, play_packets.difficulty.PlayServerDifficulty(world.data["Difficulty"].data, world.data["DifficultyLocked"].data)
+        stream,
+        play_packets.difficulty.PlayServerDifficulty(world.data["Difficulty"].data, world.data["DifficultyLocked"].data),
     )
 
     await send_player_abilities(stream, player)
@@ -93,5 +94,7 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
 
     await server.send_packet(  # yes the last arg is supposed to be fov, but the values are actually the same
         stream,
-        play_packets.player.PlayPlayerAbilitiesClientBound(flags.field, abilities["flySpeed"].data, abilities["walkSpeed"].data),
+        play_packets.player.PlayPlayerAbilitiesClientBound(
+            flags.field, abilities["flySpeed"].data, abilities["walkSpeed"].data
+        ),
     )

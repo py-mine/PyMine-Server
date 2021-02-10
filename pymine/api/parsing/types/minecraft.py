@@ -1,3 +1,4 @@
+import random
 import uuid
 
 from pymine.api.abc import AbstractParser
@@ -24,6 +25,9 @@ class Entity(AbstractParser):  # players should be a list of Player objects, the
 
             if section == "@s":
                 raise NotImplementedError
+
+            if section == "@r":
+                return random.choice(self.players)
 
         for p in self.players:
             if section == p.username:

@@ -24,3 +24,10 @@ class AbstractChunkIO:
     @classmethod
     async def fetch_chunk_async(cls, world_path: str, chunk_x: int, chunk_z: int):  # -> Chunk
         raise NotImplementedError(cls.__name__)
+
+
+class AbstractParser:
+
+    @classmethod
+    def parse(cls, s: str) -> tuple:
+        raise NotImplementedError(cls.__name__)

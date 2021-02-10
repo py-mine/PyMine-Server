@@ -70,3 +70,26 @@ class Integer(AbstractParser):
             pass
 
         raise ValueError
+
+
+class String(AbstractParser):
+    def __init__(self, mode: int) -> None:
+        self.mode = mode
+
+    def parse(self, s: str) -> tuple:
+        if self.mode == 0:  # single word
+            word = s.split(" ")[0]
+            return len(word), word
+        elif self.mode == 1:  # quotable phrase
+            if not s[0] == '"':
+                raise ValueError
+
+            out = ""
+
+            for i, c in enumerate(s[1:]):
+                if c == '"' and i > 0 and s[i-1] != "\\":  # allows for escaping of "
+                    break
+
+                out += c
+
+            return i+2, out

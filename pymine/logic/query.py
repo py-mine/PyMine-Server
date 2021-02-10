@@ -50,7 +50,7 @@ class QueryBuffer:
 
     @staticmethod
     def unpack_magic() -> int:
-        return 65277  # I hate myself
+        return 65277  # I hate myself.
 
     @staticmethod
     def pack_string(string: str) -> bytes:

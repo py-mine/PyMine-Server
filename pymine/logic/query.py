@@ -61,7 +61,7 @@ class QueryBuffer:
         return struct.pack(">i", num)
 
     @staticmethod
-    def unpack_int32(num: int) -> int:  # I think
+    def unpack_int32(num: int) -> int:  # I think.
         return struct.unpack(">i", num)
 
     @staticmethod

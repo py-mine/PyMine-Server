@@ -5,12 +5,12 @@ class Bool(AbstractParser):
     def __init__(self) -> None:
         pass
 
-    def parse(self, pos: int, s: str) -> tuple:
-        if s[pos:4] == "true":
-            return pos + 4, True
+    def parse(self, s: str) -> tuple:
+        if s[:4] == "true":
+            return 4, True
 
-        if s[pos:5] == "false":
-            return pos + 5, False
+        if s[:5] == "false":
+            return 5, False
 
         raise ValueError
 
@@ -20,14 +20,14 @@ class Float(AbstractParser):
         self.min_value = min_value
         self.max_value = max_value
 
-    def parse(self, pos: int, s: str) -> tuple:
-        section = s[pos:].split(" ")[0]
+    def parse(self, s: str) -> tuple:
+        section = s.split(" ")[0]
 
         try:
             num = float(section)
 
             if self.min_value is not None and self.max_value > num > self.min_value:
-                return pos + len(section), num
+                return len(section), num
         except BaseException:
             pass
 
@@ -39,14 +39,14 @@ class Double(AbstractParser):
         self.min_value = min_value
         self.max_value = max_value
 
-    def parse(self, pos: int, s: str) -> tuple:
-        section = s[pos:].split(" ")[0]
+    def parse(self, s: str) -> tuple:
+        section = s.split(" ")[0]
 
         try:
             num = float(section)
 
             if self.min_value is not None and self.max_value > num > self.min_value:
-                return pos + len(section), num
+                return len(section), num
         except BaseException:
             pass
 
@@ -58,14 +58,14 @@ class Integer(AbstractParser):
         self.min_value = min_value
         self.max_value = max_value
 
-    def parse(self, pos: int, s: str) -> tuple:
-        section = s[pos:].split(" ")[0]
+    def parse(self, s: str) -> tuple:
+        section = s.split(" ")[0]
 
         try:
             num = int(section)
 
             if self.min_value is not None and self.max_value > num > self.min_value:
-                return pos + len(section), num
+                return len(section), num
         except BaseException:
             pass
 

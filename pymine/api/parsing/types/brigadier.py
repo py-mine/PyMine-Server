@@ -21,7 +21,7 @@ class Float(AbstractParser):
         self.max_value = max_value
 
     def parse(self, pos: int, s: str) -> tuple:
-        section = s.split(" ")[0]
+        section = s[pos:].split(" ")[0]
 
         try:
             num = float(section)
@@ -40,7 +40,7 @@ class Double(AbstractParser):
         self.max_value = max_value
 
     def parse(self, pos: int, s: str) -> tuple:
-        section = s.split(" ")[0]
+        section = s[pos:].split(" ")[0]
 
         try:
             num = float(section)
@@ -59,7 +59,7 @@ class Integer(AbstractParser):
         self.max_value = max_value
 
     def parse(self, pos: int, s: str) -> tuple:
-        section = s.split(" ")[0]
+        section = s[pos:].split(" ")[0]
 
         try:
             num = int(section)

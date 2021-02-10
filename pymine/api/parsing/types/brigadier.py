@@ -88,12 +88,12 @@ class String(AbstractParser):
             out = ""
 
             for i, c in enumerate(s[1:]):
-                if c == '"' and i > 0 and s[i-1] != "\\":  # allows for escaping of "
+                if c == '"' and i > 0 and s[i - 1] != "\\":  # allows for escaping of "
                     break
 
                 out += c
 
-            return i+2, out
+            return i + 2, out
 
         if self.mode == 2:
             return len(s), s

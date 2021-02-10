@@ -80,7 +80,8 @@ class String(AbstractParser):
         if self.mode == 0:  # single word
             word = s.split(" ")[0]
             return len(word), word
-        elif self.mode == 1:  # quotable phrase
+
+        if self.mode == 1:  # quotable phrase
             if not s[0] == '"':
                 raise ValueError
 
@@ -93,3 +94,8 @@ class String(AbstractParser):
                 out += c
 
             return i+2, out
+
+        if self.mode == 2:
+            return len(s), s
+
+        raise ValueError

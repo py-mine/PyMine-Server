@@ -95,7 +95,7 @@ class String(AbstractParser):
 
             return i + 2, out
 
-        if self.mode == 2:
+        if self.mode == 2:  # rest of string
             return len(s), s
 
         raise ValueError

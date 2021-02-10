@@ -16,10 +16,11 @@
 - [ ] **Joinable** - *the login process is complete, but users can not yet join the world*
 - [ ] **Packet Models** - *missing some clientbound packets*
 - [x] **Status + Login Logic** - *completed*
-- [ ] **Play Logic** - *not started yet*
-- [ ] **World Generation** - *not started yet*
+- [ ] **Play Logic** - *currently a work in progress*
+- [ ] **World Generation** - *currently a work in progress*
 - [ ] **Entities/Entity AI** - *not started yet*
 - [x] **Plugin API** - *completed, but more will be added as the development continues*
+- [ ] **Command/Argument Parsing** - *currently a work in progress*
 
 
 ## Contributing

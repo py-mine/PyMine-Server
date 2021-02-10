@@ -49,6 +49,10 @@ class QueryBuffer:
         return b"\xFE\xFD"
 
     @staticmethod
+    def unpack_magic():
+        return 65277  # big brain moment
+
+    @staticmethod
     def pack_string(string: str) -> bytes:
         return bytes(string, "latin-1") + b"\x00"
 

@@ -28,5 +28,5 @@ class AbstractChunkIO:
 
 class AbstractParser:
     @classmethod
-    def parse(cls, pos: int, s: str) -> tuple:  # should return the new position and data
+    def parse(cls, s: str) -> tuple:  # should return the chars used and data
         raise NotImplementedError(cls.__name__)

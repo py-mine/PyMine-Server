@@ -1,5 +1,6 @@
 from pymine.api.abc import AbstractParser
 
+
 class Bool(AbstractParser):
     def __init__(self) -> None:
         pass
@@ -15,12 +16,12 @@ class Bool(AbstractParser):
 
 
 class Float(AbstractParser):
-    def __init__(self, min_value: float = -3.4028235e38, max_value: float = 3.4028235E38) -> None:
+    def __init__(self, min_value: float = -3.4028235e38, max_value: float = 3.4028235e38) -> None:
         self.min_value = min_value
         self.max_value = max_value
 
     def parse(self, pos: int, s: str) -> tuple:
-        section = s.split(' ')[0]
+        section = s.split(" ")[0]
 
         try:
             num = float(section)
@@ -39,7 +40,7 @@ class Double(AbstractParser):
         self.max_value = max_value
 
     def parse(self, pos: int, s: str) -> tuple:
-        section = s.split(' ')[0]
+        section = s.split(" ")[0]
 
         try:
             num = float(section)
@@ -58,7 +59,7 @@ class Integer(AbstractParser):
         self.max_value = max_value
 
     def parse(self, pos: int, s: str) -> tuple:
-        section = s.split(' ')[0]
+        section = s.split(" ")[0]
 
         try:
             num = int(section)

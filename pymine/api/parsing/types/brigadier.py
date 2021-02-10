@@ -88,7 +88,7 @@ class String(AbstractParser):
             out = ""
 
             for i, c in enumerate(s[1:]):
-                if c == '"' and i > 0 and s[i - 1] != "\\":  # allows for escaping of "
+                if c == '"' and s[i] != "\\":  # allows for escaping of "
                     break
 
                 out += c

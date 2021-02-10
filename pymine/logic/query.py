@@ -41,6 +41,10 @@ class QueryBuffer:
         return struct.pack("<h", short)
 
     @staticmethod
+    def unpack_short(short: int) -> int:
+        return struct.unpack("<h", short)
+
+    @staticmethod
     def pack_magic() -> bytes:
         return b"\xFE\xFD"
 

@@ -15,7 +15,7 @@ class Entity(AbstractParser):  # players should be a list of Player objects, the
             raise NotImplementedError
 
         if self.mode == 2:  # "If set, only allows players"
-            for p in players:
+            for p in self.players:
                 if section == p.username:
                     return len(section), p
 

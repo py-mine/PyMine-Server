@@ -54,7 +54,7 @@ class Double(AbstractParser):
 
 
 class Integer(AbstractParser):
-    def __init__(self, min_value: int = -3.4028235e38, max_value: int = 3.4028235e38) -> None:
+    def __init__(self, min_value: int = -2147483648, max_value: int = 2147483647) -> None:
         self.min_value = min_value
         self.max_value = max_value
 

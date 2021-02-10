@@ -49,7 +49,7 @@ class QueryBuffer:
         return b"\xFE\xFD"
 
     @staticmethod
-    def unpack_magic():
+    def unpack_magic() -> int:
         return 65277  # big brain moment
 
     @staticmethod

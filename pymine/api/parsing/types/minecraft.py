@@ -14,19 +14,19 @@ class Entity(AbstractParser):  # players should be a list of Player objects, the
 
         if self.mode == 1:  # Allows usage of selectors
             # currently only basic selectors are supported (nothing like @a[name=Iapetus11])
-            if section == "@a":
+            if section == "@a":  # all players
                 return self.players
 
-            if section == "@e":
+            if section == "@e":  # all entities
                 raise NotImplementedError
 
-            if section == "@p":
+            if section == "@p":  # the nearest player to the person who executed the command
                 raise NotImplementedError
 
-            if section == "@s":
+            if section == "@s":  # the player who executed sed command
                 raise NotImplementedError
 
-            if section == "@r":
+            if section == "@r":  # random player
                 return random.choice(self.players)
 
         for p in self.players:

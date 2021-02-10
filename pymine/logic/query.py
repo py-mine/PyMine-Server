@@ -46,7 +46,7 @@ class QueryBuffer:
 
     @staticmethod
     def pack_magic() -> bytes:
-        return b"\xFE\xFD"
+        return b"\xFE\xFD"  # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
     @staticmethod
     def unpack_magic() -> int:

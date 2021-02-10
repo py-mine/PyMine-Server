@@ -1,7 +1,7 @@
 from __future__ import annotations
 import struct
 
-from pymine.server import server
+# from pymine.server import server # not yet ferb
 
 
 class QueryBuffer:

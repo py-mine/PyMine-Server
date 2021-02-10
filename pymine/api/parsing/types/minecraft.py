@@ -11,18 +11,28 @@ class Entity(AbstractParser):  # players should be a list of Player objects, the
     def parse(self, s: str) -> tuple:
         section = s.split(" ")[0]
 
-        if self.mode == 1:  # "If set, only allows a single entity/player"
-            raise NotImplementedError
+        if self.mode == 1:  # Allows usage of selectors
+            # currently only basic selectors are supported (nothing like @a[name=Iapetus11])
+            if section == "@a":
+                return players
 
-        if self.mode == 2:  # "If set, only allows players"
-            for p in self.players:
-                if section == p.username:
+            if section == "@e":
+                raise NotImplementedError
+
+            if section == "@p":
+                raise NotImplementedError
+
+            if section == "@s":
+                raise NotImplementedError
+
+        for p in self.players:
+            if section == p.username:
+                return len(section), p
+
+            try:
+                if uuid.UUID(section) == p.uuid:
                     return len(section), p
-
-                try:
-                    if uuid.UUID(section) == p.uuid:
-                        return len(section), p
-                except BaseException:
-                    pass
+            except BaseException:
+                pass
 
         raise ValueError

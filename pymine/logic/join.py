@@ -71,6 +71,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     # update tab list, maybe sent to all clients?
     await broadcast_player_info(player)
 
+
 # crucial info pertaining to the world and player status
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:
     level_name = server.conf["level_name"]  # level name, i.e. Xenon

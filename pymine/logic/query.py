@@ -103,19 +103,13 @@ class QueryServer:
 
     def __init__(self, server):
         self.conf = server.conf
-        self.server = None
+        self.server = server
         self.logger = server.logger  # Logger() instance created by Server.
+        self.queryserver = None
 
     async def start(self):
-        addr = self.conf["server_ip"]
-        port = self.conf["query_port"]
-
-        if not addr:
-            addr = socket.gethostbyname(socket.gethostname())
-            self.logger.debug(f"Address not specified, using default({addr}).")
-
-        self.server = await asyncio_dgram.bind((addr, port))
-        self.logger.debug(f"Query server started on port {port}")
+        self.queryserver = await asyncio_dgram.bind((self.server.addr, self.server.port))
+        self.logger.debug(f"Query server started on port {self.server.port}")
 
     async def stop(self):
         self.logger.info("Shutting down Query server")

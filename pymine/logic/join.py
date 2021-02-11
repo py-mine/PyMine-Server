@@ -61,19 +61,22 @@ async def join_2(stream: Stream, player: Player) -> None:
     await server.send_packet(stream, play_packets.command.PlayDeclareCommands([]))
 
     # send unlocked recipes to the client
-    await server.send_packet(stream, play_packets.crafting.PlayUnlockRecipes(
-        0,  # init
-        player.data["recipeBook"]["isGuiOpen"],
-        player.data["recipeBook"]["isFilteringCraftable"],
-        player.data["recipeBook"]["isFurnaceGuiOpen"],
-        player.data["recipeBook"]["isFurnaceFilteringCraftable"],
-        player.data["recipeBook"]["isBlastingFurnaceGuiOpen"],
-        player.data["recipeBook"]["isBlastingFurnaceFilteringCraftable"],
-        player.data["recipeBook"]["isSmokerGuiOpen"],
-        player.data["recipeBook"]["isSmokerFilteringCraftable"],
-        player.data["recipeBook"]["recipes"],  # all unlocked recipes
-        player.data["recipeBook"]["toBeDisplayed"]  # ones which will be displayed as newly unlocked
-    ))
+    await server.send_packet(
+        stream,
+        play_packets.crafting.PlayUnlockRecipes(
+            0,  # init
+            player.data["recipeBook"]["isGuiOpen"],
+            player.data["recipeBook"]["isFilteringCraftable"],
+            player.data["recipeBook"]["isFurnaceGuiOpen"],
+            player.data["recipeBook"]["isFurnaceFilteringCraftable"],
+            player.data["recipeBook"]["isBlastingFurnaceGuiOpen"],
+            player.data["recipeBook"]["isBlastingFurnaceFilteringCraftable"],
+            player.data["recipeBook"]["isSmokerGuiOpen"],
+            player.data["recipeBook"]["isSmokerFilteringCraftable"],
+            player.data["recipeBook"]["recipes"],  # all unlocked recipes
+            player.data["recipeBook"]["toBeDisplayed"],  # ones which will be displayed as newly unlocked
+        ),
+    )
 
 
 # crucial info pertaining to the world and player status

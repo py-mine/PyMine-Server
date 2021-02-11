@@ -138,7 +138,6 @@ class Server:
             if p.stream is not None:
                 await self.send_packet(p.stream, packet)
 
-
     async def handle_packet(self, stream: Stream):  # Handle / respond to packets, this is called in a loop
         packet_length = 0
 

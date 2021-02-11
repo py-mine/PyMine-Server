@@ -171,3 +171,16 @@ async def broadcast_player_info(player: Player) -> None:
             ],
         )
     )
+
+    # I don't know why latency isn't just updated in the first packet broadcasted, mc do be weird
+    await server.broadcast_packet(
+        packets.play.player.PlayPlayerInfo(
+            2,  # the action, update latency
+            [
+                {
+                    "uuid": player.uuid,
+                    "ping": 0
+                }
+            ],
+        )
+    )

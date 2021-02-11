@@ -27,19 +27,23 @@ class Player:
 
     @property
     def x(self) -> float:
-        return self.data["Pos"][0]
+        return self.data["Pos"][0].data
 
     @property
     def y(self) -> float:
-        return self.data["Pos"][1]
+        return self.data["Pos"][1].data
 
     @property
     def z(self) -> float:
-        return self.data["Pos"][2]
+        return self.data["Pos"][2].data
 
     @property
     def pos(self) -> tuple:
-        return self.data["Pos"]
+        return tuple(t.data for t in self.data["Pos"])
+
+    @property
+    def rotation(self) -> tuple:
+        return tuple(t.data for t in self.data["Rotation"])
 
     @classmethod
     def new(cls, entity_id: int, uuid_: uuid.UUID, spawn: tuple, dimension: str) -> Player:

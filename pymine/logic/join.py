@@ -75,6 +75,8 @@ async def join_2(stream: Stream, player: Player) -> None:
     # see here: https://wiki.vg/Protocol#Update_View_Position
     await server.send_packet(stream, packets.play.player.PlayUpdateViewPosition(player.x//32, player.z//32))
 
+    # send_update_view_distance, unsure if needed, see here: https://wiki.vg/Protocol#Update_View_Distance
+    await send_update_view_distance(stream, player)
 
 # crucial info pertaining to the world and player status
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:
@@ -185,3 +187,12 @@ async def broadcast_player_info(player: Player) -> None:
             [{"uuid": player.uuid, "ping": 0}],
         )
     )
+
+# updates client view distance, unsure if needed, see here: https://wiki.vg/Protocol#Update_View_Distance
+async def send_update_view_distance(stream: Stream, player: Player) -> None:
+    view_distance = player.view_distance
+
+    if view_distance > server.conf["view_distance"]:
+        view_distance = server.conf["view_distance"]
+
+    await server.send_packet(stream, packets.play.player.PlayUpdateViewDistance(view_distance))

@@ -95,10 +95,12 @@ class QueryBuffer:
 
 
 class QueryServer:
-    """UDP server that follows the Minecraft Query protocol.
+    """A query server that supports the Minecraft query protocol.
 
-    :param server: The server instance initialised in pymine.server.
-    :type server: class:`pymine.server.server`
+    :param object server: The PyMine server instance.
+    :attr object conf: The contents of server.yml (The server configuration).
+    :attr object logger: The instance of the logger.
+    :attr server:
     """
 
     def __init__(self, server):

@@ -136,9 +136,6 @@ async def send_player_position_and_rotation(stream: Stream, player: Player) -> N
 
     await server.send_packet(
         packets.play.player.PlayPlayerPositionAndLookClientBound(
-            *player.pos,
-            *player.rotation,
-            flags.field,
-            random.randint(0, 999999)  # the tp id, NEEDS TO BE VERIFIED LATER
+            *player.pos, *player.rotation, flags.field, random.randint(0, 999999)  # the tp id, NEEDS TO BE VERIFIED LATER
         )
     )

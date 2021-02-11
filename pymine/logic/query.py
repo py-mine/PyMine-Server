@@ -6,14 +6,21 @@ import asyncio_dgram
 
 
 class QueryBuffer:
-    """Buffer for the query protocol, will contain most relevant methods."""
+    """Buffer for the query protocol, will contain most relevant methods.
+    :param buf: no thoughts brain empty.
+    :type buf: bytes
+    """
 
     def __init__(self, buf: bytes = None) -> None:
         self.buf = b"" if buf is None else buf
         self.pos = 0
 
     def write(self, data: bytes) -> None:
-        """Writes data to the buffer."""
+        """Writes data to the buffer.
+        :param data: Data to be written to the buffer.
+        :type data: bytes
+        :return: None
+        """
 
         self.buf += data
 
@@ -21,6 +28,9 @@ class QueryBuffer:
         """
         Reads n bytes from the buffer, if the length is None
         then all remaining data from the buffer is sent.
+        :param length: Length in bytes to be read from the buffer.
+        :type length: int
+        :return: bytes
         """
 
         try:

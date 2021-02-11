@@ -116,6 +116,7 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
         ),
     )
 
+
 # sends the previously unlocked + unviewed unlocked recipies to the client
 async def send_unlocked_recipes(stream: Stream, player: Player) -> None:
     await server.send_packet(
@@ -135,6 +136,7 @@ async def send_unlocked_recipes(stream: Stream, player: Player) -> None:
         ),
     )
 
+
 # update the player's position and rotation
 async def send_player_position_and_rotation(stream: Stream, player: Player) -> None:
     flags = BitField.new(5, (0x01, False), (0x02, False), (0x04, False), (0x08, False), (0x10, False))
@@ -144,6 +146,7 @@ async def send_player_position_and_rotation(stream: Stream, player: Player) -> N
             *player.pos, *player.rotation, flags.field, random.randint(0, 999999)  # the tp id, NEEDS TO BE VERIFIED LATER
         )
     )
+
 
 # broadcasts the player's info to the other clients, this is needed to support skins and update the tab list
 async def broadcast_player_info(player: Player) -> None:

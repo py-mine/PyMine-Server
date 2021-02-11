@@ -156,6 +156,9 @@ async def broadcast_player_info(player: Player) -> None:
     if not player.data.get("CustomNameVisible"):
         display_name = None
 
+    # Unsure whether these should broadcast to all clients or not
+    # Also unsure whether they should include all player data or just that for the connecting player
+
     await server.broadcast_packet(
         packets.play.player.PlayPlayerInfo(
             0,  # the action, add player

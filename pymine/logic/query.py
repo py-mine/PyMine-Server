@@ -83,7 +83,11 @@ class QueryBuffer:
 
 
 class QueryServer:
-    """UDP server that follows the Minecraft Query protocol."""
+    """UDP server that follows the Minecraft Query protocol.
+
+    :param server: The server instance initialised in pymine.server.
+    :type server: class:`pymine.server.server`
+    """
 
     def __init__(self, server):
         self.conf = server.conf
@@ -100,3 +104,6 @@ class QueryServer:
 
         self.server = await asyncio_dgram.bind((addr, port))
         self.logger.debug(f"Query server started on port {port}")
+
+    async def stop(self):
+        self.logger.info("Shutting down Query server")

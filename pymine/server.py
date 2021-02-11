@@ -132,7 +132,12 @@ class Server:
     async def broadcast_packet(self, packet: Packet):  # should broadcast a packet to all connected clients in the play state
         self.logger.debug(f"BROADCAST:      id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
-        raise NotImplementedError
+        for uuid_ in self.cache.values():  # uuid_ is an int
+            pee = await self.playerio.fetch_player(uuid_)
+
+            if pee.stream is not None:
+                await self.send_packet(pee.stream, packet)
+
 
     async def handle_packet(self, stream: Stream):  # Handle / respond to packets, this is called in a loop
         packet_length = 0

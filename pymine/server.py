@@ -140,7 +140,6 @@ class Server:
 
         await asyncio.gather(senders)
 
-
     async def handle_packet(self, stream: Stream):  # Handle / respond to packets, this is called in a loop
         packet_length = 0
 

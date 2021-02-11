@@ -73,7 +73,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     await broadcast_player_info(player)
 
     # see here: https://wiki.vg/Protocol#Update_View_Position
-    await server.send_packet(stream, packets.play.player.PlayUpdateViewPosition(player.x//32, player.z//32))
+    await server.send_packet(stream, packets.play.player.PlayUpdateViewPosition(player.x // 32, player.z // 32))
 
     # send_update_view_distance, unsure if needed, see here: https://wiki.vg/Protocol#Update_View_Distance
     await send_update_view_distance(stream, player)

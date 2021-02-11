@@ -4,8 +4,6 @@ import struct
 import socket
 import asyncio_dgram
 
-from pymine.server import server
-
 
 class QueryBuffer:
     """Buffer for the query protocol, will contain most relevant methods."""
@@ -87,13 +85,18 @@ class QueryBuffer:
 class QueryServer:
     """UDP server that follows the Minecraft Query protocol."""
 
-    def __init__(self):
+    def __init__(self, server):
         self.conf = server.conf
+        self.server = None
+        self.logger = server.logger  # Logger() instance created by Server.
 
     async def start(self):
         addr = self.conf["server_ip"]
-        port = self.conf["server_port"]
+        port = self.conf["query_port"]
 
         if not addr:
             addr = socket.gethostbyname(socket.gethostname())
-        await asyncio_dgram.bind(addr, port)
+            self.logger.debug(f"Address not specified, using default({addr}).")
+
+        self.server = await asyncio_dgram.bind((addr, port))
+        self.logger.debug(f"Query server started on port {port}")

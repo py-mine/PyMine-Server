@@ -72,6 +72,9 @@ async def join_2(stream: Stream, player: Player) -> None:
     # update tab list, maybe sent to all clients?
     await broadcast_player_info(player)
 
+    # see here: https://wiki.vg/Protocol#Update_View_Position
+    await server.send_packet(stream, packets.play.player.PlayUpdateViewPosition(player.x//32, player.z//32))
+
 
 # crucial info pertaining to the world and player status
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:

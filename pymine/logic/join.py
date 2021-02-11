@@ -24,6 +24,7 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str, props: list) -> 
     server.cache.uuid[stream.remote] = int(uuid_)  # update uuid cache
 
     player = await server.playerio.fetch_player(uuid_)  # fetch player data from disk
+    player.props = props
     player.stream = stream
     player.username = username
 

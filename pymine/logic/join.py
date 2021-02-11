@@ -8,6 +8,7 @@ from pymine.types.packet import Packet
 from pymine.types.player import Player
 from pymine.types.stream import Stream
 from pymine.types.world import World
+from pymine.types.chat import Chat
 import pymine.types.nbt as nbt
 
 from pymine.data.default_nbt.dimension_codec import new_dim_codec_nbt, get_dimension_data
@@ -150,6 +151,11 @@ async def send_player_position_and_rotation(stream: Stream, player: Player) -> N
 
 # broadcasts the player's info to the other clients, this is needed to support skins and update the tab list
 async def broadcast_player_info(player: Player) -> None:
+    display_name = player.data.get("CustomName")
+
+    if not player.data.get("CustomNameVisible"):
+        display_name = None
+
     await server.broadcast_packet(
         packets.play.player.PlayPlayerInfo(
             0,  # the action, add player
@@ -158,6 +164,9 @@ async def broadcast_player_info(player: Player) -> None:
                     "uuid": player.uuid,
                     "name": player.name,
                     "properties": player.props,
+                    "gamemode": player.data["playerGameType"],
+                    "ping": 0,
+                    "display_name": Chat(display_name)
                 }
             ],
         )

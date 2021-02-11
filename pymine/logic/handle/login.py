@@ -95,6 +95,6 @@ async def server_auth(packet: login_packets.LoginEncryptionResponse, remote: tup
         jj = await resp.json()
 
         if jj is not None:
-            return decrypted_shared_key, (uuid.UUID(jj["id"]), jj["name"])
+            return decrypted_shared_key, (uuid.UUID(jj["id"]), jj["name"]), jj["properties"]
 
-    return False, False
+    return False, False, None

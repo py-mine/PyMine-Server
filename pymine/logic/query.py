@@ -40,29 +40,41 @@ class QueryBuffer:
     def pack_short(short: int) -> bytes:
         return struct.pack("<h", short)
 
-    @staticmethod
-    def unpack_short(short: int) -> int:
-        return struct.unpack("<h", short)
+    def unpack_short(self) -> int:
+        return struct.unpack("<h", self.read(2))
 
     @staticmethod
     def pack_magic() -> bytes:
-        return b"\xFE\xFD"  # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        return b"\xFE\xFD"  # I blame minecraft not me
+        # More straightforward, but slower:
+        # struct.pack('>H', 65527)
 
-    @staticmethod
-    def unpack_magic() -> int:
-        return 65277  # I hate myself.
+    def unpack_magic(self):
+        assert struct.unpack(">H", self.read(2)) == 65277
 
     @staticmethod
     def pack_string(string: str) -> bytes:
         return bytes(string, "latin-1") + b"\x00"
 
+    def unpack_string(self) -> str:
+        out = b""
+
+        while True:
+            b = self.read(1)
+
+            if b == b"\x00":  # null byte, end of string
+                break
+
+            out += b
+
+        return out.decode("latin-1")
+
     @staticmethod
     def pack_int32(num: int) -> bytes:
         return struct.pack(">i", num)
 
-    @staticmethod
-    def unpack_int32(num: int) -> int:  # I think.
-        return struct.unpack(">i", num)
+    def unpack_int32(self) -> int:
+        return struct.unpack(">i", self.read(struct.calcsize(">i")))
 
     @staticmethod
     def pack_byte(byte: int) -> bytes:

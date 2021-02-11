@@ -1,7 +1,10 @@
 from __future__ import annotations
-import struct
 
-# from pymine.server import server # not yet ferb
+import struct
+import socket
+import asyncio_dgram
+
+from pymine.server import server
 
 
 class QueryBuffer:
@@ -79,3 +82,18 @@ class QueryBuffer:
     @staticmethod
     def pack_byte(byte: int) -> bytes:
         return struct.pack(">b", byte)
+
+
+class QueryServer:
+    """UDP server that follows the Minecraft Query protocol."""
+
+    def __init__(self):
+        self.conf = server.conf
+
+    async def start(self):
+        addr = self.conf["server_ip"]
+        port = self.conf["server_port"]
+
+        if not addr:
+            addr = socket.gethostbyname(socket.gethostname())
+        await asyncio_dgram.bind(addr, port)

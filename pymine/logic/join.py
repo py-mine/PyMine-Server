@@ -20,7 +20,7 @@ from pymine.server import server
 
 
 # Used to finish the process of allowing a client to actually enter the server
-async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
+async def join(stream: Stream, uuid_: uuid.UUID, username: str, props: list) -> None:
     server.cache.uuid[stream.remote] = int(uuid_)  # update uuid cache
 
     player = await server.playerio.fetch_player(uuid_)  # fetch player data from disk

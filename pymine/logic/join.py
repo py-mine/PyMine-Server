@@ -57,6 +57,9 @@ async def join_2(stream: Stream, player: Player) -> None:
     # send entity status packet, apparently this is required, for now it'll just set player to op lvl 4 (value 28)
     await server.send_packet(stream, play_packets.entity.PlayEntityStatus(player.entity_id, 28))
 
+    # tell the client the commands, since proper commands + arg parsing hasn't been added yet, we send an empty list.
+    await server.send_packet(stream, play_packets.command.PlayDeclareCommands([]))
+
 
 # crucial info pertaining to the world and player status
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:

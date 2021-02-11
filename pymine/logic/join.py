@@ -137,6 +137,6 @@ async def send_player_position_and_rotation(stream: Stream, player: Player) -> N
         packets.play.player.PlayPlayerPositionAndLookClientBound(
             *player.pos,
             *player.rotation,
-
+            flags.field
         )
     )

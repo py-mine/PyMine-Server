@@ -16,6 +16,7 @@ class Player:
 
         self.stream = None
 
+        self.props = None  # textures from the mojang api
         self.username = None
         self.brand = None
         self.locale = None

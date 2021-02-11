@@ -65,8 +65,8 @@ async def join_2(stream: Stream, player: Player) -> None:
         stream,
         play_packets.crafting.PlayUnlockRecipes(
             0,  # init
-            player.data["recipeBook"]["isGuiOpen"],
-            player.data["recipeBook"]["isFilteringCraftable"],
+            player.data["recipeBook"]["isGuiOpen"],  # refers to the regular crafting bench/table
+            player.data["recipeBook"]["isFilteringCraftable"],  # refers to the regular crafting bench/table
             player.data["recipeBook"]["isFurnaceGuiOpen"],
             player.data["recipeBook"]["isFurnaceFilteringCraftable"],
             player.data["recipeBook"]["isBlastingFurnaceGuiOpen"],

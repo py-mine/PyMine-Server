@@ -61,23 +61,10 @@ async def join_2(stream: Stream, player: Player) -> None:
     await server.send_packet(stream, packets.play.command.PlayDeclareCommands([]))
 
     # send unlocked recipes to the client
-    await server.send_packet(
-        stream,
-        packets.play.crafting.PlayUnlockRecipes(
-            0,  # init
-            player.data["recipeBook"]["isGuiOpen"],  # refers to the regular crafting bench/table
-            player.data["recipeBook"]["isFilteringCraftable"],  # refers to the regular crafting bench/table
-            player.data["recipeBook"]["isFurnaceGuiOpen"],
-            player.data["recipeBook"]["isFurnaceFilteringCraftable"],
-            player.data["recipeBook"]["isBlastingFurnaceGuiOpen"],
-            player.data["recipeBook"]["isBlastingFurnaceFilteringCraftable"],
-            player.data["recipeBook"]["isSmokerGuiOpen"],
-            player.data["recipeBook"]["isSmokerFilteringCraftable"],
-            player.data["recipeBook"]["recipes"],  # all unlocked recipes
-            player.data["recipeBook"]["toBeDisplayed"],  # ones which will be displayed as newly unlocked
-        ),
-    )
+    await send_unlocked_recipes(stream, player)
 
+    # update player position and rotation
+    await send_player_position_and_rotation(stream, player)
 
 # crucial info pertaining to the world and player status
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:
@@ -116,9 +103,55 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
     flags.add(0x04, abilities["mayfly"].data)
     flags.add(0x08, abilities["instabuild"].data)
 
-    await server.send_packet(  # yes the last arg is supposed to be fov, but the values are actually the same
+    await server.send_packet(  #erver.send_packet(
+        stream,
+        packets.play.crafting.PlayUnlockRecipes(
+            0,  # init
+            player.data["recipeBook"]["isGuiOpen"],  # refers to the regular crafting bench/table
+            player.data["recipeBook"]["isFilteringCraftable"],  # refers to the regular crafting bench/table
+            player.data["recipeBook"]["isFurnaceGuiOpen"],
+            player.data["recipeBook"]["isFurnaceFilteringCraftable"],
+            player.data["recipeBook"]["isBlastingFurnaceGuiOpen"],
+            player.data["recipeBook"]["isBlastingFurnaceFilteringCraftable"],
+            player.data["recipeBook"]["isSmokerGuiOpen"],
+            player.data["recipeBook"]["isSmokerFilteringCraftable"],
+            player.data["recipeBook"]["recipes"],  # all unlocked recipes
+            player.data["recipeBook"]["toBeDisplayed"],  # ones which will be displayed as newly unlocked
+        ),
+    ) yes the last arg is supposed to be fov, but the values are actually the same
         stream,
         packets.play.player.PlayPlayerAbilitiesClientBound(
             flags.field, abilities["flySpeed"].data, abilities["walkSpeed"].data
         ),
+    )
+
+
+async def send_unlocked_recipes(stream: Stream, player: Player) -> None:
+    await server.send_packet(
+        stream,
+        packets.play.crafting.PlayUnlockRecipes(
+            0,  # init
+            player.data["recipeBook"]["isGuiOpen"],  # refers to the regular crafting bench/table
+            player.data["recipeBook"]["isFilteringCraftable"],  # refers to the regular crafting bench/table
+            player.data["recipeBook"]["isFurnaceGuiOpen"],
+            player.data["recipeBook"]["isFurnaceFilteringCraftable"],
+            player.data["recipeBook"]["isBlastingFurnaceGuiOpen"],
+            player.data["recipeBook"]["isBlastingFurnaceFilteringCraftable"],
+            player.data["recipeBook"]["isSmokerGuiOpen"],
+            player.data["recipeBook"]["isSmokerFilteringCraftable"],
+            player.data["recipeBook"]["recipes"],  # all unlocked recipes
+            player.data["recipeBook"]["toBeDisplayed"],  # ones which will be displayed as newly unlocked
+        ),
+    )
+
+
+async def send_player_position_and_rotation(stream: Stream, player: Player) -> None:
+    flags = BitField.new(5, (0x01, False), (0x02, False), (0x04, False), (0x08, False), (0x10, False))
+
+    await server.send_packet(
+        packets.play.player.PlayPlayerPositionAndLookClientBound(
+            *player.pos,
+            *player.rotation,
+            flags.field
+        )
     )

@@ -71,13 +71,10 @@ class QueryBuffer:
 
     def unpack_string(self) -> str:
         out = b""
-
         while True:
             b = self.read(1)
-
             if b == b"\x00":  # null byte, end of string
                 break
-
             out += b
 
         return out.decode("latin-1")

@@ -66,6 +66,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     # update player position and rotation
     await send_player_position_and_rotation(stream, player)
 
+
 # crucial info pertaining to the world and player status
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:
     level_name = server.conf["level_name"]  # level name, i.e. Xenon
@@ -103,11 +104,11 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
     flags.add(0x04, abilities["mayfly"].data)
     flags.add(0x08, abilities["instabuild"].data)
 
-    await server.send_packet( # yes the last arg is supposed to be fov, but the values are actually the same
+    await server.send_packet(  # yes the last arg is supposed to be fov, but the values are actually the same
         stream,
         packets.play.player.PlayPlayerAbilitiesClientBound(
             flags.field, abilities["flySpeed"].data, abilities["walkSpeed"].data
-        )
+        ),
     )
 
 
@@ -134,9 +135,5 @@ async def send_player_position_and_rotation(stream: Stream, player: Player) -> N
     flags = BitField.new(5, (0x01, False), (0x02, False), (0x04, False), (0x08, False), (0x10, False))
 
     await server.send_packet(
-        packets.play.player.PlayPlayerPositionAndLookClientBound(
-            *player.pos,
-            *player.rotation,
-            flags.field
-        )
+        packets.play.player.PlayPlayerPositionAndLookClientBound(*player.pos, *player.rotation, flags.field)
     )

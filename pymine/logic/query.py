@@ -6,9 +6,11 @@ import asyncio_dgram
 
 
 class QueryBuffer:
-    """Buffer for the query protocol, will contain most relevant methods.
-    :param buf: no thoughts brain empty.
-    :type buf: bytes
+    """Buffer for the query protocol, contains method for dealing with query protocol types.
+
+    :param bytes buf:  Internal bytes object, used to store the data in the QueryBuffer.
+    :ivar type pos: The position in the internal bytes/buffer object.
+    :ivar buf:
     """
 
     def __init__(self, buf: bytes = None) -> None:

@@ -73,20 +73,18 @@ class Server:
         self.api = None  # the api instance
 
     async def start(self):
-        self.aiohttp = aiohttp.ClientSession()
         self.server = await asyncio.start_server(self.handle_connection, host=self.addr, port=self.port)
-        self.api = PyMineAPI(self)
 
+        self.aiohttp = aiohttp.ClientSession()
+        self.api = PyMineAPI(self)
         await self.api.init()
 
         # 24 / the second arg (the max chunk cache size per world instance), should be dynamically changed based on the
         # amount of players online on each world, probably something like (len(players)*24)
         self.worlds = await load_worlds(self, self.conf["level_name"], 24)
+        self.playerio = PlayerDataIO(self, self.conf["level_name"])  # Player data IO, used to load/dump player info
 
-        # Player data IO, used to load/dump player info
-        self.playerio = PlayerDataIO(self, self.conf["level_name"])
-
-        self.logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
+        self.logger.info(f"PyMine {self.meta.server:.1f} started on {self.addr}:{self.port}!")
 
         self.api.taskify_handlers(self.api.events._server_ready)
 

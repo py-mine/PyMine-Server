@@ -23,7 +23,7 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
     server.cache.uuid[stream.remote] = int(uuid_)  # update uuid cache
 
     player = await server.playerio.fetch_player(uuid_)  # fetch player data from disk
-    player.remote = stream.remote
+    player.stream = stream
     player.username = username
 
     world = server.worlds[player.data["Dimension"].data]  # the world player *should* be spawning into
@@ -65,6 +65,12 @@ async def join_2(stream: Stream, player: Player) -> None:
 
     # update player position and rotation
     await send_player_position_and_rotation(stream, player)
+
+    # update tab list, maybe sent to all clients?
+    await server.broadcast_packet(packets.play.player.PlayPlayerInfo(
+        0,  # the action, add player
+        [{"uuid": player.uuid, "name": player.name, "properties": [], }]
+    ))
 
 
 # crucial info pertaining to the world and player status

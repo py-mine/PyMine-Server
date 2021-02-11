@@ -69,19 +69,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     await send_player_position_and_rotation(stream, player)
 
     # update tab list, maybe sent to all clients?
-    await server.broadcast_packet(
-        packets.play.player.PlayPlayerInfo(
-            0,  # the action, add player
-            [
-                {
-                    "uuid": player.uuid,
-                    "name": player.name,
-                    "properties": [],
-                }
-            ],
-        )
-    )
-
+    await broadcast_player_info(player)
 
 # crucial info pertaining to the world and player status
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:
@@ -153,5 +141,20 @@ async def send_player_position_and_rotation(stream: Stream, player: Player) -> N
     await server.send_packet(
         packets.play.player.PlayPlayerPositionAndLookClientBound(
             *player.pos, *player.rotation, flags.field, random.randint(0, 999999)  # the tp id, NEEDS TO BE VERIFIED LATER
+        )
+    )
+
+
+async def broadcast_player_info(player: Player) -> None:
+    await server.broadcast_packet(
+        packets.play.player.PlayPlayerInfo(
+            0,  # the action, add player
+            [
+                {
+                    "uuid": player.uuid,
+                    "name": player.name,
+                    "properties": player.props,
+                }
+            ],
         )
     )

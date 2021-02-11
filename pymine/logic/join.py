@@ -60,6 +60,9 @@ async def join_2(stream: Stream, player: Player) -> None:
     # tell the client the commands, since proper commands + arg parsing hasn't been added yet, we send an empty list.
     await server.send_packet(stream, play_packets.command.PlayDeclareCommands([]))
 
+    # send unlocked recipes to the client
+    await server.send_packet(stream, play_packets.)
+
 
 # crucial info pertaining to the world and player status
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:

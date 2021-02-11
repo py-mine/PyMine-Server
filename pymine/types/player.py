@@ -14,7 +14,7 @@ class Player:
 
         self.uuid = uuid.UUID(bytes=struct.pack(">iiii", *data["UUID"]))
 
-        self.remote = None
+        self.stream = None
 
         self.username = None
         self.brand = None

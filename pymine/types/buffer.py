@@ -8,7 +8,8 @@ from pymine.types.packet import Packet
 from pymine.types.chat import Chat
 import pymine.types.nbt as nbt
 
-from pymine.data.registry import ITEM_REGISTRY
+from pymine.data.block_palette import DirectPalette
+from pymine.data.registries import ITEM_REGISTRY
 import pymine.data.misc as misc_data
 
 from pymine.api.exceptions import InvalidPacketID
@@ -50,6 +51,18 @@ class Buffer:
 
         self.pos = 0
 
+    def unpack(self, f: str) -> object:
+        unpacked = struct.unpack(">" + f, self.read(struct.calcsize(f)))
+
+        if len(unpacked) == 1:
+            return unpacked[0]
+
+        return unpacked
+
+    @classmethod
+    def pack(cls, f: str, *data: object) -> bytes:
+        return struct.pack(">" + f, *data)
+
     @classmethod
     def pack_packet(cls, packet: Packet, comp_thresh: int = -1) -> bytes:
         """
@@ -81,18 +94,6 @@ class Buffer:
             raise InvalidPacketID
 
         return packet_class.decode(self)
-
-    def unpack(self, f: str) -> object:
-        unpacked = struct.unpack(">" + f, self.read(struct.calcsize(f)))
-
-        if len(unpacked) == 1:
-            return unpacked[0]
-
-        return unpacked
-
-    @classmethod
-    def pack(cls, f: str, *data: object) -> bytes:
-        return struct.pack(">" + f, *data)
 
     @classmethod
     def pack_optional(cls, packer: object, data: object = None) -> bytes:
@@ -556,3 +557,84 @@ class Buffer:
 
     def unpack_modifier(self) -> tuple:
         return self.unpack_uuid(), self.unpack("d"), self.unpack("b")
+
+    @classmethod
+    def pack_chunk_section(cls, chunk_section: object) -> bytes:  # 0..16[0..16[0..16[]]]
+        SECTION_WIDTH = 16
+
+        # Blocks and their types should already be encoded into a palette when they're generated
+        # So we don't actually have to deal with encoding/decoding them!
+
+        bits_per_block = DirectPalette.get_bits_per_block()
+        out = cls.pack("b", bits_per_block)  # pack bits per block
+
+        data_len = (16 * 16 * 16) * bits_per_block / 64
+        data = [0] * data_len
+
+        individual_value_mask = (1 << bits_per_block) - 1
+
+        for y in range(SECTION_WIDTH):
+            for z in range(SECTION_WIDTH):
+                for x in range(SECTION_WIDTH):
+                    block_num = (((y * SECTION_WIDTH) + z) * SECTION_WIDTH) + x
+                    start_long = (block_num * bits_per_block) / 64
+                    start_offset = (block_num * bits_per_block) % 64
+                    end_long = ((block_num + 1) * bits_per_block - 1) / 64
+
+                    value = chunk_section[x][y][z][0]  # take the block state id
+                    value &= individual_value_mask
+
+                    data[start_long] |= value << start_offset
+
+                    if start_long != end_long:
+                        data[end_long] = value >> (64 - start_offset)
+
+        # pack length of data + data
+        out += cls.pack_varint(data_len) + b"".join([cls.pack("q", num) for num in data])
+
+        # calculate and write each block light value
+        for y in range(SECTION_WIDTH):
+            for z in range(SECTION_WIDTH):
+                for x in range(0, SECTION_WIDTH, 2):
+                    value = chunk_section[x][y][z][1] | (chunk_section[x + 1][y][z][1] << 4)
+                    out += cls.pack("b", value)
+
+        # calculate and write each sky light value
+        for y in range(SECTION_WIDTH):
+            for z in range(SECTION_WIDTH):
+                for x in range(0, SECTION_WIDTH, 2):
+                    value = chunk_section[x][y][z][2] | (chunk_section[x + 1][y][z][2] << 4)
+                    out += cls.pack("b", value)
+
+        return out
+
+    @classmethod  # see here: https://wiki.vg/Chunk_Format
+    def pack_chunk_data(cls, chunk_x: int, chunk_z: int, chunk: object) -> bytes:  # (256, 16, 16)?
+        CHUNK_HEIGHT = 256
+        SECTION_WIDTH = 16
+
+        out = b""
+
+        # write chunk coordinates and say that it's a full chunk
+        out += cls.pack("i", chunk_x) + cls.pack("i", chunk_z) + cls.pack("?", True)
+
+        mask = 0
+        column_data = b""
+
+        for i in range(0, len(chunk), 16):  # iterate through chunk sections (16x16x16 area of blocks)
+            chunk_section = chunk[i : i + 16]
+
+            if any(chunk_section):  # check if chunk section is empty or not
+                mask |= 1 << i
+                column_data += cls.pack_chunk_section(chunk_section)
+
+        for z in range(0, len(SECTION_WIDTH)):
+            for x in range(0, len(SECTION_WIDTH)):
+                out += cls.pack("i", 127)  # 127 is void, and we don't support biomes yet so 127 it is
+
+        out += cls.pack_varint(mask) + cls.pack_varint(len(column_data)) + column_data
+
+        # Here we would send block entities, but there's no support for them yet so we just send an array with length of 0
+        out += cls.pack_varint(0)
+
+        return out

@@ -16,10 +16,11 @@
 - [ ] **Joinable** - *the login process is complete, but users can not yet join the world*
 - [ ] **Packet Models** - *missing some clientbound packets*
 - [x] **Status + Login Logic** - *completed*
-- [ ] **Play Logic** - *not started yet*
-- [ ] **World Generation** - *not started yet*
+- [ ] **Play Logic** - *currently a work in progress*
+- [ ] **World Generation** - *superflat world generation has been started*
 - [ ] **Entities/Entity AI** - *not started yet*
 - [x] **Plugin API** - *completed, but more will be added as the development continues*
+- [ ] **Command/Argument Parsing** - *currently a work in progress*
 
 
 ## Contributing
@@ -57,6 +58,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://kevinthomas.codes/"><img src="https://avatars.githubusercontent.com/u/46242684?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kevin Thomas</b></sub></a><br /><a href="#ideas-TrustedMercury" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://milanm.tk"><img src="https://avatars.githubusercontent.com/u/29466935?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Milan Mehra</b></sub></a><br /><a href="#ideas-milanmdev" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 

@@ -4,8 +4,8 @@ import os
 from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
 
-with open(os.path.join("pymine", "data", "default_nbt", "dimension_codec.nbt"), "rb") as dim_codec_file:  # when lazy
-    DEFAULT_DIM_CODEC_NBT = nbt.unpack(Buffer(dim_codec_file.read()))
+with open(os.path.join("pymine", "data", "default_nbt", "dimension_codec.nbt"), "rb") as dim_codec_file:
+    DEFAULT_DIM_CODEC_NBT = nbt.unpack(Buffer(dim_codec_file.read()), root_is_full=False)
 
 
 def new_dim_codec_nbt() -> nbt.TAG_Compound:
@@ -16,8 +16,8 @@ def get_dimension_data(dimension: str) -> nbt.TAG_Compound:
     dims = DEFAULT_DIM_CODEC_NBT["minecraft:dimension_type"]["value"]
 
     for dim in dims:
-        if dim["name"].endswith(dimension):  # just in case namespace (like minecraft:) isn't there
-            return dim
+        if dim["name"].data.endswith(dimension):  # just in case namespace (like minecraft:) isn't there
+            return dim["element"]
 
 
 # def new_dim_codec_dim_props(

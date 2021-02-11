@@ -26,7 +26,7 @@ __all__ = (
 TYPES = []
 
 
-def unpack(buf) -> TAG_Compound:
+def unpack(buf, root_is_full: bool = True) -> TAG_Compound:
     try:
         data = gzip.decompress(buf.buf[buf.pos :])
         buf.buf = data
@@ -34,7 +34,11 @@ def unpack(buf) -> TAG_Compound:
     except BaseException:
         pass
 
-    return TAG_Compound.unpack(buf)
+    if root_is_full:
+        buf.read(1)
+        return TAG_Compound(TAG.unpack_name(buf), TAG_Compound.unpack_data(buf))
+
+    return TAG_Compound(None, TAG_Compound.unpack_data(buf))
 
 
 class BufferUtil:
@@ -64,7 +68,7 @@ class TAG:
 
     def __init__(self, name: str = None) -> None:
         self.id = self.__class__.id
-        self.name = name
+        self.name = "" if name is None else name
 
     def pack_id(self) -> bytes:
         return BufferUtil.pack("b", self.id)
@@ -105,6 +109,23 @@ class TAG:
 
 class TAG_End(TAG):
     id = 0
+
+    def __init__(self, *args) -> None:
+        super().__init__(None)
+
+    def pack_name(self) -> bytes:
+        return b""
+
+    @staticmethod
+    def unpack_name(buf) -> None:
+        return None
+
+    def pack_data(self) -> bytes:
+        return b""
+
+    @staticmethod
+    def unpack_data(buf) -> None:
+        pass
 
     def pretty(self, indent: int = 0) -> str:
         return ("    " * indent) + "TAG_End(): 0"
@@ -372,6 +393,20 @@ class TAG_Compound(TAG, dict):
         TAG.__init__(self, name)
         dict.__init__(self, [(t.name, t) for t in data])
 
+    @property
+    def data(self):
+        return self.values()
+
+    def __setitem__(self, key, value):
+        value.name = key
+        dict.__setitem__(self, key, value)
+
+    def update(self, *args, **kwargs):
+        dict.update(self, *args, **kwargs)
+
+        for k, v in self.items():
+            v.name = k
+
     def pack_data(self) -> bytes:
         return b"".join([tag.pack() for tag in self.values()]) + b"\x00"
 
@@ -382,7 +417,7 @@ class TAG_Compound(TAG, dict):
         while True:
             tag = TYPES[buf.unpack("b")]
 
-            if tag == TAG_End:
+            if tag is TAG_End:
                 break
 
             out.append(tag(tag.unpack_name(buf), tag.unpack_data(buf)))

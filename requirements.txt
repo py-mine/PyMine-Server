@@ -1,8 +1,10 @@
 aioconsole
 aiofile
 aiohttp
+colorama
 cryptography
 immutables
 mutf8
 PyYAML
 gitpython
+numpy

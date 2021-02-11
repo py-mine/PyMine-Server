@@ -16,21 +16,24 @@ class PlayServerDifficulty(Packet):
     """Used by the server to update the difficulty in the client's menu. (Server -> Client)
 
     :param int difficulty: The difficulty level, see here: https://wiki.vg/Protocol#Server_Difficulty.
-    :ivar int id: Unique packet ID.
-    :ivar int to: Packet direction.
-    :ivar difficulty:
+    :param bool locked: Whether the difficulty is locked or not.
+    :attr int id: Unique packet ID.
+    :attr int to: Packet direction.
+    :attr difficulty:
+    :attr locked:
     """
 
     id = 0x0D
     to = 1
 
-    def __init__(self, difficulty: int) -> None:
+    def __init__(self, difficulty: int, locked: bool) -> None:
         super().__init__()
 
         self.difficulty = difficulty
+        self.locked = locked
 
     def encode(self) -> bytes:
-        return Buffer.pack("B", self.difficulty)
+        return Buffer.pack("B", self.difficulty) + Buffer.pack("?", self.locked)
 
 
 class PlaySetDifficulty(Packet):

@@ -68,10 +68,18 @@ async def join_2(stream: Stream, player: Player) -> None:
     await send_player_position_and_rotation(stream, player)
 
     # update tab list, maybe sent to all clients?
-    await server.broadcast_packet(packets.play.player.PlayPlayerInfo(
-        0,  # the action, add player
-        [{"uuid": player.uuid, "name": player.name, "properties": [], }]
-    ))
+    await server.broadcast_packet(
+        packets.play.player.PlayPlayerInfo(
+            0,  # the action, add player
+            [
+                {
+                    "uuid": player.uuid,
+                    "name": player.name,
+                    "properties": [],
+                }
+            ],
+        )
+    )
 
 
 # crucial info pertaining to the world and player status

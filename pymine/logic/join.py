@@ -13,8 +13,8 @@ from pymine.data.default_nbt.dimension_codec import new_dim_codec_nbt, get_dimen
 from pymine.data.recipes import RECIPES
 from pymine.data.tags import TAGS
 
-import pymine.net.packets.play as play_packets
 from pymine.util.misc import seed_hash
+import pymine.net.packets as packets
 from pymine.server import server
 
 
@@ -32,13 +32,13 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
 
     # send server brand via plugin channels
     await server.send_packet(
-        stream, play_packets.plugin_msg.PlayPluginMessageClientBound("minecraft:brand", Buffer.pack_string(server.meta.pymine))
+        stream, packets.play.plugin_msg.PlayPluginMessageClientBound("minecraft:brand", Buffer.pack_string(server.meta.pymine))
     )
 
     # sends info about the server difficulty
     await server.send_packet(
         stream,
-        play_packets.difficulty.PlayServerDifficulty(world.data["Difficulty"].data, world.data["DifficultyLocked"].data),
+        packets.play.difficulty.PlayServerDifficulty(world.data["Difficulty"].data, world.data["DifficultyLocked"].data),
     )
 
     await send_player_abilities(stream, player)
@@ -46,24 +46,24 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
 
 async def join_2(stream: Stream, player: Player) -> None:
     # change held item to saved last held item
-    await server.send_packet(stream, play_packets.player.PlayHeldItemChangeClientBound(player.data["SelectedItemSlot"].data))
+    await server.send_packet(stream, packets.play.player.PlayHeldItemChangeClientBound(player.data["SelectedItemSlot"].data))
 
     # send recipes
-    await server.send_packet(stream, play_packets.crafting.PlayDeclareRecipes(RECIPES))
+    await server.send_packet(stream, packets.play.crafting.PlayDeclareRecipes(RECIPES))
 
     # send tags (data about the different blocks and items)
-    await server.send_packet(stream, play_packets.tags.PlayTags(TAGS))
+    await server.send_packet(stream, packets.play.tags.PlayTags(TAGS))
 
     # send entity status packet, apparently this is required, for now it'll just set player to op lvl 4 (value 28)
-    await server.send_packet(stream, play_packets.entity.PlayEntityStatus(player.entity_id, 28))
+    await server.send_packet(stream, packets.play.entity.PlayEntityStatus(player.entity_id, 28))
 
     # tell the client the commands, since proper commands + arg parsing hasn't been added yet, we send an empty list.
-    await server.send_packet(stream, play_packets.command.PlayDeclareCommands([]))
+    await server.send_packet(stream, packets.play.command.PlayDeclareCommands([]))
 
     # send unlocked recipes to the client
     await server.send_packet(
         stream,
-        play_packets.crafting.PlayUnlockRecipes(
+        packets.play.crafting.PlayUnlockRecipes(
             0,  # init
             player.data["recipeBook"]["isGuiOpen"],  # refers to the regular crafting bench/table
             player.data["recipeBook"]["isFilteringCraftable"],  # refers to the regular crafting bench/table
@@ -85,7 +85,7 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
 
     await server.send_packet(
         stream,
-        play_packets.player.PlayJoinGame(
+        packets.play.player.PlayJoinGame(
             player.entity_id,
             server.conf["hardcore"],  # whether world is hardcore or not
             player.data["playerGameType"].data,  # gamemode
@@ -118,7 +118,7 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
 
     await server.send_packet(  # yes the last arg is supposed to be fov, but the values are actually the same
         stream,
-        play_packets.player.PlayPlayerAbilitiesClientBound(
+        packets.play.player.PlayPlayerAbilitiesClientBound(
             flags.field, abilities["flySpeed"].data, abilities["walkSpeed"].data
         ),
     )

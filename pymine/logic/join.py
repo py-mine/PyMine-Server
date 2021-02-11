@@ -166,7 +166,7 @@ async def broadcast_player_info(player: Player) -> None:
                     "properties": player.props,
                     "gamemode": player.data["playerGameType"],
                     "ping": 0,
-                    "display_name": Chat(display_name)
+                    "display_name": Chat(display_name),
                 }
             ],
         )
@@ -176,11 +176,6 @@ async def broadcast_player_info(player: Player) -> None:
     await server.broadcast_packet(
         packets.play.player.PlayPlayerInfo(
             2,  # the action, update latency
-            [
-                {
-                    "uuid": player.uuid,
-                    "ping": 0
-                }
-            ],
+            [{"uuid": player.uuid, "ping": 0}],
         )
     )

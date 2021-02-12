@@ -3,6 +3,8 @@ import asyncio
 import socket
 import struct
 
+from pymine.api.exceptions import ServerBindingError
+
 
 class QueryBuffer:
     """Buffer for the query protocol, contains method for dealing with query protocol types.
@@ -110,7 +112,10 @@ class QueryServer:
         self.server_task = None  # the task that handles packets
 
     async def start(self):
-        self.server = await asyncio_dgram.bind((self.addr, self.port))
+        try:
+            self.server = await asyncio_dgram.bind((self.addr, self.port))
+        except OSError:
+            raise ServerBindingError(self.addr, self.port)
 
         self.logger.info(f"Query server started on {self.addr}:{self.port}.")
 

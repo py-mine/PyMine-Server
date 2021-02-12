@@ -16,7 +16,7 @@ from pymine.logic.worldio import load_worlds, ChunkIO
 from pymine.logic.playerio import PlayerDataIO
 from pymine.logic.query import QueryServer
 
-from pymine.api.exceptions import StopHandling, InvalidPacketID
+from pymine.api.exceptions import StopHandling, InvalidPacketID, ServerBindingError
 from pymine.net.packet_map import PACKET_MAP
 from pymine.api import PyMineAPI
 
@@ -76,7 +76,10 @@ class Server:
         self.api = None  # the api instance
 
     async def start(self):
-        self.server = await asyncio.start_server(self.handle_connection, host=self.addr, port=self.port)
+        try:
+            self.server = await asyncio.start_server(self.handle_connection, host=self.addr, port=self.port)
+        except OSError:
+            raise ServerBindingError(self.addr, self.port)
 
         self.query_server = QueryServer(self)
         await self.query_server.start()

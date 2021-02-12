@@ -52,18 +52,18 @@ class Server:
         self.cache = self.Cache()
         self.secrets = self.Secrets(*gen_rsa_keys())
 
-        self.port = self.conf.get("server_port", 25565)
-        self.addr = self.conf.get("server_ip")
-
-        if self.addr is None:  # find local addr if none was supplied
-            self.addr = socket.gethostbyname(socket.gethostname())
-
         self.conf = load_config()  # contents of server.yml in the root dir
         self.favicon = load_favicon()  # server-icon.png in the root dir, displayed in clients' server lists
         self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold since it's used so much
 
         self.logger.debug_ = self.conf["debug"]
         asyncio.get_event_loop().set_debug(self.conf["debug"])
+
+        self.port = self.conf.get("server_port", 25565)
+        self.addr = self.conf.get("server_ip")
+
+        if self.addr is None:  # find local addr if none was supplied
+            self.addr = socket.gethostbyname(socket.gethostname())
 
         self.playerio = None  # used to fetch/dump players
         self.chunkio = ChunkIO  # used to fetch chunks from the disk

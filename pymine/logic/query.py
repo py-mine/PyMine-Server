@@ -1,6 +1,5 @@
 import asyncio_dgram
 import asyncio
-import socket
 import struct
 
 from pymine.api.errors import ServerBindingError

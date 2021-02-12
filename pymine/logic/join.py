@@ -78,7 +78,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     # send_update_view_distance, unsure if needed, see here: https://wiki.vg/Protocol#Update_View_Distance
     # await send_update_view_distance(stream, player)
 
-    await send_update_light(stream, player)
+    await send_chunk_data(stream, player)
 
 
 # crucial info pertaining to the world and player status
@@ -202,21 +202,29 @@ async def send_update_view_distance(stream: Stream, player: Player) -> None:
     await server.send_packet(stream, packets.play.player.PlayUpdateViewDistance(view_distance))
 
 
-# updates chunk light for all chunks in player's view distance
-async def send_update_light(stream: Stream, player: Player) -> None:
+# sends all chunks in player's view distance
+async def send_chunk_data(stream: Stream, player: Player) -> None:
+    world = server.worlds[player.data["Dimension"].data]  # the world player *should* be spawning into
+    chunks = {}  # cache chunks here because they're used multiple times and shouldn't be garbage collected
+
     for chunk_x in range(-player.view_distance, player.view_distance):
         for chunk_z in range(-player.view_distance, player.view_distance):
-            await server.send_packet(
-                stream,
-                packets.play.chunk.PlayUpdateLight(
-                    chunk_x,
-                    chunk_z,
-                    False,  # trust edges, idk what this means, see here: https://wiki.vg/Protocol#Update_Light
-                    0,
-                    0,
-                    0,
-                    0,
-                    [],
-                    [],
-                ),
-            )
+            chunks[chunk_x, chunk_z] = await world.fetch_chunk(chunk_x, chunk_z)
+
+    for ccoords, chunk in chunks.items():
+        pass
+
+    # await server.send_packet(
+    #     stream,
+    #     packets.play.chunk.PlayUpdateLight(
+    #         chunk_x,
+    #         chunk_z,
+    #         False,  # trust edges, idk what this means, see here: https://wiki.vg/Protocol#Update_Light
+    #         0,
+    #         0,
+    #         0,
+    #         0,
+    #         [],
+    #         [],
+    #     ),
+    # )

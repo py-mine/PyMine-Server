@@ -125,17 +125,20 @@ class QueryServer:
         self.server_task = asyncio.create_task(self.handle())
 
     async def handle(self):
-        while True:
-            try:
-                data, remote = await self.server.recv()
-                await self.handle_packet(remote, data)
-            except asyncio.CancelledError:
-                break
-            except BaseException as e:
-                self.logger.error(f"Error while handling query packet: {self.logger.f_traceback(e)}")
+        try:
+            while True:
+                    data, remote = await self.server.recv()
+                    asyncio.create_task(self.handle_packet(remote, data))
+        except asyncio.CancelledError:
+            break
 
     async def handle_packet(self, remote: tuple, data: bytes) -> None:
-        pass
+        try:
+            pass
+        except asyncio.CancelledError:
+            pass
+        except BaseException as e:
+            self.logger.error(f"Error while handling query packet: {self.logger.f_traceback(e)}")
 
     def stop(self):
         self.server_task.cancel()

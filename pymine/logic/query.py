@@ -112,6 +112,5 @@ class QueryServer:
     async def start(self):
         self.queryserver = await asyncio_dgram.bind((self.addr, self.port))
 
-
     async def stop(self):
         self.logger.info("Shutting down Query server")

@@ -106,7 +106,10 @@ class QueryServer:
         self.logger = server.logger  # Logger() instance created by Server.
 
         self.addr = server.addr
-        self.port = server.conf["query_port"]
+        self.port = server.conf.get("query_port")
+
+        if self.port is None:
+            self.port = server.port
 
         self.server = None  # the result of calling asyncio_dgram.bind(...)
         self.server_task = None  # the task that handles packets

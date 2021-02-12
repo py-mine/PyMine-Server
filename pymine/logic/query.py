@@ -86,7 +86,7 @@ class QueryBuffer:
         return struct.pack(">i", num)
 
     def unpack_int32(self) -> int:
-        return struct.unpack(">i", self.read(struct.calcsize(">i")))
+        return struct.unpack(">i", self.read(4))
 
     @staticmethod
     def pack_byte(byte: int) -> bytes:

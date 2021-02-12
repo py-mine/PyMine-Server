@@ -128,11 +128,11 @@ class QueryServer:
         try:
             while True:
                 data, remote = await self.server.recv()
-                asyncio.create_task(self.handle_packet(remote, data))
+                asyncio.create_task(self.handle_packet(remote, QueryBuffer(data)))
         except asyncio.CancelledError:
             pass
 
-    async def handle_packet(self, remote: tuple, data: bytes) -> None:
+    async def handle_packet(self, remote: tuple, buf: QueryBuffer) -> None:
         try:
             pass
         except asyncio.CancelledError:

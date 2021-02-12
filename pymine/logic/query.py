@@ -64,11 +64,10 @@ class QueryBuffer:
         # struct.pack('>H', 65527)
 
     def unpack_magic(self):
-        # assert struct.unpack(">H", self.read(2)) == 65277
         magic = struct.unpack(">H", self.read(2))[0]
 
         if magic != 65277:
-            raise ValueError(f"{magic} is not 65527")
+            raise ValueError(f"{magic} is not 65277")
 
     @staticmethod
     def pack_string(string: str) -> bytes:

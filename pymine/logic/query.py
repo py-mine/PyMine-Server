@@ -137,7 +137,13 @@ class QueryServer:
 
     async def handle_packet(self, remote: tuple, buf: QueryBuffer) -> None:
         try:
-            pass
+            buf.unpack_magic()
+
+            packet_type = buf.unpack_byte()  # should be 9 (handshake) or 0 (stat)
+            session_id = buf.unpack_int32()
+
+            if packet_type == 9:
+                pass
         except asyncio.CancelledError:
             pass
         except BaseException as e:

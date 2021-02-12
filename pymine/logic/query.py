@@ -1,8 +1,7 @@
-from __future__ import annotations
-
-import struct
-import socket
 import asyncio_dgram
+import asyncio
+import socket
+import struct
 
 
 class QueryBuffer:
@@ -108,9 +107,28 @@ class QueryServer:
         self.port = server.conf["query_port"]
 
         self.server = None  # the result of calling asyncio_dgram.bind(...)
+        self.server_task = None  # the task that handles packets
 
     async def start(self):
         self.server = await asyncio_dgram.bind((self.addr, self.port))
 
-    async def stop(self):
-        self.logger.info("Shutting down Query server")
+        self.logger.info(f"Query server started on {self.addr}:{self.port}.")
+
+        self.server_task = asyncio.create_task(self.handle())
+
+    async def handle(self):
+        while True:
+            try:
+                data, remote = await self.server.recv()
+                await self.handle_packet(remote, data)
+            except asyncio.CancelledError:
+                break
+            except BaseException as e:
+                self.logger.error(f"Error while handling query packet: {self.logger.f_traceback(e)}")
+
+    async def handle_packet(self, remote: tuple, data: bytes) -> None:
+        pass
+
+    def stop(self):
+        self.server_task.cancel()
+        self.server.close()

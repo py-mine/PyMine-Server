@@ -43,7 +43,7 @@ if __name__ == "__main__":
             pass
         except ServerBindingError as e:
             logger.error(
-                f"An error occurred while attempting to bind server to {e.addr}:{e.port}, is that address already in use?"
+                f"An error occurred while attempting to bind {e.server} server to {e.addr}:{e.port}, is that address already in use?"
             )
         except BaseException as e:
             logger.critical(logger.f_traceback(e))

@@ -103,9 +103,15 @@ class Server:
     async def stop(self):
         self.logger.info("Closing server...")
 
-        if self.server is not None:  # server is first to be initialized, if it's none, then none of the below will exist
+        if self.server is not None:
             self.server.close()
-            await asyncio.gather(self.server.wait_closed(), self.api.stop(), self.aiohttp.close())
+            await self.server.wait_closed()
+
+        if self.api is not None:
+            await self.api.stop()
+
+        if self.aiohttp is not None:
+            await self.aiohttp.close()
 
         self.logger.info("Server closed.")
 

@@ -52,10 +52,10 @@ class QueryBuffer:
 
     @staticmethod
     def pack_short(short: int) -> bytes:
-        return struct.pack("<h", short)
+        return struct.pack("<h", short)[0]
 
     def unpack_short(self) -> int:
-        return struct.unpack("<h", self.read(2))
+        return struct.unpack("<h", self.read(2))[0]
 
     @staticmethod
     def pack_magic() -> bytes:
@@ -64,7 +64,10 @@ class QueryBuffer:
         # struct.pack('>H', 65527)
 
     def unpack_magic(self):
-        assert struct.unpack(">H", self.read(2)) == 65277
+        magic = struct.unpack(">H", self.read(2))[0]
+
+        if magic != 65277:
+            raise ValueError(f"{magic} is not 65277")
 
     @staticmethod
     def pack_string(string: str) -> bytes:
@@ -86,14 +89,14 @@ class QueryBuffer:
         return struct.pack(">i", num)
 
     def unpack_int32(self) -> int:
-        return struct.unpack(">i", self.read(4))
+        return struct.unpack(">i", self.read(4))[0]
 
     @staticmethod
     def pack_byte(byte: int) -> bytes:
         return struct.pack(">b", byte)
 
     def unpack_byte(self):
-        return struct.unpack(">b", self.read(1))
+        return struct.unpack(">b", self.read(1))[0]
 
 
 class QueryServer:
@@ -137,7 +140,10 @@ class QueryServer:
 
     async def handle_packet(self, remote: tuple, buf: QueryBuffer) -> None:
         try:
-            buf.unpack_magic()
+            try:
+                buf.unpack_magic()
+            except ValueError:
+                return
 
             packet_type = buf.unpack_byte()  # should be 9 (handshake) or 0 (stat)
             session_id = buf.unpack_int32()

@@ -93,7 +93,7 @@ class QueryBuffer:
         return struct.pack(">b", byte)
 
     def unpack_byte(self):
-        return struct.unpack('>b', self.read(1))
+        return struct.unpack(">b", self.read(1))
 
 
 class QueryServer:

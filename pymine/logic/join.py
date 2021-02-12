@@ -205,5 +205,5 @@ async def send_update_view_distance(stream: Stream, player: Player) -> None:
 # updates chunk light for all chunks in player's view distance
 async def send_update_light(stream: Stream, player: Player) -> None:
     for chunk_x in range(-player.view_distance, player.view_distance):
-        for chunk_z = in range(-player.view_distance, player.view_distance):
+        for chunk_z in range(-player.view_distance, player.view_distance):
             pass

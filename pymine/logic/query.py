@@ -145,7 +145,7 @@ class QueryServer:
                 return
 
             packet_type = buf.unpack_byte()  # should be 9 (handshake) or 0 (stat)
-            session_id = buf.unpack_int32()
+            session_id = buf.unpack_int32()  # uNuSeD lOcAl VaRiAbLe
 
             if packet_type == 9:
                 pass

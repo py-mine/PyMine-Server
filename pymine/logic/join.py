@@ -78,6 +78,8 @@ async def join_2(stream: Stream, player: Player) -> None:
     # send_update_view_distance, unsure if needed, see here: https://wiki.vg/Protocol#Update_View_Distance
     # await send_update_view_distance(stream, player)
 
+    await send_update_light(stream, player)
+
 
 # crucial info pertaining to the world and player status
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:
@@ -198,3 +200,10 @@ async def send_update_view_distance(stream: Stream, player: Player) -> None:
         view_distance = server.conf["view_distance"]
 
     await server.send_packet(stream, packets.play.player.PlayUpdateViewDistance(view_distance))
+
+
+# updates chunk light for all chunks in player's view distance
+async def send_update_light(stream: Stream, player: Player) -> None:
+    for chunk_x in range(-player.view_distance, player.view_distance):
+        for chunk_z = in range(-player.view_distance, player.view_distance):
+            pass

@@ -206,14 +206,17 @@ async def send_update_view_distance(stream: Stream, player: Player) -> None:
 async def send_update_light(stream: Stream, player: Player) -> None:
     for chunk_x in range(-player.view_distance, player.view_distance):
         for chunk_z in range(-player.view_distance, player.view_distance):
-            await server.send_packet(stream, packets.play.chunk.PlayUpdateLight(
-                chunk_x,
-                chunk_z,
-                False,  # trust edges, idk what this means, see here: https://wiki.vg/Protocol#Update_Light
-                0,
-                0,
-                0,
-                0,
-                [],
-                []
-            ))
+            await server.send_packet(
+                stream,
+                packets.play.chunk.PlayUpdateLight(
+                    chunk_x,
+                    chunk_z,
+                    False,  # trust edges, idk what this means, see here: https://wiki.vg/Protocol#Update_Light
+                    0,
+                    0,
+                    0,
+                    0,
+                    [],
+                    [],
+                ),
+            )

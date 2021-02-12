@@ -79,7 +79,7 @@ class Server:
         try:
             self.server = await asyncio.start_server(self.handle_connection, host=self.addr, port=self.port)
         except OSError:
-            raise ServerBindingError(self.addr, self.port)
+            raise ServerBindingError("PyMine", self.addr, self.port)
 
         self.query_server = QueryServer(self)
         await self.query_server.start()

@@ -115,7 +115,7 @@ class QueryServer:
         try:
             self.server = await asyncio_dgram.bind((self.addr, self.port))
         except OSError:
-            raise ServerBindingError(self.addr, self.port)
+            raise ServerBindingError("query server", self.addr, self.port)
 
         self.logger.info(f"Query server started on {self.addr}:{self.port}.")
 

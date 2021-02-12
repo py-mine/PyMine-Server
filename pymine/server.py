@@ -14,6 +14,7 @@ from pymine.util.encryption import gen_rsa_keys
 from pymine.logic.config import load_config, load_favicon
 from pymine.logic.worldio import load_worlds, ChunkIO
 from pymine.logic.playerio import PlayerDataIO
+from pymine.logic.query import QueryServer
 
 from pymine.api.exceptions import StopHandling, InvalidPacketID
 from pymine.net.packet_map import PACKET_MAP
@@ -68,6 +69,8 @@ class Server:
         self.chunkio = ChunkIO  # used to fetch chunks from the disk
         self.worlds = None  # world dictionary
 
+        self.query_server = None  # the QueryServer instance
+
         self.aiohttp = None  # the aiohttp session
         self.server = None  # the actual underlying asyncio server
         self.api = None  # the api instance
@@ -75,7 +78,11 @@ class Server:
     async def start(self):
         self.server = await asyncio.start_server(self.handle_connection, host=self.addr, port=self.port)
 
+        self.query_server = QueryServer(self)
+        await self.query_server.start()
+
         self.aiohttp = aiohttp.ClientSession()
+
         self.api = PyMineAPI(self)
         await self.api.init()
 

@@ -140,7 +140,10 @@ class QueryServer:
 
     async def handle_packet(self, remote: tuple, buf: QueryBuffer) -> None:
         try:
-            buf.unpack_magic()
+            try:
+                buf.unpack_magic()
+            except ValueError:
+                return
 
             packet_type = buf.unpack_byte()  # should be 9 (handshake) or 0 (stat)
             session_id = buf.unpack_int32()

@@ -59,8 +59,8 @@ class Server:
         self.logger.debug_ = self.conf["debug"]
         asyncio.get_event_loop().set_debug(self.conf["debug"])
 
-        self.port = self.conf.get("server_port", 25565)
-        self.addr = self.conf.get("server_ip")
+        self.port = self.conf["server_port"]
+        self.addr = self.conf["server_ip"]
 
         if self.addr is None:  # find local addr if none was supplied
             self.addr = socket.gethostbyname(socket.gethostname())

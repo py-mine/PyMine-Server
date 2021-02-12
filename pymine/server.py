@@ -16,7 +16,7 @@ from pymine.logic.worldio import load_worlds, ChunkIO
 from pymine.logic.playerio import PlayerDataIO
 from pymine.logic.query import QueryServer
 
-from pymine.api.exceptions import StopHandling, InvalidPacketID, ServerBindingError
+from pymine.api.errors import StopHandling, InvalidPacketID, ServerBindingError
 from pymine.net.packet_map import PACKET_MAP
 from pymine.api import PyMineAPI
 

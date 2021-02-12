@@ -3,7 +3,7 @@ import asyncio
 import socket
 import struct
 
-from pymine.api.exceptions import ServerBindingError
+from pymine.api.errors import ServerBindingError
 
 
 class QueryBuffer:

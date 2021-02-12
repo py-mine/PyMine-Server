@@ -21,7 +21,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 os.chdir(os.path.join(os.path.dirname(__file__), ".."))
 
 from pymine.util.logging import Logger, task_exception_handler
-from pymine.api.exceptions import ServerBindingError
+from pymine.api.errors import ServerBindingError
 import pymine.server
 
 if __name__ == "__main__":

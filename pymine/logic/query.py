@@ -92,6 +92,9 @@ class QueryBuffer:
     def pack_byte(byte: int) -> bytes:
         return struct.pack(">b", byte)
 
+    def unpack_byte(self):
+        return struct.unpack('>b', self.read(1))
+
 
 class QueryServer:
     """A query server that supports the Minecraft query protocol.

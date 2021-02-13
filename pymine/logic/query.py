@@ -50,6 +50,7 @@ class QueryBuffer:
         self.pos = 0
 
     @staticmethod
+    # Why is short the only little-endian one? Nobody knows.
     def pack_short(short: int) -> bytes:
         return struct.pack("<h", short)[0]
 

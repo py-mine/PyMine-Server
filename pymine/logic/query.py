@@ -176,6 +176,7 @@ class QueryServer:
                 )
 
                 await self.server.send(out, remote[0])
+
             elif packet_type == 9:  # handshake
                 challenge_token = buf.unpack_int32()
                 self.challenge_id_cache[remote] = challenge_token

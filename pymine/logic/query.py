@@ -142,6 +142,7 @@ class QueryServer:
             try:
                 buf.unpack_magic()
             except ValueError:
+                slef.logger.debug("Invalid value for magic recieved, continuing like nothing happened.")
                 return
 
             packet_type = buf.unpack_byte()  # should be 9 (handshake) or 0 (stat)

@@ -189,7 +189,7 @@ class QueryServer:
             self.logger.error(f"Error while handling query packet: {self.logger.f_traceback(e)}")
 
     def stop(self):
-        self.logger.debug("Query server shutting down.")
+        self.logger.info("Query server shutting down.")
         self.server_task.cancel()
         self.server.close()
-        self.logger.debug("Query server shut down succesfully.")
+        self.logger.info("Query server shut down succesfully.")

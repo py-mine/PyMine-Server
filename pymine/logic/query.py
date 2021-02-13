@@ -158,7 +158,7 @@ class QueryServer:
 
                 # just ignore person cause that's how query protocol works
                 if self.challenge_cache.get(remote) != challenge_token:
-                    self.logger.warn(f"Invalid challenge id {challenge_token} received for remote {remote}")
+                    self.logger.warn(f"Invalid challenge token {challenge_token} received for remote {remote}")
                     return
 
                 out = (

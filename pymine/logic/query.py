@@ -62,11 +62,13 @@ class QueryBuffer:
         # More straightforward, but slower:
         # struct.pack('>H', 65527)
 
-    def unpack_magic(self):
+    def unpack_magic(self) -> int:
         magic = struct.unpack(">H", self.read(2))[0]
 
         if magic != 65277:
             raise ValueError(f"{magic} is not 65277")
+
+        return magic
 
     @staticmethod
     def pack_string(string: str) -> bytes:
@@ -94,7 +96,7 @@ class QueryBuffer:
     def pack_byte(byte: int) -> bytes:
         return struct.pack(">b", byte)
 
-    def unpack_byte(self):
+    def unpack_byte(self) -> int:
         return struct.unpack(">b", self.read(1))[0]
 
 

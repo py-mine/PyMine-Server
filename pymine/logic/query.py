@@ -151,7 +151,7 @@ class QueryServer:
                 return
 
             packet_type = buf.unpack_byte()  # should be 9 (handshake) or 0 (stat)
-            session_id = buf.unpack_int32()  # uNuSeD lOcAl VaRiAbLe
+            session_id = buf.unpack_int32()
 
             if packet_type == 0:  # respond with basic stat
                 challenge_token = buf.unpack_int32()

@@ -119,6 +119,8 @@ class QueryServer:
         self.server = None  # the result of calling asyncio_dgram.bind(...)
         self.server_task = None  # the task that handles packets
 
+        self.ses_id_cache = {}  # {remote_ip: session_id_as_integer}
+
     async def start(self):
         try:
             self.server = await asyncio_dgram.bind((self.addr, self.port))

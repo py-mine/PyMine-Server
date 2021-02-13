@@ -12,7 +12,7 @@ from pymine.data.block_palette import DirectPalette
 from pymine.data.registries import ITEM_REGISTRY
 import pymine.data.misc as misc_data
 
-from pymine.api.exceptions import InvalidPacketID
+from pymine.api.errors import InvalidPacketID
 
 
 class Buffer:

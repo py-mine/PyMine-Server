@@ -13,10 +13,10 @@ class Player:
         self.data = data
 
         self.uuid = uuid.UUID(bytes=struct.pack(">iiii", *data["UUID"]))
-        self.x, self.y, self.z = self.pos = data["Pos"]
 
-        self.remote = None
+        self.stream = None
 
+        self.props = None  # textures from the mojang api
         self.username = None
         self.brand = None
         self.locale = None
@@ -25,6 +25,26 @@ class Player:
         self.chat_colors = None
         self.displayed_skin_parts = None
         self.main_hand = None
+
+    @property
+    def x(self) -> float:
+        return self.data["Pos"][0].data
+
+    @property
+    def y(self) -> float:
+        return self.data["Pos"][1].data
+
+    @property
+    def z(self) -> float:
+        return self.data["Pos"][2].data
+
+    @property
+    def pos(self) -> tuple:
+        return tuple(t.data for t in self.data["Pos"])
+
+    @property
+    def rotation(self) -> tuple:
+        return tuple(t.data for t in self.data["Rotation"])
 
     @classmethod
     def new(cls, entity_id: int, uuid_: uuid.UUID, spawn: tuple, dimension: str) -> Player:

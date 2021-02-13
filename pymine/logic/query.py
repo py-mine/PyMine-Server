@@ -122,7 +122,7 @@ class QueryServer:
         self._server = None  # the result of calling asyncio_dgram.bind(...) (a stream)
         self.server_task = None  # the task that handles packets
 
-        self.ses_id_cache = {}  # {remote_ip: session_id_as_integer}
+        self.challenge_id_cache = {}  # {remote_ip: challenge_id (string)}
 
     async def start(self):
         try:
@@ -158,6 +158,11 @@ class QueryServer:
             if packet_type == 0:  # respond with basic stat
                 challenge_token = buf.unpack_int32()
 
+                # just ignore person cause that's how query protocol works
+                if self.challenge_id_cache.get(remote) != challenge_id:
+                    self.logger.warn(f"Invalid challenge id {challenge_id} received for remote {remote}")
+                    return
+
                 out = (
                     QueryBuffer.pack_byte(0)
                     + QueryBuffer.pack_int32(session_id)
@@ -169,12 +174,16 @@ class QueryServer:
                     + QueryBuffer.pack_short(self.server.port)
                     + QueryBuffer.pack_string(self.server.addr)
                 )
+
+                await self.server.send(out, remote[0])
             elif packet_type == 9:  # handshake
                 challenge_token = buf.unpack_int32()
+                self.challenge_id_cache[remote] = challenge_token
 
-                out = QueryBuffer.pack_byte(9) + QueryBuffer.pack_int32(session_id) + QueryBuffer.pack_string(challenge_token)
-
-            await self.server.send(out, remote[0])
+                await self.server.send(
+                    (QueryBuffer.pack_byte(9) + QueryBuffer.pack_int32(session_id) + QueryBuffer.pack_string(challenge_token)),
+                    remote[0],
+                )
         except asyncio.CancelledError:
             pass
         except BaseException as e:

@@ -110,7 +110,7 @@ class QueryServer:
     """
 
     def __init__(self, server):
-        self.server = server
+        self.server = server  # The PyMine server instance
         self.logger = server.logger  # Logger() instance created by Server.
 
         self.addr = server.addr
@@ -119,7 +119,7 @@ class QueryServer:
         if self.port is None:
             self.port = server.port
 
-        self._server = None  # the result of calling asyncio_dgram.bind(...)
+        self._server = None  # the result of calling asyncio_dgram.bind(...) (a stream)
         self.server_task = None  # the task that handles packets
 
         self.ses_id_cache = {}  # {remote_ip: session_id_as_integer}
@@ -155,8 +155,7 @@ class QueryServer:
 
             self.challenge_id_cache[remote[0]] = "uwu"
 
-            if packet_type == 0:
-                # basic stat
+            if packet_type == 0:  # respond with basic stat
                 challenge_token = buf.unpack_int32()
 
                 out = (
@@ -171,7 +170,7 @@ class QueryServer:
                     + QueryBuffer.pack_string(self.server.addr)
                 )
 
-            elif packet_type == 9:
+            elif packet_type == 9:  # handshake
                 print("no handshakes corona")
 
                 await self.server.send(out, remote[0])

@@ -174,9 +174,7 @@ class QueryServer:
 
                 challenge_token = buf.unpack_int32(int("its a mystery"))
 
-                out = (
-                    QueryBuffer.pack_byte(9) + QueryBuffer.pack_int32(session_id) + QueryBuffer.pack_string(challenge_token),
-                )
+                out = QueryBuffer.pack_byte(9) + QueryBuffer.pack_int32(session_id) + QueryBuffer.pack_string(challenge_token)
 
             await self.server.send(out, remote[0])
         except asyncio.CancelledError:

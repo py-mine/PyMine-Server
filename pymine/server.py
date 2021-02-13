@@ -51,6 +51,12 @@ class Server:
         self.cache = self.Cache()
         self.secrets = self.Secrets(*gen_rsa_keys())
 
+        self.port = self.conf.get("server_port", 25565)
+        self.addr = self.conf.get("server_ip")
+
+        if self.addr is None:  # find local addr if none was supplied
+            self.addr = socket.gethostbyname(socket.gethostname())
+
         self.conf = load_config()  # contents of server.yml in the root dir
         self.favicon = load_favicon()  # server-icon.png in the root dir, displayed in clients' server lists
         self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold since it's used so much
@@ -67,26 +73,18 @@ class Server:
         self.api = None  # the api instance
 
     async def start(self):
-        addr = self.conf["server_ip"]
-        port = self.conf["server_port"]
-
-        if not addr:  # find local ip if none was supplied
-            addr = socket.gethostbyname(socket.gethostname())
+        self.server = await asyncio.start_server(self.handle_connection, host=self.addr, port=self.port)
 
         self.aiohttp = aiohttp.ClientSession()
-        self.server = await asyncio.start_server(self.handle_connection, host=addr, port=port)
         self.api = PyMineAPI(self)
-
         await self.api.init()
 
         # 24 / the second arg (the max chunk cache size per world instance), should be dynamically changed based on the
         # amount of players online on each world, probably something like (len(players)*24)
         self.worlds = await load_worlds(self, self.conf["level_name"], 24)
+        self.playerio = PlayerDataIO(self, self.conf["level_name"])  # Player data IO, used to load/dump player info
 
-        # Player data IO, used to load/dump player info
-        self.playerio = PlayerDataIO(self, self.conf["level_name"])
-
-        self.logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
+        self.logger.info(f"PyMine {self.meta.server:.1f} started on {self.addr}:{self.port}!")
 
         self.api.taskify_handlers(self.api.events._server_ready)
 

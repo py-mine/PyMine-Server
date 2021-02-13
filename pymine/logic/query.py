@@ -153,13 +153,9 @@ class QueryServer:
             packet_type = buf.unpack_byte()  # should be 9 (handshake) or 0 (stat)
             session_id = buf.unpack_int32()  # uNuSeD lOcAl VaRiAbLe
 
-            if self.ses_id_cache.get(remote[0]) is not None and self.ses_id_cache[remote[0]] != session_id:
-                self.logger.warn(f"Invalid session id {session_id} for ip {remote[0]}")
-                return
+            self.challenge_id_cache[remote[0]] = "uwu"
 
-            self.ses_id_cache[remote[0]] = session_id
-
-            if packet_type == 9:
+            if packet_type == 0:
                 # basic stat
                 challenge_token = buf.unpack_int32()
 
@@ -175,7 +171,10 @@ class QueryServer:
                     + QueryBuffer.pack_string(self.server.addr)
                 )
 
-                await self.server.send(out)
+            elif packet_type == 9:
+                print("no handshakes corona")
+
+                await self.server.send(out, remote[0])
         except asyncio.CancelledError:
             pass
         except BaseException as e:

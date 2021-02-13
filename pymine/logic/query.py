@@ -192,4 +192,4 @@ class QueryServer:
         self.logger.info("Query server shutting down.")
         self.server_task.cancel()
         self.server.close()
-        self.logger.info("Query server shut down succesfully.")
+        self.logger.info("Query server shut down successfully.")

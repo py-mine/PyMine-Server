@@ -34,3 +34,16 @@ async def awaiteval(uuid: str, text: str):
 @server.api.commands.on_command(name="echo", node="pymine.cmds.echo")
 async def echo(uuid: str, text: str):
     server.logger.info(f"{uuid}: {text}")
+
+
+@server.api.commands.on_command(name="help", node="pymine.cmds.help")
+async def help(uuid: str, text: str):
+    server.logger.info(
+        """PyMine - ajksdasdjkfadjk
+            help - Lists common commands and usage.
+            eval - Evaluate the arguments as python code.
+            awaiteval - Same as eval, but asynchronous.
+            exec - Execute a specific file(Generally used for debugging).
+            echo - Echos given text back to you.
+    """
+    )

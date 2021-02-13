@@ -122,7 +122,7 @@ class QueryServer:
         self._server = None  # the result of calling asyncio_dgram.bind(...) (a stream)
         self.server_task = None  # the task that handles packets
 
-        self.challenge_id_cache = {}  # {remote_ip: challenge_id (string)}
+        self.challenge_cache = {}  # {remote_ip: challenge_token (string)}
 
     async def start(self):
         try:
@@ -157,8 +157,8 @@ class QueryServer:
                 challenge_token = buf.unpack_int32()
 
                 # just ignore person cause that's how query protocol works
-                if self.challenge_id_cache.get(remote) != challenge_id:
-                    self.logger.warn(f"Invalid challenge id {challenge_id} received for remote {remote}")
+                if self.challenge_cache.get(remote) != challenge_token:
+                    self.logger.warn(f"Invalid challenge id {challenge_token} received for remote {remote}")
                     return
 
                 out = (
@@ -176,7 +176,7 @@ class QueryServer:
                 await self.server.send(out, remote[0])
             elif packet_type == 9:  # handshake
                 challenge_token = buf.unpack_int32()
-                self.challenge_id_cache[remote] = challenge_token
+                self.challenge_cache[remote] = challenge_token
 
                 await self.server.send(
                     (QueryBuffer.pack_byte(9) + QueryBuffer.pack_int32(session_id) + QueryBuffer.pack_string(challenge_token)),

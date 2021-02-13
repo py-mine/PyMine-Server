@@ -21,6 +21,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 os.chdir(os.path.join(os.path.dirname(__file__), ".."))
 
 from pymine.util.logging import Logger, task_exception_handler
+from pymine.api.errors import ServerBindingError
 import pymine.server
 
 if __name__ == "__main__":
@@ -40,6 +41,8 @@ if __name__ == "__main__":
             loop.run_until_complete(server.start())
         except (asyncio.CancelledError, KeyboardInterrupt):
             pass
+        except ServerBindingError as e:
+            logger.error(e.msg)
         except BaseException as e:
             logger.critical(logger.f_traceback(e))
 

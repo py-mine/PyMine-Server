@@ -1,3 +1,4 @@
+import random
 import time
 import uuid
 
@@ -7,23 +8,25 @@ from pymine.types.packet import Packet
 from pymine.types.player import Player
 from pymine.types.stream import Stream
 from pymine.types.world import World
+from pymine.types.chat import Chat
 import pymine.types.nbt as nbt
 
 from pymine.data.default_nbt.dimension_codec import new_dim_codec_nbt, get_dimension_data
 from pymine.data.recipes import RECIPES
 from pymine.data.tags import TAGS
 
-import pymine.net.packets.play as play_packets
 from pymine.util.misc import seed_hash
+import pymine.net.packets as packets
 from pymine.server import server
 
 
 # Used to finish the process of allowing a client to actually enter the server
-async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
+async def join(stream: Stream, uuid_: uuid.UUID, username: str, props: list) -> None:
     server.cache.uuid[stream.remote] = int(uuid_)  # update uuid cache
 
     player = await server.playerio.fetch_player(uuid_)  # fetch player data from disk
-    player.remote = stream.remote
+    player.props = props
+    player.stream = stream
     player.username = username
 
     world = server.worlds[player.data["Dimension"].data]  # the world player *should* be spawning into
@@ -32,13 +35,13 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
 
     # send server brand via plugin channels
     await server.send_packet(
-        stream, play_packets.plugin_msg.PlayPluginMessageClientBound("minecraft:brand", Buffer.pack_string(server.meta.pymine))
+        stream, packets.play.plugin_msg.PlayPluginMessageClientBound("minecraft:brand", Buffer.pack_string(server.meta.pymine))
     )
 
     # sends info about the server difficulty
     await server.send_packet(
         stream,
-        play_packets.difficulty.PlayServerDifficulty(world.data["Difficulty"].data, world.data["DifficultyLocked"].data),
+        packets.play.difficulty.PlayServerDifficulty(world.data["Difficulty"].data, world.data["DifficultyLocked"].data),
     )
 
     await send_player_abilities(stream, player)
@@ -46,16 +49,36 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str) -> None:
 
 async def join_2(stream: Stream, player: Player) -> None:
     # change held item to saved last held item
-    await server.send_packet(stream, play_packets.player.PlayHeldItemChangeClientBound(player.data["SelectedItemSlot"].data))
+    await server.send_packet(stream, packets.play.player.PlayHeldItemChangeClientBound(player.data["SelectedItemSlot"].data))
 
     # send recipes
-    await server.send_packet(stream, play_packets.crafting.PlayDeclareRecipes(RECIPES))
+    await server.send_packet(stream, packets.play.crafting.PlayDeclareRecipes(RECIPES))
 
     # send tags (data about the different blocks and items)
-    await server.send_packet(stream, play_packets.tags.PlayTags(TAGS))
+    await server.send_packet(stream, packets.play.tags.PlayTags(TAGS))
 
     # send entity status packet, apparently this is required, for now it'll just set player to op lvl 4 (value 28)
-    await server.send_packet(stream, play_packets.entity.PlayEntityStatus(player.entity_id, 28))
+    await server.send_packet(stream, packets.play.entity.PlayEntityStatus(player.entity_id, 28))
+
+    # tell the client the commands, since proper commands + arg parsing hasn't been added yet, we send an empty list.
+    await server.send_packet(stream, packets.play.command.PlayDeclareCommands([]))
+
+    # send unlocked recipes to the client
+    await send_unlocked_recipes(stream, player)
+
+    # update player position and rotation
+    await send_player_position_and_rotation(stream, player)
+
+    # update tab list, maybe sent to all clients?
+    await broadcast_player_info(player)
+
+    # see here: https://wiki.vg/Protocol#Update_View_Position
+    await server.send_packet(stream, packets.play.player.PlayUpdateViewPosition(player.x // 32, player.z // 32))
+
+    # send_update_view_distance, unsure if needed, see here: https://wiki.vg/Protocol#Update_View_Distance
+    # await send_update_view_distance(stream, player)
+
+    await send_chunk_data(stream, player)
 
 
 # crucial info pertaining to the world and player status
@@ -64,7 +87,7 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
 
     await server.send_packet(
         stream,
-        play_packets.player.PlayJoinGame(
+        packets.play.player.PlayJoinGame(
             player.entity_id,
             server.conf["hardcore"],  # whether world is hardcore or not
             player.data["playerGameType"].data,  # gamemode
@@ -97,7 +120,111 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
 
     await server.send_packet(  # yes the last arg is supposed to be fov, but the values are actually the same
         stream,
-        play_packets.player.PlayPlayerAbilitiesClientBound(
+        packets.play.player.PlayPlayerAbilitiesClientBound(
             flags.field, abilities["flySpeed"].data, abilities["walkSpeed"].data
         ),
     )
+
+
+# sends the previously unlocked + unviewed unlocked recipies to the client
+async def send_unlocked_recipes(stream: Stream, player: Player) -> None:
+    await server.send_packet(
+        stream,
+        packets.play.crafting.PlayUnlockRecipes(
+            0,  # init
+            player.data["recipeBook"]["isGuiOpen"],  # refers to the regular crafting bench/table
+            player.data["recipeBook"]["isFilteringCraftable"],  # refers to the regular crafting bench/table
+            player.data["recipeBook"]["isFurnaceGuiOpen"],
+            player.data["recipeBook"]["isFurnaceFilteringCraftable"],
+            player.data["recipeBook"]["isBlastingFurnaceGuiOpen"],
+            player.data["recipeBook"]["isBlastingFurnaceFilteringCraftable"],
+            player.data["recipeBook"]["isSmokerGuiOpen"],
+            player.data["recipeBook"]["isSmokerFilteringCraftable"],
+            player.data["recipeBook"]["recipes"],  # all unlocked recipes
+            player.data["recipeBook"]["toBeDisplayed"],  # ones which will be displayed as newly unlocked
+        ),
+    )
+
+
+# update the player's position and rotation
+async def send_player_position_and_rotation(stream: Stream, player: Player) -> None:
+    flags = BitField.new(5, (0x01, False), (0x02, False), (0x04, False), (0x08, False), (0x10, False))
+
+    await server.send_packet(
+        packets.play.player.PlayPlayerPositionAndLookClientBound(
+            *player.pos, *player.rotation, flags.field, random.randint(0, 999999)  # the tp id, NEEDS TO BE VERIFIED LATER
+        )
+    )
+
+
+# broadcasts the player's info to the other clients, this is needed to support skins and update the tab list
+async def broadcast_player_info(player: Player) -> None:
+    display_name = player.data.get("CustomName")
+
+    if not player.data.get("CustomNameVisible"):
+        display_name = None
+
+    # Unsure whether these should broadcast to all clients or not
+    # Also unsure whether they should include all player data or just that for the connecting player
+
+    await server.broadcast_packet(
+        packets.play.player.PlayPlayerInfo(
+            0,  # the action, add player
+            [
+                {
+                    "uuid": player.uuid,
+                    "name": player.name,
+                    "properties": player.props,
+                    "gamemode": player.data["playerGameType"],
+                    "ping": 0,
+                    "display_name": Chat(display_name),
+                }
+            ],
+        )
+    )
+
+    # I don't know why latency isn't just updated in the first packet broadcasted, mc do be weird
+    await server.broadcast_packet(
+        packets.play.player.PlayPlayerInfo(
+            2,  # the action, update latency
+            [{"uuid": player.uuid, "ping": 0}],
+        )
+    )
+
+
+# updates client view distance, unsure if needed, see here: https://wiki.vg/Protocol#Update_View_Distance
+async def send_update_view_distance(stream: Stream, player: Player) -> None:
+    view_distance = player.view_distance
+
+    if view_distance > server.conf["view_distance"]:
+        view_distance = server.conf["view_distance"]
+
+    await server.send_packet(stream, packets.play.player.PlayUpdateViewDistance(view_distance))
+
+
+# sends all chunks in player's view distance
+async def send_chunk_data(stream: Stream, player: Player) -> None:
+    world = server.worlds[player.data["Dimension"].data]  # the world player *should* be spawning into
+    chunks = {}  # cache chunks here because they're used multiple times and shouldn't be garbage collected
+
+    for chunk_x in range(-player.view_distance, player.view_distance):
+        for chunk_z in range(-player.view_distance, player.view_distance):
+            chunks[chunk_x, chunk_z] = await world.fetch_chunk(chunk_x, chunk_z)
+
+    for ccoords, chunk in chunks.items():
+        pass
+
+    # await server.send_packet(
+    #     stream,
+    #     packets.play.chunk.PlayUpdateLight(
+    #         chunk_x,
+    #         chunk_z,
+    #         False,  # trust edges, idk what this means, see here: https://wiki.vg/Protocol#Update_Light
+    #         0,
+    #         0,
+    #         0,
+    #         0,
+    #         [],
+    #         [],
+    #     ),
+    # )

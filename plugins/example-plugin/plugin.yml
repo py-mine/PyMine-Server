@@ -1,2 +1,8 @@
-git_url: https://github.com/py-mine/example-plugin.git
-module_folder: example_plugin
+git_url: "https://github.com/py-mine/example-plugin.git"
+module_folder: "example_plugin"
+name: "example_plugin"
+description: "This is an example plugin bada bing bada boom."
+version: 1
+author: "PyMine Devs"
+license: "GPLv3.0"
+website: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"

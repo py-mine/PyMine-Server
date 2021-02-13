@@ -14,8 +14,9 @@ from pymine.util.encryption import gen_rsa_keys
 from pymine.logic.config import load_config, load_favicon
 from pymine.logic.worldio import load_worlds, ChunkIO
 from pymine.logic.playerio import PlayerDataIO
+from pymine.logic.query import QueryServer
 
-from pymine.api.exceptions import StopHandling, InvalidPacketID
+from pymine.api.errors import StopHandling, InvalidPacketID, ServerBindingError
 from pymine.net.packet_map import PACKET_MAP
 from pymine.api import PyMineAPI
 
@@ -51,12 +52,6 @@ class Server:
         self.cache = self.Cache()
         self.secrets = self.Secrets(*gen_rsa_keys())
 
-        self.port = self.conf.get("server_port", 25565)
-        self.addr = self.conf.get("server_ip")
-
-        if self.addr is None:  # find local addr if none was supplied
-            self.addr = socket.gethostbyname(socket.gethostname())
-
         self.conf = load_config()  # contents of server.yml in the root dir
         self.favicon = load_favicon()  # server-icon.png in the root dir, displayed in clients' server lists
         self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold since it's used so much
@@ -64,18 +59,33 @@ class Server:
         self.logger.debug_ = self.conf["debug"]
         asyncio.get_event_loop().set_debug(self.conf["debug"])
 
+        self.port = self.conf["server_port"]
+        self.addr = self.conf["server_ip"]
+
+        if self.addr is None:  # find local addr if none was supplied
+            self.addr = socket.gethostbyname(socket.gethostname())
+
         self.playerio = None  # used to fetch/dump players
         self.chunkio = ChunkIO  # used to fetch chunks from the disk
         self.worlds = None  # world dictionary
+
+        self.query_server = None  # the QueryServer instance
 
         self.aiohttp = None  # the aiohttp session
         self.server = None  # the actual underlying asyncio server
         self.api = None  # the api instance
 
     async def start(self):
-        self.server = await asyncio.start_server(self.handle_connection, host=self.addr, port=self.port)
+        try:
+            self.server = await asyncio.start_server(self.handle_connection, host=self.addr, port=self.port)
+        except OSError:
+            raise ServerBindingError("PyMine", self.addr, self.port)
+
+        self.query_server = QueryServer(self)
+        await self.query_server.start()
 
         self.aiohttp = aiohttp.ClientSession()
+
         self.api = PyMineAPI(self)
         await self.api.init()
 
@@ -93,8 +103,15 @@ class Server:
     async def stop(self):
         self.logger.info("Closing server...")
 
-        self.server.close()
-        await asyncio.gather(self.server.wait_closed(), self.api.stop(), self.aiohttp.close())
+        if self.server is not None:
+            self.server.close()
+            await self.server.wait_closed()
+
+        if self.api is not None:
+            await self.api.stop()
+
+        if self.aiohttp is not None:
+            await self.aiohttp.close()
 
         self.logger.info("Server closed.")
 
@@ -130,7 +147,13 @@ class Server:
     async def broadcast_packet(self, packet: Packet):  # should broadcast a packet to all connected clients in the play state
         self.logger.debug(f"BROADCAST:      id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
-        raise NotImplementedError
+        senders = []
+
+        for p in self.playerio.cache.values():
+            if p.stream is not None:
+                senders.append(self.send_packet(p.stream, packet))
+
+        await asyncio.gather(senders)
 
     async def handle_packet(self, stream: Stream):  # Handle / respond to packets, this is called in a loop
         packet_length = 0

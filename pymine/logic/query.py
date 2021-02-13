@@ -150,6 +150,12 @@ class QueryServer:
             packet_type = buf.unpack_byte()  # should be 9 (handshake) or 0 (stat)
             session_id = buf.unpack_int32()  # uNuSeD lOcAl VaRiAbLe
 
+            if self.ses_id_cache.get(remote[0]) is not None and self.ses_id_cache[remote[0]] != session_id:
+                self.logger.warn(f"Invalid session id {session_id} for ip {remote[0]}")
+                return
+
+            self.ses_id_cache[remote[0]] = session_id
+
             if packet_type == 9:
                 pass
         except asyncio.CancelledError:

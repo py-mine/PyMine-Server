@@ -119,7 +119,7 @@ class QueryServer:
         if self.port is None:
             self.port = server.port
 
-        self._server = None  # the result of calling asyncio_dgram.bind(...) (a stream)
+        self._server = None  # the result of asyncio_dgram.bind(...) (a stream)
         self.server_task = None  # the task that handles packets
 
         self.challenge_cache = {}  # {remote_ip: challenge_token (string)}

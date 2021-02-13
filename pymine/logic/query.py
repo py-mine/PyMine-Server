@@ -172,7 +172,7 @@ class QueryServer:
 
             elif packet_type == 9:  # handshake
 
-                challenge_token = buf.unpack_int32(int("its a mystery"))
+                challenge_token = buf.unpack_int32()
 
                 out = QueryBuffer.pack_byte(9) + QueryBuffer.pack_int32(session_id) + QueryBuffer.pack_string(challenge_token)
 

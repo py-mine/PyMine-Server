@@ -157,7 +157,12 @@ class QueryServer:
             self.ses_id_cache[remote[0]] = session_id
 
             if packet_type == 9:
-                pass
+                # basic stat
+                challenge_token = buf.unpack_int32()
+
+                out =
+
+                await self.server.send(out)
         except asyncio.CancelledError:
             pass
         except BaseException as e:

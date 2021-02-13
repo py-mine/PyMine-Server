@@ -108,6 +108,7 @@ class QueryServer:
     """
 
     def __init__(self, server):
+        self.server = server
         self.logger = server.logger  # Logger() instance created by Server.
 
         self.addr = server.addr
@@ -116,14 +117,14 @@ class QueryServer:
         if self.port is None:
             self.port = server.port
 
-        self.server = None  # the result of calling asyncio_dgram.bind(...)
+        self._server = None  # the result of calling asyncio_dgram.bind(...)
         self.server_task = None  # the task that handles packets
 
         self.ses_id_cache = {}  # {remote_ip: session_id_as_integer}
 
     async def start(self):
         try:
-            self.server = await asyncio_dgram.bind((self.addr, self.port))
+            self._server = await asyncio_dgram.bind((self.addr, self.port))
         except OSError:
             raise ServerBindingError("query server", self.addr, self.port)
 
@@ -160,7 +161,17 @@ class QueryServer:
                 # basic stat
                 challenge_token = buf.unpack_int32()
 
-                out =
+                out = (
+                    QueryBuffer.pack_byte(0)
+                    + QueryBuffer.pack_int32(session_id)
+                    + QueryBuffer.pack_string(self.server.conf["motd"])
+                    + QueryBuffer.pack_string("SMP")
+                    + QueryBuffer.pack_string(self.server.conf["level_name"])
+                    + QueryBuffer.pack_string(len(self.server.cache.states))  # TODO send petus dog pics.
+                    + QueryBuffer.pack_String(self.server.share["max_players"])
+                    + QueryBuffer.pack_short(self.server.port)
+                    + QueryBuffer.pack_string(self.server.addr)
+                )
 
                 await self.server.send(out)
         except asyncio.CancelledError:

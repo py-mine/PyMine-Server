@@ -164,7 +164,7 @@ class PyMineAPI:
             try:
                 self.update_repo(git_dir, conf["git_url"], root, plugin_name)
             except BaseException as e:
-                self.logger.error(f"Failed to update {plugin_name} due to: {self.logger.f_traceback(e)}")
+                self.logger.error(f"Error while updating {plugin_name}: {self.logger.f_traceback(e)}")
 
         plugin_path = root
 
@@ -176,13 +176,13 @@ class PyMineAPI:
         try:
             plugin_module = importlib.import_module(plugin_path)
         except BaseException as e:
-            self.logger.error(f"Failed to import {plugin_name} due to: {self.logger.f_traceback(e)}")
+            self.logger.error(f"Error while loading {plugin_name}: {self.logger.f_traceback(e)}")
             return
 
         try:
             await plugin_module.setup(self.server, conf)
         except BaseException as e:
-            self.logger.error(f"Failed to setup {plugin_name} due to: {self.logger.f_traceback(e)}")
+            self.logger.error(f"Error while setting up {plugin_name}: {self.logger.f_traceback(e)}")
             return
 
         self.plugins[plugin_path] = plugin_module
@@ -207,7 +207,7 @@ class PyMineAPI:
 
         for plugin, result in zip(plugins_dir, results):
             if isinstance(result, BaseException):
-                self.logger.error(f"Failed to load {plugin} due to: {self.logger.f_traceback(result)}")
+                self.logger.error(f"Error while loading {plugin}: {self.logger.f_traceback(result)}")
 
         # *should* make packet handling slightly faster
         self.events._packet = make_immutable(self.events._packet)
@@ -228,7 +228,7 @@ class PyMineAPI:
             try:
                 await plugin_module.teardown(self.server)
             except BaseException as e:
-                self.logger.error(f"Error occurred while tearing down {plugin_name}: {self.logger.f_traceback(e)}")
+                self.logger.error(f"Error while tearing down {plugin_name}: {self.logger.f_traceback(e)}")
 
         # call and await upon all registered on_server_stop handlers
         self.taskify_handlers(self.events._server_stop)

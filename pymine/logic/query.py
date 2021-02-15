@@ -156,7 +156,7 @@ class QueryServer:
             packet_type = buf.unpack_byte()  # should be 9 (handshake) or 0 (stat)
             session_id = buf.unpack_int32()
 
-            if buf.buf[buf.pos:] == b'':
+            if buf.buf[buf.pos :] == b"":
                 challenge_token = 0
             else:
                 challenge_token = buf.unpack_int32()
@@ -173,11 +173,11 @@ class QueryServer:
                     self.logger.warn(f"Invalid challenge token {challenge_token} received for remote {remote}")
                     return
 
-                if buf.buf[buf.pos:buf.pos+4] == b'\x00\x00\x00\x00':  # full stat
+                if buf.buf[buf.pos : buf.pos + 4] == b"\x00\x00\x00\x00":  # full stat
                     out = (
                         QueryBuffer.pack_byte(packet_type)
                         + QueryBuffer.pack_int32(session_id)
-                        + b'\x73\x70\x6C\x69\x74\x6E\x75\x6D\x00\x80\x00'  # constant data / padding
+                        + b"\x73\x70\x6C\x69\x74\x6E\x75\x6D\x00\x80\x00"  # constant data / padding
                         + QueryBuffer.pack_string("hostname")
                         + QueryBuffer.pack_string(self.server.conf["motd"])
                         + QueryBuffer.pack_string("game type")
@@ -198,7 +198,7 @@ class QueryServer:
                         + QueryBuffer.pack_string(self.server.port)
                         + QueryBuffer.pack_string("hostip")
                         + QueryBuffer.pack_string(self.server.addr)
-                        + b'\x00'
+                        + b"\x00"
                         + b"\x01\x70\x6C\x61\x79\x65\x72\x5F\x00\x00"  # more constant data / padding / whatever
                         + b"Penis\x00\x00"  # should be player section, this means no players online
                     )
@@ -216,7 +216,7 @@ class QueryServer:
                     )
 
                 await self._server.send(out, remote)
-                await asyncio.sleep(.5)
+                await asyncio.sleep(0.5)
 
         except asyncio.CancelledError:
             pass

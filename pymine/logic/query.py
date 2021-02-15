@@ -183,7 +183,7 @@ class QueryServer:
                 self.challenge_cache[remote] = challenge_token
 
                 await self._server.send(
-                    (QueryBuffer.pack_byte(9) + QueryBuffer.pack_int32(session_id) + QueryBuffer.pack_string(str(challenge_token))),
+                    (QueryBuffer.pack_byte(9) + QueryBuffer.pack_int32(session_id) + QueryBuffer.pack_string(challenge_token)),
                     remote,
                 )
         except asyncio.CancelledError:

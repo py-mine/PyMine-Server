@@ -5,6 +5,8 @@ import os
 
 from pymine.util.stop import stop
 
+from pymine.api.parsers import parsers
+
 
 class CommandHandler:
     def __init__(self, server):

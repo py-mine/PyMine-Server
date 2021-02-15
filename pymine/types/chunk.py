@@ -17,6 +17,12 @@ class Chunk(nbt.TAG_Compound):
 
         self.timestamp = timestamp
 
+        self["Sections"] = numpy.ndarray(self["Sections"])
+
+    @property
+    def sections(self):
+        return self["Sections"]
+
     @classmethod
     def new(cls, chunk_x: int, chunk_z: int, timestamp: int) -> Chunk:
         return cls(cls.new_nbt(chunk_x, chunk_z), timestamp)

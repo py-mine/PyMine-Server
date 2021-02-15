@@ -8,6 +8,8 @@ from pymine.types.chunk import Chunk
 from pymine.types.world import World
 import pymine.types.nbt as nbt
 
+from pymine.data.block_palette import DirectPalette
+
 from pymine.api.abc import AbstractChunkIO
 
 # Setup world dict and load basic level data for each world
@@ -62,7 +64,14 @@ class ChunkIO(AbstractChunkIO):
             timestamp = struct.unpack(">i", region_file.read(4))
 
             region_file.seek(offset + 5)
-            return Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(region_file.read(length - 5)))), timestamp)
+            tag = nbt.TAG_Compound.unpack(Buffer(zlib.decompress(region_file.read(length - 5))))
+
+        sections = numpy.ndarray((256, 16, 16, 3))
+
+        for section in tag["Level"]["Sections"]:
+            pass
+
+        return Chunk(tag, sections, timestamp)
 
     @classmethod
     async def fetch_chunk_async(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:

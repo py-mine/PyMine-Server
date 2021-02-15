@@ -202,8 +202,6 @@ class QueryServer:
                         + b"\x01\x70\x6C\x61\x79\x65\x72\x5F\x00\x00"  # more constant data / padding / whatever
                         + b"Penis\x00\x00"  # should be player section, this means no players online
                     )
-
-                    await self._server.send(out, remote)
                 else:
                     out = (
                         QueryBuffer.pack_byte(packet_type)
@@ -217,6 +215,7 @@ class QueryServer:
                         + QueryBuffer.pack_string(self.server.addr)
                     )
 
+                await self._server.send(out, remote)
                 await asyncio.sleep(.5)
 
         except asyncio.CancelledError:

@@ -176,7 +176,7 @@ class QueryServer:
                     + QueryBuffer.pack_string(self.server.addr)
                 )
 
-                await self._server.send(out, remote[0])
+                await self._server.send(out, remote)
 
             elif packet_type == 9:  # handshake
                 challenge_token = str(buf.unpack_int32())
@@ -184,7 +184,7 @@ class QueryServer:
 
                 await self._server.send(
                     (QueryBuffer.pack_byte(9) + QueryBuffer.pack_int32(session_id) + QueryBuffer.pack_string(challenge_token)),
-                    remote[0],
+                    remote,
                 )
         except asyncio.CancelledError:
             pass

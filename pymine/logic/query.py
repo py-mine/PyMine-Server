@@ -186,6 +186,8 @@ class QueryServer:
                         + QueryBuffer.pack_string("SMP")
                         + QueryBuffer.pack_string("game_id")
                         + QueryBuffer.pack_string("MINECRAFT")
+                        + QueryBuffer.pack_string("version")
+                        + QueryBuffer.pack_string(self.server.meta.version)
                         + QueryBuffer.pack_string("plugins")
                         + QueryBuffer.pack_string("")  # empty for now
                         + QueryBuffer.pack_string("map")

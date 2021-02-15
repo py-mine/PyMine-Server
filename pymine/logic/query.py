@@ -142,6 +142,8 @@ class QueryServer:
                 asyncio.create_task(self.handle_packet(remote, QueryBuffer(data)))
         except asyncio.CancelledError:
             pass
+        except BaseException as e:
+            self.logger.error(f"Error occurred while handling query packets: {self.logger.f_traceback(e)}")
 
     async def handle_packet(self, remote: tuple, buf: QueryBuffer) -> None:
         try:

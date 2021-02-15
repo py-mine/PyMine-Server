@@ -52,7 +52,7 @@ class QueryBuffer:
     @staticmethod
     # Why is short the only little-endian one? Nobody knows.
     def pack_short(short: int) -> bytes:
-        return struct.pack("<h", short)[0]
+        return struct.pack("<h", short)
 
     def unpack_short(self) -> int:
         return struct.unpack("<h", self.read(2))[0]
@@ -163,6 +163,18 @@ class QueryServer:
                 if self.challenge_cache.get(remote) != challenge_token:
                     self.logger.warn(f"Invalid challenge token {challenge_token} received for remote {remote}")
                     return
+
+                print(
+                    QueryBuffer.pack_byte(0)
+                    + QueryBuffer.pack_int32(session_id)
+                    + QueryBuffer.pack_string(self.server.conf["motd"])
+                    + QueryBuffer.pack_string("SMP")
+                    + QueryBuffer.pack_string(self.server.conf["level_name"])
+                    + QueryBuffer.pack_string(len(self.server.cache.states))
+                    + QueryBuffer.pack_string(self.server.conf["max_players"])
+                    + QueryBuffer.pack_short(self.server.port)
+                    + QueryBuffer.pack_string(self.server.addr)
+                )
 
                 out = (
                     QueryBuffer.pack_byte(0)

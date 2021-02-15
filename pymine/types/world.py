@@ -73,3 +73,5 @@ class World:
         except FileNotFoundError:
             sections = self.server.generator.generate_chunk(self.data["RandomSeed"], self.dimension, chunk_x, chunk_z)
             chunk = Chunk.new(chunk_x, chunk_z, sections, int(time.time()))
+
+            return self.cache_chunk(chunk)

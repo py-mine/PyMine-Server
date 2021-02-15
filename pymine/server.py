@@ -81,8 +81,9 @@ class Server:
         except OSError:
             raise ServerBindingError("PyMine", self.addr, self.port)
 
-        self.query_server = QueryServer(self)
-        await self.query_server.start()
+        if self.conf["enable_query"]:
+            self.query_server = QueryServer(self)
+            await self.query_server.start()
 
         self.aiohttp = aiohttp.ClientSession()
 

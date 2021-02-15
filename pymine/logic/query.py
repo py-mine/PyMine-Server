@@ -153,13 +153,13 @@ class QueryServer:
                 self.logger.debug("Invalid value for magic recieved, continuing like nothing happened.")
                 return
 
-            print(buf.buf[buf.pos :])
-
             packet_type = buf.unpack_byte()  # should be 9 (handshake) or 0 (stat)
             session_id = buf.unpack_int32()
-            challenge_token = buf.unpack_int32()
 
-            print(buf.buf[buf.pos :])
+            if buf.buf[buf.pos:] == b'':
+                challenge_token = 0
+            else:
+                challenge_token = buf.unpack_int32()
 
             if packet_type == 9:  # handshake
                 self.challenge_cache[remote] = challenge_token

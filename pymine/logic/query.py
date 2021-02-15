@@ -189,6 +189,8 @@ class QueryServer:
                         + QueryBuffer.pack_string(self.server.conf["max_players"])
                         + QueryBuffer.pack_string(self.server.port)
                         + QueryBuffer.pack_string(self.server.addr)
+                        + b"\x01\x70\x6C\x61\x79\x65\x72\x5F\x00\x00"  # more constant data / padding / whatever
+                        + b"\x00\x00"  # should be player section, this means no players online
                     )
                 else:
                     print("regular shit")

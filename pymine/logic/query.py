@@ -73,7 +73,7 @@ class QueryBuffer:
 
     @staticmethod
     def pack_string(string: str) -> bytes:
-        return bytes(string, "latin-1") + b"\x00"
+        return bytes(str(string), "latin-1") + b"\x00"
 
     def unpack_string(self) -> str:
         out = b""

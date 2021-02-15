@@ -202,7 +202,7 @@ class QueryServer:
                         + b"\x01\x70\x6C\x61\x79\x65\x72\x5F\x00\x00"  # more constant data / padding / whatever
                         + b"Penis\x00\x00"  # should be player section, this means no players online
                     )
-                else:
+                else:  # basic stat
                     out = (
                         QueryBuffer.pack_byte(packet_type)
                         + QueryBuffer.pack_int32(session_id)

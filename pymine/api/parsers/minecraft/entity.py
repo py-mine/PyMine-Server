@@ -3,6 +3,8 @@ import uuid
 
 from pymine.api.abc import AbstractParser
 
+__all__ = ("Entity",)
+
 
 class Entity(AbstractParser):  # players should be a list of Player objects, the currently online players
     def __init__(self, mode: int, players: list) -> None:

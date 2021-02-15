@@ -180,17 +180,27 @@ class QueryServer:
                         QueryBuffer.pack_byte(packet_type)
                         + QueryBuffer.pack_int32(session_id)
                         + b'\x73\x70\x6C\x69\x74\x6E\x75\x6D\x00\x80\x00'  # constant data / padding
+                        + QueryBuffer.pack_string("hostname")
                         + QueryBuffer.pack_string(self.server.conf["motd"])
+                        + QueryBuffer.pack_string("game type")
                         + QueryBuffer.pack_string("SMP")
+                        + QueryBuffer.pack_string("game_id")
                         + QueryBuffer.pack_string("MINECRAFT")
+                        + QueryBuffer.pack_string("plugins")
                         + QueryBuffer.pack_string("")  # empty for now
+                        + QueryBuffer.pack_string("map")
                         + QueryBuffer.pack_string(self.server.conf["level_name"])
+                        + QueryBuffer.pack_string("numplayers")
                         + QueryBuffer.pack_string(len(self.server.cache.states))
+                        + QueryBuffer.pack_string("maxplayers")
                         + QueryBuffer.pack_string(self.server.conf["max_players"])
+                        + QueryBuffer.pack_string("hostport")
                         + QueryBuffer.pack_string(self.server.port)
+                        + QueryBuffer.pack_string("hostip")
                         + QueryBuffer.pack_string(self.server.addr)
+                        + b'\x00'
                         + b"\x01\x70\x6C\x61\x79\x65\x72\x5F\x00\x00"  # more constant data / padding / whatever
-                        + b"Penis\x00\x00\x00"  # should be player section, this means no players online
+                        + b"Penis\x00\x00"  # should be player section, this means no players online
                     )
 
                     await self._server.send(out, remote)

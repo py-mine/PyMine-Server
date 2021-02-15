@@ -1,5 +1,6 @@
 from collections import OrderedDict
 import aiofile
+import time
 import os
 
 from pymine.types.buffer import Buffer
@@ -70,5 +71,5 @@ class World:
         try:
             return self.cache_chunk(await self.server.chunkio.fetch_chunk_async(self.path, *key), key)
         except FileNotFoundError:
-            chunk_data = self.server.generator.generate_chunk(self.data["RandomSeed"], self.dimension, chunk_x, chunk_z)
-            return chunk_data
+            sections = self.server.generator.generate_chunk(self.data["RandomSeed"], self.dimension, chunk_x, chunk_z)
+            chunk = Chunk.new(chunk_x, chunk_z, sections, int(time.time()))

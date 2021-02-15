@@ -156,7 +156,7 @@ class QueryServer:
             packet_type = buf.unpack_byte()  # should be 9 (handshake) or 0 (stat)
             session_id = buf.unpack_int32()
 
-            if buf.buf[buf.pos :] == b"":
+            if buf.buf[buf.pos :] == b"":  # god this protocol is so fucking shit garbage
                 challenge_token = 0
             else:
                 challenge_token = buf.unpack_int32()
@@ -216,11 +216,11 @@ class QueryServer:
                     )
 
                 await self._server.send(out, remote)
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.5)  # fucking shit fucking protocol
 
         except asyncio.CancelledError:
             pass
-        except BaseException as e:
+        except BaseException as e:  # no one give s afucking shit
             self.logger.error(f"Error while handling query packet: {self.logger.f_traceback(e)}")
 
     def stop(self):

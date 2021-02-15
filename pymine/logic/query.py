@@ -153,7 +153,7 @@ class QueryServer:
                 self.logger.debug("Invalid value for magic recieved, continuing like nothing happened.")
                 return
 
-            print(buf.buf[buf.pos:])
+            print(buf.buf[buf.pos :])
 
             packet_type = buf.unpack_byte()  # should be 9 (handshake) or 0 (stat)
             session_id = buf.unpack_int32()
@@ -161,7 +161,7 @@ class QueryServer:
             if packet_type == 0:  # respond with basic stat
                 challenge_token = buf.unpack_int32()
 
-                print(buf.buf[buf.pos:])
+                print(buf.buf[buf.pos :])
 
                 # just ignore person cause that's how query protocol works
                 if self.challenge_cache.get(remote) != challenge_token:
@@ -182,14 +182,14 @@ class QueryServer:
 
                 print(out)
 
-                await self._server.send(out + b'\x00'*20000, remote)
-                await asyncio.sleep(.5)  # asyncio-dgram do be a little jank tho ngl
+                await self._server.send(out + b"\x00" * 20000, remote)
+                await asyncio.sleep(0.5)  # asyncio-dgram do be a little jank tho ngl
                 print("Done")
             elif packet_type == 9:  # handshake
                 challenge_token = buf.unpack_int32()
                 self.challenge_cache[remote] = challenge_token
 
-                print(buf.buf[buf.pos:])
+                print(buf.buf[buf.pos :])
 
                 await self._server.send(
                     (QueryBuffer.pack_byte(9) + QueryBuffer.pack_int32(session_id) + QueryBuffer.pack_string(challenge_token)),

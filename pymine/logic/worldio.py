@@ -1,5 +1,6 @@
 import aiofile
 import struct
+import numpy
 import zlib
 import os
 

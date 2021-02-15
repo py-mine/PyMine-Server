@@ -164,8 +164,6 @@ class QueryServer:
             if packet_type == 9:  # handshake
                 self.challenge_cache[remote] = challenge_token
 
-                print(buf.buf[buf.pos :])
-
                 await self._server.send(
                     (QueryBuffer.pack_byte(9) + QueryBuffer.pack_int32(session_id) + QueryBuffer.pack_string(challenge_token)),
                     remote,

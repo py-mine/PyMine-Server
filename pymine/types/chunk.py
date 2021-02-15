@@ -17,6 +17,11 @@ class Chunk(nbt.TAG_Compound):
 
         self.timestamp = timestamp
 
+        # should be a shape of (16, 16, 16, 16, 3)
+        # 16 chunk sections
+        # a chunk section is a 16x16x16 area of blocks
+        # each "block" contains (type_id_of_block, block_light_value, sky_light_value)
+        # note, this is ***not*** what should be dumped to the disk
         self["Sections"] = sections
 
     @property

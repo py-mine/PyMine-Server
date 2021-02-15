@@ -14,8 +14,9 @@ from pymine.util.encryption import gen_rsa_keys
 from pymine.logic.config import load_config, load_favicon
 from pymine.logic.worldio import load_worlds, ChunkIO
 from pymine.logic.playerio import PlayerDataIO
+from pymine.logic.query import QueryServer
 
-from pymine.api.exceptions import StopHandling, InvalidPacketID
+from pymine.api.errors import StopHandling, InvalidPacketID, ServerBindingError
 from pymine.net.packet_map import PACKET_MAP
 from pymine.api import PyMineAPI
 
@@ -58,35 +59,43 @@ class Server:
         self.logger.debug_ = self.conf["debug"]
         asyncio.get_event_loop().set_debug(self.conf["debug"])
 
+        self.port = self.conf["server_port"]
+        self.addr = self.conf["server_ip"]
+
+        if self.addr is None:  # find local addr if none was supplied
+            self.addr = socket.gethostbyname(socket.gethostname())
+
         self.playerio = None  # used to fetch/dump players
         self.chunkio = ChunkIO  # used to fetch chunks from the disk
         self.worlds = None  # world dictionary
+
+        self.query_server = None  # the QueryServer instance
 
         self.aiohttp = None  # the aiohttp session
         self.server = None  # the actual underlying asyncio server
         self.api = None  # the api instance
 
     async def start(self):
-        addr = self.conf["server_ip"]
-        port = self.conf["server_port"]
+        try:
+            self.server = await asyncio.start_server(self.handle_connection, host=self.addr, port=self.port)
+        except OSError:
+            raise ServerBindingError("PyMine", self.addr, self.port)
 
-        if not addr:  # find local ip if none was supplied
-            addr = socket.gethostbyname(socket.gethostname())
+        if self.conf["enable_query"]:
+            self.query_server = QueryServer(self)
+            await self.query_server.start()
 
         self.aiohttp = aiohttp.ClientSession()
-        self.server = await asyncio.start_server(self.handle_connection, host=addr, port=port)
-        self.api = PyMineAPI(self)
 
+        self.api = PyMineAPI(self)
         await self.api.init()
 
         # 24 / the second arg (the max chunk cache size per world instance), should be dynamically changed based on the
         # amount of players online on each world, probably something like (len(players)*24)
         self.worlds = await load_worlds(self, self.conf["level_name"], 24)
+        self.playerio = PlayerDataIO(self, self.conf["level_name"])  # Player data IO, used to load/dump player info
 
-        # Player data IO, used to load/dump player info
-        self.playerio = PlayerDataIO(self, self.conf["level_name"])
-
-        self.logger.info(f"PyMine {self.meta.server:.1f} started on {addr}:{port}!")
+        self.logger.info(f"PyMine {self.meta.server:.1f} started on {self.addr}:{self.port}!")
 
         self.api.taskify_handlers(self.api.events._server_ready)
 
@@ -95,8 +104,15 @@ class Server:
     async def stop(self):
         self.logger.info("Closing server...")
 
-        self.server.close()
-        await asyncio.gather(self.server.wait_closed(), self.api.stop(), self.aiohttp.close())
+        if self.server is not None:
+            self.server.close()
+            await self.server.wait_closed()
+
+        if self.api is not None:
+            await self.api.stop()
+
+        if self.aiohttp is not None:
+            await self.aiohttp.close()
 
         self.logger.info("Server closed.")
 
@@ -132,7 +148,13 @@ class Server:
     async def broadcast_packet(self, packet: Packet):  # should broadcast a packet to all connected clients in the play state
         self.logger.debug(f"BROADCAST:      id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
-        raise NotImplementedError
+        senders = []
+
+        for p in self.playerio.cache.values():
+            if p.stream is not None:
+                senders.append(self.send_packet(p.stream, packet))
+
+        await asyncio.gather(senders)
 
     async def handle_packet(self, stream: Stream):  # Handle / respond to packets, this is called in a loop
         packet_length = 0

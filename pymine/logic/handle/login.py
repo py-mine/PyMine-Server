@@ -13,7 +13,7 @@ from pymine.types.buffer import Buffer
 from pymine.net.packets.login.set_comp import LoginSetCompression
 import pymine.net.packets.login.login as login_packets
 
-from pymine.api.exceptions import StopHandling
+from pymine.api.errors import StopHandling
 from pymine.logic.join import join
 from pymine.server import server
 
@@ -42,12 +42,12 @@ async def login_start(stream: Stream, packet: Packet) -> None:
         await server.send_packet(stream, login_packets.LoginSuccess(uuid_, packet.username))
 
         server.cache.states[stream.remote] = 3  # Update state to play
-        await join(stream, uuid_, packet.username)
+        await join(stream, uuid_, packet.username, [])
 
 
 @server.api.events.on_packet("login", 0x01)
 async def encrypted_login(stream: Stream, packet: Packet) -> Stream:
-    shared_key, auth = await server_auth(packet, stream.remote, server.cache.login[stream.remote])
+    shared_key, auth, props = await server_auth(packet, stream.remote, server.cache.login[stream.remote])
 
     del server.cache.login[stream.remote]  # No longer needed
 
@@ -68,7 +68,7 @@ async def encrypted_login(stream: Stream, packet: Packet) -> Stream:
     await server.send_packet(stream, login_packets.LoginSuccess(*auth))
 
     server.cache.states[stream.remote] = 3  # Update state to play
-    await join(stream, *auth)
+    await join(stream, *auth, props)
 
     return stream
 
@@ -95,6 +95,6 @@ async def server_auth(packet: login_packets.LoginEncryptionResponse, remote: tup
         jj = await resp.json()
 
         if jj is not None:
-            return decrypted_shared_key, (uuid.UUID(jj["id"]), jj["name"])
+            return decrypted_shared_key, (uuid.UUID(jj["id"]), jj["name"]), jj["properties"]
 
-    return False, False
+    return False, False, None

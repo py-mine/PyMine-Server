@@ -133,29 +133,29 @@ class PyMineAPI:
 
                     self.plugins[plugin_path] = plugin_module
                 except BaseException as e:
-                    self.logger.error(f"Failed to load {plugin_name} due to: {self.logger.f_traceback(e)}")
+                    self.logger.error(f"Error while loading {plugin_name}: {self.logger.f_traceback(e)}")
 
             return
 
         plugin_config_file = os.path.join(root, "plugin.yml")
 
         if not os.path.isfile(plugin_config_file):
-            self.logger.error(f"Failed to load {plugin_name} due to missing plugin.yml.")
+            self.logger.error(f"Error while loading {plugin_name}: Missing plugin.yml.")
             return
 
         try:
             conf = self.load_plugin_config(root)
         except ValueError as e:
-            self.logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. ({str(e)})")
+            self.logger.error(f"Error while loading {plugin_name}: Invalid plugin.yml ({str(e)})")
             return
         except BaseException as e:
-            self.logger.error(f"Failed to load {plugin_name} due to invalid plugin.yml. Error: {self.logger.f_traceback(e)}")
+            self.logger.error(f"Error while loading {plugin_name}: {self.logger.f_traceback(e)}")
             return
 
         try:
             await self.install_plugin_deps(root)
         except BaseException as e:
-            self.logger.error(f"Failed to load {plugin_name} due to: {self.logger.f_traceback(e)}")
+            self.logger.error(f"Error while loading {plugin_name}: {self.logger.f_traceback(e)}")
             return
 
         if conf.get("git_url"):

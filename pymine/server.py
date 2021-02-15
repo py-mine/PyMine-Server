@@ -147,7 +147,13 @@ class Server:
     async def broadcast_packet(self, packet: Packet):  # should broadcast a packet to all connected clients in the play state
         self.logger.debug(f"BROADCAST:      id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
-        raise NotImplementedError
+        senders = []
+
+        for p in self.playerio.cache.values():
+            if p.stream is not None:
+                senders.append(self.send_packet(p.stream, packet))
+
+        await asyncio.gather(senders)
 
     async def handle_packet(self, stream: Stream):  # Handle / respond to packets, this is called in a loop
         packet_length = 0

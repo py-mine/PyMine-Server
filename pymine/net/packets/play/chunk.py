@@ -114,6 +114,8 @@ class PlayUpdateLight(Packet):
             + Buffer.pack_varint(self.block_light_mask)
             + Buffer.pack_varint(self.empty_sky_light_max)
             + Buffer.pack_varint(self.empty_block_light_mask)
-            + self.sky_light_array
-            + self.block_light_array
+            + Buffer.pack_varint(len(self.sky_light_array))
+            + b"".join(self.sky_light_array)
+            + Buffer.pack_varint(len(self.block_light_array))
+            + b"".join(self.block_light_array)
         )

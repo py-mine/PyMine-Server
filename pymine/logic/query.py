@@ -171,7 +171,7 @@ class QueryServer:
                     + QueryBuffer.pack_string("SMP")
                     + QueryBuffer.pack_string(self.server.conf["level_name"])
                     + QueryBuffer.pack_string(len(self.server.cache.states))
-                    + QueryBuffer.pack_string(self.server.share["max_players"])
+                    + QueryBuffer.pack_string(self.server.conf["max_players"])
                     + QueryBuffer.pack_short(self.server.port)
                     + QueryBuffer.pack_string(self.server.addr)
                 )

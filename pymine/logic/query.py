@@ -177,8 +177,8 @@ class QueryServer:
 
                 if buf.buf[buf.pos:buf.pos+4] == b'\x00\x00\x00\x00':  # full stat
                     out = (
-                        QueryBuffer.pack_byte(packet_type),
-                        + QueryBuffer.pack_int32(session_id),
+                        QueryBuffer.pack_byte(packet_type)
+                        + QueryBuffer.pack_int32(session_id)
                         + b'\x73\x70\x6C\x69\x74\x6E\x75\x6D\x00\x80\x00'  # constant data / padding
                         + QueryBuffer.pack_string(self.server.conf["motd"])
                         + QueryBuffer.pack_string("SMP")

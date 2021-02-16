@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import immutables
 import math
 
@@ -34,6 +36,26 @@ class DirectPalette:
 class IndirectPalette:
     def __init__(self, registry: Registry) -> None:
         self.registry = registry
+
+    @classmethod
+    def from_nbt(cls, tag: nbt.TAG) -> IndirectPalette:
+        # TAG_List("Palette"): [
+        #     TAG_Compound(""): [
+        #         TAG_String("Name"): minecraft:air
+        #     ],
+        #     TAG_Compound(""): [
+        #         TAG_String("Name"): minecraft:grass_block,
+        #         TAG_Compound("Properties"): [
+        #             TAG_String("snowy"): false
+        #         ]
+        #     ],
+        #     TAG_Compound(""): [
+        #         TAG_String("Name"): minecraft:cut_sandstone
+        #     ]
+        # ]
+
+        raise NotImplementedError
+
 
     def encode(self, block: str, props: dict = None) -> int:
         block_data = self.registry.encode(block)

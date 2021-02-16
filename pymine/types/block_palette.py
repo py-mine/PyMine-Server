@@ -56,7 +56,6 @@ class IndirectPalette:
 
         raise NotImplementedError
 
-
     def encode(self, block: str, props: dict = None) -> int:
         block_data = self.registry.encode(block)
 

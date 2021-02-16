@@ -1,6 +1,8 @@
 import immutables
 import math
 
+from pymine.types.registry import Registry
+
 from pymine.data.block_states import BLOCK_STATES
 
 
@@ -27,3 +29,25 @@ class DirectPalette:
     @staticmethod
     def decode(state: int) -> immutables.Map:
         return BLOCK_STATES.decode(state)
+
+
+class IndirectPalette:
+    def __init__(self, registry: Registry) -> None:
+        self.registry = registry
+
+    def encode(self, block: str, props: dict = None) -> int:
+        block_data = self.registry.encode(block)
+
+        for state in block_data["states"]:
+            if not props and state.get("default"):
+                return state["id"]
+
+            state_props = state.get("properties")
+
+            if state_props and dict(state_props.items()) == props:
+                return state["id"]
+
+        raise ValueError(f"{block} doesn't have a state with those properties.")
+
+    def decode(state: int) -> immutables.Map:
+        return self.registry.decode(state)

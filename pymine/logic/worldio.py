@@ -59,7 +59,7 @@ class ChunkIO(AbstractChunkIO):
         with open(region_path, "rb") as region_file:
             region_file.seek(loc_table_loc)
 
-            offset, length = cls.find_chunk(region_file.read(4))
+            offset, length = cls.find_chunk(struct.unpack(">i", region_file.read(4))[0])
 
             region_file.seek(loc_table_loc + 4096)
             timestamp = struct.unpack(">i", region_file.read(4))
@@ -87,7 +87,7 @@ class ChunkIO(AbstractChunkIO):
         async with aiofile.async_open(region_path, "rb") as region_file:
             region_file.seek(loc_table_loc)
 
-            offset, length = cls.find_chunk(await region_file.read(4))
+            offset, length = cls.find_chunk(struct.unpack(">i", await region_file.read(4))[0])
 
             region_file.seek(loc_table_loc + 4096)
             timestamp = struct.unpack(">i", await region_file.read(4))

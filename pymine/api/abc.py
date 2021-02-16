@@ -27,6 +27,8 @@ class AbstractChunkIO:
 
 
 class AbstractParser:
+    """Abstract class used to create command argument parsers"""
+
     @classmethod
     def parse(cls, s: str) -> tuple:  # should return the chars used and data
         raise NotImplementedError(cls.__name__)

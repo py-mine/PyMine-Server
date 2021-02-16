@@ -4,6 +4,7 @@ import immutables
 import math
 
 from pymine.types.registry import Registry
+import pymine.types.nbt as nbt
 
 from pymine.data.block_states import BLOCK_STATES
 

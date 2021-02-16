@@ -69,7 +69,7 @@ class ChunkIO(AbstractChunkIO):
 
         sections = numpy.ndarray((256, 16, 16, 3))
 
-        for section in tag["Level"]["Sections"]:
+        for section in tag["Level"]["Sections"].values():
             pass
 
         return Chunk(tag, sections, timestamp)

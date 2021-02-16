@@ -73,7 +73,10 @@ class ChunkIO(AbstractChunkIO):
         #     print(section.pretty())
         #     break
 
-        print(tag["Level"]["Sections"][3].pretty())
+        # print(tag["Level"]["Sections"][3].pretty())
+
+        for section in tag["Level"]["Sections"]:
+            pass
 
         return Chunk(tag, sections, timestamp)
 

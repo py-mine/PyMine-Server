@@ -30,3 +30,19 @@ class AbstractParser:
     @classmethod
     def parse(cls, s: str) -> tuple:  # should return the chars used and data
         raise NotImplementedError(cls.__name__)
+
+
+class AbstractPalette:
+    """Abstract class used to distinguish whether a class is a block palette or not"""
+
+    @classmethod
+    def get_bits_per_block(cls):
+        raise NotImplementedError(cls.__name__)
+
+    @classmethod
+    def encode(cls):
+        raise NotImplementedError(cls.__name__)
+
+    @classmethod
+    def decode(cls):
+        raise NotImplementedError(cls.__name__)

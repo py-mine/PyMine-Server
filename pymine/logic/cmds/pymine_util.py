@@ -12,33 +12,33 @@ async def exec_(uuid: str, file_name: str):
                 await server.api.commands.server_command(cmd_line)
 
     except FileNotFoundError:
-        server.logger.warn("Can't find that file...")
+        server.console.warn("Can't find that file...")
 
 
 @server.api.commands.on_command(name="eval", node="pymine.cmds.eval")
 async def eval_(uuid: str, text: str):
     try:
-        server.logger.info(repr(eval(text)))
+        server.console.info(repr(eval(text)))
     except BaseException as e:
-        server.logger.error(server.logger.f_traceback(e))
+        server.console.error(server.console.f_traceback(e))
 
 
 @server.api.commands.on_command(name="awaiteval", node="pymine.cmds.eval")
 async def awaiteval(uuid: str, text: str):
     try:
-        server.logger.info(repr(await eval(text)))
+        server.console.info(repr(await eval(text)))
     except BaseException as e:
-        server.logger.error(server.logger.f_traceback(e))
+        server.console.error(server.console.f_traceback(e))
 
 
 @server.api.commands.on_command(name="echo", node="pymine.cmds.echo")
 async def echo(uuid: str, text: str):
-    server.logger.info(f"{uuid}: {text}")
+    server.console.info(f"{uuid}: {text}")
 
 
 @server.api.commands.on_command(name="help", node="pymine.cmds.help")
 async def help(uuid: str, text: str):
-    server.logger.info(
+    server.console.info(
         """PyMine::help
             help - Lists common commands and usage.
             eval - Evaluate the arguments as python code.

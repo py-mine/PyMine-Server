@@ -11,7 +11,7 @@ from pymine.api.parsers import parsers
 class CommandHandler:
     def __init__(self, server):
         self.server = server
-        self.logger = server.logger
+        self.console = server.console
         self._commands = {}  # {name: (func, node)}
 
     # loads default built in commands
@@ -51,9 +51,9 @@ class CommandHandler:
             try:
                 await cmd_func("server", args)
             except BaseException as e:
-                self.logger.error(self.logger.f_traceback(e))
+                self.console.error(self.console.f_traceback(e))
         elif cmd != "":
-            self.logger.warn(f"Invalid/unknown command: {cmd}")
+            self.console.warn(f"Invalid/unknown command: {cmd}")
 
     async def handle_console(self):
         eoferr = False
@@ -76,7 +76,7 @@ class CommandHandler:
         except EOFError:
             eoferr = True
         except BaseException as e:
-            self.logger.error(self.logger.f_traceback(e))
+            self.console.error(self.console.f_traceback(e))
 
         if eoferr:
             await stop(self.server)

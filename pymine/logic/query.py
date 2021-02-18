@@ -112,7 +112,7 @@ class QueryServer:
 
     def __init__(self, server):
         self.server = server  # The PyMine server instance
-        self.logger = server.logger  # Logger() instance created by Server.
+        self.console = server.console  # Logger() instance created by Server.
 
         self.addr = server.addr
         self.port = server.conf.get("query_port")
@@ -131,7 +131,7 @@ class QueryServer:
         except OSError:
             raise ServerBindingError("query server", self.addr, self.port)
 
-        self.logger.info(f"Query server started on {self.addr}:{self.port}.")
+        self.console.info(f"Query server started on {self.addr}:{self.port}.")
 
         self.server_task = asyncio.create_task(self.handle())
 
@@ -143,14 +143,14 @@ class QueryServer:
         except asyncio.CancelledError:
             pass
         except BaseException as e:
-            self.logger.error(f"Error occurred while handling query packets: {self.logger.f_traceback(e)}")
+            self.console.error(f"Error occurred while handling query packets: {self.console.f_traceback(e)}")
 
     async def handle_packet(self, remote: tuple, buf: QueryBuffer) -> None:
         try:
             try:
                 buf.unpack_magic()
             except ValueError:
-                self.logger.debug("Invalid value for magic recieved, continuing like nothing happened.")
+                self.console.debug("Invalid value for magic recieved, continuing like nothing happened.")
                 return
 
             packet_type = buf.unpack_byte()  # should be 9 (handshake) or 0 (stat)
@@ -170,7 +170,7 @@ class QueryServer:
                 )
             elif packet_type == 0:  # respond with a stat packet
                 if self.challenge_cache.get(remote) != challenge_token:
-                    self.logger.warn(f"Invalid challenge token {challenge_token} received for remote {remote}")
+                    self.console.warn(f"Invalid challenge token {challenge_token} received for remote {remote}")
                     return
 
                 if buf.buf[buf.pos : buf.pos + 4] == b"\x00\x00\x00\x00":  # full stat
@@ -221,10 +221,10 @@ class QueryServer:
         except asyncio.CancelledError:
             pass
         except BaseException as e:  # no one give s afucking shit
-            self.logger.error(f"Error while handling query packet: {self.logger.f_traceback(e)}")
+            self.console.error(f"Error while handling query packet: {self.console.f_traceback(e)}")
 
     def stop(self):
-        self.logger.debug("Query server shutting down.")
+        self.console.debug("Query server shutting down.")
         self.server_task.cancel()
         self.server.close()
-        self.logger.debug("Query server shut down successfully.")
+        self.console.debug("Query server shut down successfully.")

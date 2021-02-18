@@ -49,6 +49,8 @@ class Console:
                 self.input[-1] += char
                 self.out[0] += char
 
+            print(char)
+
             await asyncio.sleep(0)
 
     def get_input(self):

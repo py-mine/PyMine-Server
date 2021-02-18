@@ -89,6 +89,8 @@ class Server:
 
         self.aiohttp = aiohttp.ClientSession()
 
+        await self.console.init()
+
         self.api = PyMineAPI(self)
         await self.api.init()
 

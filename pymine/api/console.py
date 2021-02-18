@@ -57,7 +57,7 @@ class Console:
     def write(self, text: str):
         self.out.append(text)
         os.system(self.clear_cmd)
-        print("\n".join(self.out[-os.get_terminal_size().lines:]))
+        print("\n".join(self.out[-os.get_terminal_size().lines :]))
 
     def debug(self, *message):
         if self.debug_:

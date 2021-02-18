@@ -22,7 +22,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 os.chdir(os.path.join(os.path.dirname(__file__), ".."))
 
 from pymine.api.errors import ServerBindingError
-from pymine.logic.console import Console
+from pymine.api.console import Console
 import pymine.server
 
 if __name__ == "__main__":

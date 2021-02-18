@@ -51,6 +51,7 @@ class Console:
 
     def write(self, text: str):
         print(text)
+        print()
 
     def debug(self, *message):
         if self.debug_:

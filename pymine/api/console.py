@@ -1,4 +1,5 @@
 import traceback
+import urwid
 import time
 import os
 
@@ -22,33 +23,38 @@ BG_RED = "\x1b[41;1m"
 class Console:
     """Custom logging + input implementation."""
 
-    def __init__(self, screen, debug: bool = True) -> None:
+    def __init__(self, screen, body, debug: bool = True) -> None:
         self.screen = screen
+        self.body = body
+
         self.debug_ = debug
 
     def get_input(self, *args, **kwargs):
         return self.screen.get_input(*args, **kwargs)
 
+    def write(self, text: str):
+        self.body += text
+
     def debug(self, *message):
         if self.debug_:
             message = " ".join([str(m) for m in message])
-            self.screen.write(f"{WHITE}[{f_time()} {GREY}DEBUG{WHITE}]: {GREY}{message}{END}")
+            self.write(f"{WHITE}[{f_time()} {GREY}DEBUG{WHITE}]: {GREY}{message}{END}")
 
     def info(self, *message):
         message = " ".join([str(m) for m in message])
-        self.screen.write(f"{BRIGHT}{WHITE}[{f_time()} {BLUE}INFO{WHITE}]: {message}{END}")
+        self.write(f"{BRIGHT}{WHITE}[{f_time()} {BLUE}INFO{WHITE}]: {message}{END}")
 
     def warn(self, *message):
         message = " ".join([str(m) for m in message])
-        self.screen.write(f"{BRIGHT}{WHITE}[{f_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{message}{END}")
+        self.write(f"{BRIGHT}{WHITE}[{f_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{message}{END}")
 
     def error(self, *message):
         message = " ".join([str(m) for m in message])
-        self.screen.write(f"{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{message}{END}")
+        self.write(f"{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{message}{END}")
 
     def critical(self, *message):
         message = " ".join([str(m) for m in message])
-        self.screen.write(f"{BRIGHT}{WHITE}{BG_RED}[{f_time()} CRITICAL]: {message}{END}")
+        self.write(f"{BRIGHT}{WHITE}{BG_RED}[{f_time()} CRITICAL]: {message}{END}")
 
     @staticmethod
     def f_traceback(e: BaseException):

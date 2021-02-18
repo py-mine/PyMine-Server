@@ -28,8 +28,7 @@ import pymine.server
 if __name__ == "__main__":
     screen = urwid.raw_display.Screen()
     screen.set_input_timeouts(max_wait=0)
-
-    console = Console(screen)  # debug status will be set later after config is loaded
+    console = Console(screen, lb)  # debug status will be set later after config is loaded
 
     if uvloop:
         console.debug("Using uvloop as the event loop.")
@@ -38,7 +37,7 @@ if __name__ == "__main__":
     loop.set_exception_handler(console.task_exception_handler)
 
     urwid_aioloop = urwid.AsyncioEventLoop(loop=loop)
-    urwid_mainloop = urwid.MainLoop(urwid.SolidFill(), screen=screen, event_loop=urwid_aioloop, handle_mouse=False)
+    urwid_mainloop = urwid.MainLoop(lb, screen=screen, event_loop=urwid_aioloop, handle_mouse=False)
 
     urwid_mainloop.start()
 

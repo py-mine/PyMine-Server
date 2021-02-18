@@ -10,7 +10,7 @@ if os.name == "nt":
 f_time = lambda: time.strftime("%x %H:%M:%S")
 
 BRIGHT = "\x1b[1m"
-END = "\x1b[0m"
+END = "\x1b[0m\n"
 WHITE = "\x1b[97m"
 GREY = "\x1b[37m"
 BLUE = "\x1b[34m"

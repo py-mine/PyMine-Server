@@ -7,7 +7,7 @@ import pymine.types.nbt as nbt
 
 
 class Chunk(nbt.TAG_Compound):
-    def __init__(self, tag: nbt.TAG_Compound, timestamp: int) -> None:
+    def __init__(self, tag: nbt.TAG_Compound, sections: numpy.ndarray, timestamp: int) -> None:
         super().__init__("Level", tag["Level"].data)
 
         self.data_version = tag["DataVersion"]
@@ -17,9 +17,20 @@ class Chunk(nbt.TAG_Compound):
 
         self.timestamp = timestamp
 
+        # should be a shape of (256, 16, 16, 3)
+        # 16 chunk sections in 256 blocks
+        # a chunk section is a 16x16x16 area of blocks
+        # each "block" contains (type_id_of_block, block_light_value, sky_light_value)
+        # note, this is ***not*** what should be dumped to the disk
+        self["Sections"] = sections
+
+    @property
+    def sections(self):
+        return self["Sections"]
+
     @classmethod
-    def new(cls, chunk_x: int, chunk_z: int, timestamp: int) -> Chunk:
-        return cls(cls.new_nbt(chunk_x, chunk_z), timestamp)
+    def new(cls, chunk_x: int, chunk_z: int, sections: numpy.ndarray, timestamp: int) -> Chunk:
+        return cls(cls.new_nbt(chunk_x, chunk_z), sections, timestamp)
 
     @staticmethod
     def new_nbt(chunk_x: int, chunk_z: int) -> nbt.TAG_Compound:

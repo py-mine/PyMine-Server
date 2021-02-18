@@ -45,7 +45,6 @@ class Console:
 
             if char == "\n":
                 self.input.append("")
-                self.out[0] = ">"
             else:
                 self.input[-1] += char
                 self.out[0] += char

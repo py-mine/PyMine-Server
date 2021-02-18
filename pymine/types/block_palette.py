@@ -57,7 +57,10 @@ class IndirectPalette(AbstractPalette):
         #     ]
         # ]
 
-        raise NotImplementedError
+        reverse_data = {}
+
+        for i, b in enumerate(tag):
+            reverse_data[i] = {"name": tag["Name"], "properties": {k: v for k, v in tag["Properties"]}}
 
     def encode(self, block: str, props: dict = None) -> int:
         block_data = self.registry.encode(block)

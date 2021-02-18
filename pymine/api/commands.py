@@ -1,4 +1,3 @@
-import aioconsole
 import importlib
 import asyncio
 import os

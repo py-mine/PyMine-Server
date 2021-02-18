@@ -42,6 +42,7 @@ class IndirectPalette(AbstractPalette):
 
     @classmethod
     def from_nbt(cls, tag: nbt.TAG) -> IndirectPalette:
+        # Example palette tag
         # TAG_List("Palette"): [
         #     TAG_Compound(""): [
         #         TAG_String("Name"): minecraft:air
@@ -57,10 +58,43 @@ class IndirectPalette(AbstractPalette):
         #     ]
         # ]
 
+        # Example not-reversed data
+        # "minecraft:air": {
+        #   "states": [
+        #     {
+        #       "id": 0,
+        #       "default": true
+        #     }
+        #   ]
+        # },
+        # "minecraft:stone": {
+        #   "states": [
+        #     {
+        #       "id": 1,
+        #       "default": true
+        #     }
+        #   ]
+        # },
+
+        data = {}
         reverse_data = {}
 
         for i, b in enumerate(tag):
-            reverse_data[i] = {"name": tag["Name"], "properties": {k: v for k, v in tag["Properties"]}}
+            reverse_data[i] = {"name": tag["Name"]}
+
+            if tag.get("Properties"):
+                reverse_data[i]["properties"] = {k: v for k, v in tag["Properties"]}
+
+        for id_, b in reverse_data.items():
+            if b["name"] not in data:
+                data[b["name"]] = {"states": []}
+
+            state_data = {"id": id_}
+
+            if b.get("properties"):
+                state_data["properties"] = b["properties"]
+
+            data[b["name"]]["states"].append(state_data)
 
     def encode(self, block: str, props: dict = None) -> int:
         block_data = self.registry.encode(block)

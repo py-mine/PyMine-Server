@@ -61,17 +61,17 @@ class CommandHandler:
             command = ""
 
             while True:
-                inp = "".join([chr(c) for c in self.console.get_input(raw_keys=True)[1]])
-                self.console.screen.write(inp)
-                command += inp
-
-                if "\n" in command:
-                    await self.server_command(command[:-1])
-
-                    if command.startswith("stop"):
-                        break
-
-                    command = ""
+                # inp = "".join([chr(c) for c in self.console.get_input()[1]])
+                # self.console.screen.write(inp)
+                # command += inp
+                #
+                # if "\n" in command:
+                #     await self.server_command(command[:-1])
+                #
+                #     if command.startswith("stop"):
+                #         break
+                #
+                #     command = ""
 
                 await asyncio.sleep(0)
         except (KeyboardInterrupt, asyncio.CancelledError):

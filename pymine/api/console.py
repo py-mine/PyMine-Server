@@ -47,7 +47,7 @@ class Console:
                 self.input.append("")
                 self.out[0] = ">"
             else:
-                self.input[-1].append(char)
+                self.input[-1] += char
                 self.out[0] += char
 
             await asyncio.sleep(0)

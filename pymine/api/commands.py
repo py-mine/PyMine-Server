@@ -73,7 +73,7 @@ class CommandHandler:
 
                     command = ""
 
-                await asyncio.sleep(0.001)
+                await asyncio.sleep(0)
         except (KeyboardInterrupt, asyncio.CancelledError):
             pass
         except EOFError:

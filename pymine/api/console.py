@@ -28,7 +28,6 @@ class Console:
 
         self.stdin = None
         self.stdout = None
-        self.stderr = None
 
         self.clear_cmd = 'cls' if os.name == 'nt' else 'clear'
 
@@ -36,7 +35,7 @@ class Console:
         self.input = []
 
     async def init(self):
-        self.stdin, self.stdout, self.stderr = await stream.get_standard_streams()
+        self.stdin, self.stdout = await stream.get_standard_streams()
         asyncio.create_Task(self.input_loop())
 
     async def input_loop(self):

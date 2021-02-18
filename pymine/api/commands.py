@@ -59,7 +59,7 @@ class CommandHandler:
 
         try:
             while True:
-                in_text = await aioconsole.ainput(">")
+                in_text = self.console.get_input()
 
                 # In the future, commands *should* be handled async,
                 # however, due to the way the console works rn we can't

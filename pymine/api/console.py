@@ -30,7 +30,7 @@ class Console:
         self.stdin = None
         self.stdout = None
 
-        self.clear_cmd = 'cls' if os.name == 'nt' else 'clear'
+        self.clear_cmd = "cls" if os.name == "nt" else "clear"
 
         self.out = [""]
         self.input = [""]

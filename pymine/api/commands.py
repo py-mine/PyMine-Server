@@ -61,12 +61,11 @@ class CommandHandler:
             command = ""
 
             while True:
-                inp = "".join(self.console.get_input(raw_keys=True)[0])
+                inp = "".join([chr(c) for c in self.console.get_input(raw_keys=True)[1]])
                 self.console.screen.write(inp)
+                command += inp
 
                 if "\n" in command:
-                    self.console.screen.write("\n")
-
                     await self.server_command(command)
 
                     if command.startswith("stop"):

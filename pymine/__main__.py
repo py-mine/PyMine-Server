@@ -36,7 +36,7 @@ if __name__ == "__main__":
     loop.set_exception_handler(console.task_exception_handler)
 
     urwid_aioloop = urwid.AsyncioEventLoop(loop=loop)
-    urwid_mainloop = urwid.MainLoop(urwid.SolidFill(), event_loop=urwid_aioloop, handle_mouse=False)
+    urwid_mainloop = urwid.MainLoop(urwid.SolidFill(), screen=screen, event_loop=urwid_aioloop, handle_mouse=False)
 
     urwid_mainloop.start()
 

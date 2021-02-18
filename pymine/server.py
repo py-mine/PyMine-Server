@@ -56,7 +56,7 @@ class Server:
         self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold since it's used so much
 
         self.console.debug_ = self.conf["debug"]
-        asyncio.get_event_loop().set_debug(self.conf["debug"])
+        asyncio.get_event_loop().set_debug(False)
 
         self.port = self.conf["server_port"]
         self.addr = self.conf["server_ip"]

@@ -32,7 +32,7 @@ class Console:
 
         self.clear_cmd = 'cls' if os.name == 'nt' else 'clear'
 
-        self.out = []
+        self.out = [""]
         self.input = []
 
     async def init(self):
@@ -55,7 +55,7 @@ class Console:
         return self.input.pop(0)
 
     def write(self, text: str):
-        self.out.insert(1, text)
+        self.out.append(text)
         os.system(self.clear_cmd)
         print("\n".join(self.out))
 

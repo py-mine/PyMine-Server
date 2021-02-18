@@ -52,7 +52,7 @@ class CommandHandler:
             except BaseException as e:
                 self.console.error(self.console.f_traceback(e))
         elif cmd != "":
-            self.console.warn(f"Invalid/unknown command: {cmd}")
+            self.console.warn(f"Invalid/unknown command: {repr(cmd)}")
 
     async def handle_console(self):
         eoferr = False
@@ -66,7 +66,7 @@ class CommandHandler:
                 command += inp
 
                 if "\n" in command:
-                    await self.server_command(command)
+                    await self.server_command(command[:-1])
 
                     if command.startswith("stop"):
                         break

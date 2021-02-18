@@ -30,6 +30,8 @@ class Console:
         self.stdout = None
         self.stderr = None
 
+        self.clear_cmd = 'cls' if os.name == 'nt' else 'clear'
+
         self.out = []
         self.input = []
 
@@ -54,7 +56,7 @@ class Console:
 
     def write(self, text: str):
         self.out.insert(1, text)
-        os.system('cls' if os.name == 'nt' else 'clear')
+        os.system(self.clear_cmd)
         print("\n".join(self.out))
 
     def debug(self, *message):

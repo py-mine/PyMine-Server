@@ -27,6 +27,8 @@ import pymine.server
 
 if __name__ == "__main__":
     screen = urwid.raw_display.Screen()
+    screen.set_input_timeouts(max_wait=0)
+
     console = Console(screen)  # debug status will be set later after config is loaded
 
     if uvloop:

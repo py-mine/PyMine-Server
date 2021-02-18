@@ -25,7 +25,7 @@ from pymine.api.console import Console
 import pymine.server
 
 if __name__ == "__main__":
-    console = Console(screen, lb)  # debug status will be set later after config is loaded
+    console = Console()  # debug status will be set later after config is loaded
 
     if uvloop:
         console.debug("Using uvloop as the event loop.")

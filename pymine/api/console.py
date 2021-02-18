@@ -30,20 +30,24 @@ class Console:
         self.stdout = None
         self.stderr = None
 
-        self.input_queue = ""
+        self.input = []
 
     async def init(self):
         self.stdin, self.stdout, self.stderr = await stream.get_standard_streams()
 
     async def input_loop(self):
         while True:
-            self.input_queue += await self.stdin.read(1)
+            char = (await self.stdin.read(1)).decode()
+
+            if char == "\n":
+                self.input.append("")
+            else:
+                self.input[-1].append(char)
+
             await asyncio.sleep(0)
 
     def get_input(self):
-        temp = self.input_queue
-        self.input_queue = ""
-        return temp
+        return self.input.pop(0)
 
     def write(self, text: str):
         print(text)

@@ -26,14 +26,20 @@ from pymine.api.errors import ServerBindingError
 import pymine.server
 
 if __name__ == "__main__":
+    screen = urwid.raw_display.Screen()
+
     logger = Logger()  # debug status will be set later after config is loaded
 
     if uvloop:
         logger.debug("Using uvloop as the event loop.")
 
-    # loop = urwid.AsyncioEventLoop(loop=asyncio.get_event_loop())
-    loop=asyncio.get_event_loop()
+    loop = asyncio.get_event_loop()
     loop.set_exception_handler(task_exception_handler)
+
+    urwid_aioloop = urwid.AsyncioEventLoop(loop=loop)
+    urwid_mainloop = urwid.MainLoop(urwid.SolidFill(), event_loop=urwid_aioloop, handle_mouse=False)
+
+    urwid_mainloop.start()
 
     with concurrent.futures.ProcessPoolExecutor() as executor:
         server = pymine.server.Server(logger, executor, bool(uvloop))

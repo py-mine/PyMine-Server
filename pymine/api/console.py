@@ -37,6 +37,7 @@ class Console:
 
     async def init(self):
         self.stdin, self.stdout, self.stderr = await stream.get_standard_streams()
+        asyncio.create_Task(self.input_loop())
 
     async def input_loop(self):
         while True:

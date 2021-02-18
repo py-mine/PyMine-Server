@@ -4,6 +4,7 @@ import os
 
 if os.name == "nt":
     import colorama
+
     colorama.init()
 
 f_time = lambda: time.strftime("%x %H:%M:%S")

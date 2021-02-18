@@ -1,5 +1,6 @@
 import concurrent.futures
 import asyncio
+import urwid
 import sys
 import os
 
@@ -30,7 +31,8 @@ if __name__ == "__main__":
     if uvloop:
         logger.debug("Using uvloop as the event loop.")
 
-    loop = asyncio.get_event_loop()
+    # loop = urwid.AsyncioEventLoop(loop=asyncio.get_event_loop())
+    loop=asyncio.get_event_loop()
     loop.set_exception_handler(task_exception_handler)
 
     with concurrent.futures.ProcessPoolExecutor() as executor:

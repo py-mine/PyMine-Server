@@ -21,20 +21,19 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # ensure the current working directory is correct
 os.chdir(os.path.join(os.path.dirname(__file__), ".."))
 
-from pymine.util.logging import Logger, task_exception_handler
 from pymine.api.errors import ServerBindingError
+from pymine.logic.console import Console
 import pymine.server
 
 if __name__ == "__main__":
     screen = urwid.raw_display.Screen()
-
-    logger = Logger()  # debug status will be set later after config is loaded
+    console = Console(screen)  # debug status will be set later after config is loaded
 
     if uvloop:
-        logger.debug("Using uvloop as the event loop.")
+        console.debug("Using uvloop as the event loop.")
 
     loop = asyncio.get_event_loop()
-    loop.set_exception_handler(task_exception_handler)
+    loop.set_exception_handler(console.task_exception_handler)
 
     urwid_aioloop = urwid.AsyncioEventLoop(loop=loop)
     urwid_mainloop = urwid.MainLoop(urwid.SolidFill(), event_loop=urwid_aioloop, handle_mouse=False)
@@ -42,7 +41,7 @@ if __name__ == "__main__":
     urwid_mainloop.start()
 
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        server = pymine.server.Server(logger, executor, bool(uvloop))
+        server = pymine.server.Server(console, executor, bool(uvloop))
         pymine.server.server = server
 
         try:
@@ -50,14 +49,14 @@ if __name__ == "__main__":
         except (asyncio.CancelledError, KeyboardInterrupt):
             pass
         except ServerBindingError as e:
-            logger.error(e.msg)
+            console.error(e.msg)
         except BaseException as e:
-            logger.critical(logger.f_traceback(e))
+            console.critical(console.f_traceback(e))
 
         try:
             loop.run_until_complete(server.stop())
         except BaseException as e:
-            logger.critical(logger.f_traceback(e))
+            console.critical(console.f_traceback(e))
 
     loop.stop()
     loop.close()

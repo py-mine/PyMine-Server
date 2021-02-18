@@ -11,7 +11,7 @@ if os.name == "nt":
 f_time = lambda: time.strftime("%x %H:%M:%S")
 
 BRIGHT = "\x1b[1m"
-END = "\x1b[0m\n"
+END = "\x1b[0m"
 WHITE = "\x1b[97m"
 GREY = "\x1b[37m"
 BLUE = "\x1b[34m"
@@ -30,6 +30,7 @@ class Console:
         self.stdout = None
         self.stderr = None
 
+        self.out = []
         self.input = []
 
     async def init(self):
@@ -41,8 +42,10 @@ class Console:
 
             if char == "\n":
                 self.input.append("")
+                self.out[0] = ">"
             else:
                 self.input[-1].append(char)
+                self.out[0] += char
 
             await asyncio.sleep(0)
 
@@ -50,8 +53,9 @@ class Console:
         return self.input.pop(0)
 
     def write(self, text: str):
-        print(text)
-        print()
+        self.out.insert(1, text)
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("\n".join(self.out))
 
     def debug(self, *message):
         if self.debug_:

@@ -58,18 +58,23 @@ class CommandHandler:
         eoferr = False
 
         try:
+            command = ""
+
             while True:
-                in_text = self.console.get_input()
+                inp = "".join(self.console.get_input())
+                self.console.screen.write(inp)
 
-                # In the future, commands *should* be handled async,
-                # however, due to the way the console works rn we can't
-                # without messing up the output
-                # asyncio.create_task(handle_command(in_text))
+                if "\n" in command:
+                    self.console.screen.write("\n")
+                    
+                    await self.server_command(command)
 
-                await self.server_command(in_text)
+                    if command.startswith("stop"):
+                        break
 
-                if in_text.startswith("stop"):
-                    break
+                    command = ""
+
+                await asyncio.sleep(.25)
         except (KeyboardInterrupt, asyncio.CancelledError):
             pass
         except EOFError:

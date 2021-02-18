@@ -1,6 +1,5 @@
 import concurrent.futures
 import asyncio
-import urwid
 import sys
 import os
 
@@ -26,8 +25,6 @@ from pymine.api.console import Console
 import pymine.server
 
 if __name__ == "__main__":
-    screen = urwid.raw_display.Screen()
-    screen.set_input_timeouts(max_wait=0)
     console = Console(screen, lb)  # debug status will be set later after config is loaded
 
     if uvloop:
@@ -35,11 +32,6 @@ if __name__ == "__main__":
 
     loop = asyncio.get_event_loop()
     loop.set_exception_handler(console.task_exception_handler)
-
-    urwid_aioloop = urwid.AsyncioEventLoop(loop=loop)
-    urwid_mainloop = urwid.MainLoop(lb, screen=screen, event_loop=urwid_aioloop, handle_mouse=False)
-
-    urwid_mainloop.start()
 
     with concurrent.futures.ProcessPoolExecutor() as executor:
         server = pymine.server.Server(console, executor, bool(uvloop))

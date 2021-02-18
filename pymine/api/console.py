@@ -1,5 +1,4 @@
 import traceback
-import urwid
 import time
 import os
 
@@ -29,11 +28,11 @@ class Console:
 
         self.debug_ = debug
 
-    def get_input(self, *args, **kwargs):
-        return self.screen.get_input(*args, **kwargs)
+    async def fetch_input(self):
+        await aioconsole.async_input()
 
     def write(self, text: str):
-        self.body += text
+        print(text)
 
     def debug(self, *message):
         if self.debug_:

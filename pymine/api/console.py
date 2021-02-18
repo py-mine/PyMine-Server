@@ -49,8 +49,6 @@ class Console:
                 self.input[-1] += char
                 self.out[0] += char
 
-            print(char)
-
             await asyncio.sleep(0)
 
     def get_input(self):
@@ -59,7 +57,7 @@ class Console:
     def write(self, text: str):
         self.out.append(text)
         os.system(self.clear_cmd)
-        print("\n".join(self.out))
+        print("\n".join(self.out[:os.get_terminal_size().lines]))
 
     def debug(self, *message):
         if self.debug_:

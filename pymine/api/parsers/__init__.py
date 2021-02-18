@@ -4,8 +4,6 @@ import os
 
 from pymine.api.abc import AbstractParser
 
-import pymine.api.parsers.brigadier as brigadier
-import pymine.api.parsers.minecraft as minecraft
 
 parsers = []
 

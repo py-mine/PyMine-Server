@@ -1,3 +1,4 @@
+from aioconsole import stream
 import traceback
 import time
 import os
@@ -22,14 +23,27 @@ BG_RED = "\x1b[41;1m"
 class Console:
     """Custom logging + input implementation."""
 
-    def __init__(self, screen, body, debug: bool = True) -> None:
-        self.screen = screen
-        self.body = body
-
+    def __init__(self, debug: bool = True) -> None:
         self.debug_ = debug
 
-    async def fetch_input(self):
-        await aioconsole.async_input()
+        self.stdin = None
+        self.stdout = None
+        self.stderr = None
+
+        self.input_queue = ""
+
+    async def init(self):
+        self.stdin, self.stdout, self.stderr = await stream.get_standard_streams()
+
+    async def input_loop(self):
+        while True:
+            self.input_queue += await self.stdin.read(1)
+            await asyncio.sleep(0)
+
+    def get_input(self):
+        temp = self.input_queue
+        self.input_queue = ""
+        return temp
 
     def write(self, text: str):
         print(text)

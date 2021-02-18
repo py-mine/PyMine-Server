@@ -33,7 +33,7 @@ class Console:
         self.clear_cmd = 'cls' if os.name == 'nt' else 'clear'
 
         self.out = [""]
-        self.input = []
+        self.input = [""]
 
     async def init(self):
         self.stdin, self.stdout = await stream.get_standard_streams()

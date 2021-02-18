@@ -73,5 +73,5 @@ class IndirectPalette(AbstractPalette):
 
         raise ValueError(f"{block} doesn't have a state with those properties.")
 
-    def decode(state: int) -> immutables.Map:
+    def decode(self, state: int) -> immutables.Map:
         return self.registry.decode(state)

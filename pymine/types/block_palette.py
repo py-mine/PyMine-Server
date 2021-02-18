@@ -96,6 +96,8 @@ class IndirectPalette(AbstractPalette):
 
             data[b["name"]]["states"].append(state_data)
 
+        return cls(Registry(data, reverse_data))
+
     def encode(self, block: str, props: dict = None) -> int:
         block_data = self.registry.encode(block)
 

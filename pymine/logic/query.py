@@ -112,7 +112,7 @@ class QueryServer:
 
     def __init__(self, server):
         self.server = server  # The PyMine server instance
-        self.console = server.console  # Logger() instance created by Server.
+        self.console = server.console  # Console() instance created by Server.
 
         self.addr = server.addr
         self.port = server.conf.get("query_port")

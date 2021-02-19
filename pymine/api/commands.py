@@ -79,7 +79,7 @@ class CommandHandler:
         except BaseException as e:
             self.console.error(f"Error while executing command {split[0]}: {self.console.f_traceback(e)}")
 
-    async def handle_console(self):
+    async def handle_console_commands(self):
         eoferr = False
 
         try:

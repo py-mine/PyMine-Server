@@ -213,7 +213,7 @@ class PyMineAPI:
         self.events._packet = make_immutable(self.events._packet)
 
         # start console command handler task
-        self.tasks.append(asyncio.create_task(self.commands.handle_console()))
+        self.tasks.append(asyncio.create_task(self.commands.handle_console_commands()))
 
         return self
 

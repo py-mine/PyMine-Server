@@ -14,7 +14,7 @@ if os.name == "nt":
 f_time = lambda: time.strftime("%x %H:%M:%S")
 
 BRIGHT = "\x1b[1m"
-END = "\x1b[0m"
+END = "\x1b[0m\n"
 WHITE = "\x1b[97m"
 GREY = "\x1b[37m"
 BLUE = "\x1b[34m"
@@ -29,7 +29,7 @@ class Console:
     def __init__(self, debug: bool = True) -> None:
         self.debug_ = debug
 
-        self.stdout = StdoutProxy()
+        self.stdout = StdoutProxy(sleep_between_writes=.5)
         self.out = create_output(self.stdout)
         self.ses = PromptSession(output=self.out)
 
@@ -37,7 +37,7 @@ class Console:
         return await self.ses.prompt_async("> ")
 
     def write(self, text: str):
-        self.out.write_raw(text + "\n")
+        self.out.write_raw(text)
         self.out.flush()
 
     def debug(self, *message):

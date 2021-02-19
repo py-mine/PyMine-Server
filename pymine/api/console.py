@@ -1,4 +1,4 @@
-from aioconsole import stream
+from prompt_toolkit import PromptSession, ANSI, print_formatted_text
 import traceback
 import asyncio
 import time
@@ -26,38 +26,17 @@ class Console:
 
     def __init__(self, debug: bool = True) -> None:
         self.debug_ = debug
-
-        self.stdin = None
-        self.stdout = None
-
-        self.clear_cmd = "cls" if os.name == "nt" else "clear"
-
-        self.out = [""]
-        self.input = [""]
+        self.ses = PromptSession()
 
     async def init(self):
-        self.stdin, self.stdout = await stream.get_standard_streams()
-        asyncio.create_task(self.input_loop())
+        pass
 
-    async def input_loop(self):
-        while True:
-            char = (await self.stdin.read(1)).decode()
-
-            if char == "\n":
-                self.input.append("")
-            else:
-                self.input[-1] += char
-                self.out[0] += char
-
-            await asyncio.sleep(0)
-
-    def get_input(self):
-        return self.input.pop(0)
+    async def fetch_input(self):
+        with self.ses.patch_stdout():
+            return await self.ses.prompt_async()
 
     def write(self, text: str):
-        self.out.append(text)
-        os.system(self.clear_cmd)
-        print("\n".join(self.out[-os.get_terminal_size().lines :]))
+        print_formatted_text(ANSI(text))
 
     def debug(self, *message):
         if self.debug_:

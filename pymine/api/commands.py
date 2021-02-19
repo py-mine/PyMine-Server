@@ -36,32 +36,26 @@ class CommandHandler:
 
         return deco
 
-    async def server_command(self, in_text: str):
-        in_split = in_text.split(" ")
-        cmd = in_split.pop(0)
+    async def server_command(self, full: str):
+        split = full.split(" ")
+        command = self._commands.get(split[0])
+        args_text = split[1:]
 
-        args = " ".join(in_split)
-
-        reg_cmd = self._commands.get(cmd)
-
-        if reg_cmd is not None:
-            cmd_func = reg_cmd[0]
-
-            try:
-                await cmd_func("server", args)
-            except BaseException as e:
-                self.console.error(self.console.f_traceback(e))
-        elif cmd != "":
+        if command is None:
             self.console.warn(f"Invalid/unknown command: {repr(cmd)}")
+            return
+
+        for arg, type_ in command.__annotations__.items():
+            pass
 
     async def handle_console(self):
         eoferr = False
 
         try:
             while True:
-                command = await self.console.fetch_input()
+                in_ = await self.console.fetch_input()
 
-                await self.server_command(command)
+                await self.server_command(in_)
 
                 if command.startswith("stop"):
                     break

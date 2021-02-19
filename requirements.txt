@@ -8,3 +8,4 @@ mutf8
 PyYAML
 gitpython
 numpy
+prompt_toolkit

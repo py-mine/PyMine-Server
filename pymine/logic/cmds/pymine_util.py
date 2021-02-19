@@ -1,6 +1,16 @@
-# from pymine.server import server
-#
-#
+from pymine.api.parsers.brigadier import String
+
+from pymine.server import server
+
+
+@server.api.commands.on_command(name="eval", node="pymine.cmds.eval")
+async def eval_(uuid: str, text: String(2)):
+    try:
+        server.console.info(repr(eval(text)))
+    except BaseException as e:
+        server.console.error(server.console.f_traceback(e))
+
+
 # @server.api.commands.on_command(name="exec", node="pymine.cmds.exec")
 # async def exec_(uuid: str, file_name: str):
 #

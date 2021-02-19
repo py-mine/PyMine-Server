@@ -53,7 +53,7 @@ class CommandHandler:
         if not len(command.__annotations__) >= command.__code__.co_argcount - 1:  # dev error
             raise ValueError(f"Missing argument typephints/annotations for command {split[0]}.")
 
-        if command.__code__.co_argcount != len(split) - 1:  # user error
+        if command.__code__.co_argcount != len(split):  # user error
             self.console.warn(f"Invalid/unknown command for given arguments: {split[0]}")
             return
 

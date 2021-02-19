@@ -78,6 +78,8 @@ class CommandHandler:
 
             parsed_to, parsed = parser.parse(args_text[parsed_to:])
 
+            parsed_to += 1
+
             args.append(parsed)
 
         try:

@@ -88,7 +88,7 @@ class CommandHandler:
 
                 await self.command("server", in_)
 
-                if command.startswith("stop"):
+                if in_.startswith("stop"):
                     break
 
                 await asyncio.sleep(0)

@@ -86,7 +86,7 @@ class CommandHandler:
             while True:
                 in_ = await self.console.fetch_input()
 
-                await self.server_command(in_)
+                await self.command("server", in_)
 
                 if command.startswith("stop"):
                     break

@@ -37,7 +37,6 @@ class Console:
         return await self.ses.prompt_async("> ")
 
     def write(self, text: str):
-        # print_formatted_text(ANSI(text))
         self.out.write_raw(text + "\n")
         self.out.flush()
 

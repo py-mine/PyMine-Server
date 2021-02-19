@@ -1,6 +1,7 @@
 import random
 import uuid
 
+from pymine.api.errors import ParsingError
 from pymine.api.abc import AbstractParser
 
 
@@ -39,4 +40,4 @@ class Entity(AbstractParser):  # players should be a list of Player objects, the
             except BaseException:
                 pass
 
-        raise ValueError
+        raise ParsingError

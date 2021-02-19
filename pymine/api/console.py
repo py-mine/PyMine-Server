@@ -31,7 +31,7 @@ class Console:
 
         self.stdout = StdoutProxy()
         self.out = create_output(self.stdout)
-        self.ses = PromptSession(self.out)
+        self.ses = PromptSession(output=self.out)
 
     async def fetch_input(self):
         return await self.ses.prompt_async("> ")

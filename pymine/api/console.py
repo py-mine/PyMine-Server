@@ -1,4 +1,5 @@
 from prompt_toolkit import PromptSession, ANSI, print_formatted_text
+from prompt_toolkit.patch_stdout import patch_stdout
 import traceback
 import asyncio
 import time
@@ -29,7 +30,7 @@ class Console:
         self.ses = PromptSession()
 
     async def fetch_input(self):
-        with self.ses.patch_stdout():
+        with patch_stdout():
             return await self.ses.prompt_async("> ")
 
     def write(self, text: str):

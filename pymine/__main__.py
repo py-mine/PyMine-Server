@@ -31,7 +31,7 @@ if __name__ == "__main__":
         console.debug("Using uvloop as the event loop.")
 
     loop = asyncio.get_event_loop()
-    # loop.set_exception_handler(console.task_exception_handler)
+    loop.set_exception_handler(console.task_exception_handler)
 
     with concurrent.futures.ProcessPoolExecutor() as executor:
         server = pymine.server.Server(console, executor, bool(uvloop))

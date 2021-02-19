@@ -34,6 +34,10 @@ class CommandHandler:
             if not asyncio.iscoroutinefunction(func):
                 raise ValueError("Decorated object must be a coroutine function.")
 
+            # checks to see if there are enough typehints for the number of args
+            if not len(func.__annotations__) >= func.__code__.co_argcount - 1:
+                raise ValueError(f"Missing required argument typehints/annotations for {func.__module__}.{func.__qualname__}.")
+
             self._commands[name] = func, node
             return func
 
@@ -49,10 +53,6 @@ class CommandHandler:
             return
 
         command = command[0]  # we don't need the permission node for now so yeah
-
-        # checks to see if there are enough typehints for the number of args
-        if not len(command.__annotations__) >= command.__code__.co_argcount - 1:  # dev error
-            raise ValueError(f"Missing argument typephints/annotations for command {split[0]}.")
 
         parsed_to = 0
         args = []

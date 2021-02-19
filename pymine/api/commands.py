@@ -64,7 +64,9 @@ class CommandHandler:
         parsed_to = 0
         args = []
 
-        for arg in command.__code__.co_varnames[1:command.__code__.co_argcount]:  # iterate through args skipping the first arg
+        for arg in command.__code__.co_varnames[
+            1 : command.__code__.co_argcount
+        ]:  # iterate through args skipping the first arg
             parser = command.__annotations__.get(arg)  # get parser from annotations
 
             if isinstance(parser, bool):  # allow for primitive bool type to be used as a typehint

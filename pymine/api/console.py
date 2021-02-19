@@ -1,5 +1,6 @@
 from prompt_toolkit import PromptSession, ANSI, print_formatted_text
-from prompt_toolkit.patch_stdout import patch_stdout
+from prompt_toolkit.patch_stdout import StdoutProxy
+from prompt_toolkit.output import create_output
 import traceback
 import asyncio
 import time
@@ -27,14 +28,17 @@ class Console:
 
     def __init__(self, debug: bool = True) -> None:
         self.debug_ = debug
-        self.ses = PromptSession()
+
+        self.out = create_output(StdoutProxy())
+        self.ses = PromptSession(self.out)
 
     async def fetch_input(self):
-        with patch_stdout():
-            return await self.ses.prompt_async("> ")
+        return await self.ses.prompt_async("> ")
 
     def write(self, text: str):
-        print_formatted_text(ANSI(text))
+        # print_formatted_text(ANSI(text))
+        self.out.write_raw(text + "\n")
+        self.out.flush()
 
     def debug(self, *message):
         if self.debug_:

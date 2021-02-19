@@ -28,9 +28,6 @@ class Console:
         self.debug_ = debug
         self.ses = PromptSession()
 
-    async def init(self):
-        pass
-
     async def fetch_input(self):
         with self.ses.patch_stdout():
             return await self.ses.prompt_async("> ")

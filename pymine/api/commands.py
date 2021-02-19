@@ -42,17 +42,21 @@ class CommandHandler:
     async def command(self, uuid_: uuid.UUID, full: str):
         split = full.split(" ")
         command = self._commands.get(split[0])
-        args_text = " ".join(split[1:])
+        args_text = " ".join(split[1:])  # basically the text excluding the actual command name and the space following it
 
         if command is None:  # user error
             self.console.warn(f"Invalid/unknown command: {split[0]}")
             return
 
-        command = command[0]
+        command = command[0]  # we don't need the permission node for now so yeah
 
+        # checks to see if there are enough typehints for the number of args
         if not len(command.__annotations__) >= command.__code__.co_argcount - 1:  # dev error
             raise ValueError(f"Missing argument typephints/annotations for command {split[0]}.")
 
+        # check to see if the supplied arguments are the correct amount for the given command
+        # this might have to be removed or modified if we support having commands with the same name
+        # but different args in the future, (kinda like method overloading)
         if command.__code__.co_argcount != len(split):  # user error
             self.console.warn(f"Invalid/unknown command for given arguments: {split[0]}")
             return
@@ -61,14 +65,14 @@ class CommandHandler:
         args = []
 
         for arg, parser in list(command.__annotations__.items())[1:]:  # [1:] to skip first arg which should be the uuid
-            if isinstance(parser, bool):
+            if isinstance(parser, bool):  # allow for primitive bool type to be used as a typehint
                 parser = Bool()
-            elif isinstance(parser, float):
+            elif isinstance(parser, float): # allow for primitive float type to be used as a typehint
                 parser = Double()
-            elif isinstance(parser, int):
+            elif isinstance(parser, int): # allow for primitive int type to be used as a typehint
                 parser = Integer()
-            elif isinstance(parser, str):
-                parser = String(0)  # single word
+            elif isinstance(parser, str): # allow for primitive str type to be used as a typehint
+                parser = String(0)  # a single word
             elif not isinstance(parser, AbstractParser):  # dev error
                 raise ValueError(f"{parser} is not an instance of AbstractParser")
 

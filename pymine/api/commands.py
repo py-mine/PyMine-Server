@@ -45,14 +45,14 @@ class CommandHandler:
         args_text = " ".join(split[1:])
 
         if command is None:
-            self.console.warn(f"Invalid/unknown command: {repr(split[0])}")
+            self.console.warn(f"Invalid/unknown command: {split[0]}")
             return
 
         if not len(command.__annotations__) >= command.__code__.co_argcount - 1:
             raise ValueError(f"Missing argument typephints/annotations for command {split[0]}.")
 
         if command.__code__.co_argcount != len(split) - 1:
-            self.console.warn(f"Invalid/unknown command for given arguments: {repr(split[0])}")
+            self.console.warn(f"Invalid/unknown command for given arguments: {split[0]}")
             return
 
         parsed_to = 0

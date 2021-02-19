@@ -29,7 +29,7 @@ class Console:
     def __init__(self, debug: bool = True) -> None:
         self.debug_ = debug
 
-        self.stdout = StdoutProxy(sleep_between_writes=.5)
+        self.stdout = StdoutProxy(sleep_between_writes=0.5)
         self.out = create_output(self.stdout)
         self.ses = PromptSession(output=self.out)
 

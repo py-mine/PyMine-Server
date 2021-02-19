@@ -33,7 +33,7 @@ class Console:
 
     async def fetch_input(self):
         with self.ses.patch_stdout():
-            return await self.ses.prompt_async()
+            return await self.ses.prompt_async("> ")
 
     def write(self, text: str):
         print_formatted_text(ANSI(text))

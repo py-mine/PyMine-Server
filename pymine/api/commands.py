@@ -39,7 +39,7 @@ class CommandHandler:
 
         return deco
 
-    async def command(self, uuid_: uuid.UUID, full: str):
+    async def handle_command(self, uuid_: uuid.UUID, full: str):
         split = full.split(" ")
         command = self._commands.get(split[0])
         args_text = " ".join(split[1:])  # basically the text excluding the actual command name and the space following it
@@ -92,7 +92,7 @@ class CommandHandler:
             while True:
                 in_ = await self.console.fetch_input()
 
-                await self.command("server", in_)
+                await self.handle_command("server", in_)
 
                 if in_.startswith("stop"):
                     break

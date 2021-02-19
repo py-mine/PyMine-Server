@@ -1,4 +1,7 @@
+from pymine.api.errors import ParsingError
 from pymine.api.abc import AbstractParser
+
+__all__ = ('Bool', 'Float', 'Double', 'Integer', 'String')
 
 
 class Bool(AbstractParser):
@@ -12,7 +15,7 @@ class Bool(AbstractParser):
         if s[:5] == "false":
             return 5, False
 
-        raise ValueError
+        raise ParsingError
 
 
 class Float(AbstractParser):
@@ -31,7 +34,7 @@ class Float(AbstractParser):
         except BaseException:
             pass
 
-        raise ValueError
+        raise ParsingError
 
 
 class Double(AbstractParser):
@@ -50,7 +53,7 @@ class Double(AbstractParser):
         except BaseException:
             pass
 
-        raise ValueError
+        raise ParsingError
 
 
 class Integer(AbstractParser):
@@ -69,7 +72,7 @@ class Integer(AbstractParser):
         except BaseException:
             pass
 
-        raise ValueError
+        raise ParsingError
 
 
 class String(AbstractParser):
@@ -83,7 +86,7 @@ class String(AbstractParser):
 
         if self.mode == 1:  # quotable phrase
             if not s[0] == '"':
-                raise ValueError
+                raise ParsingError
 
             out = ""
 
@@ -98,4 +101,4 @@ class String(AbstractParser):
         if self.mode == 2:  # rest of string
             return len(s), s
 
-        raise ValueError
+        raise ParsingError

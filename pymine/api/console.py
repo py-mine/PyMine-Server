@@ -29,7 +29,8 @@ class Console:
     def __init__(self, debug: bool = True) -> None:
         self.debug_ = debug
 
-        self.out = create_output(StdoutProxy())
+        self.stdout = StdoutProxy()
+        self.out = create_output(self.stdout)
         self.ses = PromptSession(self.out)
 
     async def fetch_input(self):

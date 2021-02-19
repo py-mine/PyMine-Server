@@ -1,0 +1,14 @@
+[1m[97m[02/18/21 08:19:55 [34mINFO[97m]: Query server started on 127.0.1.1:25565.[0m
+[1m[97m[02/18/21 08:19:55 [34mINFO[97m]: Checking for updates for example-plugin...[0m
+[97m[02/18/21 08:19:55 [37mDEBUG[97m]: [37mPulling from https://github.com/py-mine/example-plugin.git...[0m
+[1m[97m[02/18/21 08:19:56 [34mINFO[97m]: No updates found for example-plugin.[0m
+[1m[97m[02/18/21 08:19:56 [34mINFO[97m]: EXAMPLE PLUGIN: setup coroutine called![0m
+[97m[02/18/21 08:19:56 [37mDEBUG[97m]: [37m{'git_url': 'https://github.com/py-mine/example-plugin.git', 'module_folder': 'example_plugin', 'name': 'example_plugin', 'description': 'This is an example plugin bada bing bada boom.', 'version': 1, 'author': 'PyMine Devs', 'license': 'GPLv3.0', 'website': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'}[0m
+[1m[97m[02/18/21 08:19:56 [34mINFO[97m]: Loading default worlds for level world...[0m
+[1m[97m[02/18/21 08:19:56 [34mINFO[97m]: Loaded default worlds: world, world_nether, world_the_end.[0m
+[1m[97m[02/18/21 08:19:56 [34mINFO[97m]: PyMine 0.1 started on 127.0.1.1:25565![0m
+>[1m[97m[02/18/21 08:19:56 [34mINFO[97m]: EXAMPLE PLUGIN: AYYY SERVER DO BE READY THO NGL?[0m
+[1m[97m[02/18/21 08:21:04 [34mINFO[97m]: Closing server...[0m
+[1m[97m[02/18/21 08:21:04 [34mINFO[97m]: EXAMPLE PLUGIN: teardown coroutine![0m
+[1m[97m[02/18/21 08:21:04 [34mINFO[97m]: EXAMPLE PLUGIN: bish you better start this server back up[0m
+[1m[97m[02/18/21 08:21:04 [34mINFO[97m]: Server closed.[0m

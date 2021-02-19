@@ -67,11 +67,11 @@ class CommandHandler:
         for arg, parser in list(command.__annotations__.items())[1:]:  # [1:] to skip first arg which should be the uuid
             if isinstance(parser, bool):  # allow for primitive bool type to be used as a typehint
                 parser = Bool()
-            elif isinstance(parser, float): # allow for primitive float type to be used as a typehint
+            elif isinstance(parser, float):  # allow for primitive float type to be used as a typehint
                 parser = Double()
-            elif isinstance(parser, int): # allow for primitive int type to be used as a typehint
+            elif isinstance(parser, int):  # allow for primitive int type to be used as a typehint
                 parser = Integer()
-            elif isinstance(parser, str): # allow for primitive str type to be used as a typehint
+            elif isinstance(parser, str):  # allow for primitive str type to be used as a typehint
                 parser = String(0)  # a single word
             elif not isinstance(parser, AbstractParser):  # dev error
                 raise ValueError(f"{parser} is not an instance of AbstractParser")

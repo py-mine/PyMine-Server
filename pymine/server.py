@@ -75,6 +75,8 @@ class Server:
         self.api = None  # the api instance
 
     async def start(self):
+        self.console.out.set_title(self.meta.pymine)
+
         try:
             self.server = await asyncio.start_server(self.handle_connection, host=self.addr, port=self.port)
         except OSError as e:

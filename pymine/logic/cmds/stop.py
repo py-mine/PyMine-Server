@@ -1,5 +1,3 @@
-import asyncio
-
 from pymine.util.stop import stop
 from pymine.server import server
 

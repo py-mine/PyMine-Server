@@ -7,7 +7,7 @@ from pymine.util.stop import stop
 
 from pymine.api.errors import ParsingError
 from pymine.api.abc import AbstractParser
-import pymine.api.parsers as parsers
+from pymine.api import parsers
 
 
 class CommandHandler:

@@ -1,9 +1,11 @@
 import importlib
 import asyncio
+import uuid
 import os
 
 from pymine.util.stop import stop
 
+from pymine.api.abc import AbstractParser
 from pymine.api.parsers import parsers
 
 
@@ -36,17 +38,30 @@ class CommandHandler:
 
         return deco
 
-    async def server_command(self, full: str):
+    async def command(self, uuid_: uuid.UUID, full: str):
         split = full.split(" ")
         command = self._commands.get(split[0])
-        args_text = split[1:]
+        args_text = " ".join(split[1:])
 
         if command is None:
             self.console.warn(f"Invalid/unknown command: {repr(cmd)}")
             return
 
-        for arg, type_ in command.__annotations__.items():
-            pass
+        parsed_to = 0
+        args = []
+
+        for arg, parser in command.__annotations__.items():
+            if not isinstance(parser, AbstractParser):
+                raise ValueError(f"{parser} is not an instance of AbstractParser")
+
+            parsed_to, parsed = parser.parse(args_text[parsed_to:])
+
+            args.append(parsed)
+
+        try:
+            await command(uuid_, *args)
+        except BaseException as e:
+            self.console.error(f'')
 
     async def handle_console(self):
         eoferr = False

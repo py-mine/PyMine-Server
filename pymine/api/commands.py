@@ -86,7 +86,7 @@ class CommandHandler:
                 self.console.warn(f"Invalid arguments for command: {split[0]}")
                 return
 
-            parsed_to += 1
+            parsed_to += 1  # account for space which differentiates arguments
 
             args.append(parsed)
 

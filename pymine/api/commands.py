@@ -54,13 +54,6 @@ class CommandHandler:
         if not len(command.__annotations__) >= command.__code__.co_argcount - 1:  # dev error
             raise ValueError(f"Missing argument typephints/annotations for command {split[0]}.")
 
-        # # check to see if the supplied arguments are the correct amount for the given command
-        # # this might have to be removed or modified if we support having commands with the same name
-        # # but different args in the future, (kinda like method overloading)
-        # if command.__code__.co_argcount != len(split):  # user error
-        #     self.console.warn(f"Invalid/unknown command for given arguments: {split[0]}")
-        #     return
-
         parsed_to = 0
         args = []
 

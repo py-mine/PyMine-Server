@@ -51,5 +51,7 @@ if __name__ == "__main__":
         except BaseException as e:
             console.critical(console.f_traceback(e))
 
+    console.stdout.close()
+
     loop.stop()
     loop.close()

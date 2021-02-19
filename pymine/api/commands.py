@@ -5,6 +5,7 @@ import os
 
 from pymine.util.stop import stop
 
+from pymine.api.errors import ParsingError
 from pymine.api.abc import AbstractParser
 import pymine.api.parsers as parsers
 
@@ -63,26 +64,27 @@ class CommandHandler:
         parsed_to = 0
         args = []
 
-        try:
-            for arg, parser in list(command.__annotations__.items())[1:]:  # [1:] to skip first arg which should be the uuid
-                if isinstance(parser, bool):  # allow for primitive bool type to be used as a typehint
-                    parser = parsers.Bool()
-                elif isinstance(parser, float):  # allow for primitive float type to be used as a typehint
-                    parser = parsers.Double()
-                elif isinstance(parser, int):  # allow for primitive int type to be used as a typehint
-                    parser = parsers.Integer()
-                elif isinstance(parser, str):  # allow for primitive str type to be used as a typehint
-                    parser = parsers.String(0)  # a single word
-                elif not isinstance(parser, AbstractParser):  # dev error
-                    raise ValueError(f"{parser} is not an instance of AbstractParser")
+        for arg, parser in list(command.__annotations__.items())[1:]:  # [1:] to skip first arg which should be the uuid
+            if isinstance(parser, bool):  # allow for primitive bool type to be used as a typehint
+                parser = parsers.Bool()
+            elif isinstance(parser, float):  # allow for primitive float type to be used as a typehint
+                parser = parsers.Double()
+            elif isinstance(parser, int):  # allow for primitive int type to be used as a typehint
+                parser = parsers.Integer()
+            elif isinstance(parser, str):  # allow for primitive str type to be used as a typehint
+                parser = parsers.String(0)  # a single word
+            elif not isinstance(parser, AbstractParser):  # dev error
+                raise ValueError(f"{parser} is not an instance of AbstractParser")
 
+            try:
                 parsed_to, parsed = parser.parse(args_text[parsed_to:])
+            except ParsingError:  # either devs did a bad or user didn't put in the right arguments
+                self.console.warn(f"Invalid arguments for command: {split[0]}")
+                return
 
-                parsed_to += 1
+            parsed_to += 1
 
-                args.append(parsed)
-        except:
-            pass
+            args.append(parsed)
 
         try:
             await command(uuid_, *args)

@@ -51,6 +51,9 @@ class CommandHandler:
         parsed_to = 0
         args = []
 
+        if not len(command.__annotations__) >= command.__code__.co_argcount - 1:
+            raise ValueError(f"Missing argument typephints/annotations for command {split[0]}.")
+
         for arg, parser in command.__annotations__.items()[1:]:  # [1:] to skip first arg which should be the uuid
             if isinstance(parser, bool):
                 parser = Bool()

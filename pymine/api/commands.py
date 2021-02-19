@@ -44,16 +44,16 @@ class CommandHandler:
         command = self._commands.get(split[0])
         args_text = " ".join(split[1:])
 
-        if command is None:
+        if command is None:  # user error
             self.console.warn(f"Invalid/unknown command: {split[0]}")
             return
 
         command = command[0]
 
-        if not len(command.__annotations__) >= command.__code__.co_argcount - 1:
+        if not len(command.__annotations__) >= command.__code__.co_argcount - 1:  # dev error
             raise ValueError(f"Missing argument typephints/annotations for command {split[0]}.")
 
-        if command.__code__.co_argcount != len(split) - 1:
+        if command.__code__.co_argcount != len(split) - 1:  # user error
             self.console.warn(f"Invalid/unknown command for given arguments: {split[0]}")
             return
 
@@ -69,7 +69,7 @@ class CommandHandler:
                 parser = Integer()
             elif isinstance(parser, str):
                 parser = String(0)  # single word
-            elif not isinstance(parser, AbstractParser):
+            elif not isinstance(parser, AbstractParser):  # dev error
                 raise ValueError(f"{parser} is not an instance of AbstractParser")
 
             parsed_to, parsed = parser.parse(args_text[parsed_to:])
@@ -78,7 +78,7 @@ class CommandHandler:
 
         try:
             await command(uuid_, *args)
-        except BaseException as e:
+        except BaseException as e:  # dev error
             self.console.error(f"Error while executing command {split[0]}: {self.console.f_traceback(e)}")
 
     async def handle_console_commands(self):

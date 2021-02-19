@@ -73,7 +73,7 @@ class CommandHandler:
         try:
             await command(uuid_, *args)
         except BaseException as e:
-            self.console.error(f'Error while executing command {split[0]}: {self.console.f_traceback(e)}')
+            self.console.error(f"Error while executing command {split[0]}: {self.console.f_traceback(e)}")
 
     async def handle_console(self):
         eoferr = False

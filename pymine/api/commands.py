@@ -44,13 +44,13 @@ class CommandHandler:
         args_text = " ".join(split[1:])
 
         if command is None:
-            self.console.warn(f"Invalid/unknown command: {repr(cmd)}")
+            self.console.warn(f"Invalid/unknown command: {repr(split[0])}")
             return
 
         parsed_to = 0
         args = []
 
-        for arg, parser in command.__annotations__.items():
+        for arg, parser in command.__annotations__.items()[1:]:  # [1:] to skip first arg which should be the uuid
             if not isinstance(parser, AbstractParser):
                 raise ValueError(f"{parser} is not an instance of AbstractParser")
 
@@ -61,7 +61,7 @@ class CommandHandler:
         try:
             await command(uuid_, *args)
         except BaseException as e:
-            self.console.error(f'Error while executing command {command}: {self.console.f_traceback(e)}')
+            self.console.error(f'Error while executing command {split[0]}: {self.console.f_traceback(e)}')
 
     async def handle_console(self):
         eoferr = False

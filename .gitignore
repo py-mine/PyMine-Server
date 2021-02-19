@@ -24,3 +24,5 @@ docs/_build/
 
 # Ewww
 .vscode/
+.shwayzrun.sh
+pp*

@@ -1,7 +1,7 @@
 from pymine.api.errors import ParsingError
 from pymine.api.abc import AbstractParser
 
-__all__ = ('Bool', 'Float', 'Double', 'Integer', 'String')
+__all__ = ("Bool", "Float", "Double", "Integer", "String")
 
 
 class Bool(AbstractParser):

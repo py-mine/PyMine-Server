@@ -5,6 +5,7 @@ import os
 
 from pymine.util.stop import stop
 
+from pymine.api.parsers.brigadier import Bool, Double, Integer, String
 from pymine.api.abc import AbstractParser
 from pymine.api.parsers import parsers
 
@@ -51,7 +52,15 @@ class CommandHandler:
         args = []
 
         for arg, parser in command.__annotations__.items()[1:]:  # [1:] to skip first arg which should be the uuid
-            if not isinstance(parser, AbstractParser):
+            if isinstance(parser, bool):
+                parser = Bool()
+            elif isinstance(parser, float):
+                parser = Double()
+            elif isinstance(parser, int):
+                parser = Integer()
+            elif isinstance(parser, str):
+                parser = String(0)  # single word
+            elif not isinstance(parser, AbstractParser):
                 raise ValueError(f"{parser} is not an instance of AbstractParser")
 
             parsed_to, parsed = parser.parse(args_text[parsed_to:])

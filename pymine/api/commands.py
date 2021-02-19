@@ -93,7 +93,11 @@ class CommandHandler:
             while True:
                 in_ = await self.console.fetch_input()
 
-                await self.handle_command("server", in_)
+                try:
+                    await self.handle_command("server", in_)
+                except BaseException as e:  # pymine devs did an oopsie?
+                    self.console.error(f"Error while handling command {split[0]}: {self.console.f_traceback(e)}")
+                    continue
 
                 if in_.startswith("stop"):
                     break

@@ -60,7 +60,7 @@ class CommandHandler:
         parsed_to = 0
         args = []
 
-        for arg, parser in command.__annotations__.items()[1:]:  # [1:] to skip first arg which should be the uuid
+        for arg, parser in list(command.__annotations__.items())[1:]:  # [1:] to skip first arg which should be the uuid
             if isinstance(parser, bool):
                 parser = Bool()
             elif isinstance(parser, float):

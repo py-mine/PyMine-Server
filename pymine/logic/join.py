@@ -211,7 +211,7 @@ async def send_chunk_data(stream: Stream, player: Player) -> None:
         for chunk_z in range(-player.view_distance, player.view_distance):
             chunks[chunk_x, chunk_z] = await world.fetch_chunk(chunk_x, chunk_z)
 
-    for ccoords, chunk in chunks.items():
+    for coords, chunk in chunks.items():
         pass
 
     # await server.send_packet(

@@ -72,12 +72,12 @@ class CommandHandler:
                 raise ValueError(f"{parser} is not an instance of AbstractParser or a compatible primitive type.")
 
             try:
-                parsed_to, parsed = parser.parse(args_text[parsed_to:])
+                just_parsed_to, parsed = parser.parse(args_text[parsed_to:])
             except ParsingError:  # either devs did a bad or user didn't put in the right arguments
-                self.console.warn(f"Invalid arguments for command: {split[0]}")
+                self.console.warn(f"Invalid input for command {split[0]}: {repr(args_text[parsed_to:])}")
                 return
 
-            parsed_to += 1  # account for space which differentiates arguments
+            parsed_to += just_parsed_to + 1  # +1 to account for space which differentiates arguments
 
             args.append(parsed)
 

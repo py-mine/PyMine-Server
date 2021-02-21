@@ -22,11 +22,3 @@ def seed_hash(seed: int):  # probably not correct but it seems to work so?
     m = hashlib.sha256()
     m.update(seed.to_bytes(8, "big"))
     return int(str(int.from_bytes(m.digest(), "big"))[:8])
-
-
-# def run_in_executor(func):
-#     @functools.wraps(func)
-#     def deco(*args, **kwargs):
-#         return asyncio.get_running_loop().run_in_executor(None, functools.partial(func, *args, **kwargs))
-#
-#     return deco

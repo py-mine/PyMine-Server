@@ -1,4 +1,4 @@
-from pymine.api.parsers.brigadier import String, Integer
+from pymine.api.parsers.brigadier import *
 
 from pymine.server import server
 
@@ -12,8 +12,8 @@ async def eval_(uuid, text: String(2)):
 
 
 @server.api.commands.on_command(name="test", node="pymine.cmds.eval")
-async def test(uuid, text: String(0), num: Integer()):
-    print(uuid, repr(text), repr(num))
+async def test(uuid, b: Bool(), f: Float(), d: Double(), i: Integer(), s: String(0), s2: String(1), s3: String(2)):
+    print(uuid, b, f, d, i, s, s2, s3)
 
 
 # @server.api.commands.on_command(name="exec", node="pymine.cmds.exec")

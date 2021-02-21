@@ -18,7 +18,7 @@ def gen_seed() -> int:  # generates a random seed as an int
     return randint(0, (2 ** 64) - 1)
 
 
-def seed_hash(seed: int):
+def seed_hash(seed: int):  # probably not correct but it seems to work so?
     m = hashlib.sha256()
     m.update(seed.to_bytes(8, "big"))
     return int(str(int.from_bytes(m.digest(), "big"))[:8])

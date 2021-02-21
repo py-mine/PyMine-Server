@@ -93,6 +93,9 @@ class CommandHandler:
             while True:
                 in_ = await self.console.fetch_input()
 
+                if in_ == "":
+                    continue
+
                 try:
                     await self.handle_command("server", in_)
                 except BaseException as e:  # pymine devs did an oopsie?

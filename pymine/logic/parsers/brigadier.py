@@ -42,16 +42,23 @@ class Double(AbstractParser):
         self.min_value = min_value
         self.max_value = max_value
 
+    @classmethod
+    def __getitem__(cls, ranges: slice) -> Double:
+        return cls(ranges.start, range.stop)
+
     def parse(self, s: str) -> tuple:
-        section = s.split(" ")[0]
+        try:
+            section = s.split()[0]
+        except IndexError:
+            raise ParsingError
 
         try:
             num = float(section)
+        except ValueError:
+            raise ParsingError
 
-            if self.min_value is not None and self.max_value > num > self.min_value:
-                return len(section), num
-        except BaseException:
-            pass
+        if self.min_value is None or self.max_value > num > self.min_value:
+            return len(section), num
 
         raise ParsingError
 
@@ -63,7 +70,7 @@ class Integer(AbstractParser):
 
     @classmethod
     def __getitem__(cls, ranges: slice) -> Integer:
-        return cls(ranges.start, range.step)
+        return cls(ranges.start, range.stop)
 
     def parse(self, s: str) -> tuple:
         try:
@@ -84,6 +91,10 @@ class Integer(AbstractParser):
 class String(AbstractParser):
     def __init__(self, mode: int) -> None:
         self.mode = mode
+
+    @classmethod
+    def __getitem__(cls, mode: slice) -> String:
+        return cls(mode.start)
 
     def parse(self, s: str) -> tuple:
         if self.mode == 0:  # single word

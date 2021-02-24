@@ -22,10 +22,6 @@ class ChunkSection:
     def from_nbt(cls, tag: nbt.TAG) -> ChunkSection:
         section = cls()
 
-        block_light = tag["BlockLight"]
-        block_states = tag["BlockStates"]
-        sky_light = tag["SkyLight"]
-
         # this is a calculation one would use to serialize a chunk section
         # we need this to solve for bits_per_block as we don't have that
         # but we *do* have the length of the array from the nbt data
@@ -33,20 +29,21 @@ class ChunkSection:
         # long_array_len = ((16*16*16)*bits_per_block) / 64
         # this simplifies to 64*bits_per_block which is easy to solve
         # for bits_per_block so we get the below
-        bits_per_block = len(block_states) / 64
+        bits_per_block = len(tag["BlockStates"]) / 64
 
         individual_value_mask = (1 << bits_per_block) - 1
-
-        # yoinked most of the logic for chunk deserialization from https://wiki.vg/Chunk_Format
-        # however, that is for deserialization of a chunk packet, not the nbt data so it's a bit
-        # different but most of the logic still applies
-        state_bytes = b"".join([Buffer.pack("q", n) for n in block_states])
 
         if tag.get("Palette") is None:
             palette = DirectPalette()
         else:
             palette = IndirectPalette.from_nbt(tag["Palette"])
 
+        # yoinked most of the logic for chunk deserialization from https://wiki.vg/Chunk_Format
+        # however, that is for deserialization of a chunk packet, not the nbt data so it's a bit
+        # different but most of the logic still applies and this is needed for that
+        state_bytes = b"".join([Buffer.pack("q", n) for n in tag["BlockStates"]])
+
+        # populate block_states array
         for y in range(16):
             for z in range(16):
                 for x in range(16):
@@ -61,6 +58,26 @@ class ChunkSection:
                         data = state_bytes[start_long] >> start_offset | state_bytes[end_long] << (64 - start_offset)
 
                     section.block_states[x, y, z] = palette.decode(data & individual_value_mask)
+
+        block_light = tag["BlockLight"]
+        i = 0
+
+        # populate block_light array
+        for y in range(16):
+            for z in range(16):
+                for x in range(16):
+                    section[x, y, z] = block_light[i]
+                    i += 1
+
+        sky_light = tag["BlockLight"]
+        i = 0
+
+        # populate sky_light array
+        for y in range(16):
+            for z in range(16):
+                for x in range(16):
+                    section[x, y, z] = sky_light[i]
+                    i += 1
 
 
 class Chunk(nbt.TAG_Compound):

@@ -60,25 +60,8 @@ class ChunkSection:
 
                     section.block_states[x, y, z] = palette.decode(data & individual_value_mask)
 
-        block_light = tag["BlockLight"]
-        i = 0
-
-        # populate block_light array
-        for y in range(16):
-            for z in range(16):
-                for x in range(16):
-                    section[x, y, z] = block_light[i]
-                    i += 1
-
-        sky_light = tag["BlockLight"]
-        i = 0
-
-        # populate sky_light array
-        for y in range(16):
-            for z in range(16):
-                for x in range(16):
-                    section[x, y, z] = sky_light[i]
-                    i += 1
+        section.block_light = numpy.asarray(tag["BlockLight"]).reshape(16, 16, 16)
+        section.sky_light = numpy.asarray(tag["SkyLight"]).reshape(16, 16, 16)
 
         return section
 

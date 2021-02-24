@@ -14,17 +14,25 @@ class ChunkSection:
         self.section_y = section_y
         self.palette = palette
 
-        self.states = numpy.ndarray((16, 16, 16), numpy.uint16)
         self.block_light = numpy.ndarray((16, 16, 16), numpy.uint8)
+        self.states = numpy.ndarray((16, 16, 16), numpy.uint16)
         self.sky_light = numpy.ndarray((16, 16, 16), numpy.uint8)
 
     def from_nbt(self, tag: nbt.TAG) -> ChunkSection:
         if tag.get("Palette") is None:
             palette = DirectPalette()
+            bits_per_block = palette.get_bits_per_block()
         else:
             palette = IndirectPalette.from_nbt(tag["Palette"])
 
-        
+        block_light = Buffer(b"".join([Buffer.pack("i", n) for n in tag["BlockLight"]]))
+        states = Buffer(b"".join([Buffer.pack("i", n) for n in tag["BlockStates"]]))
+        sky_light = Buffer(b"".join([Buffer.pack("i", n) for n in tag["SkyLight"]]))
+
+        for y in range(16):
+            for z in range(16):
+                for x in range(16):
+                    pass
 
 class Chunk(nbt.TAG_Compound):
     def __init__(self, tag: nbt.TAG_Compound, sections: numpy.ndarray, timestamp: int) -> None:

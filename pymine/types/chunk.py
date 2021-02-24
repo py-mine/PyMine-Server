@@ -33,7 +33,7 @@ class ChunkSection:
         # long_array_len = ((16*16*16)*bits_per_block) / 64
         # this simplifies to 64*bits_per_block which is easy to invert
         # so we get the below
-        bits_per_block = len(block_states)/64
+        bits_per_block = len(block_states) / 64
 
         individual_value_mask = (1 << bits_per_block) - 1
         block_states_bytes = b"".join([Buffer.pack("q", n) for n in block_states])

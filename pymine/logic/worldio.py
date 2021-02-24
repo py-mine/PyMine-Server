@@ -69,16 +69,13 @@ class ChunkIO(AbstractChunkIO):
 
         sections = numpy.ndarray((256, 16, 16, 3))
 
-        # for section in tag["Level"]["Sections"]:
-        #     print(section.pretty())
-        #     break
-
-        # print(tag["Level"]["Sections"][3].pretty())
-
         for section in tag["Level"]["Sections"]:
+            lights = int("".join(section["BlockLight"]))
+            blocks = int("".join(section["BlockStates"]))
+
             pass
 
-        return Chunk(tag, sections, timestamp)
+        return tag
 
     @classmethod
     async def fetch_chunk_async(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:

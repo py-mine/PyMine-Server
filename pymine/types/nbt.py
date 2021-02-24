@@ -307,7 +307,7 @@ class TAG_Byte_Array(TAG, bytearray):
         tab_extra = "    " * (indent + 1)
         nl = f", "
 
-        return f'{tab}TAG_Int_Array("{self.name}"): [{nl.join([str(v) for v in self])}]'
+        return f'{tab}TAG_Byte_Array("{self.name}"): [{nl.join([str(v) for v in self])}]'
 
 
 class TAG_String(TAG):

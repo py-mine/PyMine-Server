@@ -79,6 +79,8 @@ class ChunkSection:
                     section[x, y, z] = sky_light[i]
                     i += 1
 
+        return section
+
 
 class Chunk(nbt.TAG_Compound):
     def __init__(self, tag: nbt.TAG_Compound, sections: numpy.ndarray, timestamp: int) -> None:

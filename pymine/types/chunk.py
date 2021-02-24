@@ -36,7 +36,7 @@ class ChunkSection:
         bits_per_block = len(block_states) / 64
 
         individual_value_mask = (1 << bits_per_block) - 1
-        block_states_bytes = b"".join([Buffer.pack("q", n) for n in block_states])
+        state_bytes = b"".join([Buffer.pack("q", n) for n in block_states])
 
         if tag.get("Palette") is None:
             palette = DirectPalette()
@@ -52,9 +52,9 @@ class ChunkSection:
                     end_long = ((block_num + 1) * bits_per_block - 1) / 64
 
                     if start_long == end_long:
-                        data = block_states_bytes[start_long] >> start_offset
+                        data = state_bytes[start_long] >> start_offset
                     else:
-                        data = block_states_bytes[start_long] >> start_offset | data_array[end_long] << (64 - start_offset)
+                        data = state_bytes[start_long] >> start_offset | state_bytes[end_long] << (64 - start_offset)
 
                     section.block_states[x, y, z] = palette.decode(data & individual_value_mask)
 

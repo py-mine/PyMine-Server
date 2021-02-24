@@ -36,6 +36,10 @@ class ChunkSection:
         bits_per_block = len(block_states) / 64
 
         individual_value_mask = (1 << bits_per_block) - 1
+
+        # yoinked most of the logic for chunk deserialization from https://wiki.vg/Chunk_Format
+        # however, that is for deserialization of a chunk packet, not the nbt data so it's a bit
+        # different but most of the logic still applies
         state_bytes = b"".join([Buffer.pack("q", n) for n in block_states])
 
         if tag.get("Palette") is None:

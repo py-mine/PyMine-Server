@@ -20,8 +20,6 @@ class ChunkSection:
 
     @classmethod
     def from_nbt(cls, tag: nbt.TAG) -> ChunkSection:
-        section = cls()
-
         # this is a calculation one would use to serialize a chunk section
         # we need this to solve for bits_per_block as we don't have that
         # but we *do* have the length of the array from the nbt data
@@ -37,6 +35,9 @@ class ChunkSection:
             palette = DirectPalette()
         else:
             palette = IndirectPalette.from_nbt(tag["Palette"])
+
+
+        section = cls(tag["Y"], palette)
 
         # yoinked most of the logic for chunk deserialization from https://wiki.vg/Chunk_Format
         # however, that is for deserialization of a chunk packet, not the nbt data so it's a bit

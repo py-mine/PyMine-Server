@@ -62,22 +62,24 @@ class Integer(AbstractParser):
         self.max_value = max_value
 
     @classmethod
-    def __getitem__(cls, range_: slice) -> Integer:
-        return cls(*range_[:2])
+    def __getitem__(cls, ranges: slice) -> Integer:
+        return cls(ranges.start, range.step)
 
     def parse(self, s: str) -> tuple:
-        section = s.split(" ")[0]
+        try:
+            section = s.split()[0]
+        except IndexError:
+            raise ParsingError
 
         try:
             num = int(section)
-
-            if self.min_value is None or self.max_value > num > self.min_value:
-                return len(section), num
         except ValueError:
-            pass
+            raise ParsingError
+
+        if self.min_value is None or self.max_value > num >= self.min_value:
+            return len(section), num
 
         raise ParsingError
-
 
 class String(AbstractParser):
     def __init__(self, mode: int) -> None:

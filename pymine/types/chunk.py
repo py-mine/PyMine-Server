@@ -43,7 +43,6 @@ class ChunkSection:
                     end_long = ((block_num + 1) * bits_per_block - 1) / 64
 
 
-
 class Chunk(nbt.TAG_Compound):
     def __init__(self, tag: nbt.TAG_Compound, sections: numpy.ndarray, timestamp: int) -> None:
         super().__init__("Level", tag["Level"].data)

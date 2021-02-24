@@ -64,7 +64,6 @@ class IndirectPalette(AbstractPalette):
 
         return cls(Registry(data, reverse_data))
 
-
     def encode(self, block: str, props: dict = None) -> int:
         block_data = self.registry.encode(block)
 

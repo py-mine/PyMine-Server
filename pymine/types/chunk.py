@@ -2,9 +2,29 @@ from __future__ import annotations
 
 import numpy
 
+from pymine.api.abc import AbstractPalette
 from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
 
+
+class ChunkSection:
+    """Represents a 16x16x16 area of chunks"""
+
+    def __init__(self, section_y: int, palette: AbstractPalette):
+        self.section_y = section_y
+        self.palette = palette
+
+        self.states = numpy.ndarray((16, 16, 16), numpy.uint16)
+        self.block_light = numpy.ndarray((16, 16, 16), numpy.uint8)
+        self.sky_light = numpy.ndarray((16, 16, 16), numpy.uint8)
+
+    def from_nbt(self, tag: nbt.TAG) -> ChunkSection:
+        if tag.get("Palette") is None:
+            palette = DirectPalette()
+        else:
+            palette = IndirectPalette.from_nbt(tag["Palette"])
+
+        
 
 class Chunk(nbt.TAG_Compound):
     def __init__(self, tag: nbt.TAG_Compound, sections: numpy.ndarray, timestamp: int) -> None:

@@ -19,20 +19,29 @@ class ChunkSection:
         self.sky_light = numpy.ndarray((16, 16, 16), numpy.uint8)
 
     def from_nbt(self, tag: nbt.TAG) -> ChunkSection:
-        data = Buffer(
-            b"".join([Buffer.pack("i", n) for n in tag["BlockLight"]])
-            + b"".join([Buffer.pack("i", n) for n in tag["BlockStates"]])
-            + b"".join([Buffer.pack("i", n) for n in tag["SkyLight"]])
-        )
+        # data = Buffer(
+        #     b"".join([Buffer.pack("i", n) for n in tag["BlockLight"]])
+        #     + b"".join([Buffer.pack("i", n) for n in tag["BlockStates"]])
+        #     + b"".join([Buffer.pack("i", n) for n in tag["SkyLight"]])
+        # )
 
-        bits_per_block = data.read_byte()
+        block_light = tag["BlockLight"]
+        block_states = tag["BlockStates"]
+        sky_light = tag["SkyLight"]
 
-        if bits_per_block <= 8:
-            palette = IndirectPalette.from_nbt(tag["Palette"])
-        else:
+        # this is a calculation one would use to serialize a chunk section
+        # we need this to solve for bits_per_block as we don't have that
+        # but we *do* have the length of the array from the nbt data
+        # that we read earlier
+        # long_array_len = ((16*16*16)*bits_per_block) / 64
+        # this simplifies to 64*bits_per_block which is easy to invert
+        # so we get the below
+        bits_per_block = len(block_states)/64
+
+        if tag.get("Palette") is None:
             palette = DirectPalette()
-
-        data_array = None
+        else:
+            palette = IndirectPalette.from_nbt(tag["Palette"])
 
         for y in range(16):
             for z in range(16):

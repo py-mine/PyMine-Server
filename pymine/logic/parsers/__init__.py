@@ -1,5 +1,5 @@
-from pymine.api.parsers.brigadier import *
-from pymine.api.parsers.minecraft import *
+from pymine.logic.parsers.brigadier import *
+from pymine.logic.parsers.minecraft import *
 
 
 # parsers = []

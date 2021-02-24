@@ -1,4 +1,4 @@
-from pymine.api.parsers.brigadier import *
+from pymine.logic.parsers.brigadier import *
 
 from pymine.server import server
 

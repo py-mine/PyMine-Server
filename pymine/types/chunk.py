@@ -36,7 +36,6 @@ class ChunkSection:
         else:
             palette = IndirectPalette.from_nbt(tag["Palette"])
 
-
         section = cls(tag["Y"], palette)
 
         # yoinked most of the logic for chunk deserialization from https://wiki.vg/Chunk_Format

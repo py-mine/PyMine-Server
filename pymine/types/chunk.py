@@ -18,12 +18,9 @@ class ChunkSection:
         self.states = numpy.ndarray((16, 16, 16), numpy.uint16)
         self.sky_light = numpy.ndarray((16, 16, 16), numpy.uint8)
 
-    def from_nbt(self, tag: nbt.TAG) -> ChunkSection:
-        # data = Buffer(
-        #     b"".join([Buffer.pack("i", n) for n in tag["BlockLight"]])
-        #     + b"".join([Buffer.pack("i", n) for n in tag["BlockStates"]])
-        #     + b"".join([Buffer.pack("i", n) for n in tag["SkyLight"]])
-        # )
+    @classmethod
+    def from_nbt(cls, tag: nbt.TAG) -> ChunkSection:
+        section = cls()
 
         block_light = tag["BlockLight"]
         block_states = tag["BlockStates"]
@@ -38,6 +35,9 @@ class ChunkSection:
         # so we get the below
         bits_per_block = len(block_states)/64
 
+        individual_value_mask = (1 << bits_per_block) - 1
+        block_states_bytes = b"".join([Buffer.pack("q", n) for n in block_states])
+
         if tag.get("Palette") is None:
             palette = DirectPalette()
         else:
@@ -50,6 +50,13 @@ class ChunkSection:
                     start_long = (block_num * bits_per_block) / 64
                     start_offset = (block_num * bits_per_block) % 64
                     end_long = ((block_num + 1) * bits_per_block - 1) / 64
+
+                    if start_long == end_long:
+                        data = block_states_bytes[start_long] >> start_offset
+                    else:
+                        data = block_states_bytes[start_long] >> start_offset | data_array[end_long] << (64 - start_offset)
+
+                    section.block_states[x, y, z] = palette.decode(data & individual_value_mask)
 
 
 class Chunk(nbt.TAG_Compound):

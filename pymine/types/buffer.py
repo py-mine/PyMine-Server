@@ -46,6 +46,11 @@ class Buffer:
         finally:
             self.pos += length
 
+    def read_byte(self) -> int:
+        byte = self.buf[self.pos]
+        self.pos += 1
+        return byte
+
     def reset(self) -> None:
         """Resets the position in the buffer."""
 

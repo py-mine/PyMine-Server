@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import numpy
 
-from pymine.api.abc import AbstractPalette
+from pymine.types.block_palette import DirectPalette, IndirectPalette
 from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
+
+from pymine.api.abc import AbstractPalette
 
 
 class ChunkSection:

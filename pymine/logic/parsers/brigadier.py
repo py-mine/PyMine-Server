@@ -95,6 +95,7 @@ class Integer(AbstractParser):
 
         raise ParsingError
 
+
 class String(AbstractParser):
     def __init__(self, mode: int) -> None:
         self.mode = mode

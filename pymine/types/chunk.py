@@ -12,7 +12,7 @@ from pymine.api.abc import AbstractPalette
 class ChunkSection:
     """Represents a 16x16x16 area of chunks"""
 
-    def __init__(self, section_y: int, palette: AbstractPalette):
+    def __init__(self, y: int, palette: AbstractPalette):
         self.y = y
         self.palette = palette
 

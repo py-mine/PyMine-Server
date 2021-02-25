@@ -81,8 +81,7 @@ class Chunk(dict):
         self.sections = {}  # indexes go below 0 so a dict it is
 
         for section_tag in self["Sections"]:
-            section = ChunkSection.from_nbt(section_tag)
-            self.sections[section.y] = section
+            self.sections[section_tag["Y"]] = ChunkSection.from_nbt(section_tag)
 
         # delete data which are stored as attributes of this class
         del self["Sections"]  # stored in .sections

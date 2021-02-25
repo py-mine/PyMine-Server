@@ -13,7 +13,7 @@ class ChunkSection:
     """Represents a 16x16x16 area of chunks"""
 
     def __init__(self, section_y: int, palette: AbstractPalette):
-        self.section_y = section_y
+        self.y = y
         self.palette = palette
 
         self.block_light = numpy.ndarray((16, 16, 16), numpy.uint8)
@@ -67,30 +67,23 @@ class ChunkSection:
         return section
 
 
-class Chunk(nbt.TAG_Compound):
-    def __init__(self, tag: nbt.TAG_Compound, sections: numpy.ndarray, timestamp: int) -> None:
-        super().__init__("Level", tag["Level"].data)
-
+class Chunk:
+    def __init__(self, tag: nbt.TAG_Compound, timestamp: int) -> None:
         self.data_version = tag["DataVersion"]
 
-        self.chunk_x = self["xPos"].data
-        self.chunk_z = self["zPos"].data
+        self.x = tag["xPos"].data
+        self.z = tag["zPos"].data
 
         self.timestamp = timestamp
 
-        # should be a shape of (256, 16, 16, 3)
-        # 16 chunk sections in 256 blocks
-        # a chunk section is a 16x16x16 area of blocks
-        # each "block" contains (type_id_of_block, block_light_value, sky_light_value)
-        # note, this is ***not*** what should be dumped to the disk
-        self["Sections"] = sections
+        self.sections = {}
 
-    @property
-    def sections(self):
-        return self["Sections"]
+        for section_tag in tag["Sections"]:
+            section = ChunkSection.from_nbt(section_tag)
+            self.sections[section.y] = section
 
     @classmethod
-    def new(cls, chunk_x: int, chunk_z: int, sections: numpy.ndarray, timestamp: int) -> Chunk:
+    def new(cls, chunk_x: int, chunk_z: int, timestamp: int) -> Chunk:
         return cls(cls.new_nbt(chunk_x, chunk_z), sections, timestamp)
 
     @staticmethod

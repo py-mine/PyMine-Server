@@ -78,7 +78,7 @@ class Chunk(dict):
 
         self.timestamp = timestamp
 
-        self.sections = {}
+        self.sections = {}  # indexes go below 0 so a dict it is
 
         for section_tag in self["Sections"]:
             section = ChunkSection.from_nbt(section_tag)

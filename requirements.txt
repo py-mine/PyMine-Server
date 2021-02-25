@@ -8,3 +8,5 @@ mutf8
 PyYAML
 gitpython
 numpy
+asyncio_dgram
+

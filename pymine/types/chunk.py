@@ -67,9 +67,9 @@ class ChunkSection:
         return section
 
 
-class Chunk(nbt.TAG_Compound):
+class Chunk(dict):
     def __init__(self, tag: nbt.TAG_Compound, timestamp: int) -> None:
-        super().__init__(tag["Level"])
+        super().__init__(dict(tag["Level"]))
 
         self.data_version = tag["DataVersion"]
 
@@ -84,7 +84,10 @@ class Chunk(nbt.TAG_Compound):
             section = ChunkSection.from_nbt(section_tag)
             self.sections[section.y] = section
 
+        # delete data which are stored as attributes of this class
         del self["Sections"]  # stored in .sections
+        del self["xPos"]
+        del self["zPos"]
 
     @classmethod
     def new(cls, chunk_x: int, chunk_z: int, timestamp: int) -> Chunk:

@@ -17,8 +17,8 @@ class ChunkSection:
         self.palette = palette
 
         self.block_states = numpy.ndarray((16, 16, 16), numpy.uint16)
-        self.block_light = numpy.ndarray((16, 16, 16), numpy.uint8)
-        self.sky_light = numpy.ndarray((16, 16, 16), numpy.uint8)
+        self.block_light = None
+        self.sky_light = None
 
     @classmethod
     def from_nbt(cls, tag: nbt.TAG) -> ChunkSection:

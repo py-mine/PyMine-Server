@@ -67,7 +67,7 @@ class ChunkIO(AbstractChunkIO):
             region_file.seek(offset + 5)
             tag = nbt.TAG_Compound.unpack(Buffer(zlib.decompress(region_file.read(length - 5))))
 
-        return Chunk.from_nbt(tag)
+        return Chunk(tag, timestamp)
 
     @classmethod
     async def fetch_chunk_async(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:

@@ -565,7 +565,7 @@ class Buffer:
         return self.unpack_uuid(), self.unpack("d"), self.unpack("b")
 
     @classmethod
-    def pack_palette(cls, palette: AbstractPalette) -> bytes:
+    def pack_block_palette(cls, palette: AbstractPalette) -> bytes:
         return cls.pack_varint(len(palette.registry.data)) + b"".join(  # map indirect ids to the global palette
             [cls.pack_varint(DirectPalette.encode(palette.decode(state_id))) for state_id in range(len(palette.registry.data))]
         )
@@ -575,7 +575,7 @@ class Buffer:
         palette = section.palette
         bits_per_block = palette.get_bits_per_block()
 
-        out = Buffer.pack("b", bits_per_block) + Buffer.pack_
+        out = cls.pack("b", bits_per_block) + cls.pack_palette()
 
     @classmethod  # see here: https://wiki.vg/Chunk_Format
     def pack_chunk_data(cls, chunk_x: int, chunk_z: int, chunk) -> bytes:  # (256, 16, 16)?

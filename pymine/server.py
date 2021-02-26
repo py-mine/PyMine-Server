@@ -180,7 +180,7 @@ class Server:
                 self.logger.warn("Legacy ping attempted, legacy ping is not supported.")
                 raise StopHandling
 
-            b = struct.unpack("B", read)[0]
+            b = struct.unpack(">B", read)[0]
             packet_length |= (b & 0x7F) << 7 * i
 
             if not b & 0x80:

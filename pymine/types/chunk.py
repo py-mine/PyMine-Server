@@ -39,7 +39,7 @@ class ChunkSection:
             else:
                 palette = IndirectPalette.from_nbt(tag["Palette"])
 
-            section = cls(tag["Y"], palette)
+            section = cls(tag["Y"].data, palette)
 
             section.block_states = numpy.ndarray((16, 16, 16), numpy.uint16)
 
@@ -99,7 +99,7 @@ class Chunk(dict):
         self.sections = {}  # indexes go below 0 so a dict it is
 
         for section_tag in self["Sections"]:
-            self.sections[section_tag["Y"]] = ChunkSection.from_nbt(section_tag)
+            self.sections[section_tag["Y"].data] = ChunkSection.from_nbt(section_tag)
 
         # delete data which are stored as attributes of this class
         del self["Sections"]  # stored in .sections

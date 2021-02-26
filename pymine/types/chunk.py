@@ -61,8 +61,15 @@ class ChunkSection:
 
                     section.block_states[x, y, z] = palette.decode(data & individual_value_mask)
 
-        section.block_light = numpy.asarray(tag["BlockLight"]).reshape(16, 16, 16)
-        section.sky_light = numpy.asarray(tag["SkyLight"]).reshape(16, 16, 16)
+        if tag.get("BlockLight") is None:
+            section.block_light = None
+        else:
+            section.block_light = numpy.asarray(tag["BlockLight"]).reshape(16, 16, 16)
+
+        if tag.get("SkyLight") is None:
+            section.sky_light = None
+        else:
+            section.sky_light = numpy.asarray(tag["SkyLight"]).reshape(16, 16, 16)
 
         return section
 

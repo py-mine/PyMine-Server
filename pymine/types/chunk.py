@@ -21,7 +21,7 @@ class ChunkSection:
         self.sky_light = None
 
     def __repr__(self):
-        return f'ChunkSection(y={self.y})'
+        return f"ChunkSection(y={self.y})"
 
     def __getitem__(self, coords: tuple):
         return (

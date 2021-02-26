@@ -30,7 +30,7 @@ class ChunkSection:
             # long_array_len = ((16*16*16)*bits_per_block) / 64
             # this simplifies to 64*bits_per_block which is easy to solve
             # for bits_per_block so we get the below
-            bits_per_block = len(tag["BlockStates"]) / 64
+            bits_per_block = int(len(tag["BlockStates"]) / 64)  # probably 4
 
             individual_value_mask = (1 << bits_per_block) - 1
 

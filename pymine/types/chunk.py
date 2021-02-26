@@ -124,6 +124,12 @@ class Chunk:
 
         return self.sections[index]
 
+    def __setitem__(self, index, new_value):
+        if isinstance(index, str):
+            self.data[index] = new_value
+        else:
+            self.sections[index] = new_value
+
     def get(self, index, default=None):
         try:
             return self[index]

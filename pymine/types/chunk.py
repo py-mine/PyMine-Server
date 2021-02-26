@@ -16,50 +16,55 @@ class ChunkSection:
         self.y = y
         self.palette = palette
 
-        self.block_states = numpy.ndarray((16, 16, 16), numpy.uint16)
+        self.block_states = None
         self.block_light = None
         self.sky_light = None
 
     @classmethod
     def from_nbt(cls, tag: nbt.TAG) -> ChunkSection:
-        # this is a calculation one would use to serialize a chunk section
-        # we need this to solve for bits_per_block as we don't have that
-        # but we *do* have the length of the array from the nbt data
-        # that we read earlier
-        # long_array_len = ((16*16*16)*bits_per_block) / 64
-        # this simplifies to 64*bits_per_block which is easy to solve
-        # for bits_per_block so we get the below
-        bits_per_block = len(tag["BlockStates"]) / 64
+        if tag.get("BlockStates") is not None:
+            # this is a calculation one would use to serialize a chunk section
+            # we need this to solve for bits_per_block as we don't have that
+            # but we *do* have the length of the array from the nbt data
+            # that we read earlier
+            # long_array_len = ((16*16*16)*bits_per_block) / 64
+            # this simplifies to 64*bits_per_block which is easy to solve
+            # for bits_per_block so we get the below
+            bits_per_block = len(tag["BlockStates"]) / 64
 
-        individual_value_mask = (1 << bits_per_block) - 1
+            individual_value_mask = (1 << bits_per_block) - 1
 
-        if tag.get("Palette") is None:
-            palette = DirectPalette()
+            if tag.get("Palette") is None:
+                palette = DirectPalette()
+            else:
+                palette = IndirectPalette.from_nbt(tag["Palette"])
+
+            section = cls(tag["Y"], palette)
+
+            section.block_states = numpy.ndarray((16, 16, 16), numpy.uint16)
+
+            # yoinked most of the logic for chunk deserialization from https://wiki.vg/Chunk_Format
+            # however, that is for deserialization of a chunk packet, not the nbt data so it's a bit
+            # different but most of the logic still applies and this is needed for that
+            state_bytes = b"".join([Buffer.pack("q", n) for n in tag["BlockStates"]])
+
+            # populate block_states array
+            for y in range(16):
+                for z in range(16):
+                    for x in range(16):
+                        block_num = (((y * 16) + z) * 16) + x
+                        start_long = (block_num * bits_per_block) / 64
+                        start_offset = (block_num * bits_per_block) % 64
+                        end_long = ((block_num + 1) * bits_per_block - 1) / 64
+
+                        if start_long == end_long:
+                            data = state_bytes[start_long] >> start_offset
+                        else:
+                            data = state_bytes[start_long] >> start_offset | state_bytes[end_long] << (64 - start_offset)
+
+                        section.block_states[x, y, z] = palette.decode(data & individual_value_mask)
         else:
-            palette = IndirectPalette.from_nbt(tag["Palette"])
-
-        section = cls(tag["Y"], palette)
-
-        # yoinked most of the logic for chunk deserialization from https://wiki.vg/Chunk_Format
-        # however, that is for deserialization of a chunk packet, not the nbt data so it's a bit
-        # different but most of the logic still applies and this is needed for that
-        state_bytes = b"".join([Buffer.pack("q", n) for n in tag["BlockStates"]])
-
-        # populate block_states array
-        for y in range(16):
-            for z in range(16):
-                for x in range(16):
-                    block_num = (((y * 16) + z) * 16) + x
-                    start_long = (block_num * bits_per_block) / 64
-                    start_offset = (block_num * bits_per_block) % 64
-                    end_long = ((block_num + 1) * bits_per_block - 1) / 64
-
-                    if start_long == end_long:
-                        data = state_bytes[start_long] >> start_offset
-                    else:
-                        data = state_bytes[start_long] >> start_offset | state_bytes[end_long] << (64 - start_offset)
-
-                    section.block_states[x, y, z] = palette.decode(data & individual_value_mask)
+            section = cls(tag["Y"], None)
 
         if tag.get("BlockLight") is None:
             section.block_light = None

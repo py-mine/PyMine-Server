@@ -35,7 +35,7 @@ class ChunkSection:
             individual_value_mask = (1 << bits_per_block) - 1
 
             if tag.get("Palette") is None:
-                palette = DirectPalette()
+                palette = DirectPalette
             else:
                 palette = IndirectPalette.from_nbt(tag["Palette"])
 

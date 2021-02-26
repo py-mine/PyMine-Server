@@ -41,6 +41,9 @@ class IndirectPalette(AbstractPalette):
         self.registry = registry
         self.bits_per_block = bits_per_block
 
+    def get_bits_per_block(self):
+        return self.bits_per_block
+
     @classmethod
     def from_nbt(cls, tag: nbt.TAG) -> IndirectPalette:
         data = {}

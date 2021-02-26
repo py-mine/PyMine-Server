@@ -106,6 +106,8 @@ class TAG:
     def __str__(self):
         return self.pretty()
 
+    __repr__ = __str__
+
 
 class TAG_End(TAG):
     id = 0

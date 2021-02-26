@@ -604,13 +604,13 @@ class Buffer:
         for y in range(16):
             for z in range(16):
                 for x in range(0, 16, 2):
-                    out += section.block_light[x][y][z] | (section[x+1][y][z] << 4)
+                    out += section.block_light[x][y][z] | (section[x + 1][y][z] << 4)
 
         # pack the sky light array
         for y in range(16):
             for z in range(16):
                 for x in range(0, 16, 2):
-                    out += section.sky_light[x][y][z] | (section[x+1][y][z] << 4)
+                    out += section.sky_light[x][y][z] | (section[x + 1][y][z] << 4)
 
     @classmethod  # see here: https://wiki.vg/Chunk_Format
     def pack_chunk_data(cls, chunk_x: int, chunk_z: int, chunk) -> bytes:  # (256, 16, 16)?

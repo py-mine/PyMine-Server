@@ -575,7 +575,42 @@ class Buffer:
         palette = section.palette
         bits_per_block = palette.get_bits_per_block()
 
-        out = cls.pack("b", bits_per_block) + cls.pack_palette()
+        # pack bits per block and palette
+        out = cls.pack("b", bits_per_block) + cls.pack_block_palette(palette)
+
+        data = [0] * int((16 * 16 * 16) * bits_per_block / 64)
+        individual_value_mask = (1 << bits_per_block) - 1
+
+        # create the long array from the block states
+        for y in range(16):
+            for z in range(16):
+                for x in range(16):
+                    block_num = (((y * 16) + z) * 16) + x
+                    start_long = (block_num * bits_per_block) // 64
+                    start_offset = (block_num * bits_per_block) % 64
+                    end_long = ((block_num + 1) * bits_per_block - 1) // 64
+
+                    value = section[x][y][z] & individual_value_mask
+
+                    data[start_long] |= value << start_offset
+
+                    if start_long != end_long:
+                        data[end_long] = value >> (64 - start_offset)
+
+        # pack the block state long array
+        out += Buffer.pack_varint(len(data)) + b"".join([Buffer.pack("q", q) for q in data])
+
+        # pack the block light array
+        for y in range(16):
+            for z in range(16):
+                for x in range(0, 16, 2):
+                    out += section.block_light[x][y][z] | (section[x+1][y][z] << 4)
+
+        # pack the sky light array
+        for y in range(16):
+            for z in range(16):
+                for x in range(0, 16, 2):
+                    out += section.sky_light[x][y][z] | (section[x+1][y][z] << 4)
 
     @classmethod  # see here: https://wiki.vg/Chunk_Format
     def pack_chunk_data(cls, chunk_x: int, chunk_z: int, chunk) -> bytes:  # (256, 16, 16)?

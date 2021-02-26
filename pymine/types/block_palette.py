@@ -37,8 +37,9 @@ class DirectPalette(AbstractPalette):
 
 
 class IndirectPalette(AbstractPalette):
-    def __init__(self, registry: Registry) -> None:
+    def __init__(self, registry: Registry, bits_per_block: int) -> None:
         self.registry = registry
+        self.bits_per_block = bits_per_block
 
     @classmethod
     def from_nbt(cls, tag: nbt.TAG) -> IndirectPalette:

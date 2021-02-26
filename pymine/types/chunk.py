@@ -122,7 +122,7 @@ class Chunk:
         del self.data["zPos"]
 
     def __repr__(self):
-        return f'Chunk(x={self.x}, z={self.z})'
+        return f"Chunk(x={self.x}, z={self.z})"
 
     def __getitem__(self, index):
         if isinstance(index, str):

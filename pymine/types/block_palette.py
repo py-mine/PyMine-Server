@@ -49,7 +49,7 @@ class IndirectPalette(AbstractPalette):
             reverse_data[i] = {"name": b["Name"]}
 
             if b.get("Properties"):
-                reverse_data[i]["properties"] = {k: v for k, v in b["Properties"]}
+                reverse_data[i]["properties"] = {k: v for k, v in b["Properties"].items()}
 
         for id_, b in reverse_data.items():
             if b["name"] not in data:

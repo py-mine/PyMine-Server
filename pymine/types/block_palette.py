@@ -46,10 +46,10 @@ class IndirectPalette(AbstractPalette):
         reverse_data = {}
 
         for i, b in enumerate(tag):
-            reverse_data[i] = {"name": tag["Name"]}
+            reverse_data[i] = {"name": b["Name"]}
 
-            if tag.get("Properties"):
-                reverse_data[i]["properties"] = {k: v for k, v in tag["Properties"]}
+            if b.get("Properties"):
+                reverse_data[i]["properties"] = {k: v for k, v in b["Properties"]}
 
         for id_, b in reverse_data.items():
             if b["name"] not in data:

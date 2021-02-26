@@ -47,10 +47,14 @@ class Buffer:
         finally:
             self.pos += length
 
-    def read_byte(self) -> int:
+    def unpack_byte(self) -> int:
         byte = self.buf[self.pos]
         self.pos += 1
         return byte
+
+    @classmethod
+    def pack_byte(cls, b: int) -> bytes:
+        return struct.pack(">b", b)
 
     def reset(self) -> None:
         """Resets the position in the buffer."""

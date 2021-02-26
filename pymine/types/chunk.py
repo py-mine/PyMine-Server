@@ -20,6 +20,13 @@ class ChunkSection:
         self.block_light = None
         self.sky_light = None
 
+    def __getitem__(self, coords: tuple):
+        return (
+            (None if self.block_states is None else self.block_states[coords]),
+            (None if self.block_light is None else self.block_light[coords]),
+            (None if self.sky_light is None else self.sky_light[coords]),
+        )
+
     @classmethod
     def from_nbt(cls, tag: nbt.TAG) -> ChunkSection:
         if tag.get("BlockStates") is not None:

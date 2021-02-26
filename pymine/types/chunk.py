@@ -112,6 +112,18 @@ class Chunk:
         del self.data["xPos"]
         del self.data["zPos"]
 
+    def __getitem__(self, index):
+        if isinstance(index, str):
+            return self.data[index]
+
+        return self.sections[index]
+
+    def get(self, index, default=None):
+        try:
+            return self[index]
+        except KeyError:
+            return default
+
     @classmethod
     def new(cls, chunk_x: int, chunk_z: int, timestamp: int) -> Chunk:
         return cls(cls.new_nbt(chunk_x, chunk_z), timestamp)

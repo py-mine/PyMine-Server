@@ -71,12 +71,12 @@ class ChunkSection:
         if tag.get("BlockLight") is None:
             section.block_light = None
         else:
-            section.block_light = numpy.asarray([(b & 0x0F, b >> 4 & 0x0F) for b in tag["BlockLight"]], numpy.uint8).reshape(16, 16, 16)
+            section.block_light = numpy.asarray([n for n in (b & 0x0F, b >> 4 & 0x0F) for b in tag["BlockLight"]], numpy.uint8).reshape(16, 16, 16)
 
         if tag.get("SkyLight") is None:
             section.sky_light = None
         else:
-            section.sky_light = numpy.asarray([(b & 0x0F, b >> 4 & 0x0F) for b in tag["SkyLight"]], numpy.uint8).reshape(16, 16, 16)
+            section.sky_light = numpy.asarray([n for n in (b & 0x0F, b >> 4 & 0x0F) for b in tag["SkyLight"]], numpy.uint8).reshape(16, 16, 16)
 
         return section
 

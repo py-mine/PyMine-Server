@@ -27,6 +27,12 @@ class ChunkSection:
             (None if self.sky_light is None else self.sky_light[coords]),
         )
 
+    def get(self, index, default=None):
+        try:
+            return self[index]
+        except KeyError:
+            return default
+
     @classmethod
     def from_nbt(cls, tag: nbt.TAG) -> ChunkSection:
         if tag.get("BlockStates") is not None:

@@ -30,7 +30,7 @@ class ChunkSection:
             # long_array_len = ((16*16*16)*bits_per_block) / 64
             # this simplifies to 64*bits_per_block which is easy to solve
             # for bits_per_block so we get the below
-            bits_per_block = int(len(tag["BlockStates"]) / 64)  # probably 4
+            bits_per_block = len(tag["BlockStates"]) // 64  # probably 4
 
             individual_value_mask = (1 << bits_per_block) - 1
 
@@ -53,9 +53,9 @@ class ChunkSection:
                 for z in range(16):
                     for x in range(16):
                         block_num = (((y * 16) + z) * 16) + x
-                        start_long = (block_num * bits_per_block) / 64
+                        start_long = (block_num * bits_per_block) // 64
                         start_offset = (block_num * bits_per_block) % 64
-                        end_long = ((block_num + 1) * bits_per_block - 1) / 64
+                        end_long = ((block_num + 1) * bits_per_block - 1) // 64
 
                         if start_long == end_long:
                             data = state_bytes[start_long] >> start_offset

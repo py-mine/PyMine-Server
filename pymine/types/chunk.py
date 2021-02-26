@@ -16,8 +16,8 @@ class ChunkSection:
         self.y = y
         self.palette = palette
 
+        self.block_states = numpy.ndarray((16, 16, 16), numpy.uint16)
         self.block_light = numpy.ndarray((16, 16, 16), numpy.uint8)
-        self.states = numpy.ndarray((16, 16, 16), numpy.uint16)
         self.sky_light = numpy.ndarray((16, 16, 16), numpy.uint8)
 
     @classmethod

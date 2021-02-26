@@ -62,7 +62,7 @@ class ChunkSection:
                         else:
                             data = state_bytes[start_long] >> start_offset | state_bytes[end_long] << (64 - start_offset)
 
-                        section.block_states[x, y, z] = palette.decode(data & individual_value_mask)
+                        section.block_states[x, y, z] = data & individual_value_mask
         else:
             section = cls(tag["Y"], None)
 

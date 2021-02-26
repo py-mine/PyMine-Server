@@ -67,15 +67,7 @@ class ChunkIO(AbstractChunkIO):
             region_file.seek(offset + 5)
             tag = nbt.TAG_Compound.unpack(Buffer(zlib.decompress(region_file.read(length - 5))))
 
-        sections = numpy.ndarray((256, 16, 16, 3))
-
-        for section in tag["Level"]["Sections"]:
-            lights = int("".join(section["BlockLight"]))
-            blocks = int("".join(section["BlockStates"]))
-
-            pass
-
-        return tag
+        return Chunk.from_nbt(tag)
 
     @classmethod
     async def fetch_chunk_async(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:

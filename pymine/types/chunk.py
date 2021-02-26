@@ -53,7 +53,7 @@ class ChunkSection:
             if tag.get("Palette") is None:
                 palette = DirectPalette
             else:
-                palette = IndirectPalette.from_nbt(tag["Palette"])
+                palette = IndirectPalette.from_nbt(tag["Palette"], bits_per_block)
 
             section = cls(tag["Y"].data, palette)
 

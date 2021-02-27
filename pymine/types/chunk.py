@@ -130,11 +130,11 @@ class Chunk:
 
         return self.sections[key]
 
-    def __setitem__(self, key, new_value):
+    def __setitem__(self, key, value):
         if isinstance(key, str):
-            self.data[key] = new_value
+            self.data[key] = value
         else:
-            self.sections[key] = new_value
+            self.sections[key] = value
 
     def __del__(self):
         pass  # should dump the chunk to the disk in the future, or perhaps have an explicit save() method?

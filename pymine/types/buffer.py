@@ -627,7 +627,10 @@ class Buffer:
 
     @classmethod  # see here: https://wiki.vg/Chunk_Format
     def pack_chunk_data(cls, chunk: Chunk, full: bool = True) -> bytes:
-        out = cls.pack("i", chunk.x) + cls.pack("i", chunk.z)
+        if not full:
+            raise NotImplementedError
+
+        out = cls.pack("i", chunk.x) + cls.pack("i", chunk.z) + cls.pack('?', full)
 
         mask = 0
         column_buffer = cls()

@@ -33,15 +33,21 @@ class PlayChunkData(Packet):
     id = 0x20
     to = 1
 
-    def __init__(self, chunk: Chunk, full: bool, primary_bit_mask: int) -> None:
+    def __init__(self, chunk: Chunk, full: bool) -> None:
         super().__init__()
 
         self.chunk = chunk
         self.full = full
-        self.primary_bit_mask = primary_bit_mask
 
     def encode(self) -> bytes:
-        pass
+        out = Buffer.pack('i', self.chunk.x) + Buffer.pack('i', self.chunk.z) + Buffer.pack('?', self.full)
+
+        mask = 0
+        chunk_sections_buffer = Buffer()
+
+        for y, section in self.chunk.sections.items():
+            if y >= 0:
+                chunk_sections_buffer.write(Buffer.pack_chunk_section(section))
 
 
 class PlayUpdateLight(Packet):

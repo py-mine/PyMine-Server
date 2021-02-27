@@ -217,6 +217,8 @@ async def send_world_info(stream: Stream, player: Player) -> None:
     for chunk in chunks.values():  # send chunk data packet for each chunk in player's view distance
         await server.send_packet(stream, packets.play.chunk.PlayChunkData(chunk, True))
 
+    del chunks  # no longer needed so free the memoryyyy
+
     # send the world border data to the client
     await server.send_packet(
         stream,

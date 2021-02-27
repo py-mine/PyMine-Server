@@ -43,6 +43,7 @@ class PlayChunkData(Packet):
     def encode(self) -> bytes:
         pass
 
+
 class PlayUpdateLight(Packet):
     """Updates light levels for a chunk."""
 

@@ -125,20 +125,20 @@ class Chunk:
         return f"Chunk(x={self.x}, z={self.z})"
 
     def __getitem__(self, key):
-        if isinstance(index, str):
+        if isinstance(key, str):
             return self.data[key]
 
         return self.sections[key]
 
-    def __setitem__(self, index, new_value):
-        if isinstance(index, str):
-            self.data[index] = new_value
+    def __setitem__(self, key, new_value):
+        if isinstance(key, str):
+            self.data[key] = new_value
         else:
-            self.sections[index] = new_value
+            self.sections[key] = new_value
 
-    def get(self, index, default=None):
+    def get(self, key, default=None):
         try:
-            return self[index]
+            return self[key]
         except KeyError:
             return default
 

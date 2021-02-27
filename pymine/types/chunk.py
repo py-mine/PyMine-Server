@@ -23,7 +23,7 @@ class ChunkSection:
     def __repr__(self):
         return f"ChunkSection(y={self.y})"
 
-    def __getitem__(self, coords: tuple):
+    def __getitem__(self, coords):
         return (
             (None if self.block_states is None else self.block_states[coords]),
             (None if self.block_light is None else self.block_light[coords]),

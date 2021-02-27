@@ -80,7 +80,9 @@ async def join_2(stream: Stream, player: Player) -> None:
 
     await send_world_info(stream, player)
 
-    await server.send_packet(stream, packets.play.player.PlayPlayerPositionAndLookClientBound())
+    await server.send_packet(
+        stream, packets.play.player.PlayPlayerPositionAndLookClientBound(player, 0, random.randint(1, 999999))
+    )
 
 
 # crucial info pertaining to the world and player status

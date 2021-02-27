@@ -245,5 +245,5 @@ async def send_positional_data(stream: Stream, world: World, player: Player) -> 
 
     await server.send_packet(
         stream,
-        packets.play.spawn.PlaySpawnPosition()
+        packets.play.spawn.PlaySpawnPosition(world["SpawnX"], world["SpawnY"], world["SpawnZ"])
     )

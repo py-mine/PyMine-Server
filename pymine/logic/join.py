@@ -223,14 +223,14 @@ async def send_world_info(stream: Stream, player: Player) -> None:
         packets.play.world.PlayWorldBorder(
             3,
             {
-                "x": 0,
-                "z": 0,
-                "old_diameter": 29999984,
-                "new_diameter": 29999984,
+                "x": world["BorderCenterX"],
+                "z": world["BorderCenterZ"],
+                "old_diameter": world["BorderSize"],
+                "new_diameter": world["BorderSize"],
                 "speed": 0,
-                "portal_teleport_boundary": 29999984,
-                "warning_blocks": 5,
-                "warning_time": 15,
+                "portal_teleport_boundary": world["BorderSize"],
+                "warning_blocks": world["BorderWarningBlocks"],
+                "warning_time": world["BorderWarningTime"],
             },
         ),
     )

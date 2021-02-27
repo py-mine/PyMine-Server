@@ -47,6 +47,7 @@ class PlayChunkData(Packet):
 
         for y, section in self.chunk.sections.items():
             if y >= 0:
+                mask |= (1 << y)
                 chunk_sections_buffer.write(Buffer.pack_chunk_section(section))
 
 

@@ -626,7 +626,7 @@ class Buffer:
                         out += cls.pack_byte(section.sky_light[x][y][z] | (section[x + 1][y][z] << 4))
 
     @classmethod  # see here: https://wiki.vg/Chunk_Format
-    def pack_chunk_data(cls, chunk: Chunk, full: bool = True) -> bytes:
+    def pack_chunk(cls, chunk: Chunk, full: bool = True) -> bytes:
         out = cls.pack('i', chunk.x) + cls.pack('i', chunk.z)
 
         mask = 0
@@ -643,3 +643,5 @@ class Buffer:
                 column_buffer.write(cls.pack('i', 127))  # 127 for void as I don't feel like supporting biomes rn
 
         out += cls.pack_varint(mask) + cls.pack_varint(len(column_buffer)) + column_buffer.read()
+
+        out += cls.pack_varint(0)  # normally here we would pack the entities, but 0 signifies there are none so we good

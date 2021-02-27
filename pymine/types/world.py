@@ -25,6 +25,18 @@ class World:
         self._proper_name = None
         self._dimension = None
 
+    def __getitem__(self, key):
+        return self.data[key]
+
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
+    def get(self, key, default=None):
+        try:
+            return self.data[key]
+        except KeyError:
+            return default
+
     @property
     def proper_name(self):
         if self._proper_name is None:
@@ -38,9 +50,6 @@ class World:
             self._dimension = "minecraft:" + self.proper_name.replace(self.name + "_", "")
 
         return self._dimension
-
-    def __getitem__(self, key):
-        return self.data[key]
 
     async def init(self):
         self.data = await self.load_level_data()

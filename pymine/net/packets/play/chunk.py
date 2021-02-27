@@ -135,4 +135,14 @@ class PlayUpdateLight(Packet):
 
                         block_light_arrays.append(b"".join(data))
 
-        return out + Buffer.pack_varint(sky_light_mask) + Buffer.pack_varint(block_light_mask) + Buffer.pack_varint(empty_sky_light_mask) + Buffer.pack_varint(empty_block_light_mask) + Buffer.pack_varint(len(sky_light_arrays)) + b"".join(sky_light_arrays) + Buffer.pack_varint(len(block_light_arrays)) + b"".join(block_light_arrays)
+        return (
+            out
+            + Buffer.pack_varint(sky_light_mask)
+            + Buffer.pack_varint(block_light_mask)
+            + Buffer.pack_varint(empty_sky_light_mask)
+            + Buffer.pack_varint(empty_block_light_mask)
+            + Buffer.pack_varint(len(sky_light_arrays))
+            + b"".join(sky_light_arrays)
+            + Buffer.pack_varint(len(block_light_arrays))
+            + b"".join(block_light_arrays)
+        )

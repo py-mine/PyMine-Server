@@ -60,7 +60,7 @@ class PlayChunkData(Packet):
                 chunk_sections_buffer.write(Buffer.pack_chunk_section(section))
 
         out += Buffer.pack_varint(mask) + Buffer.pack_nbt(
-            nbt.TAG_Compound("", [chunk["Heightmaps"]["MOTION_BLOCKING"], chunk["Heightmaps"]["WORLD_SURFACE"]])
+            nbt.TAG_Compound("", [self.chunk["Heightmaps"]["MOTION_BLOCKING"], self.chunk["Heightmaps"]["WORLD_SURFACE"]])
         )
 
         if self.full:

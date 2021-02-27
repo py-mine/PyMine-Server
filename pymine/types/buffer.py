@@ -645,3 +645,5 @@ class Buffer:
         out += cls.pack_varint(mask) + cls.pack_varint(len(column_buffer)) + column_buffer.read()
 
         out += cls.pack_varint(0)  # normally here we would pack the entities, but 0 signifies there are none so we good
+
+        return out

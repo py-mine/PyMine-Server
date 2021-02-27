@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
+from pymine.types.chunk import Chunk
 import pymine.types.nbt as nbt
 
 __all__ = (
@@ -28,8 +29,19 @@ class PlayUnloadChunk(Packet):
 
 
 class PlayChunkData(Packet):
-    
 
+    id = 0x20
+    to = 1
+
+    def __init__(self, chunk: Chunk, full: bool, primary_bit_mask: int) -> None:
+        super().__init__()
+
+        self.chunk = chunk
+        self.full = full
+        self.primary_bit_mask = primary_bit_mask
+
+    def encode(self) -> bytes:
+        pass
 
 class PlayUpdateLight(Packet):
     """Updates light levels for a chunk."""

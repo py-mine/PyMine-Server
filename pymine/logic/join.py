@@ -29,7 +29,7 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str, props: list) -> 
     player.stream = stream
     player.username = username
 
-    world = server.worlds[player.data["Dimension"].data]  # the world player *should* be spawning into
+    world = server.worlds[player["Dimension"].data]  # the world player *should* be spawning into
 
     await send_join_game_packet(stream, world, player)
 
@@ -49,7 +49,7 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str, props: list) -> 
 
 async def join_2(stream: Stream, player: Player) -> None:
     # change held item to saved last held item
-    await server.send_packet(stream, packets.play.player.PlayHeldItemChangeClientBound(player.data["SelectedItemSlot"].data))
+    await server.send_packet(stream, packets.play.player.PlayHeldItemChangeClientBound(player["SelectedItemSlot"].data))
 
     # send recipes
     await server.send_packet(stream, packets.play.crafting.PlayDeclareRecipes(RECIPES))
@@ -80,6 +80,8 @@ async def join_2(stream: Stream, player: Player) -> None:
 
     await send_world_info(stream, player)
 
+    await server.send_packet(stream, packets.play.player.PlayPlayerPositionAndLookClientBound())
+
 
 # crucial info pertaining to the world and player status
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:
@@ -90,12 +92,12 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
         packets.play.player.PlayJoinGame(
             player.entity_id,
             server.conf["hardcore"],  # whether world is hardcore or not
-            player.data["playerGameType"].data,  # gamemode
-            player.data["previousPlayerGameType"].data,  # previous gamemode
+            player["playerGameType"].data,  # gamemode
+            player["previousPlayerGameType"].data,  # previous gamemode
             [level_name, f"{level_name}_nether", f"{level_name}_the_end"],  # world names
             new_dim_codec_nbt(),  # Shouldn't change unless CUSTOM DIMENSIONS are added fml
             # This is like the the dimension data for the dim the player is currently spawning into
-            get_dimension_data(player.data["Dimension"].data),  # player.data['Dimension'] should be like minecraft:overworld
+            get_dimension_data(player["Dimension"].data),  # player['Dimension'] should be like minecraft:overworld
             server.conf["level_name"],  # level name of the world the player is spawning into
             seed_hash(server.conf["seed"]),
             server.conf["max_players"],
@@ -110,7 +112,7 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
 
 # send what the player can/can't do
 async def send_player_abilities(stream: Stream, player: Player) -> None:
-    abilities = player.data["abilities"]
+    abilities = player["abilities"]
     flags = BitField.new(4)
 
     flags.add(0x01, abilities["invulnerable"].data)
@@ -132,16 +134,16 @@ async def send_unlocked_recipes(stream: Stream, player: Player) -> None:
         stream,
         packets.play.crafting.PlayUnlockRecipes(
             0,  # init
-            player.data["recipeBook"]["isGuiOpen"],  # refers to the regular crafting bench/table
-            player.data["recipeBook"]["isFilteringCraftable"],  # refers to the regular crafting bench/table
-            player.data["recipeBook"]["isFurnaceGuiOpen"],
-            player.data["recipeBook"]["isFurnaceFilteringCraftable"],
-            player.data["recipeBook"]["isBlastingFurnaceGuiOpen"],
-            player.data["recipeBook"]["isBlastingFurnaceFilteringCraftable"],
-            player.data["recipeBook"]["isSmokerGuiOpen"],
-            player.data["recipeBook"]["isSmokerFilteringCraftable"],
-            player.data["recipeBook"]["recipes"],  # all unlocked recipes
-            player.data["recipeBook"]["toBeDisplayed"],  # ones which will be displayed as newly unlocked
+            player["recipeBook"]["isGuiOpen"],  # refers to the regular crafting bench/table
+            player["recipeBook"]["isFilteringCraftable"],  # refers to the regular crafting bench/table
+            player["recipeBook"]["isFurnaceGuiOpen"],
+            player["recipeBook"]["isFurnaceFilteringCraftable"],
+            player["recipeBook"]["isBlastingFurnaceGuiOpen"],
+            player["recipeBook"]["isBlastingFurnaceFilteringCraftable"],
+            player["recipeBook"]["isSmokerGuiOpen"],
+            player["recipeBook"]["isSmokerFilteringCraftable"],
+            player["recipeBook"]["recipes"],  # all unlocked recipes
+            player["recipeBook"]["toBeDisplayed"],  # ones which will be displayed as newly unlocked
         ),
     )
 
@@ -159,9 +161,9 @@ async def send_player_position_and_rotation(stream: Stream, player: Player) -> N
 
 # broadcasts the player's info to the other clients, this is needed to support skins and update the tab list
 async def broadcast_player_info(player: Player) -> None:
-    display_name = player.data.get("CustomName")
+    display_name = player.get("CustomName")
 
-    if not player.data.get("CustomNameVisible"):
+    if not player.get("CustomNameVisible"):
         display_name = None
 
     # Unsure whether these should broadcast to all clients or not
@@ -175,7 +177,7 @@ async def broadcast_player_info(player: Player) -> None:
                     "uuid": player.uuid,
                     "name": player.name,
                     "properties": player.props,
-                    "gamemode": player.data["playerGameType"],
+                    "gamemode": player["playerGameType"],
                     "ping": 0,
                     "display_name": Chat(display_name),
                 }
@@ -204,7 +206,7 @@ async def send_update_view_distance(stream: Stream, player: Player) -> None:
 
 # sends information about the world to the client, like chunk data and other stuff
 async def send_world_info(stream: Stream, player: Player) -> None:
-    world = server.worlds[player.data["Dimension"].data]  # the world player *should* be spawning into
+    world = server.worlds[player["Dimension"].data]  # the world player *should* be spawning into
     chunks = {}  # cache chunks here because they're used multiple times and shouldn't be garbage collected
 
     for x in range(-player.view_distance - 1, player.view_distance + 1):

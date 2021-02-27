@@ -110,7 +110,9 @@ class PlayUpdateLight(Packet):
                         for y in range(16):
                             for z in range(16):
                                 for x in range(0, 16, 2):
-                                    data.append(Buffer.pack('b', section.sky_light[x][y][z] | (section.sky_light[x+1][y][z] << 4)))
+                                    data.append(
+                                        Buffer.pack("b", section.sky_light[x][y][z] | (section.sky_light[x + 1][y][z] << 4))
+                                    )
 
                         sky_light_arrays.append(b"".join(data))
 
@@ -125,6 +127,10 @@ class PlayUpdateLight(Packet):
                         for y in range(16):
                             for z in range(16):
                                 for x in range(0, 16, 2):
-                                    data.append(Buffer.pack('b', section.block_light[x][y][z] | (section.block_light[x+1][y][z] << 4)))
+                                    data.append(
+                                        Buffer.pack(
+                                            "b", section.block_light[x][y][z] | (section.block_light[x + 1][y][z] << 4)
+                                        )
+                                    )
 
                         block_light_arrays.append(b"".join(data))

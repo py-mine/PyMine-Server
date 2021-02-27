@@ -211,20 +211,8 @@ async def send_chunk_data(stream: Stream, player: Player) -> None:
         for chunk_z in range(-player.view_distance, player.view_distance):
             chunks[chunk_x, chunk_z] = await world.fetch_chunk(chunk_x, chunk_z)
 
-    for coords, chunk in chunks.items():
-        pass
+    for chunk in chunks.values():  # send update light packet for each chunk in the player's view distance
+        await server.send_packet(stream, packets.play.chunk.PlayUpdateLight(chunk))
 
-    # await server.send_packet(
-    #     stream,
-    #     packets.play.chunk.PlayUpdateLight(
-    #         chunk_x,
-    #         chunk_z,
-    #         False,  # trust edges, idk what this means, see here: https://wiki.vg/Protocol#Update_Light
-    #         0,
-    #         0,
-    #         0,
-    #         0,
-    #         [],
-    #         [],
-    #     ),
-    # )
+    for chunk in chunks.values():  # send chunk data packet for each chunk in player's view distance
+        await server.send_packet(stream, packets.play.chunk.PlayChunkData(chunk, True))

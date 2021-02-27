@@ -10,7 +10,7 @@ testpaths = ["tests"]
 [tool.poetry]
 name = "pymine"
 version = "0.1.0"
-description = ""
+description = "A fast and easy to use, moddable, Python based Minecraft server!"
 authors = ["Milo Weinberg <iapetus011@gmail.com>"]
 license = "GPLv3"
 

@@ -627,20 +627,20 @@ class Buffer:
 
     @classmethod  # see here: https://wiki.vg/Chunk_Format
     def pack_chunk(cls, chunk: Chunk, full: bool = True) -> bytes:
-        out = cls.pack('i', chunk.x) + cls.pack('i', chunk.z)
+        out = cls.pack("i", chunk.x) + cls.pack("i", chunk.z)
 
         mask = 0
         column_buffer = cls()
 
-        for y in range(256//16):
-            mask |= (1 << y)
+        for y in range(256 // 16):
+            mask |= 1 << y
 
             if chunk.sections.get(y - 1) is not None:  # y - 1 because it's indexed that way idfk why but yeah
                 column_buffer.write(cls.pack_chunk_section(chunk.sections[y - 1]))
 
         for z in range(16):
             for x in range(16):
-                column_buffer.write(cls.pack('i', 127))  # 127 for void as I don't feel like supporting biomes rn
+                column_buffer.write(cls.pack("i", 127))  # 127 for void as I don't feel like supporting biomes rn
 
         out += cls.pack_varint(mask) + cls.pack_varint(len(column_buffer)) + column_buffer.read()
 

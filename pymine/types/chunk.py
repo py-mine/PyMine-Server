@@ -136,6 +136,9 @@ class Chunk:
         else:
             self.sections[key] = new_value
 
+    def __del__(self):
+        pass  # should dump the chunk to the disk in the future, or perhaps have an explicit save() method?
+
     def get(self, key, default=None):
         try:
             return self[key]

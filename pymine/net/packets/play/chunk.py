@@ -81,38 +81,29 @@ class PlayUpdateLight(Packet):
     id = 0x23
     to = 1
 
-    def __init__(
-        self,
-        chunk_x: int,
-        chunk_z: int,
-        trust_edges: bool,
-        sky_light_mask: int,
-        block_light_mask: int,
-        empty_sky_light_mask: int,
-        empty_block_light_mask: int,
-        sky_light_array: list,
-        block_light_array: list,
-    ) -> None:
+    def __init__(self, chunk: Chunk) -> None:
         super().__init__()
 
-        self.chunk_x, self.chunk_z = chunk_x, chunk_z
-        self.trust_edges = trust_edges
-        self.sky_light_mask, self.empty_sky_light_mask = sky_light_mask, empty_sky_light_mask
-        self.block_light_mask, self.empty_block_light_mask = block_light_mask, empty_block_light_mask
-        self.sky_light_array = sky_light_array
-        self.block_light_array = block_light_array
+        self.chunk = chunk
 
     def encode(self) -> bytes:
-        return (
-            Buffer.pack("i", self.chunk_x)
-            + Buffer.pack("i", self.chunk_z)
-            + Buffer.pack("?", self.trust_edges)
-            + Buffer.pack_varint(self.sky_light_mask)
-            + Buffer.pack_varint(self.block_light_mask)
-            + Buffer.pack_varint(self.empty_sky_light_max)
-            + Buffer.pack_varint(self.empty_block_light_mask)
-            + Buffer.pack_varint(len(self.sky_light_array))
-            + b"".join(self.sky_light_array)
-            + Buffer.pack_varint(len(self.block_light_array))
-            + b"".join(self.block_light_array)
-        )
+        out = Buffer.pack_varint(self.chunk.x) + Buffer.pack_varint(self.chunk.z) + Buffer.pack('?', True)
+
+        sky_light_mask = 0
+        block_light_mask = 0
+        empty_sky_light_mask = 0
+        empty_block_light_mask = 0
+
+        for y, section in chunk.sections.items():
+            if y >= 0:
+                if section.sky_light is not None:
+                    if len(section.sky_light.nonzero()) == 0:
+                        empty_sky_light_mask |= 1 << y
+                    else:
+                        sky_light_mask |= 1 << y
+
+                if section.block_light is not None:
+                    if len(section.block_light.nonzero() == 0):
+                        empty_block_light_mask |= 1 << y
+                    else:
+                        block_light_mask |= 1 << y

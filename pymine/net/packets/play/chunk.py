@@ -29,6 +29,15 @@ class PlayUnloadChunk(Packet):
 
 
 class PlayChunkData(Packet):
+    """Sends a chunk / its data to the client. (Server -> Client)
+
+    :param Chunk chunk: The chunk to send the data for.
+    :param bool full: Whether the chunk is "full" or not, see here: https://wiki.vg/Chunk_Format#Full_chunk
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar chunk:
+    :ivar full:
+    """
 
     id = 0x20
     to = 1

@@ -103,7 +103,7 @@ class PlayUpdateLight(Packet):
                         sky_light_mask |= 1 << y
 
                 if section.block_light is not None:
-                    if len(section.block_light.nonzero() == 0):
+                    if len(section.block_light.nonzero()) == 0:
                         empty_block_light_mask |= 1 << y
                     else:
                         block_light_mask |= 1 << y

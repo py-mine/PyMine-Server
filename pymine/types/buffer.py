@@ -28,6 +28,9 @@ class Buffer:
         self.buf = b"" if buf is None else buf
         self.pos = 0
 
+    def __len__(self):
+        return len(self.buf)
+
     def write(self, data: bytes) -> None:
         """Writes data to the buffer."""
 
@@ -623,11 +626,20 @@ class Buffer:
                         out += cls.pack_byte(section.sky_light[x][y][z] | (section[x + 1][y][z] << 4))
 
     @classmethod  # see here: https://wiki.vg/Chunk_Format
-    def pack_chunk_data(cls, chunk_x: int, chunk_z: int, chunk: Chunk, full: bool = True) -> bytes:
-        out = cls.pack('i', chunk_x) + cls.pack('i', chunk_z)
+    def pack_chunk_data(cls, chunk: Chunk, full: bool = True) -> bytes:
+        out = cls.pack('i', chunk.x) + cls.pack('i', chunk.z)
 
         mask = 0
         column_buffer = cls()
 
         for y in range(256//16):
-            pass
+            mask |= (1 << y)
+
+            if chunk.sections.get(y - 1) is not None:  # y - 1 because it's indexed that way idfk why but yeah
+                column_buffer.write(cls.pack_chunk_section(chunk.sections[y - 1]))
+
+        for z in range(16):
+            for x in range(16):
+                column_buffer.write(cls.pack('i', 127))  # 127 for void as I don't feel like supporting biomes rn
+
+        out += cls.pack_varint(mask) + cls.pack_varint(len(column_buffer)) + column_buffer.read()

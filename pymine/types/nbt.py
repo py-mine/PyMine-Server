@@ -305,11 +305,7 @@ class TAG_Byte_Array(TAG, bytearray):
         return bytearray(buf.read(buf.unpack("i")))
 
     def pretty(self, indent: int = 0) -> str:
-        tab = "    " * indent
-        tab_extra = "    " * (indent + 1)
-        nl = f", "
-
-        return f'{tab}TAG_Byte_Array("{self.name}"): [{nl.join([str(v) for v in self])}]'
+        return f'{" " * 4 * indent}TAG_Byte_Array("{self.name}"): [{", ".join([str(v) for v in self])}]'
 
 
 class TAG_String(TAG):
@@ -337,7 +333,7 @@ class TAG_String(TAG):
         return decode_modified_utf8(buf.read(buf.unpack("H")))
 
     def pretty(self, indent: int = 0) -> str:
-        return ("    " * indent) + f'{self.__class__.__name__}("{self.name}"): {self.data}'
+        return f'{" " * 4 * indent}{self.__class__.__name__}("{self.name}"): {self.data}'
 
 
 class TAG_List(TAG, list):
@@ -374,10 +370,10 @@ class TAG_List(TAG, list):
         return out
 
     def pretty(self, indent: int = 0) -> str:
-        tab = "    " * indent
+        tab = " " * 4 * indent
         nl = f",\n"
 
-        return f'{tab}TAG_List("{self.name}"): [\n{nl.join([t.pretty(indent+1) for t in self])}\n{tab}]'
+        return f'TAG_List("{self.name}"): [\n{nl.join([t.pretty(indent+1) for t in self])}\n{tab}]'
 
 
 class TAG_Compound(TAG, dict):
@@ -427,7 +423,7 @@ class TAG_Compound(TAG, dict):
         return out
 
     def pretty(self, indent: int = 0) -> str:
-        tab = "    " * indent
+        tab = " " * 4 * indent
         nl = f",\n"
 
         return f'{tab}TAG_Compound("{self.name}"): [\n{nl.join([t.pretty(indent + 1) for t in self.values()])}\n{tab}]'
@@ -456,11 +452,7 @@ class TAG_Int_Array(TAG, list):
         return [buf.unpack("i") for _ in range(buf.unpack("i"))]
 
     def pretty(self, indent: int = 0) -> str:
-        tab = "    " * indent
-        tab_extra = "    " * (indent + 1)
-        nl = f", "
-
-        return f'{tab}TAG_Int_Array("{self.name}"): [{nl.join([str(v) for v in self])}]'
+        return f'{" " * 4 * indent}TAG_Int_Array("{self.name}"): [{", ".join([str(v) for v in self])}]'
 
 
 class TAG_Long_Array(TAG, list):
@@ -486,11 +478,7 @@ class TAG_Long_Array(TAG, list):
         return [buf.unpack("q") for _ in range(buf.unpack("i"))]
 
     def pretty(self, indent: int = 0) -> str:
-        tab = "    " * indent
-        tab_extra = "    " * (indent + 1)
-        nl = f", "
-
-        return f'{tab}TAG_Int_Array("{self.name}"): [{nl.join([str(v) for v in self])}]'
+        return f'{" " * 4 * indent}TAG_Long_Array("{self.name}"): [{", ".join([str(v) for v in self])}]'
 
 
 TYPES.extend(

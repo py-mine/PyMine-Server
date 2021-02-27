@@ -360,7 +360,7 @@ class PlayPlayerPositionAndLookClientBound(Packet):
             + Buffer.pack("d", self.player.z)
             + Buffer.pack("f", self.player["Rotation"][0].data)  # yaw
             + Buffer.pack("f", self.player["Rotation"][1].data)  # pitch
-            + Buffer.pack('b', self.flags)
+            + Buffer.pack("b", self.flags)
             + Buffer.pack_varint(self.teleport_id)
         )
 

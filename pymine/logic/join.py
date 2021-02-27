@@ -48,6 +48,8 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str, props: list) -> 
 
 
 async def join_2(stream: Stream, player: Player) -> None:
+    world = server.worlds[player["Dimension"].data]  # the world player *should* be spawning into
+
     # change held item to saved last held item
     await server.send_packet(stream, packets.play.player.PlayHeldItemChangeClientBound(player["SelectedItemSlot"].data))
 
@@ -67,7 +69,9 @@ async def join_2(stream: Stream, player: Player) -> None:
     await send_unlocked_recipes(stream, player)
 
     # update player position and rotation
-    await send_player_position_and_rotation(stream, player)
+    # await server.send_packet(  # wiki.vg says to send twice?? (see normal login sequence page)
+    #     stream, packets.play.player.PlayPlayerPositionAndLookClientBound(player, 0, random.randint(1, 999999))
+    # )
 
     # update tab list, maybe sent to all clients?
     await broadcast_player_info(player)
@@ -78,11 +82,9 @@ async def join_2(stream: Stream, player: Player) -> None:
     # send_update_view_distance, unsure if needed, see here: https://wiki.vg/Protocol#Update_View_Distance
     # await send_update_view_distance(stream, player)
 
-    await send_world_info(stream, player)
+    await send_world_info(stream, world, player)
 
-    await server.send_packet(
-        stream, packets.play.player.PlayPlayerPositionAndLookClientBound(player, 0, random.randint(1, 999999))
-    )
+    await send_positional_data(stream, world, player)
 
 
 # crucial info pertaining to the world and player status
@@ -107,7 +109,7 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
             (not server.conf["debug"]),
             (world["GameRules"]["doImmediateRespawn"].data != "true"),  # (not doImmediateRespawn gamerule)
             False,  # If world is a debug world iirc
-            False,  # Should be true if world is superflat
+            False,  # ShouFld be true if world is superflat
         ),
     )
 
@@ -147,17 +149,6 @@ async def send_unlocked_recipes(stream: Stream, player: Player) -> None:
             player["recipeBook"]["recipes"],  # all unlocked recipes
             player["recipeBook"]["toBeDisplayed"],  # ones which will be displayed as newly unlocked
         ),
-    )
-
-
-# update the player's position and rotation
-async def send_player_position_and_rotation(stream: Stream, player: Player) -> None:
-    flags = BitField.new(5, (0x01, False), (0x02, False), (0x04, False), (0x08, False), (0x10, False))
-
-    await server.send_packet(
-        packets.play.player.PlayPlayerPositionAndLookClientBound(
-            *player.pos, *player.rotation, flags.field, random.randint(0, 999999)  # the tp id, NEEDS TO BE VERIFIED LATER
-        )
     )
 
 
@@ -207,8 +198,7 @@ async def send_update_view_distance(stream: Stream, player: Player) -> None:
 
 
 # sends information about the world to the client, like chunk data and other stuff
-async def send_world_info(stream: Stream, player: Player) -> None:
-    world = server.worlds[player["Dimension"].data]  # the world player *should* be spawning into
+async def send_world_info(stream: Stream, world: World, player: Player) -> None:
     chunks = {}  # cache chunks here because they're used multiple times and shouldn't be garbage collected
 
     for x in range(-player.view_distance - 1, player.view_distance + 1):
@@ -239,4 +229,21 @@ async def send_world_info(stream: Stream, player: Player) -> None:
                 "warning_time": world["BorderWarningTime"],
             },
         ),
+    )
+
+
+# update the player's position and rotation, as well as the world spawn
+async def send_positional_data(stream: Stream, world: World, player: Player) -> None:
+    flags = BitField.new(5, (0x01, False), (0x02, False), (0x04, False), (0x08, False), (0x10, False))
+
+    await server.send_packet(
+        stream,
+        packets.play.player.PlayPlayerPositionAndLookClientBound(
+            player, flags.field, random.randint(0, 999999)  # the tp id, should be verified later
+        ),
+    )
+
+    await server.send_packet(
+        stream,
+        packets.play.spawn.PlaySpawnPosition()
     )

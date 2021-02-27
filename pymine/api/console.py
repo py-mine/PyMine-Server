@@ -26,15 +26,16 @@ BG_RED = "\x1b[41;1m"
 class Console:
     """Custom logging + input implementation."""
 
-    def __init__(self, debug: bool = True) -> None:
+    def __init__(self, debug: bool = True, prompt: str = "> ") -> None:
         self.debug_ = debug
+        self.prompt = prompt
 
         self.stdout = StdoutProxy(sleep_between_writes=0.5)
         self.out = create_output(self.stdout)
         self.ses = PromptSession(output=self.out)
 
     async def fetch_input(self):
-        return await self.ses.prompt_async("> ")
+        return await self.ses.prompt_async(self.prompt)
 
     def write(self, text: str):
         self.out.write_raw(text)

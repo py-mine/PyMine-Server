@@ -97,7 +97,7 @@ class PlayUpdateLight(Packet):
         sky_light_arrays = []
         block_light_arrays = []
 
-        for y, section in chunk.sections.items():
+        for y, section in self.chunk.sections.items():
             if y >= 0:
                 if section.sky_light is not None:
                     if len(section.sky_light.nonzero()) == 0:

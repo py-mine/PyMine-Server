@@ -155,7 +155,7 @@ class Chunk:
                 nbt.TAG_Compound(
                     "Level",
                     [
-                        nbt.TAG_Int_Array("Biomes", [127]*1024),
+                        nbt.TAG_Int_Array("Biomes", [127] * 1024),
                         nbt.TAG_Compound("CarvingMasks", [nbt.TAG_Byte_Array("AIR", []), nbt.TAG_Byte_Array("LIQUID", [])]),
                         nbt.TAG_List("Entities", []),
                         nbt.TAG_Compound(

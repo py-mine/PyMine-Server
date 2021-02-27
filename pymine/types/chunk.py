@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import struct
 import numpy
 
 from pymine.types.block_palette import DirectPalette, IndirectPalette
-from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
 
 from pymine.api.abc import AbstractPalette
@@ -62,7 +62,7 @@ class ChunkSection:
             # yoinked most of the logic for chunk deserialization from https://wiki.vg/Chunk_Format
             # however, that is for deserialization of a chunk packet, not the nbt data so it's a bit
             # different but most of the logic still applies and this is needed for that
-            state_bytes = b"".join([Buffer.pack("q", n) for n in tag["BlockStates"]])
+            state_bytes = b"".join([struct.pack(">q", n) for n in tag["BlockStates"]])
 
             # populate block_states array
             for y in range(16):

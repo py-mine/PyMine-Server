@@ -78,7 +78,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     # send_update_view_distance, unsure if needed, see here: https://wiki.vg/Protocol#Update_View_Distance
     # await send_update_view_distance(stream, player)
 
-    await send_chunk_data(stream, player)
+    await send_world_info(stream, player)
 
 
 # crucial info pertaining to the world and player status
@@ -202,8 +202,8 @@ async def send_update_view_distance(stream: Stream, player: Player) -> None:
     await server.send_packet(stream, packets.play.player.PlayUpdateViewDistance(view_distance))
 
 
-# sends all chunks in player's view distance
-async def send_chunk_data(stream: Stream, player: Player) -> None:
+# sends information about the world to the client, like chunk data and other stuff
+async def send_world_info(stream: Stream, player: Player) -> None:
     world = server.worlds[player.data["Dimension"].data]  # the world player *should* be spawning into
     chunks = {}  # cache chunks here because they're used multiple times and shouldn't be garbage collected
 
@@ -216,3 +216,6 @@ async def send_chunk_data(stream: Stream, player: Player) -> None:
 
     for chunk in chunks.values():  # send chunk data packet for each chunk in player's view distance
         await server.send_packet(stream, packets.play.chunk.PlayChunkData(chunk, True))
+
+    # send the world border data to the client
+    await server.send_packet(stream, packets.play.world.PlayWorldBorder(3, {"x": 0, "z": 0, "old_diameter": 29999984, "new_diameter": 29999984, "speed": 0, "portal_teleport_boundary": 29999984, "warning_blocks": 5, "warning_time": 15}))

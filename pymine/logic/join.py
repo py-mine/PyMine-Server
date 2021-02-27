@@ -41,7 +41,7 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str, props: list) -> 
     # sends info about the server difficulty
     await server.send_packet(
         stream,
-        packets.play.difficulty.PlayServerDifficulty(world.data["Difficulty"].data, world.data["DifficultyLocked"].data),
+        packets.play.difficulty.PlayServerDifficulty(world["Difficulty"].data, world["DifficultyLocked"].data),
     )
 
     await send_player_abilities(stream, player)
@@ -101,7 +101,7 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
             server.conf["max_players"],
             server.conf["view_distance"],
             (not server.conf["debug"]),
-            (world.data["GameRules"]["doImmediateRespawn"].data != "true"),  # (not doImmediateRespawn gamerule)
+            (world["GameRules"]["doImmediateRespawn"].data != "true"),  # (not doImmediateRespawn gamerule)
             False,  # If world is a debug world iirc
             False,  # Should be true if world is superflat
         ),

@@ -40,15 +40,29 @@ class PlayChunkData(Packet):
         self.full = full
 
     def encode(self) -> bytes:
-        out = Buffer.pack('i', self.chunk.x) + Buffer.pack('i', self.chunk.z) + Buffer.pack('?', self.full)
+        out = Buffer.pack("i", self.chunk.x) + Buffer.pack("i", self.chunk.z) + Buffer.pack("?", self.full)
 
         mask = 0
         chunk_sections_buffer = Buffer()
 
-        for y, section in self.chunk.sections.items():
+        for y, section in self.chunk.sections.items():  # pack chunk columns into buffer and generate a bitmask
             if y >= 0:
-                mask |= (1 << y)
+                mask |= 1 << y
                 chunk_sections_buffer.write(Buffer.pack_chunk_section(section))
+
+        out += Buffer.pack_varint(mask) + Buffer.pack_nbt(
+            nbt.TAG_Compound("", [chunk["Heightmaps"]["MOTION_BLOCKING"], chunk["Heightmaps"]["WORLD_SURFACE"]])
+        )
+
+        if self.full:
+            out += Buffer.pack_varint(len(Chunk["Biomes"])) + b"".join([Buffer.pack_varint(n) for n in Chunk["Biomes"]])
+
+        out += len(chunk_sections_buffer) + chunk_sections_buffer.read()
+
+        # here we would pack the block entities, but we don't support them yet so we just send an array with length of 0
+        out += Buffer.pack_varint(0)
+
+        return out
 
 
 class PlayUpdateLight(Packet):

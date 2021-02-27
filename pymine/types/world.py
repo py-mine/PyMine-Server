@@ -39,6 +39,9 @@ class World:
 
         return self._dimension
 
+    def __getitem__(self, key):
+        return self.data[key]
+
     async def init(self):
         self.data = await self.load_level_data()
         return self  # for fluent style chaining

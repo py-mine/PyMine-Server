@@ -207,9 +207,9 @@ async def send_chunk_data(stream: Stream, player: Player) -> None:
     world = server.worlds[player.data["Dimension"].data]  # the world player *should* be spawning into
     chunks = {}  # cache chunks here because they're used multiple times and shouldn't be garbage collected
 
-    for chunk_x in range(-player.view_distance, player.view_distance):
-        for chunk_z in range(-player.view_distance, player.view_distance):
-            chunks[chunk_x, chunk_z] = await world.fetch_chunk(chunk_x, chunk_z)
+    for x in range(-player.view_distance-1, player.view_distance+1):
+        for z in range(-player.view_distance-1, player.view_distance+1):
+            chunks[x, z] = await world.fetch_chunk(x, z)
 
     for chunk in chunks.values():  # send update light packet for each chunk in the player's view distance
         await server.send_packet(stream, packets.play.chunk.PlayUpdateLight(chunk))

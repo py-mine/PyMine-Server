@@ -30,9 +30,9 @@ class ChunkSection:
             (None if self.sky_light is None else self.sky_light[coords]),
         )
 
-    def get(self, index, default=None):
+    def get(self, key, default=None):
         try:
-            return self[index]
+            return self[key]
         except KeyError:
             return default
 
@@ -124,11 +124,11 @@ class Chunk:
     def __repr__(self):
         return f"Chunk(x={self.x}, z={self.z})"
 
-    def __getitem__(self, index):
+    def __getitem__(self, key):
         if isinstance(index, str):
-            return self.data[index]
+            return self.data[key]
 
-        return self.sections[index]
+        return self.sections[key]
 
     def __setitem__(self, index, new_value):
         if isinstance(index, str):

@@ -626,7 +626,7 @@ class Buffer:
                         out += cls.pack_byte(section.sky_light[x][y][z] | (section[x + 1][y][z] << 4))
 
     @classmethod  # see here: https://wiki.vg/Chunk_Format
-    def pack_chunk(cls, chunk: Chunk, full: bool = True) -> bytes:
+    def pack_chunk_data(cls, chunk: Chunk, full: bool = True) -> bytes:
         out = cls.pack("i", chunk.x) + cls.pack("i", chunk.z)
 
         mask = 0

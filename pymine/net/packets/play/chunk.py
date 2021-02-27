@@ -87,7 +87,7 @@ class PlayUpdateLight(Packet):
         self.chunk = chunk
 
     def encode(self) -> bytes:
-        out = Buffer.pack_varint(self.chunk.x) + Buffer.pack_varint(self.chunk.z) + Buffer.pack('?', True)
+        out = Buffer.pack_varint(self.chunk.x) + Buffer.pack_varint(self.chunk.z) + Buffer.pack("?", True)
 
         sky_light_mask = 0
         block_light_mask = 0

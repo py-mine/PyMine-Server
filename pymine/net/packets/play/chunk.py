@@ -9,6 +9,7 @@ import pymine.types.nbt as nbt
 
 __all__ = (
     "PlayUnloadChunk",
+    "PlayChunkData",
     "PlayUpdateLight",
 )
 

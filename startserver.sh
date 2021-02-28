@@ -5,7 +5,7 @@ do
 #!/bin/bash
 currentver=$($command -c "import platform;print(platform.python_version())")
 # echo $currentver
-requiredver="3.7"
+requiredver="3.7.9"
  if [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]; then 
         echo "python version ok ($currentver)"
         $command pymine

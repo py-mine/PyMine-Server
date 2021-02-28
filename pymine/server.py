@@ -60,6 +60,8 @@ class Server:
         self.console.debug_ = self.conf["debug"]
         asyncio.get_event_loop().set_debug(False)
 
+        self.console.debug("Debug mode enabled.")
+
         self.port = self.conf["server_port"]
         self.addr = self.conf["server_ip"]
 

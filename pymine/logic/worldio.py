@@ -1,5 +1,6 @@
 import aiofile
 import struct
+import numpy
 import zlib
 import os
 
@@ -8,13 +9,15 @@ from pymine.types.chunk import Chunk
 from pymine.types.world import World
 import pymine.types.nbt as nbt
 
+from pymine.types.block_palette import DirectPalette
+
 from pymine.api.abc import AbstractChunkIO
 
 # Setup world dict and load basic level data for each world
 async def load_worlds(server, level_name: str, chunk_cache_max_per: int) -> dict:
     worlds = {}
 
-    server.logger.info(f"Loading default worlds for level {level_name}...")
+    server.console.info(f"Loading default worlds for level {level_name}...")
 
     # Worlds, in the world dict (server.worlds) are indexed by their dimension type, this, however can change in the future
     # worlds are passed their file name / folder name (i.e. level_name + ext) via their constructors
@@ -26,7 +29,7 @@ async def load_worlds(server, level_name: str, chunk_cache_max_per: int) -> dict
             server, name, os.path.join("worlds", name), chunk_cache_max_per
         ).init()
 
-    server.logger.info(f'Loaded default worlds: {", ".join([w.name for w in worlds.values()])}.')
+    server.console.info(f'Loaded default worlds: {", ".join([w.name for w in worlds.values()])}.')
 
     return worlds
 
@@ -56,13 +59,15 @@ class ChunkIO(AbstractChunkIO):
         with open(region_path, "rb") as region_file:
             region_file.seek(loc_table_loc)
 
-            offset, length = cls.find_chunk(region_file.read(4))
+            offset, length = cls.find_chunk(struct.unpack(">i", region_file.read(4))[0])
 
             region_file.seek(loc_table_loc + 4096)
             timestamp = struct.unpack(">i", region_file.read(4))
 
             region_file.seek(offset + 5)
-            return Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(region_file.read(length - 5)))), timestamp)
+            tag = nbt.TAG_Compound.unpack(Buffer(zlib.decompress(region_file.read(length - 5))))
+
+        return Chunk(tag, timestamp)
 
     @classmethod
     async def fetch_chunk_async(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:
@@ -77,10 +82,12 @@ class ChunkIO(AbstractChunkIO):
         async with aiofile.async_open(region_path, "rb") as region_file:
             region_file.seek(loc_table_loc)
 
-            offset, length = cls.find_chunk(await region_file.read(4))
+            offset, length = cls.find_chunk(struct.unpack(">i", await region_file.read(4))[0])
 
             region_file.seek(loc_table_loc + 4096)
             timestamp = struct.unpack(">i", await region_file.read(4))
 
             region_file.seek(offset + 5)
-            return Chunk(nbt.TAG_Compound.unpack(Buffer(zlib.decompress(await region_file.read(length - 5)))), timestamp)
+            tag = nbt.TAG_Compound.unpack(Buffer(zlib.decompress(await region_file.read(length - 5))))
+
+        return Chunk(tag, timestamp)

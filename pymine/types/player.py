@@ -26,6 +26,18 @@ class Player:
         self.displayed_skin_parts = None
         self.main_hand = None
 
+    def __getitem__(self, key):
+        return self.data[key]
+
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
+    def get(self, key, default=None):
+        try:
+            return self.data[key]
+        except KeyError:
+            return default
+
     @property
     def x(self) -> float:
         return self.data["Pos"][0].data

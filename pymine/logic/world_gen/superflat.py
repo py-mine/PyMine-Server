@@ -3,7 +3,7 @@ import time
 
 from pymine.types.chunk import Chunk
 
-from pymine.data.block_palette import DirectPalette
+from pymine.types.block_palette import DirectPalette
 from pymine.api.abc import AbstractWorldGenerator
 from pymine.data.registries import BLOCK_REGISTRY
 

@@ -1,5 +1,6 @@
 from collections import OrderedDict
 import aiofile
+import time
 import os
 
 from pymine.types.buffer import Buffer
@@ -16,13 +17,25 @@ class World:
         self.name = name
         self.path = path  # should be "worlds/world_name_dim/" in production probably
 
-        self.data = None
+        self.data = None  # data from the level.dat
 
         self._chunk_cache_max = chunk_cache_max
         self._chunk_cache = OrderedDict()
 
         self._proper_name = None
         self._dimension = None
+
+    def __getitem__(self, key):
+        return self.data[key]
+
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
+    def get(self, key, default=None):
+        try:
+            return self.data[key]
+        except KeyError:
+            return default
 
     @property
     def proper_name(self):
@@ -42,6 +55,7 @@ class World:
         self.data = await self.load_level_data()
         return self  # for fluent style chaining
 
+    # loads the level.dat for the current world
     async def load_level_data(self):
         file = os.path.join(self.path, "level.dat")
 
@@ -51,6 +65,7 @@ class World:
 
         return new_level_nbt((2586, self.server.meta.version, 19133), self.name, (0, 100, 0), self.server.conf["seed"])["Data"]
 
+    # caches a chunk and returns sed chunk
     def cache_chunk(self, chunk: Chunk, key: tuple) -> Chunk:
         self._chunk_cache[key] = chunk
 
@@ -62,13 +77,15 @@ class World:
     async def fetch_chunk(self, chunk_x: int, chunk_z: int) -> Chunk:
         key = (chunk_x, chunk_z)
 
-        try:
+        try:  # try to fetch chunk from cache
             return self._chunk_cache[key]
         except KeyError:
             pass
 
-        try:
+        try:  # try to fetch from disk
             return self.cache_chunk(await self.server.chunkio.fetch_chunk_async(self.path, *key), key)
-        except FileNotFoundError:
-            chunk_data = self.server.generator.generate_chunk(self.data["RandomSeed"], self.dimension, chunk_x, chunk_z)
-            return chunk_data
+        except FileNotFoundError:  # fall back to generate chunk
+            sections = self.server.generator.generate_chunk(self.data["RandomSeed"], self.dimension, chunk_x, chunk_z)
+            chunk = Chunk.new(chunk_x, chunk_z, sections, int(time.time()))
+
+            return self.cache_chunk(chunk)

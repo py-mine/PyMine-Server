@@ -9,6 +9,8 @@
 5. One of the main devs will review it and request changes if needed!
 6. *You should probably also [join our Discord server](https://discord.gg/dHjv7DJgb2), for news on the status and direction of the project*
 
+Note: For vanilla server features (as PyMine plans to support all of them), don't create an issue without an attached pull request to add it.
+
 ### General Guidelines
 * Use f-strings (`f"{thing}"`) instead of `.format()` where possible
 * Use concatenation instead of f-strings where possible, as concatenation is faster

@@ -21,7 +21,7 @@
 - [ ] **Entities/Entity AI** - *not started yet*
 - [x] **Plugin API** - *completed, but more will be added as the development continues*
 - [ ] **Command/Argument Parsing** - *currently a work in progress*
-- [ ] **Query Support** - *currently a work in progress*
+- [x] **Query Support** - *completed*
 - [ ] **RCON Support** - *not started yet*
 
 
@@ -61,6 +61,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://kevinthomas.codes/"><img src="https://avatars.githubusercontent.com/u/46242684?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kevin Thomas</b></sub></a><br /><a href="#ideas-TrustedMercury" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://milanm.tk"><img src="https://avatars.githubusercontent.com/u/29466935?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Milan Mehra</b></sub></a><br /><a href="#ideas-milanmdev" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/the456gamer"><img src="https://avatars.githubusercontent.com/u/42748092?v=4?s=100" width="100px;" alt=""/><br /><sub><b>the456gamer</b></sub></a><br /><a href="#ideas-the456gamer" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 

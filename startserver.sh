@@ -2,7 +2,7 @@ for command in pypy python python3.9 python3.8 python3.7 python3
 do
 
 #!/bin/bash
-currentver=`$command -c "import platform;print(platform.python_version())"`
+currentver=$($command -c "import platform;print(platform.python_version())")
 # echo $currentver
 requiredver="3.7"
  if [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]; then 

@@ -1,3 +1,4 @@
+#!/bin/bash
 for command in pypy python python3.9 python3.8 python3.7 python3  
 do
 

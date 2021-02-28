@@ -17,7 +17,7 @@ from pymine.api.abc import AbstractChunkIO
 async def load_worlds(server, level_name: str, chunk_cache_max_per: int) -> dict:
     worlds = {}
 
-    server.logger.info(f"Loading default worlds for level {level_name}...")
+    server.console.info(f"Loading default worlds for level {level_name}...")
 
     # Worlds, in the world dict (server.worlds) are indexed by their dimension type, this, however can change in the future
     # worlds are passed their file name / folder name (i.e. level_name + ext) via their constructors
@@ -29,7 +29,7 @@ async def load_worlds(server, level_name: str, chunk_cache_max_per: int) -> dict
             server, name, os.path.join("worlds", name), chunk_cache_max_per
         ).init()
 
-    server.logger.info(f'Loaded default worlds: {", ".join([w.name for w in worlds.values()])}.')
+    server.console.info(f'Loaded default worlds: {", ".join([w.name for w in worlds.values()])}.')
 
     return worlds
 

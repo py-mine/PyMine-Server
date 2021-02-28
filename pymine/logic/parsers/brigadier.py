@@ -1,4 +1,7 @@
+from pymine.api.errors import ParsingError
 from pymine.api.abc import AbstractParser
+
+__all__ = ("Bool", "Float", "Double", "Integer", "String")
 
 
 class Bool(AbstractParser):
@@ -12,7 +15,7 @@ class Bool(AbstractParser):
         if s[:5] == "false":
             return 5, False
 
-        raise ValueError
+        raise ParsingError
 
 
 class Float(AbstractParser):
@@ -20,18 +23,25 @@ class Float(AbstractParser):
         self.min_value = min_value
         self.max_value = max_value
 
+    # @classmethod
+    # def __getitem__(cls, ranges: slice) -> Float:
+    #     return cls(ranges.start, range.stop)
+
     def parse(self, s: str) -> tuple:
-        section = s.split(" ")[0]
+        try:
+            section = s.split()[0]
+        except IndexError:
+            raise ParsingError
 
         try:
             num = float(section)
+        except ValueError:
+            raise ParsingError
 
-            if self.min_value is not None and self.max_value > num > self.min_value:
-                return len(section), num
-        except BaseException:
-            pass
+        if self.min_value is None or self.max_value > num > self.min_value:
+            return len(section), num
 
-        raise ValueError
+        raise ParsingError
 
 
 class Double(AbstractParser):
@@ -39,18 +49,25 @@ class Double(AbstractParser):
         self.min_value = min_value
         self.max_value = max_value
 
+    # @classmethod
+    # def __getitem__(cls, ranges: slice) -> Double:
+    #     return cls(ranges.start, range.stop)
+
     def parse(self, s: str) -> tuple:
-        section = s.split(" ")[0]
+        try:
+            section = s.split()[0]
+        except IndexError:
+            raise ParsingError
 
         try:
             num = float(section)
+        except ValueError:
+            raise ParsingError
 
-            if self.min_value is not None and self.max_value > num > self.min_value:
-                return len(section), num
-        except BaseException:
-            pass
+        if self.min_value is None or self.max_value > num > self.min_value:
+            return len(section), num
 
-        raise ValueError
+        raise ParsingError
 
 
 class Integer(AbstractParser):
@@ -58,32 +75,43 @@ class Integer(AbstractParser):
         self.min_value = min_value
         self.max_value = max_value
 
+    # @classmethod
+    # def __getitem__(cls, ranges: slice) -> Integer:
+    #     return cls(ranges.start, range.stop)
+
     def parse(self, s: str) -> tuple:
-        section = s.split(" ")[0]
+        try:
+            section = s.split()[0]
+        except IndexError:
+            raise ParsingError
 
         try:
             num = int(section)
+        except ValueError:
+            raise ParsingError
 
-            if self.min_value is not None and self.max_value > num > self.min_value:
-                return len(section), num
-        except BaseException:
-            pass
+        if self.min_value is None or self.max_value > num >= self.min_value:
+            return len(section), num
 
-        raise ValueError
+        raise ParsingError
 
 
 class String(AbstractParser):
     def __init__(self, mode: int) -> None:
         self.mode = mode
 
+    # @classmethod
+    # def __getitem__(cls, mode: slice) -> String:
+    #     return cls(mode.start)
+
     def parse(self, s: str) -> tuple:
         if self.mode == 0:  # single word
-            word = s.split(" ")[0]
+            word = s.split()[0]
             return len(word), word
 
         if self.mode == 1:  # quotable phrase
             if not s[0] == '"':
-                raise ValueError
+                raise ParsingError
 
             out = ""
 
@@ -98,4 +126,4 @@ class String(AbstractParser):
         if self.mode == 2:  # rest of string
             return len(s), s
 
-        raise ValueError
+        raise ParsingError

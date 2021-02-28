@@ -13,5 +13,5 @@ requiredver="3.7.9"
  fi
 done
 
-echo Couldnt find Suitble python version. please use your package manager to install python 3.7 or later 
+echo "Couldnt find Suitable python version. please use your package manager to install python 3.7.9 or later"
 exit 1

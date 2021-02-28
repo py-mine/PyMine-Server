@@ -26,7 +26,7 @@ BG_RED = "\x1b[41;1m"
 class Console:
     """Custom logging + input implementation."""
 
-    def __init__(self, debug: bool = True, prompt: str) -> None:
+    def __init__(self, debug: bool = True, prompt: str = None) -> None:
         self.debug_ = debug
         self.prompt = "> " if prompt is None else prompt
 

@@ -238,7 +238,10 @@ class Buffer:
     def pack_chat(cls, msg: Chat) -> bytes:
         """Packs a Minecraft chat message into bytes."""
 
-        return cls.pack_json(msg.msg)
+        if isinstance(msg, Chat):
+            return cls.pack_json(msg.msg)
+
+        return cls.pack_json(Chat(msg).msg)
 
     def unpack_chat(self) -> Chat:
         """Unpacks a Minecraft chat message from the buffer."""

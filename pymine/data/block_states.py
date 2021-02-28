@@ -17,6 +17,7 @@ def reversed_bs_data(bs_data):
 
     return make_immutable(reverse_data)
 
+
 if "sphinx" in sys.modules:
     os.chdir(os.path.join(os.path.dirname(__file__), "../.."))
 

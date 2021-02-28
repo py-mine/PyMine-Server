@@ -28,14 +28,16 @@ class Console:
 
     def __init__(self, debug: bool = True, prompt: str = None) -> None:
         self.debug_ = debug
-        self.prompt = "> " if prompt is None else prompt
+        self.prompt = "> " if prompt is None else ANSI(prompt)
+
+        print(self.prompt)
 
         self.stdout = StdoutProxy(sleep_between_writes=0.5)
         self.out = create_output(self.stdout)
         self.ses = PromptSession(output=self.out)
 
     async def fetch_input(self):
-        return await self.ses.prompt_async(ANSI(self.prompt))
+        return await self.ses.prompt_async(self.prompt)
 
     def write(self, text: str):
         self.out.write_raw(text)

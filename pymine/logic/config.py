@@ -27,7 +27,7 @@ DEFAULT_CONFIG = {
     "generate_structures": True,
     "enable_query": True,
     "query_port": None,
-    "prompt": None,
+    "prompt": "> ",
 }
 
 

@@ -33,12 +33,6 @@ Registry
 .. automodule:: pymine.types.registry
     :members:
 
-Region
-------
-
-.. automodule:: pymine.types.region
-    :members:
-
 World
 -----
 
@@ -187,11 +181,6 @@ Plugin Msg
 .. automodule:: pymine.net.packets.play.plugin_msg
     :members:
 
-Recipe
-------
-
-.. automodule:: pymine.net.packets.play.recipe
-    :members:
 
 Resource Pack
 --------------

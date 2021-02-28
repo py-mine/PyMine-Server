@@ -11,6 +11,8 @@ async def on_teleport_confirm(stream: Stream, packet: Packet) -> None:
     player = await server.playerio.fetch_player(server.cache.uuid[stream.remote])
 
     if player.teleport_id != packet.teleport_id:
-        await server.send_packet(
-            stream, PlayDisconnect(f"Invalid teleport ID ({repr(player.teleport_id)} != {repr(packet.teleport_id)}).")
-        )
+        # await server.send_packet(
+        #     stream, PlayDisconnect(f"Invalid teleport ID ({repr(player.teleport_id)} != {repr(packet.teleport_id)}).")
+        # )
+
+        server.console.debug(f"Warning, invalid teleport ID. ({repr(player.teleport_id)} != {repr(packet.teleport_id)})")

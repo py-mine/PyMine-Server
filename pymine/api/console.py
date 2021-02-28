@@ -35,7 +35,7 @@ class Console:
         self.ses = PromptSession(output=self.out)
 
     async def fetch_input(self):
-        return await self.ses.prompt_async(self.prompt)
+        return await self.ses.prompt_async(ANSI(self.prompt))
 
     def write(self, text: str):
         self.out.write_raw(text)

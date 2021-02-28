@@ -236,10 +236,12 @@ async def send_world_info(stream: Stream, world: World, player: Player) -> None:
 async def send_positional_data(stream: Stream, world: World, player: Player) -> None:
     flags = BitField.new(5, (0x01, False), (0x02, False), (0x04, False), (0x08, False), (0x10, False))
 
+    player.teleport_id = random.randint(0, 999999)
+
     await server.send_packet(
         stream,
         packets.play.player.PlayPlayerPositionAndLookClientBound(
-            player, flags.field, random.randint(0, 999999)  # the tp id, should be verified later
+            player, flags.field, player.teleport_id  # the tp id, should be verified later
         ),
     )
 

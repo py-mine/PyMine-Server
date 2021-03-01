@@ -162,7 +162,7 @@ class Server:
             if p.stream is not None:
                 senders.append(self.send_packet(p.stream, packet))
 
-        await asyncio.gather(senders)
+        await asyncio.gather(*senders)
 
     async def handle_packet(self, stream: Stream):  # Handle / respond to packets, this is called in a loop
         packet_length = 0
@@ -233,6 +233,9 @@ class Server:
             try:
                 stream = await self.handle_packet(stream)
             except StopHandling:
+                break
+            except ConnectionResetError as e:
+                self.console.error(self.console.f_traceback(e))
                 break
             except BaseException as e:
                 self.console.error(self.console.f_traceback(e))

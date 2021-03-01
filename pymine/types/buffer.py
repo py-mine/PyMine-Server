@@ -415,8 +415,9 @@ class Buffer:
 
             for row in recipe["pattern"]:
                 for key in row:
-                    if recipe["key"][key].get("item"):
-                        out += cls.pack_ingredient(recipe["key"][key])
+                    if recipe["key"].get(key) is not None:
+                        if recipe["key"][key].get("item"):
+                            out += cls.pack_ingredient(recipe["key"][key])
 
             out += cls.pack_slot(**recipe["result"])
         elif recipe_type in misc_data.SMELT_TYPES:  # SMELT_TYPES imported from misc.py

@@ -172,7 +172,7 @@ class Server:
         # and also to handle legacy server list ping packets
         for i in range(3):
             try:
-                read = await asyncio.wait_for(stream.read(1), 5)
+                read = await asyncio.wait_for(stream.read(1), 30)
             except asyncio.TimeoutError:
                 self.console.debug("Closing due to timeout on read...")
                 raise StopHandling

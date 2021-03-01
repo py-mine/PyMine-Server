@@ -7,7 +7,10 @@ from pymine.types.block_palette import DirectPalette
 from pymine.api.abc import AbstractWorldGenerator
 from pymine.data.registries import BLOCK_REGISTRY
 
+from pymine.server import server
 
+@server.api.register.world_generator("superflat")
+@server.api.register.world_generator("default")
 class SuperFlatWorldGenerator(AbstractWorldGenerator):
     @staticmethod
     def generate_chunk(seed: int, dimension: str, chunk_x: int, chunk_z: int) -> numpy.ndarray:

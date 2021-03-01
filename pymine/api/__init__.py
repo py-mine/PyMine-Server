@@ -22,9 +22,9 @@ class PyMineAPI:
         self.plugins = {}
         self.tasks = []
 
-        self.events = EventHandler()
-        self.commands = CommandHandler(server)
-        self.register = Register()
+        self.events = EventHandler()  # for registering events
+        self.commands = CommandHandler(server)  # for commands
+        self.register = Register()  # for non-event registering, like world generators
 
         self.eid_current = 0  # used to not generate duplicate entity ids
 

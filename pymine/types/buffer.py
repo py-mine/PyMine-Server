@@ -335,7 +335,7 @@ class Buffer:
     def pack_ingredient(cls, ingredient: object) -> bytes:
         """Packs a recipe ingredient into bytes."""
 
-        if isinstance(ingredient, list):
+        if isinstance(ingredient, (list, tuple)):
             return cls.pack_varint(len(ingredient)) + b"".join([cls.pack_slot(**slot) for slot in ingredient])
 
         if isinstance(ingredient, (dict, immutables.Map)):

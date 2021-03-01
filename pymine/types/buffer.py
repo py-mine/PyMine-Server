@@ -356,7 +356,7 @@ class Buffer:
         elif type_ == "minecraft:crafting_shaped":
             out += (
                 cls.pack_varint(len(recipe["pattern"][0]))
-                + cls.pack_varint(len(recipe["pattern"]))[0]
+                + cls.pack_varint(len(recipe["pattern"]))
                 + cls.pack_string(recipe["group"])
                 + b"".join([cls.pack_ingredient(ingredient) for ingredient in recipe["ingredients"]])
                 + cls.pack_slot(**recipe["result"])

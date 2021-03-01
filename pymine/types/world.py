@@ -75,6 +75,8 @@ class World:
         return chunk
 
     async def fetch_chunk(self, chunk_x: int, chunk_z: int) -> Chunk:
+        print(self.proper_name, self.dimension)
+
         key = (chunk_x, chunk_z)
 
         try:  # try to fetch chunk from cache

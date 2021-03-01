@@ -5,14 +5,15 @@ import json
 import uuid
 import zlib
 
+from pymine.types.block_palette import DirectPalette
 from pymine.types.chunk import Chunk, ChunkSection
 from pymine.types.packet import Packet
 from pymine.types.chat import Chat
 import pymine.types.nbt as nbt
 
-from pymine.types.block_palette import DirectPalette
 from pymine.data.registries import ITEM_REGISTRY
 import pymine.data.misc as misc_data
+from pymine.data.tags import TAGS
 
 from pymine.api.errors import InvalidPacketID
 from pymine.api.abc import AbstractPalette
@@ -336,9 +337,15 @@ class Buffer:
         """Packs a recipe ingredient into bytes."""
 
         if isinstance(ingredient, (list, tuple)):
-            return cls.pack_varint(len(ingredient)) + b"".join([cls.pack_slot(**slot) for slot in ingredient])
+            if isinstance(ingredient[0], (dict, immutables.Map)):
+                return cls.pack_varint(len(ingredient)) + b"".join([cls.pack_slot(**slot) for slot in ingredient])
+            else:
+                return cls.pack_varint(len(ingredient)) + b"".join([cls.pack_slot(slot) for slot in ingredient])
 
         if isinstance(ingredient, (dict, immutables.Map)):
+            if ingredient.get("tag") is not None:
+                return cls.pack_ingredient(TAGS["items"][ingredient["tag"].replace("minecraft:", "", 1)])
+
             return cls.pack_varint(1) + cls.pack_slot(**ingredient)
 
         raise TypeError(f"Type {type(ingredient)} is not a type that can be packed as an ingredient.")

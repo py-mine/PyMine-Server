@@ -9,6 +9,7 @@ from pymine.data.registries import BLOCK_REGISTRY
 
 from pymine.server import server
 
+
 @server.api.register.world_generator("superflat")
 @server.api.register.world_generator("default")
 class SuperFlatWorldGenerator(AbstractWorldGenerator):

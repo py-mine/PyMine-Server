@@ -392,8 +392,6 @@ class Buffer:
         #   }
         # }
 
-        print(dict(recipe))
-
         recipe_type = recipe["type"]
 
         out = cls.pack_string(recipe_type) + cls.pack_string(recipe_id)
@@ -423,7 +421,7 @@ class Buffer:
         elif recipe_type in misc_data.SMELT_TYPES:  # SMELT_TYPES imported from misc.py
             out += cls.pack_string(recipe.get("group", ""))
             out += cls.pack_ingredient(recipe["ingredient"])
-            out += cls.pack_slot(**recipe["result"])
+            out += cls.pack_slot(recipe["result"])
             out += cls.pack("f", recipe["experience"])
             out += cls.pack_varint(recipe["cookingtime"])
         elif recipe_type == "minecraft:stonecutting":  # Stone cutter recipes are fucky wucky, so we have to do some jank here

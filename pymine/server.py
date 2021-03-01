@@ -129,7 +129,7 @@ class Server:
             await stream.drain()
         except BaseException:
             pass
-            
+
         stream.close()
         await stream.wait_closed()
 

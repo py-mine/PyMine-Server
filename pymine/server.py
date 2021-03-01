@@ -251,6 +251,8 @@ class Server:
                 stream = await self.handle_packet(stream)
             except StopHandling:
                 break
+            except (ConnectionResetError, BrokenPipeError):
+                break
             except BaseException as e:
                 error_count += 1
 

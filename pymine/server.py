@@ -231,15 +231,22 @@ class Server:
         stream = Stream(reader, writer)
         self.console.debug(f"Connection received from {stream.remote[0]}:{stream.remote[1]}.")
 
+        error_count = 0
+
         while True:
             try:
                 stream = await self.handle_packet(stream)
             except StopHandling:
                 break
-            except ConnectionResetError as e:
-                self.console.error(self.console.f_traceback(e))
-                break
             except BaseException as e:
+                error_count += 1
+
                 self.console.error(self.console.f_traceback(e))
+
+                if error_count > 2:
+                    break
+
+            if error_count > 0:
+                error_count -= 1
 
         await self.close_connection(stream)

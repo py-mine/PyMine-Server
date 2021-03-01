@@ -28,6 +28,7 @@ DEFAULT_CONFIG = {
     "enable_query": True,
     "query_port": None,
     "prompt": "> ",
+    "generator": "default"
 }
 
 

@@ -68,10 +68,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     # send unlocked recipes to the client
     await send_unlocked_recipes(stream, player)
 
-    # update player position and rotation
-    # await server.send_packet(  # wiki.vg says to send twice?? (see normal login sequence page)
-    #     stream, packets.play.player.PlayPlayerPositionAndLookClientBound(player, 0, random.randint(1, 999999))
-    # )
+
 
     # update tab list, maybe sent to all clients?
     await broadcast_player_info(player)
@@ -233,7 +230,7 @@ async def send_world_info(stream: Stream, world: World, player: Player) -> None:
 
 
 # update the player's position and rotation, as well as the world spawn
-async def send_positional_data(stream: Stream, world: World, player: Player) -> None:
+async def send_positional_data(stream: Stream, world: World, player: Player, only_ppos: bool = False) -> None:
     flags = BitField.new(5, (0x01, False), (0x02, False), (0x04, False), (0x08, False), (0x10, False))
 
     player.teleport_id = random.randint(0, 999999)
@@ -245,4 +242,5 @@ async def send_positional_data(stream: Stream, world: World, player: Player) -> 
         ),
     )
 
-    await server.send_packet(stream, packets.play.spawn.PlaySpawnPosition(world["SpawnX"], world["SpawnY"], world["SpawnZ"]))
+    if not only_ppos:
+        await server.send_packet(stream, packets.play.spawn.PlaySpawnPosition(world["SpawnX"], world["SpawnY"], world["SpawnZ"]))

@@ -225,6 +225,8 @@ class QueryServer:
 
     def stop(self):
         self.console.debug("Query server shutting down.")
+
         self.server_task.cancel()
-        self.server.close()
+        self._server.close()
+        
         self.console.debug("Query server shut down successfully.")

@@ -369,6 +369,18 @@ class Buffer:
                 + cls.pack("f", recipe["experience"])
                 + cls.pack_varint(recipe["cooking_time"])
             )
+        elif type_ == "minecraft:stonecutting":
+            out += (
+                cls.pack_string(recipe["group"])
+                + cls.pack_ingredient(recipe["ingredient"])
+                + cls.pack_slot(**recipe["result"])
+            )
+        elif type_ == "minecraft:smithing":
+            out += (
+                cls.pack_ingredient(recipe["base"])
+                + cls.pack_ingredient(recipe["addition"])
+                + cls.pack_slot(**recipe["result"])
+            )
 
         return out
 

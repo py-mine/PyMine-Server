@@ -98,3 +98,6 @@ class CommandHandler:
                 await self.handle_command("server", in_)
             except BaseException as e:  # pymine devs did an oopsie?
                 self.console.error(f"Error while handling command {repr(in_)}: {self.console.f_traceback(e)}")
+
+            if in_.startswith("stop"):
+                break

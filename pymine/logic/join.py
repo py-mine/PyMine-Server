@@ -53,7 +53,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     world = server.worlds[player["Dimension"].data]  # the world player *should* be spawning into
 
     # change held item to saved last held item
-    await server.send_packet(stream, packets.play.player.PlayHeldItemChangeClientBound(player["SelectedItemSlot"].data))
+    await server.send_packet(stream, packets.play.item.PlayHeldItemChangeClientBound(player["SelectedItemSlot"].data))
 
     # send/declare recipes
     await server.send_packet(stream, packets.play.crafting.PlayDeclareRecipes(RECIPES))

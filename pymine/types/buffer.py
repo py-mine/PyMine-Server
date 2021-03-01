@@ -409,7 +409,7 @@ class Buffer:
 
             out += cls.pack_varint(width)
             out += cls.pack_varint(height)
-            out += cls.pack_string(recipe["group"])
+            out += cls.pack_string(recipe.get("group", ""))
 
             out += cls.pack_varint(width * height)  # pack length of ingredients array
 

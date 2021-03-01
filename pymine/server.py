@@ -125,8 +125,11 @@ class Server:
         self.console.info("Server closed.")
 
     async def close_connection(self, stream: Stream):  # Close a connection to a client
-        await stream.drain()
-
+        try:
+            await stream.drain()
+        except BaseException:
+            pass
+            
         stream.close()
         await stream.wait_closed()
 

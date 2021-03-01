@@ -46,6 +46,8 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str, props: list) -> 
 
     await send_player_abilities(stream, player)
 
+    await join_2(stream, player)
+
 
 async def join_2(stream: Stream, player: Player) -> None:
     world = server.worlds[player["Dimension"].data]  # the world player *should* be spawning into

@@ -1,4 +1,5 @@
 from __future__ import annotations
+import immutables
 import struct
 import json
 import uuid
@@ -337,7 +338,7 @@ class Buffer:
         if isinstance(ingredient, list):
             return cls.pack_varint(len(ingredient)) + b"".join([cls.pack_slot(**slot) for slot in ingredient])
 
-        if isinstance(ingredient, dict):
+        if isinstance(ingredient, (dict, immutables.Map)):
             return cls.pack_varint(1) + cls.pack_slot(**ingredient)
 
         raise TypeError(f"Ingredient should be of type list or dict but was instead of type {type(ingredient)}")
@@ -390,6 +391,8 @@ class Buffer:
         #     "count": 3
         #   }
         # }
+
+        print(dict(recipe))
 
         recipe_type = recipe["type"]
 

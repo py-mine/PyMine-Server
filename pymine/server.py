@@ -42,10 +42,9 @@ class Server:
             self.login = {}  # {remote: {username: username, verify: verify token}}
             self.uuid = {}  # {remote: uuid as int}
 
-    def __init__(self, console, executor, uvloop):
+    def __init__(self, console, executor):
         self.console = console  # console instance (see pymine/api/console.py)
         self.executor = executor  # the process pool executor instance
-        self.uvloop = uvloop  # bool whether uvloop is being used or not
 
         self.meta = self.Meta()
         self.cache = self.Cache()

@@ -53,7 +53,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     # change held item to saved last held item
     await server.send_packet(stream, packets.play.player.PlayHeldItemChangeClientBound(player["SelectedItemSlot"].data))
 
-    # send recipes
+    # send/declare recipes
     await server.send_packet(stream, packets.play.crafting.PlayDeclareRecipes(RECIPES))
 
     # send tags (data about the different blocks and items)
@@ -62,7 +62,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     # send entity status packet, apparently this is required, for now it'll just set player to op lvl 4 (value 28)
     await server.send_packet(stream, packets.play.entity.PlayEntityStatus(player.entity_id, 28))
 
-    # tell the client the commands, since proper commands + arg parsing hasn't been added yet, we send an empty list.
+    # tell the client the commands, just send empty list for now
     await server.send_packet(stream, packets.play.command.PlayDeclareCommands([]))
 
     # send unlocked recipes to the client

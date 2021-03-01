@@ -243,10 +243,10 @@ class Server:
 
                 self.console.error(self.console.f_traceback(e))
 
-                if error_count > 2:
+                if error_count > 1:
                     break
 
             if error_count > 0:
-                error_count -= 1
+                error_count -= .5
 
         await self.close_connection(stream)

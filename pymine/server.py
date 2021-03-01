@@ -104,6 +104,7 @@ class Server:
 
         try:
             self.generator = self.api.register._generators[self.conf["generator"]]
+            self.console.debug(f"World generator chosen is {self.generator.__name__}")
         except KeyError:
             self.console.error("Invalid world generator chosen in server.yml.")
             return

@@ -38,7 +38,7 @@ if __name__ == "__main__":
         pymine.server.server = server
 
         try:
-            loop.run_until_complete(server.start())
+            asyncio.run(server.start())
         except (asyncio.CancelledError, KeyboardInterrupt):
             pass
         except ServerBindingError as e:
@@ -47,7 +47,7 @@ if __name__ == "__main__":
             console.critical(console.f_traceback(e))
 
         try:
-            loop.run_until_complete(server.stop())
+            asyncio.run(server.stop())
         except BaseException as e:
             console.critical(console.f_traceback(e))
 

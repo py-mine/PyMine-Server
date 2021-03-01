@@ -247,6 +247,6 @@ class Server:
                     break
 
             if error_count > 0:
-                error_count -= .5
+                error_count -= 0.5
 
         await self.close_connection(stream)

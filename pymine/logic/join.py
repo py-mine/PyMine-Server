@@ -165,7 +165,7 @@ async def broadcast_player_info(player: Player) -> None:
             [
                 {
                     "uuid": player.uuid,
-                    "name": player.name,
+                    "name": player.username,
                     "properties": player.props,
                     "gamemode": player["playerGameType"],
                     "ping": 0,

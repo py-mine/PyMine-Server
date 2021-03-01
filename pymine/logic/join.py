@@ -229,6 +229,9 @@ async def send_world_info(stream: Stream, world: World, player: Player) -> None:
 
 # update the player's position and rotation, as well as the world spawn
 async def send_positional_data(stream: Stream, world: World, player: Player, only_ppos: bool = False) -> None:
+    if not only_ppos:
+        await server.send_packet(stream, packets.play.spawn.PlaySpawnPosition(world["SpawnX"], world["SpawnY"], world["SpawnZ"]))
+
     flags = BitField.new(5, (0x01, False), (0x02, False), (0x04, False), (0x08, False), (0x10, False))
 
     player.teleport_id = random.randint(0, 999999)
@@ -239,6 +242,3 @@ async def send_positional_data(stream: Stream, world: World, player: Player, onl
             player, flags.field, player.teleport_id  # the tp id, should be verified later
         ),
     )
-
-    if not only_ppos:
-        await server.send_packet(stream, packets.play.spawn.PlaySpawnPosition(world["SpawnX"], world["SpawnY"], world["SpawnZ"]))

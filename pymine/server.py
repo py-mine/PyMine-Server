@@ -106,7 +106,10 @@ class Server:
 
         self.api.taskify_handlers(self.api.events._server_ready)
 
-        await self.server.serve_forever()
+        try:
+            await self.server.serve_forever()
+        except asyncio.CancelledError:
+            pass
 
     async def stop(self):
         self.console.info("Closing server...")

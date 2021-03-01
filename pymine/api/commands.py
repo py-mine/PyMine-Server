@@ -88,18 +88,13 @@ class CommandHandler:
             self.console.error(f"Error while executing command {split[0]}: {self.console.f_traceback(e)}")
 
     async def handle_console_commands(self):
-        try:
-            while True:
-                in_ = await self.console.fetch_input()
+        while True:
+            in_ = await self.console.fetch_input()
 
-                if in_ == "":
-                    continue
+            if in_ == "":
+                continue
 
-                try:
-                    await self.handle_command("server", in_)
-                except BaseException as e:  # pymine devs did an oopsie?
-                    self.console.error(f"Error while handling command {repr(in_)}: {self.console.f_traceback(e)}")
-        except asyncio.CancelledError:
-            pass
-        except BaseException as e:
-            self.console.error(self.console.f_traceback(e))
+            try:
+                await self.handle_command("server", in_)
+            except BaseException as e:  # pymine devs did an oopsie?
+                self.console.error(f"Error while handling command {repr(in_)}: {self.console.f_traceback(e)}")

@@ -71,7 +71,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     await send_unlocked_recipes(stream, player)
 
     # send player position and look
-    await send_positional_data(stream, world, player, ppos_only=True)
+    await send_positional_data(stream, world, player, only_ppos=True)
 
     # update tab list, maybe sent to all clients?
     await broadcast_player_info(player)

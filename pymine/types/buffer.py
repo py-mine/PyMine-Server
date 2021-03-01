@@ -420,7 +420,9 @@ class Buffer:
                             if recipe["key"][key].get("item"):
                                 out += cls.pack_ingredient(recipe["key"][key])
                         else:
-                            raise TypeError(f"Type {type(recipe['key'][key])} is not a type that can be packed as an ingredient.")
+                            raise TypeError(
+                                f"Type {type(recipe['key'][key])} is not a type that can be packed as an ingredient."
+                            )
 
             out += cls.pack_slot(**recipe["result"])
         elif recipe_type in misc_data.SMELT_TYPES:  # SMELT_TYPES imported from misc.py

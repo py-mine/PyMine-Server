@@ -341,7 +341,7 @@ class Buffer:
         if isinstance(ingredient, (dict, immutables.Map)):
             return cls.pack_varint(1) + cls.pack_slot(**ingredient)
 
-        raise TypeError(f"Ingredient should be of type list or dict but was instead of type {type(ingredient)}")
+        raise TypeError(f"Type {type(ingredient)} is not a type that can be packed as an ingredient.")
 
     # def unpack_ingredient(self):
     #     """Unpacks a recipe ingredient from the buffer."""
@@ -414,8 +414,13 @@ class Buffer:
             for row in recipe["pattern"]:
                 for key in row:
                     if recipe["key"].get(key) is not None:
-                        if recipe["key"][key].get("item"):
+                        if isinstance(recipe["key"][key], (list, tuple)):
                             out += cls.pack_ingredient(recipe["key"][key])
+                        elif isinstance(recipe["key"][key], (dict, immutables.Map)):
+                            if recipe["key"][key].get("item"):
+                                out += cls.pack_ingredient(recipe["key"][key])
+                        else:
+                            raise TypeError(f"Type {type(recipe['key'][key])} is not a type that can be packed as an ingredient.")
 
             out += cls.pack_slot(**recipe["result"])
         elif recipe_type in misc_data.SMELT_TYPES:  # SMELT_TYPES imported from misc.py

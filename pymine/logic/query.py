@@ -228,5 +228,5 @@ class QueryServer:
 
         self.server_task.cancel()
         self._server.close()
-        
+
         self.console.debug("Query server shut down successfully.")

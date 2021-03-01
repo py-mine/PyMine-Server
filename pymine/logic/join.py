@@ -68,16 +68,14 @@ async def join_2(stream: Stream, player: Player) -> None:
     # send unlocked recipes to the client
     await send_unlocked_recipes(stream, player)
 
-
+    # send player position and look
+    await send_positional_data(stream, world, player, ppos_only=True)
 
     # update tab list, maybe sent to all clients?
     await broadcast_player_info(player)
 
     # see here: https://wiki.vg/Protocol#Update_View_Position
     await server.send_packet(stream, packets.play.player.PlayUpdateViewPosition(player.x // 32, player.z // 32))
-
-    # send_update_view_distance, unsure if needed, see here: https://wiki.vg/Protocol#Update_View_Distance
-    # await send_update_view_distance(stream, player)
 
     await send_world_info(stream, world, player)
 

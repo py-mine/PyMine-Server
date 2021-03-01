@@ -333,10 +333,10 @@ class Buffer:
         return misc_data.POSES[self.unpack_varint()]
 
     @classmethod
-    def pack_ingredient(cls, ingredient: object) -> bytes:
+    def pack_ingredient(cls, ingredient: dict) -> bytes:
         """Packs a recipe ingredient into bytes."""
 
-        raise NotImplementedError
+        return cls.pack_varint(len(ingredient)) + b"".join([cls.pack_slot(**slot) for slot in ingredient.values()])
 
     @classmethod  # Note, recipes are sent as an array and actually require a varint length of recipe array before recipe array
     # recipe_id is the actual name of the recipe i.e. jungle_planks, oak_door, furnace, etc...

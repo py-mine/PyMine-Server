@@ -135,25 +135,25 @@ async def send_unlocked_recipes(stream: Stream, player: Player) -> None:
         stream,
         packets.play.crafting.PlayUnlockRecipes(
             0,  # init
-            player["recipeBook"]["isGuiOpen"],  # refers to the regular crafting bench/table
-            player["recipeBook"]["isFilteringCraftable"],  # refers to the regular crafting bench/table
-            player["recipeBook"]["isFurnaceGuiOpen"],
-            player["recipeBook"]["isFurnaceFilteringCraftable"],
-            player["recipeBook"]["isBlastingFurnaceGuiOpen"],
-            player["recipeBook"]["isBlastingFurnaceFilteringCraftable"],
-            player["recipeBook"]["isSmokerGuiOpen"],
-            player["recipeBook"]["isSmokerFilteringCraftable"],
-            player["recipeBook"]["recipes"],  # all unlocked recipes
-            player["recipeBook"]["toBeDisplayed"],  # ones which will be displayed as newly unlocked
+            player["recipeBook"]["isGuiOpen"].data,  # refers to the regular crafting bench/table
+            player["recipeBook"]["isFilteringCraftable"].data,  # refers to the regular crafting bench/table
+            player["recipeBook"]["isFurnaceGuiOpen"].data,
+            player["recipeBook"]["isFurnaceFilteringCraftable"].data,
+            player["recipeBook"]["isBlastingFurnaceGuiOpen"].data,
+            player["recipeBook"]["isBlastingFurnaceFilteringCraftable"].data,
+            player["recipeBook"]["isSmokerGuiOpen"].data,
+            player["recipeBook"]["isSmokerFilteringCraftable"].data,
+            player["recipeBook"]["recipes"].data,  # all unlocked recipes
+            player["recipeBook"]["toBeDisplayed"].data,  # ones which will be displayed as newly unlocked
         ),
     )
 
 
 # broadcasts the player's info to the other clients, this is needed to support skins and update the tab list
 async def broadcast_player_info(player: Player) -> None:
-    display_name = player.get("CustomName")
+    display_name = player.get("CustomName").data
 
-    if not player.get("CustomNameVisible"):
+    if not player.get("CustomNameVisible").data:
         display_name = None
 
     # Unsure whether these should broadcast to all clients or not
@@ -167,7 +167,7 @@ async def broadcast_player_info(player: Player) -> None:
                     "uuid": player.uuid,
                     "name": player.username,
                     "properties": player.props,
-                    "gamemode": player["playerGameType"],
+                    "gamemode": player["playerGameType"].data,
                     "ping": 0,
                     "display_name": Chat(display_name),
                 }
@@ -216,14 +216,14 @@ async def send_world_info(stream: Stream, world: World, player: Player) -> None:
         packets.play.world.PlayWorldBorder(
             3,
             {
-                "x": world["BorderCenterX"],
-                "z": world["BorderCenterZ"],
-                "old_diameter": world["BorderSize"],
-                "new_diameter": world["BorderSize"],
+                "x": world["BorderCenterX"].data,
+                "z": world["BorderCenterZ"].data,
+                "old_diameter": world["BorderSize"].data,
+                "new_diameter": world["BorderSize"].data,
                 "speed": 0,
-                "portal_teleport_boundary": world["BorderSize"],
-                "warning_blocks": world["BorderWarningBlocks"],
-                "warning_time": world["BorderWarningTime"],
+                "portal_teleport_boundary": world["BorderSize"].data,
+                "warning_blocks": world["BorderWarningBlocks"].data,
+                "warning_time": world["BorderWarningTime"].data,
             },
         ),
     )

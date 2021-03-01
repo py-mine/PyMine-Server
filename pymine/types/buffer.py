@@ -399,7 +399,7 @@ class Buffer:
         out = cls.pack_string(recipe_type) + cls.pack_string(recipe_id)
 
         if recipe_type == "minecraft:crafting_shapeless":
-            out += cls.pack_string(recipe["group"])
+            out += cls.pack_string(recipe.get("group", ""))
             out += cls.pack_varint(len(recipe["ingredients"]))  # Length of ingredient array
             out += b"".join([cls.pack_ingredient(ingredient) for ingredient in recipe["ingredients"]])
             out += cls.pack_slot(**recipe["result"])
@@ -421,7 +421,7 @@ class Buffer:
 
             out += cls.pack_slot(**recipe["result"])
         elif recipe_type in misc_data.SMELT_TYPES:  # SMELT_TYPES imported from misc.py
-            out += cls.pack_string(recipe["group"])
+            out += cls.pack_string(recipe.get("group", ""))
             out += cls.pack_ingredient(recipe["ingredient"])
             out += cls.pack_slot(**recipe["result"])
             out += cls.pack("f", recipe["experience"])

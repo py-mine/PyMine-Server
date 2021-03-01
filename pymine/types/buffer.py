@@ -336,120 +336,31 @@ class Buffer:
     def pack_ingredient(cls, ingredient: object) -> bytes:
         """Packs a recipe ingredient into bytes."""
 
-        if isinstance(ingredient, (list, tuple)):
-            if isinstance(ingredient[0], (dict, immutables.Map)):
-                return cls.pack_varint(len(ingredient)) + b"".join([cls.pack_slot(**slot) for slot in ingredient])
-            else:
-                return cls.pack_varint(len(ingredient)) + b"".join([cls.pack_slot(slot) for slot in ingredient])
-
-        if isinstance(ingredient, (dict, immutables.Map)):
-            if ingredient.get("tag") is not None:
-                return cls.pack_ingredient(TAGS["items"][ingredient["tag"].replace("minecraft:", "", 1)])
-
-            return cls.pack_varint(1) + cls.pack_slot(**ingredient)
-
-        raise TypeError(f"Type {type(ingredient)} is not a type that can be packed as an ingredient.")
-
-    # def unpack_ingredient(self):
-    #     """Unpacks a recipe ingredient from the buffer."""
-    #
-    #     return [self.unpack_slot() for _ in range(self.unpack_varint())]
+        raise NotImplementedError
 
     @classmethod  # Note, recipes are sent as an array and actually require a varint length of recipe array before recipe array
     # recipe_id is the actual name of the recipe i.e. jungle_planks, oak_door, furnace, etc...
     def pack_recipe(cls, recipe_id: str, recipe: dict) -> bytes:  # https://wiki.vg/Protocol#Declare_Recipes
         """Packs a recipe into bytes."""
 
-        # ------------------------------- shapeless recipe -------------------------------
-        # {
-        #   "type": "minecraft:crafting_shapeless",  # Type of crafting recipe, see here: https://wiki.vg/Protocol#Declare_Recipes
-        #   "group": "dyed_bed",  # Crafting group, used for recipe unlocks among other things
-        #   "ingredients": [  # Each of these are "slots"
-        #     {
-        #       "item": "minecraft:white_bed"
-        #     },
-        #     {
-        #       "item": "minecraft:black_dye"
-        #     }
-        #   ],
-        #   "result": {  # Result item of recipe, should be packed as a slot
-        #     "item": "minecraft:black_bed"
-        #   }
-        # }
-        # ------------------------------- shaped recipe -------------------------------
-        # {
-        #   "type": "minecraft:crafting_shaped",
-        #   "group": "sign",  # Crafting group
-        #   "pattern": [  # Pattern layed out for recipe
-        #     "###",
-        #     "###",
-        #     " X "
-        #   ],
-        #   "key": {  # Which character in the pattern corresponds to what item, each of these should be slots
-        #     "#": {
-        #       "item": "minecraft:acacia_planks"
-        #     },
-        #     "X": {
-        #       "item": "minecraft:stick"
-        #     }
-        #   },
-        #   "result": {  # Result of the recipe, should be packed as a slot
-        #     "item": "minecraft:acacia_sign",
-        #     "count": 3
-        #   }
-        # }
+        type_ = recipe["type"]
+        out = cls.pack_string(type_) + cls.pack_string(recipe_id)
 
-        recipe_type = recipe["type"]
-
-        out = cls.pack_string(recipe_type) + cls.pack_string(recipe_id)
-
-        if recipe_type == "minecraft:crafting_shapeless":
-            out += cls.pack_string(recipe.get("group", ""))
-            out += cls.pack_varint(len(recipe["ingredients"]))  # Length of ingredient array
-            out += b"".join([cls.pack_ingredient(ingredient) for ingredient in recipe["ingredients"]])
-            out += cls.pack_slot(**recipe["result"])
-        elif recipe_type == "minecraft:crafting_shaped":
-            width = len(recipe["pattern"][0])  # Width of pattern
-            height = len(recipe["pattern"])  # Height of pattern
-
-            out += cls.pack_varint(width)
-            out += cls.pack_varint(height)
-            out += cls.pack_string(recipe.get("group", ""))
-
-            out += cls.pack_varint(width * height)  # pack length of ingredients array
-
-            for row in recipe["pattern"]:
-                for key in row:
-                    if recipe["key"].get(key) is not None:
-                        if isinstance(recipe["key"][key], (list, tuple)):
-                            out += cls.pack_ingredient(recipe["key"][key])
-                        elif isinstance(recipe["key"][key], (dict, immutables.Map)):
-                            if recipe["key"][key].get("item"):
-                                out += cls.pack_ingredient(recipe["key"][key])
-                        else:
-                            raise TypeError(
-                                f"Type {type(recipe['key'][key])} is not a type that can be packed as an ingredient."
-                            )
-
-            out += cls.pack_slot(**recipe["result"])
-        elif recipe_type in misc_data.SMELT_TYPES:  # SMELT_TYPES imported from misc.py
-            out += cls.pack_string(recipe.get("group", ""))
-            out += cls.pack_ingredient(recipe["ingredient"])
-            out += cls.pack_slot(recipe["result"])
-            out += cls.pack("f", recipe["experience"])
-            out += cls.pack_varint(recipe["cookingtime"])
-        elif recipe_type == "minecraft:stonecutting":  # Stone cutter recipes are fucky wucky, so we have to do some jank here
-            # For some reason some recipes don't include the group?
-            out += cls.pack_string(recipe.get("group", ""))
-            out += cls.pack_ingredient(recipe["ingredient"])
-            # again, stone cutter recipes are fucky wucky
-            out += cls.pack_slot(item=recipe["result"], count=recipe["count"])
-        elif recipe_type == "minecraft:smithing":
-            out += cls.pack_ingredient(recipe["base"])
-            out += cls.pack_ingredient(recipe["addition"])
-            out += cls.pack_slot(**recipe["result"])
-
-        return out
+        if type_ == "minecraft:crafting_shapeless":
+            out += (
+                cls.pack_string(recipe["group"])
+                + cls.pack_varint(len(recipe["ingredients"]))
+                + b"".join([cls.pack_ingredient(ingredient) for ingredient in recipe["ingredients"]])
+                + cls.pack_slot(**recipe["result"])
+            )
+        elif type_ == "minecraft:crafting_shaped":
+            out += (
+                cls.pack_varint(len(recipe["pattern"][0]))
+                + cls.pack_varint(len(recipe["pattern"]))[0]
+                + cls.pack_string(recipe["group"])
+                + b"".join([cls.pack_ingredient(ingredient) for ingredient in recipe["ingredients"]])
+                + cls.pack_slot(**recipe["result"])
+            )
 
     @classmethod
     def pack_villager(cls, kind: int, profession: int, level: int) -> bytes:

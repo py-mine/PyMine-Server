@@ -143,8 +143,8 @@ async def send_unlocked_recipes(stream: Stream, player: Player) -> None:
             player["recipeBook"]["isBlastingFurnaceFilteringCraftable"].data,
             player["recipeBook"]["isSmokerGuiOpen"].data,
             player["recipeBook"]["isSmokerFilteringCraftable"].data,
-            player["recipeBook"]["recipes"].data,  # all unlocked recipes
-            player["recipeBook"]["toBeDisplayed"].data,  # ones which will be displayed as newly unlocked
+            player["recipeBook"]["recipes"],  # all unlocked recipes
+            player["recipeBook"]["toBeDisplayed"],  # ones which will be displayed as newly unlocked
         ),
     )
 

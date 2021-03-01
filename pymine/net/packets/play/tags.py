@@ -13,10 +13,7 @@ __all__ = ("PlayTags",)
 class PlayTags(Packet):
     """Sends ids to the client, see here: https://wiki.vg/Protocol#Tags. (Server -> Client)
 
-    :param dict block: Block tags.
-    :param dict item: Item tags.
-    :param dict fluid: Fluid tags.
-    :param dict entity: Entity tags.
+    :param dict tags: All tags.
     :ivar int id: Unique packet ID.
     :ivar int to: Packet direction.
     :ivar block:
@@ -28,7 +25,7 @@ class PlayTags(Packet):
     id = 0x5B
     to = 1
 
-    def __init__(self, block: dict, item: dict, fluid: dict, entity: dict) -> None:
+    def __init__(self, tags: dict) -> None:
         super().__init__()
 
         # A tags list *should* be something like:
@@ -38,10 +35,10 @@ class PlayTags(Packet):
         #     }
         # }
 
-        self.block = block
-        self.item = item
-        self.fluid = fluid
-        self.entity = entity
+        self.block = tags["blocks"]
+        self.item = tags["items"]
+        self.fluid = tags["fluids"]
+        self.entity = tags["entity_types"]
 
     def encode(self) -> bytes:
         out = b""

@@ -42,10 +42,9 @@ class Server:
             self.login = {}  # {remote: {username: username, verify: verify token}}
             self.uuid = {}  # {remote: uuid as int}
 
-    def __init__(self, console, executor, uvloop):
+    def __init__(self, console, executor):
         self.console = console  # console instance (see pymine/api/console.py)
         self.executor = executor  # the process pool executor instance
-        self.uvloop = uvloop  # bool whether uvloop is being used or not
 
         self.meta = self.Meta()
         self.cache = self.Cache()
@@ -59,6 +58,8 @@ class Server:
 
         self.console.debug_ = self.conf["debug"]
         asyncio.get_event_loop().set_debug(False)
+
+        self.console.debug("Debug mode enabled.")
 
         self.port = self.conf["server_port"]
         self.addr = self.conf["server_ip"]
@@ -105,7 +106,10 @@ class Server:
 
         self.api.taskify_handlers(self.api.events._server_ready)
 
-        await self.server.serve_forever()
+        try:
+            await self.server.serve_forever()
+        except asyncio.CancelledError:
+            pass
 
     async def stop(self):
         self.console.info("Closing server...")
@@ -113,6 +117,9 @@ class Server:
         if self.server is not None:
             self.server.close()
             await self.server.wait_closed()
+
+        if self.query_server is not None:
+            self.query_server.stop()
 
         if self.api is not None:
             await self.api.stop()
@@ -123,7 +130,10 @@ class Server:
         self.console.info("Server closed.")
 
     async def close_connection(self, stream: Stream):  # Close a connection to a client
-        await stream.drain()
+        try:
+            await stream.drain()
+        except BaseException:
+            pass
 
         stream.close()
         await stream.wait_closed()
@@ -160,7 +170,7 @@ class Server:
             if p.stream is not None:
                 senders.append(self.send_packet(p.stream, packet))
 
-        await asyncio.gather(senders)
+        await asyncio.gather(*senders)
 
     async def handle_packet(self, stream: Stream):  # Handle / respond to packets, this is called in a loop
         packet_length = 0
@@ -170,7 +180,7 @@ class Server:
         # and also to handle legacy server list ping packets
         for i in range(3):
             try:
-                read = await asyncio.wait_for(stream.read(1), 5)
+                read = await asyncio.wait_for(stream.read(1), 30)
             except asyncio.TimeoutError:
                 self.console.debug("Closing due to timeout on read...")
                 raise StopHandling
@@ -227,12 +237,22 @@ class Server:
         stream = Stream(reader, writer)
         self.console.debug(f"Connection received from {stream.remote[0]}:{stream.remote[1]}.")
 
+        error_count = 0
+
         while True:
             try:
                 stream = await self.handle_packet(stream)
             except StopHandling:
                 break
             except BaseException as e:
+                error_count += 1
+
                 self.console.error(self.console.f_traceback(e))
+
+                if error_count > 1:
+                    break
+
+            if error_count > 0:
+                error_count -= 0.5
 
         await self.close_connection(stream)

@@ -46,14 +46,16 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str, props: list) -> 
 
     await send_player_abilities(stream, player)
 
+    await join_2(stream, player)
+
 
 async def join_2(stream: Stream, player: Player) -> None:
     world = server.worlds[player["Dimension"].data]  # the world player *should* be spawning into
 
     # change held item to saved last held item
-    await server.send_packet(stream, packets.play.player.PlayHeldItemChangeClientBound(player["SelectedItemSlot"].data))
+    await server.send_packet(stream, packets.play.item.PlayHeldItemChangeClientBound(player["SelectedItemSlot"].data))
 
-    # send recipes
+    # send/declare recipes
     await server.send_packet(stream, packets.play.crafting.PlayDeclareRecipes(RECIPES))
 
     # send tags (data about the different blocks and items)
@@ -62,25 +64,20 @@ async def join_2(stream: Stream, player: Player) -> None:
     # send entity status packet, apparently this is required, for now it'll just set player to op lvl 4 (value 28)
     await server.send_packet(stream, packets.play.entity.PlayEntityStatus(player.entity_id, 28))
 
-    # tell the client the commands, since proper commands + arg parsing hasn't been added yet, we send an empty list.
+    # tell the client the commands, just send empty list for now
     await server.send_packet(stream, packets.play.command.PlayDeclareCommands([]))
 
     # send unlocked recipes to the client
     await send_unlocked_recipes(stream, player)
 
-    # update player position and rotation
-    # await server.send_packet(  # wiki.vg says to send twice?? (see normal login sequence page)
-    #     stream, packets.play.player.PlayPlayerPositionAndLookClientBound(player, 0, random.randint(1, 999999))
-    # )
+    # send player position and look
+    await send_positional_data(stream, world, player, only_ppos=True)
 
     # update tab list, maybe sent to all clients?
     await broadcast_player_info(player)
 
     # see here: https://wiki.vg/Protocol#Update_View_Position
     await server.send_packet(stream, packets.play.player.PlayUpdateViewPosition(player.x // 32, player.z // 32))
-
-    # send_update_view_distance, unsure if needed, see here: https://wiki.vg/Protocol#Update_View_Distance
-    # await send_update_view_distance(stream, player)
 
     await send_world_info(stream, world, player)
 
@@ -138,14 +135,14 @@ async def send_unlocked_recipes(stream: Stream, player: Player) -> None:
         stream,
         packets.play.crafting.PlayUnlockRecipes(
             0,  # init
-            player["recipeBook"]["isGuiOpen"],  # refers to the regular crafting bench/table
-            player["recipeBook"]["isFilteringCraftable"],  # refers to the regular crafting bench/table
-            player["recipeBook"]["isFurnaceGuiOpen"],
-            player["recipeBook"]["isFurnaceFilteringCraftable"],
-            player["recipeBook"]["isBlastingFurnaceGuiOpen"],
-            player["recipeBook"]["isBlastingFurnaceFilteringCraftable"],
-            player["recipeBook"]["isSmokerGuiOpen"],
-            player["recipeBook"]["isSmokerFilteringCraftable"],
+            player["recipeBook"]["isGuiOpen"].data,  # refers to the regular crafting bench/table
+            player["recipeBook"]["isFilteringCraftable"].data,  # refers to the regular crafting bench/table
+            player["recipeBook"]["isFurnaceGuiOpen"].data,
+            player["recipeBook"]["isFurnaceFilteringCraftable"].data,
+            player["recipeBook"]["isBlastingFurnaceGuiOpen"].data,
+            player["recipeBook"]["isBlastingFurnaceFilteringCraftable"].data,
+            player["recipeBook"]["isSmokerGuiOpen"].data,
+            player["recipeBook"]["isSmokerFilteringCraftable"].data,
             player["recipeBook"]["recipes"],  # all unlocked recipes
             player["recipeBook"]["toBeDisplayed"],  # ones which will be displayed as newly unlocked
         ),
@@ -154,9 +151,9 @@ async def send_unlocked_recipes(stream: Stream, player: Player) -> None:
 
 # broadcasts the player's info to the other clients, this is needed to support skins and update the tab list
 async def broadcast_player_info(player: Player) -> None:
-    display_name = player.get("CustomName")
+    display_name = player.get("CustomName").data
 
-    if not player.get("CustomNameVisible"):
+    if not player.get("CustomNameVisible").data:
         display_name = None
 
     # Unsure whether these should broadcast to all clients or not
@@ -168,9 +165,9 @@ async def broadcast_player_info(player: Player) -> None:
             [
                 {
                     "uuid": player.uuid,
-                    "name": player.name,
+                    "name": player.username,
                     "properties": player.props,
-                    "gamemode": player["playerGameType"],
+                    "gamemode": player["playerGameType"].data,
                     "ping": 0,
                     "display_name": Chat(display_name),
                 }
@@ -201,8 +198,8 @@ async def send_update_view_distance(stream: Stream, player: Player) -> None:
 async def send_world_info(stream: Stream, world: World, player: Player) -> None:
     chunks = {}  # cache chunks here because they're used multiple times and shouldn't be garbage collected
 
-    for x in range(-player.view_distance - 1, player.view_distance + 1):
-        for z in range(-player.view_distance - 1, player.view_distance + 1):
+    for x in range(-server.conf["view_distance"] - 1, server.conf["view_distance"] + 1):
+        for z in range(-server.conf["view_distance"] - 1, server.conf["view_distance"] + 1):
             chunks[x, z] = await world.fetch_chunk(x, z)
 
     for chunk in chunks.values():  # send update light packet for each chunk in the player's view distance
@@ -219,28 +216,33 @@ async def send_world_info(stream: Stream, world: World, player: Player) -> None:
         packets.play.world.PlayWorldBorder(
             3,
             {
-                "x": world["BorderCenterX"],
-                "z": world["BorderCenterZ"],
-                "old_diameter": world["BorderSize"],
-                "new_diameter": world["BorderSize"],
+                "x": world["BorderCenterX"].data,
+                "z": world["BorderCenterZ"].data,
+                "old_diameter": world["BorderSize"].data,
+                "new_diameter": world["BorderSize"].data,
                 "speed": 0,
-                "portal_teleport_boundary": world["BorderSize"],
-                "warning_blocks": world["BorderWarningBlocks"],
-                "warning_time": world["BorderWarningTime"],
+                "portal_teleport_boundary": world["BorderSize"].data,
+                "warning_blocks": world["BorderWarningBlocks"].data,
+                "warning_time": world["BorderWarningTime"].data,
             },
         ),
     )
 
 
 # update the player's position and rotation, as well as the world spawn
-async def send_positional_data(stream: Stream, world: World, player: Player) -> None:
+async def send_positional_data(stream: Stream, world: World, player: Player, only_ppos: bool = False) -> None:
+    if not only_ppos:
+        await server.send_packet(
+            stream, packets.play.spawn.PlaySpawnPosition(world["SpawnX"], world["SpawnY"], world["SpawnZ"])
+        )
+
     flags = BitField.new(5, (0x01, False), (0x02, False), (0x04, False), (0x08, False), (0x10, False))
+
+    player.teleport_id = random.randint(0, 999999)
 
     await server.send_packet(
         stream,
         packets.play.player.PlayPlayerPositionAndLookClientBound(
-            player, flags.field, random.randint(0, 999999)  # the tp id, should be verified later
+            player, flags.field, player.teleport_id  # the tp id, should be verified later
         ),
     )
-
-    await server.send_packet(stream, packets.play.spawn.PlaySpawnPosition(world["SpawnX"], world["SpawnY"], world["SpawnZ"]))

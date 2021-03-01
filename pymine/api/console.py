@@ -67,7 +67,7 @@ class Console:
         return "\n" + "".join(traceback.format_exception(type(e), e, e.__traceback__, 200)).rstrip("\n")
 
     def task_exception_handler(self, loop, ctx):
-        if ctx["exception"]:
+        if ctx.get("exception"):
             print(f'{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{self.f_traceback(ctx["exception"])}{END}')
         else:
             print(f'{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{ctx["message"]}{END}')

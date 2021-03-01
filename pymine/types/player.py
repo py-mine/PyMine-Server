@@ -26,6 +26,8 @@ class Player:
         self.displayed_skin_parts = None
         self.main_hand = None
 
+        self.teleport_id = None
+
     def __getitem__(self, key):
         return self.data[key]
 

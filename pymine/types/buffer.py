@@ -361,6 +361,16 @@ class Buffer:
                 + b"".join([cls.pack_ingredient(ingredient) for ingredient in recipe["ingredients"]])
                 + cls.pack_slot(**recipe["result"])
             )
+        elif type_[10:] in ("smelting", "blasting", "campfire_cooking"):
+            out += (
+                cls.pack_string(recipe["group"])
+                + cls.pack_ingredient(recipe["ingredient"])
+                + cls.pack_slot(**recipe["result"])
+                + cls.pack("f", recipe["experience"])
+                + cls.pack_varint(recipe["cooking_time"])
+            )
+
+        return out
 
     @classmethod
     def pack_villager(cls, kind: int, profession: int, level: int) -> bytes:

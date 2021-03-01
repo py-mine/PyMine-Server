@@ -118,6 +118,9 @@ class Server:
             self.server.close()
             await self.server.wait_closed()
 
+        if self.query_server is not None:
+            self.query_server.stop()
+
         if self.api is not None:
             await self.api.stop()
 

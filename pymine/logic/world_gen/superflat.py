@@ -17,7 +17,7 @@ class SuperFlatWorldGenerator(AbstractWorldGenerator):
     def generate_chunk(seed: int, dimension: str, chunk_x: int, chunk_z: int) -> Chunk:
         chunk = Chunk.new(chunk_x, chunk_z, int(time.time()))
 
-        chunk.sections[0] = ChunkSection(0, DirectPalette)
+        chunk.sections[0] = ChunkSection.new(0, DirectPalette)
         palette = chunk.sections[0].palette
 
         if dimension == "minecraft:overworld":
@@ -30,6 +30,8 @@ class SuperFlatWorldGenerator(AbstractWorldGenerator):
             chunk.sections[0].sky_light[4] = 15
         else:
             raise ValueError(f"Unsupported dimension: {dimension}")
+
+        return chunk
 
 
 # chunk_data = numpy.ndarray((256, 16, 16, 3), numpy.uint16)

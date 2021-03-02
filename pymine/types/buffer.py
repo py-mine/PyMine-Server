@@ -362,9 +362,6 @@ class Buffer:
                 + cls.pack_slot(**recipe["result"])
             )
         elif type_[10:] in ("smelting", "blasting", "campfire_cooking"):
-            if 'group' not in recipe:
-                print(recipe)
-
             out += (
                 cls.pack_string(recipe["group"])
                 + cls.pack_ingredient(recipe["ingredient"])

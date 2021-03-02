@@ -12,5 +12,3 @@ class UUID(AbstractParser):
         section = s.split()[0]
 
         return len(section), server.playerio.cache[int(uuid.UUID(section))]
-
-

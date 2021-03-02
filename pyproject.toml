@@ -11,7 +11,7 @@ testpaths = ["tests"]
 name = "pymine"
 version = "0.1.0"
 description = "A fast and easy to use, moddable, Python based Minecraft server!"
-authors = ["Your Name <you@example.com>"]
+author = "PyMine Developers & Contributors"
 license = "GPLv3"
 
 [tool.poetry.dependencies]

@@ -8,7 +8,7 @@ foreach ($command in $pythonversions) {
             $currentver=Invoke-Expression -Command "$command -c 'import platform;print(platform.python_version())'"
             if ($currentver -ge $minimumVersion) {
                 Write-Output "Using Python version $currentver ($command)"
-                Invoke-Expression $command pymine
+                Invoke-Expression "$command pymine"
                 exit 0
             }
         }

@@ -23,7 +23,8 @@
         "ideas",
         "projectManagement",
         "review",
-        "test"
+        "test",
+        "infra"
       ]
     },
     {
@@ -39,7 +40,8 @@
         "question",
         "review",
         "test",
-        "projectManagement"
+        "projectManagement",
+        "infra"
       ]
     },
     {
@@ -100,7 +102,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/46242684?v=4",
       "profile": "https://kevinthomas.codes/",
       "contributions": [
-        "ideas"
+        "ideas",
+        "code"
       ]
     },
     {
@@ -119,7 +122,8 @@
       "profile": "https://github.com/the456gamer",
       "contributions": [
         "ideas",
-        "code"
+        "code",
+        "bug"
       ]
     }
   ],

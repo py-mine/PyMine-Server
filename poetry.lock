@@ -1,12 +1,4 @@
 [[package]]
-name = "aioconsole"
-version = "0.3.1"
-description = "Asynchronous console and interfaces for asyncio"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[[package]]
 name = "aiofile"
 version = "3.4.0"
 description = "Asynchronous file operations."
@@ -500,12 +492,9 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.9"
-content-hash = "dec2ad74929b9a46850d1c1d3d26967ade66479bce1f59d87e87c60deb778f8f"
+content-hash = "1dcc4ce32d87e76cebc13f6c4a0fda113acb91b49ba0098fe3af9dd1f26393f9"
 
 [metadata.files]
-aioconsole = [
-    {file = "aioconsole-0.3.1.tar.gz", hash = "sha256:7c038bb40b7690bf5be6b17154830b7bff25e7be1c02d8420a346c3efbd5d8e5"},
-]
 aiofile = [
     {file = "aiofile-3.4.0-py3-none-any.whl", hash = "sha256:5ad3b032a062d5159055230b121c9f83c0912287443352d467006c0d627e3247"},
     {file = "aiofile-3.4.0.tar.gz", hash = "sha256:1322057bb7c1266935302f1702b036bc5558fe76c018bcda74c4b0cced769035"},

@@ -273,8 +273,6 @@ World
     :members:
 
 
-Login Reference
-================
 
 Login
 ------
@@ -297,9 +295,6 @@ Legacy Ping
 ------------
 .. automodule:: pymine.net.packets.handshaking.legacy_ping
     :members:
-
-Status Reference
-=================
 
 Status
 -------

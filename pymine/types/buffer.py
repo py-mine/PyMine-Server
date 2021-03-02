@@ -376,12 +376,14 @@ class Buffer:
                 + cls.pack_recipe_item(recipe["result"])
             )
         elif type_[10:] in ("smelting", "blasting", "campfire_cooking"):
+            print(recipe)
+
             out += (
                 cls.pack_string(recipe["group"])
                 + cls.pack_ingredient(recipe["ingredient"])
                 + cls.pack_recipe_item(recipe["result"])
                 + cls.pack("f", recipe["experience"])
-                + cls.pack_varint(recipe["cooking_time"])
+                + cls.pack_varint(recipe["cookingtime"])
             )
         elif type_ == "minecraft:stonecutting":
             out += (

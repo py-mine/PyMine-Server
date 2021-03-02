@@ -9,6 +9,12 @@ class UUID(AbstractParser):
         pass
 
     def parse(self, s: str) -> tuple:
-        section = s.split()[0]
+        try:
+            section = s.split()[0]
+        except IndexError:
+            raise ParsingError
 
-        return len(section), server.playerio.cache[int(uuid.UUID(section))]
+        try:
+            return len(section), server.playerio.cache[int(uuid.UUID(section))]
+        except (ValueError, KeyError):  # valueerror for if section isn't valid uuid, keyerror for if player isn't in cache
+            raise ParsingError

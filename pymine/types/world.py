@@ -61,7 +61,7 @@ class World:
     def cache_chunk(self, chunk: Chunk, key: tuple) -> Chunk:
         self._chunk_cache[key] = chunk
 
-        if len(self.chunk_cache) > self._chunk_cache_max:
+        if len(self._chunk_cache) > self._chunk_cache_max:
             self._chunk_cache.popitem(False)
 
         return chunk

@@ -37,6 +37,16 @@ class ChunkSection:
             return default
 
     @classmethod
+    def new(cls, *args, **kwargs):
+        section = cls(*args, **kwargs)
+
+        section.block_states = numpy.ndarray((16, 16, 16), numpy.uint8)
+        section.block_light = numpy.ndarray((16, 16, 16), numpy.uint8)
+        section.sky_light = numpy.ndarray((16, 16, 16), numpy.uint8)
+
+        return section
+
+    @classmethod
     def from_nbt(cls, tag: nbt.TAG) -> ChunkSection:
         if tag.get("BlockStates") is not None:
             # this is a calculation one would use to serialize a chunk section

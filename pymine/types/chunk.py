@@ -44,6 +44,10 @@ class ChunkSection:
         section.block_light = numpy.ndarray((16, 16, 16), numpy.int8)
         section.sky_light = numpy.ndarray((16, 16, 16), numpy.int8)
 
+        section.block_states.fill(0)
+        section.block_light.fill(0)
+        section.sky_light.fill(0)
+
         return section
 
     @classmethod

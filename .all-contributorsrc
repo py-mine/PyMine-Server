@@ -39,7 +39,8 @@
         "question",
         "review",
         "test",
-        "projectManagement"
+        "projectManagement",
+        "infra"
       ]
     },
     {

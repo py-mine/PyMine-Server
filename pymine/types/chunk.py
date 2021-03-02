@@ -40,9 +40,9 @@ class ChunkSection:
     def new(cls, *args, **kwargs):
         section = cls(*args, **kwargs)
 
-        section.block_states = numpy.ndarray((16, 16, 16), numpy.uint8)
-        section.block_light = numpy.ndarray((16, 16, 16), numpy.uint8)
-        section.sky_light = numpy.ndarray((16, 16, 16), numpy.uint8)
+        section.block_states = numpy.ndarray((16, 16, 16), numpy.uint16)
+        section.block_light = numpy.ndarray((16, 16, 16), numpy.int8)
+        section.sky_light = numpy.ndarray((16, 16, 16), numpy.int8)
 
         return section
 

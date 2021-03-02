@@ -22,3 +22,10 @@ def seed_hash(seed: int):  # probably not correct but it seems to work so?
     m = hashlib.sha256()
     m.update(seed.to_bytes(8, "big"))
     return int(str(int.from_bytes(m.digest(), "big"))[:8])
+
+
+def remove_namespace(s: str) -> str:
+    if ":" in s:
+        return "".join(s.split(":")[1:])
+
+    return s

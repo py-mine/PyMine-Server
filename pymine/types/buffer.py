@@ -333,10 +333,25 @@ class Buffer:
         return misc_data.POSES[self.unpack_varint()]
 
     @classmethod
+    def pack_recipe_item(cls, item):
+        if isinstance(item (dict, immutables.Map)):
+            return cls.pack_slot(**item)
+
+        if isinstance(item, str):
+            return cls.pack_slot(item)
+
+        raise TypeError(f"Invalid type {item)}.")
+
+    @classmethod
     def pack_ingredient(cls, ingredient: dict) -> bytes:
         """Packs a recipe ingredient into bytes."""
 
-        return cls.pack_varint(len(ingredient)) + b"".join([cls.pack_slot(**slot) for slot in ingredient.values()])
+        return cls.pack_varint(len(ingredient)) + b"".join(
+            [
+                cls.pack_recipe_item(slot)
+                for slot in ingredient.values()
+            ]
+        )
 
     @classmethod  # Note, recipes are sent as an array and actually require a varint length of recipe array before recipe array
     # recipe_id is the actual name of the recipe i.e. jungle_planks, oak_door, furnace, etc...
@@ -346,11 +361,15 @@ class Buffer:
         type_ = recipe["type"]
         out = cls.pack_string(type_) + cls.pack_string(recipe_id)
 
+        if recipe.get("group") is None:
+            recipe = {**recipe, "group": "null"}
+
         if type_ == "minecraft:crafting_shapeless":
+            print(recipe.get("ingredients"))
             out += (
                 cls.pack_string(recipe["group"])
                 + cls.pack_varint(len(recipe["ingredients"]))
-                + b"".join([cls.pack_ingredient(ingredient) for ingredient in recipe["ingredients"]])
+                + b"".join([cls.pack_ingredient(ingredient) for ingredient in recipe.get("ingredients", [])])
                 + cls.pack_slot(**recipe["result"])
             )
         elif type_ == "minecraft:crafting_shaped":
@@ -358,7 +377,7 @@ class Buffer:
                 cls.pack_varint(len(recipe["pattern"][0]))
                 + cls.pack_varint(len(recipe["pattern"]))
                 + cls.pack_string(recipe["group"])
-                + b"".join([cls.pack_ingredient(ingredient) for ingredient in recipe["ingredients"]])
+                + b"".join([cls.pack_ingredient(ingredient) for ingredient in recipe.get("ingredients", [])])
                 + cls.pack_slot(**recipe["result"])
             )
         elif type_[10:] in ("smelting", "blasting", "campfire_cooking"):
@@ -376,11 +395,14 @@ class Buffer:
                 + cls.pack_slot(**recipe["result"])
             )
         elif type_ == "minecraft:smithing":
-            out += (
-                cls.pack_ingredient(recipe["base"])
-                + cls.pack_ingredient(recipe["addition"])
-                + cls.pack_slot(**recipe["result"])
-            )
+            out += cls.pack_ingredient(recipe["base"]) + cls.pack_ingredient(recipe["addition"])
+
+            if isinstance(recipe["result"], (dict, immutables.Map)):
+                out += cls.pack_slot(**recipe["result"])
+            elif isinstance(recipe["result"], str):
+                out += cls.pack_slot(recipe["result"])
+            else:
+                raise ValueError(f"Invalid type {type(recipe['result'])} for recipe['result'].")
 
         return out
 

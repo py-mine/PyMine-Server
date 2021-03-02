@@ -11,7 +11,7 @@ class Entity(AbstractParser):  # players should be a list of Player objects, the
         self.players = players
 
     def parse(self, s: str) -> tuple:
-        section = s.split(" ")[0]
+        section = s.split()[0]
 
         if self.mode == 1:  # Allows usage of selectors
             # currently only basic selectors are supported (nothing like @a[name=Iapetus11])

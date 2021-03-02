@@ -20,4 +20,4 @@ PyYAML==5.4.1
 smmap==3.0.5
 typing-extensions==3.7.4.3
 yarl==1.6.3
-prompt_toolkit
+prompt-toolkit==3.0.16

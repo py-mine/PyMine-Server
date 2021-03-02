@@ -334,7 +334,7 @@ class Buffer:
 
     @classmethod
     def pack_recipe_item(cls, item):
-        if isinstance(item(dict, immutables.Map)):
+        if isinstance(item, (dict, immutables.Map)):
             return cls.pack_slot(**item)
 
         if isinstance(item, str):

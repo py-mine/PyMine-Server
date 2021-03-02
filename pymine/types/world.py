@@ -22,8 +22,7 @@ class World:
         self._chunk_cache_max = chunk_cache_max
         self._chunk_cache = OrderedDict()
 
-        self._proper_name = None
-        self._dimension = None
+        self._cached_name = None
 
     def __getitem__(self, key):
         return self.data[key]
@@ -38,18 +37,11 @@ class World:
             return default
 
     @property
-    def proper_name(self):
-        if self._proper_name is None:
-            self._proper_name = list(self.server.worlds.keys())[list(self.server.worlds.values()).index(self)]
+    def cached_name(self):
+        if self._cached_name is None:
+            self._cached_name = list(self.server.worlds.keys())[list(self.server.worlds.values()).index(self)]
 
-        return self._proper_name
-
-    @property
-    def dimension(self):
-        if self._dimension is None:
-            self._dimension = "minecraft:" + self.proper_name.replace(self.name + "_", "")
-
-        return self._dimension
+        return self._cached_name
 
     async def init(self):
         self.data = await self.load_level_data()
@@ -75,8 +67,6 @@ class World:
         return chunk
 
     async def fetch_chunk(self, chunk_x: int, chunk_z: int) -> Chunk:
-        print(self.proper_name, self.dimension)
-
         key = (chunk_x, chunk_z)
 
         try:  # try to fetch chunk from cache
@@ -87,7 +77,7 @@ class World:
         try:  # try to fetch from disk
             return self.cache_chunk(await self.server.chunkio.fetch_chunk_async(self.path, *key), key)
         except FileNotFoundError:  # fall back to generate chunk
-            sections = self.server.generator.generate_chunk(self.data["RandomSeed"], self.dimension, chunk_x, chunk_z)
+            sections = self.server.generator.generate_chunk(self.data["RandomSeed"], self.cached_name, chunk_x, chunk_z)
             chunk = Chunk.new(chunk_x, chunk_z, sections, int(time.time()))
 
             return self.cache_chunk(chunk)

@@ -78,6 +78,5 @@ class World:
             return self.cache_chunk(await self.server.chunkio.fetch_chunk_async(self.path, *key), key)
         except FileNotFoundError:  # fall back to generate chunk
             return self.cache_chunk(
-                self.server.generator.generate_chunk(self.data["RandomSeed"].data, self.cached_name, chunk_x, chunk_z),
-                key
+                self.server.generator.generate_chunk(self.data["RandomSeed"].data, self.cached_name, chunk_x, chunk_z), key
             )

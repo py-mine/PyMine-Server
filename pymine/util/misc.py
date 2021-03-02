@@ -3,15 +3,10 @@ import functools
 import asyncio
 import hashlib
 
-
-def string_hash_code(s: str) -> int:  # implementation of java's String.hashCode()
-    n = len(s)
-    hash_code = 0
-
-    for i, c in enumerate(s, start=1):
-        hash_code += c * (31 ** (n - i))
-
-    return hash_code
+# An implementation of java's String.hashCode()
+def java_string_hash(s: str) -> int:
+    l = len(s)
+    return sum((ord(s[i])*31**(l-1-i) for i in range(l))) & 0xFFFFFFFF
 
 
 def gen_seed() -> int:  # generates a random seed as an int

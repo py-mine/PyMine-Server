@@ -22,8 +22,7 @@ class World:
         self._chunk_cache_max = chunk_cache_max
         self._chunk_cache = OrderedDict()
 
-        self._proper_name = None
-        self._dimension = None
+        self._cached_name = None
 
     def __getitem__(self, key):
         return self.data[key]
@@ -38,18 +37,11 @@ class World:
             return default
 
     @property
-    def proper_name(self):
-        if self._proper_name is None:
-            self._proper_name = list(self.server.worlds.keys())[list(self.server.worlds.values()).index(self)]
+    def cached_name(self):
+        if self._cached_name is None:
+            self._cached_name = list(self.server.worlds.keys())[list(self.server.worlds.values()).index(self)]
 
-        return self._proper_name
-
-    @property
-    def dimension(self):
-        if self._dimension is None:
-            self._dimension = "minecraft:" + self.proper_name.replace(self.name + "_", "")
-
-        return self._dimension
+        return self._cached_name
 
     async def init(self):
         self.data = await self.load_level_data()
@@ -69,7 +61,7 @@ class World:
     def cache_chunk(self, chunk: Chunk, key: tuple) -> Chunk:
         self._chunk_cache[key] = chunk
 
-        if len(self.chunk_cache) > self._chunk_cache_max:
+        if len(self._chunk_cache) > self._chunk_cache_max:
             self._chunk_cache.popitem(False)
 
         return chunk
@@ -85,7 +77,6 @@ class World:
         try:  # try to fetch from disk
             return self.cache_chunk(await self.server.chunkio.fetch_chunk_async(self.path, *key), key)
         except FileNotFoundError:  # fall back to generate chunk
-            sections = self.server.generator.generate_chunk(self.data["RandomSeed"], self.dimension, chunk_x, chunk_z)
-            chunk = Chunk.new(chunk_x, chunk_z, sections, int(time.time()))
-
-            return self.cache_chunk(chunk)
+            return self.cache_chunk(
+                self.server.generator.generate_chunk(self.data["RandomSeed"].data, self.cached_name, chunk_x, chunk_z), key
+            )

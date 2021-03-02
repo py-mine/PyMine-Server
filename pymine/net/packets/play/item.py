@@ -139,7 +139,7 @@ class PlayHeldItemChangeClientBound(Packet):
     to = 1
 
     def __init__(self, slot: int) -> None:
-        super().init()
+        super().__init__()
 
         self.slot = slot
 

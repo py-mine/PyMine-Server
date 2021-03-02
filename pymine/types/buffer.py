@@ -1,17 +1,19 @@
 from __future__ import annotations
+import immutables
 import struct
 import json
 import uuid
 import zlib
 
+from pymine.types.block_palette import DirectPalette
 from pymine.types.chunk import Chunk, ChunkSection
 from pymine.types.packet import Packet
 from pymine.types.chat import Chat
 import pymine.types.nbt as nbt
 
-from pymine.types.block_palette import DirectPalette
 from pymine.data.registries import ITEM_REGISTRY
 import pymine.data.misc as misc_data
+from pymine.data.tags import TAGS
 
 from pymine.api.errors import InvalidPacketID
 from pymine.api.abc import AbstractPalette
@@ -238,7 +240,10 @@ class Buffer:
     def pack_chat(cls, msg: Chat) -> bytes:
         """Packs a Minecraft chat message into bytes."""
 
-        return cls.pack_json(msg.msg)
+        if isinstance(msg, Chat):
+            return cls.pack_json(msg.msg)
+
+        return cls.pack_json(Chat(msg).msg)
 
     def unpack_chat(self) -> Chat:
         """Unpacks a Minecraft chat message from the buffer."""
@@ -331,13 +336,19 @@ class Buffer:
     def pack_ingredient(cls, ingredient: object) -> bytes:
         """Packs a recipe ingredient into bytes."""
 
-        if isinstance(ingredient, list):
-            return cls.pack_varint(len(ingredient)) + b"".join([cls.pack_slot(**slot) for slot in ingredient])
+        if isinstance(ingredient, (list, tuple)):
+            if isinstance(ingredient[0], (dict, immutables.Map)):
+                return cls.pack_varint(len(ingredient)) + b"".join([cls.pack_slot(**slot) for slot in ingredient])
+            else:
+                return cls.pack_varint(len(ingredient)) + b"".join([cls.pack_slot(slot) for slot in ingredient])
 
-        if isinstance(ingredient, dict):
+        if isinstance(ingredient, (dict, immutables.Map)):
+            if ingredient.get("tag") is not None:
+                return cls.pack_ingredient(TAGS["items"][ingredient["tag"].replace("minecraft:", "", 1)])
+
             return cls.pack_varint(1) + cls.pack_slot(**ingredient)
 
-        raise TypeError(f"Ingredient should be of type list or dict but was instead of type {type(ingredient)}")
+        raise TypeError(f"Type {type(ingredient)} is not a type that can be packed as an ingredient.")
 
     # def unpack_ingredient(self):
     #     """Unpacks a recipe ingredient from the buffer."""
@@ -393,7 +404,7 @@ class Buffer:
         out = cls.pack_string(recipe_type) + cls.pack_string(recipe_id)
 
         if recipe_type == "minecraft:crafting_shapeless":
-            out += cls.pack_string(recipe["group"])
+            out += cls.pack_string(recipe.get("group", ""))
             out += cls.pack_varint(len(recipe["ingredients"]))  # Length of ingredient array
             out += b"".join([cls.pack_ingredient(ingredient) for ingredient in recipe["ingredients"]])
             out += cls.pack_slot(**recipe["result"])
@@ -403,20 +414,28 @@ class Buffer:
 
             out += cls.pack_varint(width)
             out += cls.pack_varint(height)
-            out += cls.pack_string(recipe["group"])
+            out += cls.pack_string(recipe.get("group", ""))
 
             out += cls.pack_varint(width * height)  # pack length of ingredients array
 
             for row in recipe["pattern"]:
                 for key in row:
-                    if recipe["key"][key].get("item"):
-                        out += cls.pack_ingredient(recipe["key"][key])
+                    if recipe["key"].get(key) is not None:
+                        if isinstance(recipe["key"][key], (list, tuple)):
+                            out += cls.pack_ingredient(recipe["key"][key])
+                        elif isinstance(recipe["key"][key], (dict, immutables.Map)):
+                            if recipe["key"][key].get("item"):
+                                out += cls.pack_ingredient(recipe["key"][key])
+                        else:
+                            raise TypeError(
+                                f"Type {type(recipe['key'][key])} is not a type that can be packed as an ingredient."
+                            )
 
             out += cls.pack_slot(**recipe["result"])
         elif recipe_type in misc_data.SMELT_TYPES:  # SMELT_TYPES imported from misc.py
-            out += cls.pack_string(recipe["group"])
+            out += cls.pack_string(recipe.get("group", ""))
             out += cls.pack_ingredient(recipe["ingredient"])
-            out += cls.pack_slot(**recipe["result"])
+            out += cls.pack_slot(recipe["result"])
             out += cls.pack("f", recipe["experience"])
             out += cls.pack_varint(recipe["cookingtime"])
         elif recipe_type == "minecraft:stonecutting":  # Stone cutter recipes are fucky wucky, so we have to do some jank here

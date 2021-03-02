@@ -17,4 +17,4 @@ async def client_settings_recv(stream: Stream, packet: Packet) -> None:
     player.displayed_skin_parts = packet.displayed_skin_parts
     player.main_hand = packet.main_hand
 
-    await join_2(stream, player)
+    # await join_2(stream, player)

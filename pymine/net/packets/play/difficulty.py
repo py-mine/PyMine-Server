@@ -17,10 +17,10 @@ class PlayServerDifficulty(Packet):
 
     :param int difficulty: The difficulty level, see here: https://wiki.vg/Protocol#Server_Difficulty.
     :param bool locked: Whether the difficulty is locked or not.
-    :attr int id: Unique packet ID.
-    :attr int to: Packet direction.
-    :attr difficulty:
-    :attr locked:
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar difficulty:
+    :ivar locked:
     """
 
     id = 0x0D

@@ -11,13 +11,13 @@ __all__ = (
 
 
 def gen_rsa_keys():
-    private_key = rsa.generate_private_key(65537, 1024) # nosec : expected by the client, only used for negotionation
+    private_key = rsa.generate_private_key(65537, 1024)  # nosec : expected by the client, only used for negotionation
 
     return private_key, private_key.public_key()
 
 
 def gen_verify_hash(shared_key: bytes, public_key: bytes):
-    verify_hash = hashlib.sha1() # nosec : shared client verification only
+    verify_hash = hashlib.sha1()  # nosec : shared client verification only
 
     verify_hash.update((" " * 20).encode("utf-8"))
     verify_hash.update(shared_key)

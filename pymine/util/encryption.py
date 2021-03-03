@@ -11,7 +11,7 @@ __all__ = (
 
 
 def gen_rsa_keys():
-    private_key = rsa.generate_private_key(65537, 1024)  # nosec : expected by the client, only used for negotionation
+    private_key = rsa.generate_private_key(65537, 1024)  # nosec : expected by the client, only used for negotiation
 
     return private_key, private_key.public_key()
 

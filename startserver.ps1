@@ -13,5 +13,5 @@ foreach ($command in $pythonversions) {
         }
 }
 
-Write-Output "Couldn't find suitable Python version. Please use your package manager to install Python 3.7.9 or later"
+Write-Output "Couldn't find suitable Python version. Please install Python 3.7.9 or later (see https://python.org)"
 exit 1

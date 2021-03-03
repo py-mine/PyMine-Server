@@ -70,12 +70,12 @@ class Server:
         self.playerio = None  # used to fetch/dump players
         self.chunkio = ChunkIO  # used to fetch chunks from the disk
         self.worlds = None  # world dictionary
+        self.generator = None  # the world generator
 
         self.query_server = None  # the QueryServer instance
-
+        self.api = None  # the api instance
         self.aiohttp = None  # the aiohttp session
         self.server = None  # the actual underlying asyncio server
-        self.api = None  # the api instance
 
     async def start(self):
         self.console.out.set_title(self.meta.pymine)
@@ -101,6 +101,13 @@ class Server:
         # amount of players online on each world, probably something like (len(players)*24)
         self.worlds = await load_worlds(self, self.conf["level_name"], 24)
         self.playerio = PlayerDataIO(self, self.conf["level_name"])  # Player data IO, used to load/dump player info
+
+        try:
+            self.generator = self.api.register._generators[self.conf["generator"]]
+            self.console.debug(f"World generator chosen is {self.generator.__name__}")
+        except KeyError:
+            self.console.error("Invalid world generator chosen in server.yml.")
+            return
 
         self.console.info(f"PyMine {self.meta.server:.1f} started on {self.addr}:{self.port}!")
 
@@ -243,6 +250,8 @@ class Server:
             try:
                 stream = await self.handle_packet(stream)
             except StopHandling:
+                break
+            except (ConnectionResetError, BrokenPipeError):
                 break
             except BaseException as e:
                 error_count += 1

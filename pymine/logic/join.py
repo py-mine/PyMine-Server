@@ -56,7 +56,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     await server.send_packet(stream, packets.play.item.PlayHeldItemChangeClientBound(player["SelectedItemSlot"].data))
 
     # send/declare recipes
-    await server.send_packet(stream, packets.play.crafting.PlayDeclareRecipes(RECIPES))
+    # await server.send_packet(stream, packets.play.crafting.PlayDeclareRecipes(RECIPES))
 
     # send tags (data about the different blocks and items)
     await server.send_packet(stream, packets.play.tags.PlayTags(TAGS))

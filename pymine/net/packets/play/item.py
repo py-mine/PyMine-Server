@@ -144,7 +144,7 @@ class PlayHeldItemChangeClientBound(Packet):
         self.slot = slot
 
     def encode(self) -> bytes:
-        return Buffer.pack("h", self.slot)
+        return Buffer.pack("b", self.slot)
 
 
 class PlayCollectItem(Packet):

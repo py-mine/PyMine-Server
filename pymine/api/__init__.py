@@ -22,9 +22,9 @@ class PyMineAPI:
         self.plugins = {}
         self.tasks = []
 
-        self.events = EventHandler()
-        self.commands = CommandHandler(server)
-        self.register = Register()
+        self.events = EventHandler()  # for registering events
+        self.commands = CommandHandler(server)  # for commands
+        self.register = Register()  # for non-event registering, like world generators
 
         self.eid_current = 0  # used to not generate duplicate entity ids
 
@@ -192,6 +192,11 @@ class PyMineAPI:
 
         # Load packet handlers / packet logic handlers under pymine/logic/handle
         for root, dirs, files in os.walk(os.path.join("pymine", "logic", "handle")):
+            for file in filter((lambda f: f.endswith(".py")), files):
+                importlib.import_module(os.path.join(root, file)[:-3].replace("\\", "/").replace("/", "."))
+
+        # Load world generators from pymine/logc/world_gen
+        for root, dirs, files in os.walk(os.path.join("pymine", "logic", "world_gen")):
             for file in filter((lambda f: f.endswith(".py")), files):
                 importlib.import_module(os.path.join(root, file)[:-3].replace("\\", "/").replace("/", "."))
 

@@ -55,5 +55,5 @@ async def main():
 if __name__ == "__main__":
     try:
         asyncio.run(main())
-    except SystemExit:
-        pass
+    except SystemExit as e:
+        os._exit(e.code)

@@ -7,6 +7,12 @@ if not sys.implementation.version[:3] >= (3, 7, 9):  # Ensure user is on correct
     print("You are not on a supported version of Python. Please update to version 3.7.9 or later.")
     exit(1)
 
+try:
+    import git
+except BaseException:
+    print("PyMine requires git to be installed, you can download it here: https://git-scm.com/downloads.")
+    exit(1)
+
 # try:
 #     import uvloop
 #

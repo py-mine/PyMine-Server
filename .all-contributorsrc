@@ -123,7 +123,8 @@
       "contributions": [
         "ideas",
         "code",
-        "bug"
+        "bug",
+        "infra"
       ]
     }
   ],

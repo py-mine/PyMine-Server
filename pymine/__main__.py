@@ -9,6 +9,9 @@ if not sys.implementation.version[:3] >= (3, 7, 9):  # Ensure user is on correct
 
 try:
     import git
+except ModuleNotFoundError:
+    print("You need to install PyMine's dependencies, either use poetry or use the requirements.txt file.")
+    exit(1)
 except BaseException:
     print("PyMine requires git to be installed, you can download it here: https://git-scm.com/downloads.")
     exit(1)

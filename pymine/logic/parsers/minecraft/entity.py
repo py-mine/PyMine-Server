@@ -4,8 +4,6 @@ import uuid
 from pymine.api.errors import ParsingError
 from pymine.api.abc import AbstractParser
 
-from pymine.server import server
-
 
 class UUID(AbstractParser):
     def parse(self, s: str) -> tuple:

@@ -345,8 +345,8 @@ class TAG_List(TAG, list):
     def pack_data(self) -> bytes:
         if len(self) > 0:
             return BufferUtil.pack("b", self[0].id) + BufferUtil.pack("i", len(self)) + b"".join([t.pack_data() for t in self])
-        else:
-            return BufferUtil.pack("b", 0) + BufferUtil.pack("i", 0)
+
+        return BufferUtil.pack("b", 0) + BufferUtil.pack("i", 0)
 
     @staticmethod
     def unpack_data(buf) -> list:

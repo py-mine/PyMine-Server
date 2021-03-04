@@ -43,7 +43,7 @@ class Console:
 
     def debug(self, *message):
         if self.debug_:
-            message =  ".join([str(m) for m in message])
+            message = " ".join([str(m) for m in message])
 
             for line in message.split("\n"):
                 self.write(f"{WHITE}[{f_time()} {GREY}DEBUG{WHITE}]: {GREY}{line}{END}")

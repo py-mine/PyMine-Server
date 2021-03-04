@@ -97,43 +97,41 @@ class PlayUpdateLight(Packet):
         sky_light_arrays = []
         block_light_arrays = []
 
-        for y, section in self.chunk.sections.items():
-            if y >= 0:
-                if section.sky_light is not None:
-                    if len(section.sky_light.nonzero()) == 0:
-                        empty_sky_light_mask |= 1 << y
-                    else:
-                        sky_light_mask |= 1 << y
+        for section in self.chunk.sections.values():
+            sky_light_array = b""
+            block_light_array = b""
 
-                        data = []
+            if section.y == -1:
+                section_y = 255
+            else:
+                section_y = section.y
 
-                        for y in range(16):
-                            for z in range(16):
-                                for x in range(0, 16, 2):
-                                    data.append(
-                                        Buffer.pack("b", section.sky_light[x][y][z] | (section.sky_light[x + 1][y][z] << 4))
-                                    )
+            if section.sky_light is None or len(section.sky_light.nonzero()) == 0:
+                empty_sky_light_mask |= 1 << section_y
+            else:
+                sky_light_mask |= 1 << section_y
 
-                        sky_light_arrays.append(b"".join(data))
+                for y in range(16):
+                    for z in range(16):
+                        for x in range(0, 16, 2):
+                            sky_light_array += Buffer.pack(
+                                "b", section.sky_light[x][y][z] | (section.sky_light[x + 1][y][z] << 4)
+                            )
 
-                if section.block_light is not None:
-                    if len(section.block_light.nonzero()) == 0:
-                        empty_block_light_mask |= 1 << y
-                    else:
-                        block_light_mask |= 1 << y
+            if section.block_light is None or len(section.block_light.nonzero()) == 0:
+                empty_block_light_mask |= 1 << section_y
+            else:
+                block_light_mask |= 1 << section_y
 
-                        data = []
+                for y in range(16):
+                    for z in range(16):
+                        for x in range(0, 16, 2):
+                            block_light_array += Buffer.pack(
+                                "b", section.sky_light[x][y][z] | (section.sky_light[x + 1][y][z] << 4)
+                            )
 
-                        for y in range(16):
-                            for z in range(16):
-                                for x in range(0, 16, 2):
-                                    data.append(
-                                        Buffer.pack(
-                                            "b", section.block_light[x][y][z] | (section.block_light[x + 1][y][z] << 4)
-                                        )
-                                    )
-
-                        block_light_arrays.append(b"".join(data))
+            sky_light_arrays.append(Buffer.pack_varint(len(sky_light_array)) + sky_light_array)
+            block_light_arrays.append(Buffer.pack_varint(len(block_light_array)) + block_light_array)
 
         return (
             out
@@ -146,3 +144,64 @@ class PlayUpdateLight(Packet):
             + Buffer.pack_varint(len(block_light_arrays))
             + b"".join(block_light_arrays)
         )
+
+    # def encode(self) -> bytes:
+    #     out = Buffer.pack_varint(self.chunk.x) + Buffer.pack_varint(self.chunk.z) + Buffer.pack("?", True)
+    #
+    #     sky_light_mask = 0
+    #     block_light_mask = 0
+    #     empty_sky_light_mask = 0
+    #     empty_block_light_mask = 0
+    #
+    #     sky_light_arrays = []
+    #     block_light_arrays = []
+    #
+    #     for y, section in self.chunk.sections.items():
+    #         if y >= 0:
+    #             if section.sky_light is not None:
+    #                 if len(section.sky_light.nonzero()) == 0:
+    #                     empty_sky_light_mask |= 1 << y
+    #                 else:
+    #                     sky_light_mask |= 1 << y
+    #
+    #                     data = []
+    #
+    #                     for y in range(16):
+    #                         for z in range(16):
+    #                             for x in range(0, 16, 2):
+    #                                 data.append(
+    #                                     Buffer.pack("b", section.sky_light[x][y][z] | (section.sky_light[x + 1][y][z] << 4))
+    #                                 )
+    #
+    #                     sky_light_arrays.append(b"".join(data))
+    #
+    #             if section.block_light is not None:
+    #                 if len(section.block_light.nonzero()) == 0:
+    #                     empty_block_light_mask |= 1 << y
+    #                 else:
+    #                     block_light_mask |= 1 << y
+    #
+    #                     data = []
+    #
+    #                     for y in range(16):
+    #                         for z in range(16):
+    #                             for x in range(0, 16, 2):
+    #                                 data.append(
+    #                                     Buffer.pack(
+    #                                         "b", section.block_light[x][y][z] | (section.block_light[x + 1][y][z] << 4)
+    #                                     )
+    #                                 )
+    #
+    #                     block_light_arrays.append(b"".join(data))
+    #
+    #     return (
+    #         out
+    #         + Buffer.pack_varint(sky_light_mask)
+    #         + Buffer.pack_varint(block_light_mask)
+    #         + Buffer.pack_varint(empty_sky_light_mask)
+    #         + Buffer.pack_varint(empty_block_light_mask)
+    #         + Buffer.pack_varint(len(sky_light_arrays))
+    #         + b"".join(sky_light_arrays)
+    #         + Buffer.pack_varint(len(block_light_arrays))
+    #         + b"".join(block_light_arrays)
+    #     )

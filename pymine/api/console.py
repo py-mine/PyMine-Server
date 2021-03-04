@@ -28,14 +28,14 @@ class Console:
 
     def __init__(self, debug: bool = True, prompt: str = "> ") -> None:
         self.debug_ = debug
-        self.prompt = prompt
+        self.prompt = ANSI("> " if prompt is None else prompt)
 
         self.stdout = StdoutProxy(sleep_between_writes=0.5)
         self.out = create_output(self.stdout)
         self.ses = PromptSession(output=self.out)
 
     async def fetch_input(self):
-        return await self.ses.prompt_async(ANSI(self.prompt))
+        return await self.ses.prompt_async(self.prompt)
 
     def write(self, text: str):
         self.out.write_raw(text)
@@ -67,7 +67,7 @@ class Console:
         return "\n" + "".join(traceback.format_exception(type(e), e, e.__traceback__, 200)).rstrip("\n")
 
     def task_exception_handler(self, loop, ctx):
-        if ctx["exception"]:
+        if ctx.get("exception"):
             print(f'{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{self.f_traceback(ctx["exception"])}{END}')
         else:
             print(f'{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{ctx["message"]}{END}')

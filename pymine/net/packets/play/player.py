@@ -684,7 +684,7 @@ class PlayPlayerInfo(Packet):
         self.players = players
 
     def encode(self) -> bytes:
-        out = Buffer.pack_varint(self.action) + len(self.players)
+        out = Buffer.pack_varint(self.action) + Buffer.pack_varint(len(self.players))
 
         if self.action == 0:  # add player
             for player in self.players:

@@ -182,7 +182,7 @@ class PlayUnlockRecipes(Packet):
         self.crafting_book_open = crafting_book_open
         self.crafting_book_filter_active = crafting_book_filter_active
         self.smelting_book_open = smelting_book_open
-        self.smelting_book_filter_active = self.smelting_book_filter_active
+        self.smelting_book_filter_active = smelting_book_filter_active
         self.blast_furnace_book_open = blast_furnace_book_open
         self.blast_furnace_book_filter_active = blast_furnace_book_filter_active
         self.smoker_book_open = smoker_book_open

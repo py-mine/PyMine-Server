@@ -15,8 +15,8 @@ class UUID(AbstractParser):
             raise ParsingError
 
         try:
-            return len(section), server.playerio.cache[int(uuid.UUID(section))]
-        except (ValueError, KeyError):  # valueerror for if section isn't valid uuid, keyerror for if player isn't in cache
+            return len(section), uuid.UUID(section)
+        except ValueError:  # valueerror for if section isn't valid uuid, keyerror for if player isn't in cache
             raise ParsingError
 
 class Player(AbstractParser):

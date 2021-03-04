@@ -44,23 +44,33 @@ class Console:
     def debug(self, *message):
         if self.debug_:
             message = " ".join([str(m) for m in message])
-            self.write(f"{WHITE}[{f_time()} {GREY}DEBUG{WHITE}]: {GREY}{message}{END}")
+
+            for line in message.split("\n"):
+                self.write(f"{WHITE}[{f_time()} {GREY}DEBUG{WHITE}]: {GREY}{line}{END}")
 
     def info(self, *message):
         message = " ".join([str(m) for m in message])
-        self.write(f"{BRIGHT}{WHITE}[{f_time()} {BLUE}INFO{WHITE}]: {message}{END}")
+
+        for line in message.split("\n"):
+            self.write(f"{BRIGHT}{WHITE}[{f_time()} {BLUE}INFO{WHITE}]: {line}{END}")
 
     def warn(self, *message):
         message = " ".join([str(m) for m in message])
-        self.write(f"{BRIGHT}{WHITE}[{f_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{message}{END}")
+
+        for line in message.split("\n"):
+            self.write(f"{BRIGHT}{WHITE}[{f_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{line}{END}")
 
     def error(self, *message):
         message = " ".join([str(m) for m in message])
-        self.write(f"{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{message}{END}")
+
+        for line in message.split("\n"):
+            self.write(f"{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{line}{END}")
 
     def critical(self, *message):
         message = " ".join([str(m) for m in message])
-        self.write(f"{BRIGHT}{WHITE}{BG_RED}[{f_time()} CRITICAL]: {message}{END}")
+
+        for line in message.split("\n"):
+            self.write(f"{BRIGHT}{WHITE}{BG_RED}[{f_time()} CRITICAL]: {line}{END}")
 
     @staticmethod
     def f_traceback(e: BaseException):

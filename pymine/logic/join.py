@@ -165,6 +165,7 @@ async def broadcast_player_info(player: Player) -> None:
     # Unsure whether these should broadcast to all clients or not
     # Also unsure whether they should include all player data or just that for the connecting player
 
+    # THIS IS THE THINGY CAUSING THE THINGY ERROR I think
     await server.broadcast_packet(
         packets.play.player.PlayPlayerInfo(
             0,  # the action, add player

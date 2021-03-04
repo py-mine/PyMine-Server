@@ -15,7 +15,7 @@ class CommandHandler:
         self.console = server.console
 
         self._commands = {}  # {name: (func, node)}
-        self._parsers = importlib.import_module("pymine.logic.parsers")
+        self._parsers = importlib.import_module("pymine.logic.parsers").parsers
 
     # loads default built in commands
     @staticmethod

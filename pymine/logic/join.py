@@ -70,6 +70,7 @@ async def join_2(stream: Stream, player: Player) -> None:
 
     # send unlocked recipes to the client
     await send_unlocked_recipes(stream, player)
+    await asyncio.sleep(2)
 
     # send player position and look
     await send_positional_data(stream, world, player, only_ppos=True)

@@ -40,6 +40,7 @@ typing-extensions = "3.7.4.3"
 yarl = "1.6.3"
 uvloop = {version = "^0.15.2", optional = true}
 prompt-toolkit = "^3.0.16"
+classy-json = "^3.0.3"
 
 [tool.poetry.dev-dependencies]
 black = "^20.8b1"

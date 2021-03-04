@@ -133,6 +133,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "classy-json"
+version = "3.0.3"
+description = "Dot access for Python dictionaries"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "click"
 version = "7.1.2"
 description = "Composable command line interface toolkit"
@@ -492,7 +500,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.9"
-content-hash = "1dcc4ce32d87e76cebc13f6c4a0fda113acb91b49ba0098fe3af9dd1f26393f9"
+content-hash = "514dd28a0738c5b7e9447aca0a181198392031eb5e6ccbcfc015cb0734c4259c"
 
 [metadata.files]
 aiofile = [
@@ -614,6 +622,10 @@ cffi = [
 chardet = [
     {file = "chardet-3.0.4-py2.py3-none-any.whl", hash = "sha256:fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"},
     {file = "chardet-3.0.4.tar.gz", hash = "sha256:84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae"},
+]
+classy-json = [
+    {file = "classy-json-3.0.3.tar.gz", hash = "sha256:69a602d7172c7b46a931b5a0a6fb079b56427494f42b03bff4927df10bb0ac64"},
+    {file = "classy_json-3.0.3-py3-none-any.whl", hash = "sha256:b26bae86afe36b8fff8de6e9711d9976ef5883da54c2e8050deb4b6bbabe5fd2"},
 ]
 click = [
     {file = "click-7.1.2-py2.py3-none-any.whl", hash = "sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc"},

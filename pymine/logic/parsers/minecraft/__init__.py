@@ -1,1 +1,1 @@
-from pymine.logic.parsers.minecraft.player import UUID, Entity
+from pymine.logic.parsers.minecraft.player import UUID, Player

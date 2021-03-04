@@ -19,6 +19,7 @@ class UUID(AbstractParser):
         except ValueError:  # valueerror for if section isn't valid uuid, keyerror for if player isn't in cache
             raise ParsingError
 
+
 class Player(AbstractParser):
     def parse(self, s: str) -> tuple:
         try:

@@ -58,7 +58,7 @@ class PlayChunkData(Packet):
         for y, section in self.chunk.sections.items():  # pack chunk columns into buffer and generate a bitmask
             if y >= 0:
                 mask |= 1 << y
-                chunk_sections_buffer.write(Buffer.pack_chunk_section(section))
+                chunk_sections_buffer.write(Buffer.pack_chunk_section_blocks(section))
 
         out += Buffer.pack_varint(mask) + Buffer.pack_nbt(
             nbt.TAG_Compound("", [self.chunk["Heightmaps"]["MOTION_BLOCKING"], self.chunk["Heightmaps"]["WORLD_SURFACE"]])

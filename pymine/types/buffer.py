@@ -576,7 +576,7 @@ class Buffer:
         )
 
     @classmethod
-    def pack_chunk_section(cls, section: ChunkSection) -> bytes:
+    def pack_chunk_section_blocks(cls, section: ChunkSection) -> bytes:
         if section.block_states is None:
             return cls.pack_varint(0)  # length is 0
         else:

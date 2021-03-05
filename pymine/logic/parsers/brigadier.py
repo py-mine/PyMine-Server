@@ -111,7 +111,7 @@ class String(AbstractParser):
 
                 out += c
 
-            if not out.endswith("\""):
+            if not out.endswith('"'):
                 raise ParsingError
 
             return i + 2, out

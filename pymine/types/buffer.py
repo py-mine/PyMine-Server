@@ -577,7 +577,9 @@ class Buffer:
 
     @classmethod
     def pack_chunk_section(cls, section: ChunkSection) -> bytes:
-        if section.block_states is not None:
+        if section.block_states is None:
+            out += cls.pack_varint(0)  # length is 0
+        else:
             palette = section.palette
             bits_per_block = palette.get_bits_per_block()
 
@@ -605,8 +607,8 @@ class Buffer:
 
             # pack the block state long array
             out += cls.pack_varint(len(data)) + b"".join([cls.pack("q", q) for q in data])
-        else:
-            out += cls.pack_varint(0)  # length is 0
+
+        return out
 
         # # pack the block light array
         # if section.block_light is not None:

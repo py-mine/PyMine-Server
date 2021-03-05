@@ -541,6 +541,33 @@ class Buffer:
         return self.unpack_uuid(), self.unpack("d"), self.unpack("b")
 
     @classmethod
+    def pack_node(cls, node: dict) -> bytes:
+        out = (
+            cls.pack_byte(node["flags"])
+            + cls.pack_varint(len(node["children"]))
+            + b"".join([cls.pack_node(child) for child in node["children"]])
+        )
+
+        if node["flags"] & 0x08:
+            out += cls.pack_varint(node["redirect_node"])
+
+        if node["flags"] & 0x03 in (1, 2):  # argument or literal node
+            out += cls.pack_string(node["name"])
+
+        if node["flags"] & 0x03 == 2:  # argument node
+            out += cls.pack_string(node["parser"])
+
+            if node.get("properties"):
+                for packer, data in node["properties"]:
+                    out += packer(data)
+
+        if node["flags"] & 0x10:
+            out += cls.pack_string(node["suggestions_type"])
+
+        return out
+
+
+    @classmethod
     def pack_block_palette(cls, palette: AbstractPalette) -> bytes:
         return cls.pack_varint(len(palette.registry.data)) + b"".join(  # map indirect ids to the global palette
             [cls.pack_varint(DirectPalette.encode(palette.decode(state_id))) for state_id in range(len(palette.registry.data))]

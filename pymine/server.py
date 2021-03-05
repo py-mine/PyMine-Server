@@ -42,9 +42,10 @@ class Server:
             self.login = {}  # {remote: {username: username, verify: verify token}}
             self.uuid = {}  # {remote: uuid as int}
 
-    def __init__(self, console, executor):
+    def __init__(self, console, process_executor, thread_executor):
         self.console = console  # console instance (see pymine/api/console.py)
-        self.executor = executor  # the process pool executor instance
+        self.process_executor = process_executor  # the process pool executor instance
+        self.thread_executor = thread_executor  # the thread pool executor instance
 
         self.meta = self.Meta()
         self.cache = self.Cache()

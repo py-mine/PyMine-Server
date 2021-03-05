@@ -117,10 +117,10 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
     abilities = player["abilities"]
     flags = BitField.new(4)
 
-    flags.add(0x01, abilities["invulnerable"].data)
-    flags.add(0x02, abilities["flying"].data)
-    flags.add(0x04, abilities["mayfly"].data)
-    flags.add(0x08, abilities["instabuild"].data)
+    flags.set(0x01, abilities["invulnerable"].data)
+    flags.set(0x02, abilities["flying"].data)
+    flags.set(0x04, abilities["mayfly"].data)
+    flags.set(0x08, abilities["instabuild"].data)
 
     await server.send_packet(  # yes the last arg is supposed to be fov, but the values are actually the same
         stream,
@@ -133,13 +133,13 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
 async def send_command_nodes(stream: Stream) -> None:
     flags = BitField.new(4)
 
-    flags.add(0x00, True)
-    flags.add(0x01, False)
-    flags.add(0x02, False)
-    flags.add(0x03, False)
-    flags.add(0x04, False)
-    flags.add(0x08, False)
-    flags.add(0x10, False)
+    flags.set(0x00, True)
+    flags.set(0x01, False)
+    flags.set(0x02, False)
+    flags.set(0x03, False)
+    flags.set(0x04, False)
+    flags.set(0x08, False)
+    flags.set(0x10, False)
 
     await server.send_packet(stream, packets.play.command.PlayDeclareCommands([{"flags": flags.field, "children": []}]))
 

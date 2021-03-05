@@ -661,10 +661,10 @@ class Buffer:
                 block_light_arrays.append(cls.pack_varint(len(block_light_array)) + block_light_array)
 
         return (
-            cls.pack_varint(sky_light_mask.field, 18)
-            + cls.pack_varint(block_light_mask.field, 18)
-            + cls.pack_varint(empty_sky_light_mask.field, 18)
-            + cls.pack_varint(empty_block_light_mask.field, 18)
+            cls.pack_varint(sky_light_mask.field)
+            + cls.pack_varint(block_light_mask.field)
+            + cls.pack_varint(empty_sky_light_mask.field)
+            + cls.pack_varint(empty_block_light_mask.field)
             + b"".join(sky_light_arrays)
             + b"".join(block_light_arrays)
         )

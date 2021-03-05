@@ -10,10 +10,7 @@ from pymine.util.misc import DualMethod
 class UUID(AbstractParser):
     @DualMethod
     def parse(self, s: str) -> tuple:
-        try:
-            section = s.split()[0]
-        except IndexError:
-            raise ParsingError
+        section = s.split()[0]
 
         try:
             return len(section), uuid.UUID(section)

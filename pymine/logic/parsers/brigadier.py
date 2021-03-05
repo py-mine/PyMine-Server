@@ -28,10 +28,7 @@ class Float(AbstractParser):
 
     @DualMethod
     def parse(self, s: str) -> tuple:
-        try:
-            section = s.split()[0]
-        except IndexError:
-            raise ParsingError
+        section = s.split()[0]
 
         try:
             num = float(section)
@@ -54,10 +51,7 @@ class Double(AbstractParser):
 
     @DualMethod
     def parse(self, s: str) -> tuple:
-        try:
-            section = s.split()[0]
-        except IndexError:
-            raise ParsingError
+        section = s.split()[0]
 
         try:
             num = float(section)
@@ -80,10 +74,7 @@ class Integer(AbstractParser):
 
     @DualMethod
     def parse(self, s: str) -> tuple:
-        try:
-            section = s.split()[0]
-        except IndexError:
-            raise ParsingError
+        section = s.split()[0]
 
         try:
             num = int(section)
@@ -119,6 +110,9 @@ class String(AbstractParser):
                     break
 
                 out += c
+
+            if not out.endswith("\""):
+                raise ParsingError
 
             return i + 2, out
 

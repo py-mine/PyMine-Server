@@ -12,10 +12,7 @@ from pymine.server import server
 class Player(AbstractParser):
     @DualMethod
     def parse(self, s: str) -> tuple:
-        try:
-            section = s.split()[0]
-        except IndexError:
-            raise ParsingError
+        section = s.split()[0]
 
         # check if section could be a valid username
         if 17 > len(section) > 1 and section.lower().strip("abcdefghijklmnopqrstuvwxyz1234567890_") == "":

@@ -1,13 +1,13 @@
 from pymine.api.errors import ParsingError
 from pymine.api.abc import AbstractParser
 
+from pymine.util.misc import DualMethod
+
 __all__ = ("Bool", "Float", "Double", "Integer", "String")
 
 
 class Bool(AbstractParser):
-    def __init__(self) -> None:
-        pass
-
+    @DualMethod
     def parse(self, s: str) -> tuple:
         if s[:4] == "true":
             return 4, True
@@ -19,14 +19,14 @@ class Bool(AbstractParser):
 
 
 class Float(AbstractParser):
-    def __init__(self, min_value: float = -3.4028235e38, max_value: float = 3.4028235e38) -> None:
+    min_value = -3.4028235e38
+    max_value = 3.4028235e38
+
+    def __init__(self, min_value: float = min_value, max_value: float = max_value) -> None:
         self.min_value = min_value
         self.max_value = max_value
 
-    # @classmethod
-    # def __getitem__(cls, ranges: slice) -> Float:
-    #     return cls(ranges.start, range.stop)
-
+    @DualMethod
     def parse(self, s: str) -> tuple:
         try:
             section = s.split()[0]
@@ -45,14 +45,14 @@ class Float(AbstractParser):
 
 
 class Double(AbstractParser):
-    def __init__(self, min_value: float = -1.7976931348623157e307, max_value: float = 1.7976931348623157e307) -> None:
+    min_value = -1.7976931348623157e307
+    max_value = 1.7976931348623157e307
+
+    def __init__(self, min_value: float = min_value, max_value: float = max_value) -> None:
         self.min_value = min_value
         self.max_value = max_value
 
-    # @classmethod
-    # def __getitem__(cls, ranges: slice) -> Double:
-    #     return cls(ranges.start, range.stop)
-
+    @DualMethod
     def parse(self, s: str) -> tuple:
         try:
             section = s.split()[0]
@@ -71,14 +71,14 @@ class Double(AbstractParser):
 
 
 class Integer(AbstractParser):
-    def __init__(self, min_value: int = -2147483648, max_value: int = 2147483647) -> None:
+    min_value = -2147483648
+    max_value = 2147483647
+
+    def __init__(self, min_value: int = min_value, max_value: int = max_value) -> None:
         self.min_value = min_value
         self.max_value = max_value
 
-    # @classmethod
-    # def __getitem__(cls, ranges: slice) -> Integer:
-    #     return cls(ranges.start, range.stop)
-
+    @DualMethod
     def parse(self, s: str) -> tuple:
         try:
             section = s.split()[0]
@@ -97,13 +97,12 @@ class Integer(AbstractParser):
 
 
 class String(AbstractParser):
+    mode = 0
+
     def __init__(self, mode: int) -> None:
         self.mode = mode
 
-    # @classmethod
-    # def __getitem__(cls, mode: slice) -> String:
-    #     return cls(mode.start)
-
+    @DualMethod
     def parse(self, s: str) -> tuple:
         if self.mode == 0:  # single word
             word = s.split()[0]

@@ -65,7 +65,9 @@ class PlayChunkData(Packet):
         )
 
         if self.full:
-            out += Buffer.pack_varint(len(self.chunk["Biomes"])) + b"".join([Buffer.pack_varint(n) for n in self.chunk["Biomes"]])
+            out += Buffer.pack_varint(len(self.chunk["Biomes"])) + b"".join(
+                [Buffer.pack_varint(n) for n in self.chunk["Biomes"]]
+            )
 
         out += Buffer.pack_varint(len(chunk_sections_buffer)) + chunk_sections_buffer.read()
 

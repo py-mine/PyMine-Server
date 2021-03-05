@@ -15,4 +15,4 @@ class UUID(AbstractParser):
         try:
             return len(section), uuid.UUID(section)
         except ValueError:
-            raise ParsingError
+            raise ParsingError("Invalid value for a UUID provided.")

@@ -5,7 +5,7 @@ from pymine.server import server
 async def list(uuid):
     players_online = len(server.playerio.cache)
 
-    if players_only > 0:
+    if players_online > 0:
         server.console.info(
             f"There are {players_online}/{server.conf['max_players']} players online: {', '.join([p.username for p in server.playerio.cache.values()])}"
         )

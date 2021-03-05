@@ -20,15 +20,10 @@ class PlayDeclareCommands(Packet):
     id = 0x10
     to = 1
 
-    def __init__(self, nodes: list) -> None:  # nodes is a list of dicts
+    def __init__(self, nodes: list) -> None:  # nodes is a list of dicts, assumes first node is the root node
         super().__init__()
 
         self.nodes = nodes
 
     def encode(self) -> bytes:
-        out = Buffer.pack_varint(len(self.nodes))
-
-        for node in self.nodes:
-            out += Buffer.pack("b", node["flags"]) + Buffer.pack
-
-        return out + Buffer.pack_varint(0)
+        return Buffer.pack_varint(len(self.nodes)) + b"".join([Buffer.pack_node(node) for node in self.nodes]) + Buffer.pack_varint(0)

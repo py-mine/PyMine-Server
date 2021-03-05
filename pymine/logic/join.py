@@ -220,8 +220,12 @@ async def send_world_info(stream: Stream, world: World, player: Player) -> None:
     # for chunk in chunks.values():  # send update light packet for each chunk in the player's view distance
     #     await server.send_packet(stream, packets.play.chunk.PlayUpdateLight(chunk))
 
-    for chunk in chunks.values():  # send chunk data packet for each chunk in player's view distance
-        await server.send_packet(stream, packets.play.chunk.PlayChunkData(chunk, True))
+    # for chunk in chunks.values():  # send chunk data packet for each chunk in player's view distance
+    #     await server.send_packet(stream, packets.play.chunk.PlayChunkData(chunk, True))
+
+    for chunk in chunks.values():  # send chunk data packet for every chunk in server render distance
+        packet = await asyncio.get_event_loop().run_in_executor(server.thread_executor, packets.play.chunk.PlayChunkData, chunk, True)
+        asyncio.create_task(server.send_packet(stream, packet))
 
     del chunks  # no longer needed so free the memoryyyy
 

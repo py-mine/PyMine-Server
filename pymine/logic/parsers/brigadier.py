@@ -15,7 +15,7 @@ class Bool(AbstractParser):
         if s[:5] == "false":
             return 5, False
 
-        raise ParsingError("Invalid value for a bool provided, use either true or false.")
+        raise ParsingError("invalid value for a bool provided, use either true or false.")
 
 
 class Float(AbstractParser):
@@ -33,12 +33,12 @@ class Float(AbstractParser):
         try:
             num = float(section)
         except ValueError:
-            raise ParsingError("Invalid value provided for a number.")
+            raise ParsingError("invalid value provided for a number.")
 
         if self.min_value is None or self.max_value > num > self.min_value:
             return len(section), num
 
-        raise ParsingError(f"Provided value is not within allowed range ({self.min_value} < value < {self.max_value}).")
+        raise ParsingError(f"provided value is not within allowed range ({self.min_value} < value < {self.max_value}).")
 
 
 class Double(AbstractParser):
@@ -56,12 +56,12 @@ class Double(AbstractParser):
         try:
             num = float(section)
         except ValueError:
-            raise ParsingError("Invalid value provided for a number.")
+            raise ParsingError("invalid value provided for a number.")
 
         if self.min_value is None or self.max_value > num > self.min_value:
             return len(section), num
 
-        raise ParsingError(f"Provided value is not within allowed range ({self.min_value} < value < {self.max_value}).")
+        raise ParsingError(f"provided value is not within allowed range ({self.min_value} < value < {self.max_value}).")
 
 
 class Integer(AbstractParser):
@@ -79,12 +79,12 @@ class Integer(AbstractParser):
         try:
             num = int(section)
         except ValueError:
-            raise ParsingError("Invalid value provided for an integer number.")
+            raise ParsingError("invalid value provided for an integer number.")
 
         if self.min_value is None or self.max_value > num >= self.min_value:
             return len(section), num
 
-        raise ParsingError(f"Provided value is not within allowed range ({self.min_value} < value < {self.max_value}).")
+        raise ParsingError(f"provided value is not within allowed range ({self.min_value} < value < {self.max_value}).")
 
 
 class String(AbstractParser):
@@ -101,7 +101,7 @@ class String(AbstractParser):
 
         if self.mode == 1:  # quotable phrase
             if not s[0] == '"':
-                raise ParsingError("Missing starting quotes.")
+                raise ParsingError("missing starting quotes.")
 
             out = ""
 
@@ -113,11 +113,11 @@ class String(AbstractParser):
                 out += c
 
             if not out.endswith('"'):
-                raise ParsingError("Missing closing quotes.")
+                raise ParsingError("missing closing quotes.")
 
             return i + 2, out[:-1]
 
         if self.mode == 2:  # rest of string
             return len(s), s
 
-        raise ParsingError(f"Failed to parse a string in mode {self.mode}.")
+        raise ParsingError(f"failed to parse a string in mode {self.mode}.")

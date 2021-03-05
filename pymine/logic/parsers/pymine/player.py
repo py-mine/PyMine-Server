@@ -27,4 +27,4 @@ class Player(AbstractParser):
             except (ValueError, KeyError):  # valueerror for if section isn't valid uuid, keyerror for if player isn't in cache
                 pass
 
-        raise ParsingError("Invalid value for a username or UUID provided.")
+        raise ParsingError("invalid value for a username or UUID provided.")

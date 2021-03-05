@@ -82,8 +82,12 @@ class CommandHandler:
 
             try:
                 just_parsed_to, parsed = parser.parse(args_text[parsed_to:])
-            except ParsingError:  # either devs did a bad or user didn't put in the right arguments
-                self.console.warn(f"Invalid input for command {split[0]}: {repr(args_text[parsed_to:])}")
+            except ParsingError as e:  # either devs did a bad or user didn't put in the right arguments
+                try:
+                    self.console.warn(f"Invalid input for command {split[0]}: {e.msg}")
+                except AttributeError:
+                    self.console.warn(f"Invalid input for command {split[0]}: {repr(args_text[parsed_to:])}")
+
                 return
 
             parsed_to += just_parsed_to + 1  # +1 to account for space which differentiates arguments

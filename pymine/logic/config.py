@@ -72,8 +72,8 @@ def load_favicon():
 
 class DualMethod:
     """Allows a method of a class to be a classmethod or regular method.
-    If the method is called like Class.method(), the self parameter will be the class object.
-    If the method is called like instance.method(), the self parameter will be the instance of the class object.
+    If the method is called like Class.method(), the first parameter will be the class object.
+    If the method is called like instance.method(), the first parameter will be the instance of the class object.
 
     Usage is like:
     class Foo:

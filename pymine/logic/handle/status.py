@@ -16,7 +16,7 @@ async def send_status(stream: Stream, packet: Packet) -> tuple:
         "players": {
             "max": server.conf["max_players"],
             "online": len(server.playerio.cache),
-            "sample": [{"name": p.username, "id": str(p.uuid)} for p in server.playerio.cache.values()]
+            "sample": [{"name": p.username, "id": str(p.uuid)} for p in server.playerio.cache.values()],
         },
         "description": Chat(server.conf["motd"]).msg,  # a Chat
     }

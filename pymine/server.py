@@ -139,11 +139,14 @@ class Server:
     async def close_connection(self, stream: Stream):  # Close a connection to a client
         try:
             await stream.drain()
-        except BaseException:
+        except (ConnectionResetError, BrokenPipeError):
             pass
 
-        stream.close()
-        await stream.wait_closed()
+        try:
+            stream.close()
+            await stream.wait_closed()
+        except (ConnectionResetError, BrokenPipeError):
+            pass
 
         try:
             del self.cache.states[stream.remote]
@@ -152,6 +155,16 @@ class Server:
 
         try:
             del self.cache.login[stream.remote]
+        except KeyError:
+            pass
+
+        try:
+            del self.playerio.cache[self.cache.uuid[stream.remote]]
+        except KeyError:
+            pass
+
+        try:
+            del self.cache.uuid[stream.remote]
         except KeyError:
             pass
 

@@ -60,6 +60,11 @@ class CommandHandler:
 
         # iterate through args skipping the first arg
         for i, arg in enumerate(command.__code__.co_varnames[1 : command.__code__.co_argcount]):
+            if parsed_to > len(args_text):
+                missing = command.__code__.co_varnames[i+1:command.__code__.co_argcount]
+                self.console.warn(f"Missing parameter(s) for command {split[0]}: {', '.join(missing)}")
+                return
+
             parser = command.__annotations__.get(arg)  # get parser from annotations
 
             if parser is bool:  # allow for primitive bool type to be used as a typehint
@@ -82,11 +87,6 @@ class CommandHandler:
                 return
 
             parsed_to += just_parsed_to + 1  # +1 to account for space which differentiates arguments
-
-            if parsed_to >= len(args_text):
-                missing = command.__code__.co_varnames[i+1:command.__code__.co_argcount]
-                self.console.warn(f"Missing parameter(s) for command {split[0]}: {', '.join(missing)}")
-                return
 
             args.append(parsed)
 

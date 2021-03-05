@@ -107,6 +107,7 @@ class String(AbstractParser):
 
             for i, c in enumerate(s[1:]):
                 if c == '"' and s[i] != "\\":  # allows for escaping of "
+                    out += '"'
                     break
 
                 out += c
@@ -114,7 +115,7 @@ class String(AbstractParser):
             if not out.endswith('"'):
                 raise ParsingError("Missing closing quotes.")
 
-            return i + 2, out
+            return i + 2, out[:-1]
 
         if self.mode == 2:  # rest of string
             return len(s), s

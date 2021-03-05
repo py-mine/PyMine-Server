@@ -8,7 +8,7 @@ from pymine.types.buffer import Buffer
 __all__ = ("PlayDeclareCommands",)
 
 
-class PlayDeclareCommands(Packet):  # THIS ISN'T DONE YET
+class PlayDeclareCommands(Packet):
     """Tells the clients what commands there are.
 
     :param list nodes: The command nodes.
@@ -20,7 +20,7 @@ class PlayDeclareCommands(Packet):  # THIS ISN'T DONE YET
     id = 0x10
     to = 1
 
-    def __init__(self, nodes: list) -> None:
+    def __init__(self, nodes: list) -> None:  # nodes is a list of dicts
         super().__init__()
 
         self.nodes = nodes
@@ -29,6 +29,6 @@ class PlayDeclareCommands(Packet):  # THIS ISN'T DONE YET
         out = Buffer.pack_varint(len(self.nodes))
 
         for node in self.nodes:
-            pass  # idek yet
+            out += Buffer.pack("b", node["flags"]) + Buffer.pack
 
         return out + Buffer.pack_varint(0)

@@ -10,6 +10,4 @@ async def list(uuid):
             f"There are {players_online}/{server.conf['max_players']} players online: {', '.join([p.username for p in server.playerio.cache.values()])}"
         )
     else:
-        server.console.info(
-            f"There are {players_online}/{server.conf['max_players']} players online."
-        )
+        server.console.info(f"There are {players_online}/{server.conf['max_players']} players online.")

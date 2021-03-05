@@ -1,6 +1,5 @@
 from immutables import Map
 import base64
-import types
 import yaml
 
 from pymine.util.misc import string_hash_code, gen_seed

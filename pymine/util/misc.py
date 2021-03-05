@@ -2,6 +2,7 @@ from random import randint
 import functools
 import asyncio
 import hashlib
+import types
 
 
 def string_hash_code(s: str) -> int:  # implementation of java's String.hashCode()

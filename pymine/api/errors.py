@@ -14,5 +14,5 @@ class ServerBindingError(BaseException):
 
 class ParsingError(BaseException):
     def __init__(self, msg: str) -> None:
-        self.message = msg
+        self.msg = msg
         super().__init__(self.msg)

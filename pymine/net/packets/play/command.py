@@ -26,4 +26,8 @@ class PlayDeclareCommands(Packet):
         self.nodes = nodes
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(len(self.nodes)) + b"".join([Buffer.pack_node(node) for node in self.nodes]) + Buffer.pack_varint(0)
+        return (
+            Buffer.pack_varint(len(self.nodes))
+            + b"".join([Buffer.pack_node(node) for node in self.nodes])
+            + Buffer.pack_varint(0)
+        )

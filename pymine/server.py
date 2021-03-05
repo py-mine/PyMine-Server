@@ -99,7 +99,7 @@ class Server:
 
         # 24 / the second arg (the max chunk cache size per world instance), should be dynamically changed based on the
         # amount of players online on each world, probably something like (len(players)*24)
-        self.worlds = await load_worlds(self, self.conf["level_name"], 24)
+        self.worlds = await load_worlds(self, self.conf["level_name"], 1000)
         self.playerio = PlayerDataIO(self, self.conf["level_name"])  # Player data IO, used to load/dump player info
 
         try:

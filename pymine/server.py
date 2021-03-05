@@ -54,7 +54,7 @@ class Server:
         self.favicon = load_favicon()  # server-icon.png in the root dir, displayed in clients' server lists
         self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold since it's used so much
 
-        self.console.prompt = self.conf["prompt"]
+        self.console.set_prompt(self.conf["prompt"])
 
         self.console.debug_ = self.conf["debug"]
         asyncio.get_event_loop().set_debug(False)

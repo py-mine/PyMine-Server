@@ -12,7 +12,7 @@ async def eval_(uuid, text: String(2)):
 
 
 @server.api.commands.on_command(name="test", node="pymine.cmds.test")
-async def test(uuid, b: Bool(), f: Float(), d: Double(), i: Integer(), s: String(0), s2: String(1), s3: String(2)):
+async def test(uuid, b: Bool, f: Float(), d: Double(), i: Integer(), s: str, s2: String(1), s3: String(2)):
     print(uuid, b, f, d, i, s, s2, s3)
 
 

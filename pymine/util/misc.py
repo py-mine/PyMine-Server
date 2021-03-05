@@ -2,6 +2,7 @@ from random import randint
 import functools
 import asyncio
 import hashlib
+import types
 
 # An implementation of java's String.hashCode()
 def java_string_hash(s: str) -> int:
@@ -25,3 +26,22 @@ def remove_namespace(s: str) -> str:
         return "".join(s.split(":")[1:])
 
     return s
+
+
+class DualMethod:
+    """Allows a method of a class to be a classmethod or regular method.
+    If the method is called like Class.method(), the first parameter will be the class object.
+    If the method is called like instance.method(), the first parameter will be the instance of the class object.
+
+    Usage is like:
+    class Foo:
+        @DualMethod
+        def bar(self, *args):
+            print(*args)
+    """
+
+    def __init__(self, func):
+        self._func = func
+
+    def __get__(self, instance, owner=None):
+        return types.MethodType(self._func, (owner if instance is None else instance))

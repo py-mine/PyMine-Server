@@ -58,6 +58,9 @@ async def main():
         except BaseException as e:
             console.critical(console.f_traceback(e))
 
+    if os.name == "posix":
+        os.system("stty sane")
+
     exit(0)
 
 

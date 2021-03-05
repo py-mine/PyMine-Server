@@ -205,4 +205,4 @@ class PlaySpawnPosition(Packet):
         self.x, self.y, self.z = x, y, z
 
     def encode(self) -> bytes:
-        return Buffer.pack("d", self.x) + Buffer.pack("d", self.y) + Buffer.pack("d", self.z)
+        return Buffer.pack_pos(self.x, self.y, self.z)

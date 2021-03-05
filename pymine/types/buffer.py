@@ -608,16 +608,16 @@ class Buffer:
         else:
             out += cls.pack_varint(0)  # length is 0
 
-        # pack the block light array
-        if section.block_light is not None:
-            for y in range(16):
-                for z in range(16):
-                    for x in range(0, 16, 2):
-                        out += cls.pack_byte(section.block_light[x][y][z] | (section[x + 1][y][z] << 4))
-
-        # pack the sky light array
-        if section.sky_light is not None:
-            for y in range(16):
-                for z in range(16):
-                    for x in range(0, 16, 2):
-                        out += cls.pack_byte(section.sky_light[x][y][z] | (section[x + 1][y][z] << 4))
+        # # pack the block light array
+        # if section.block_light is not None:
+        #     for y in range(16):
+        #         for z in range(16):
+        #             for x in range(0, 16, 2):
+        #                 out += cls.pack_byte(section.block_light[x][y][z] | (section[x + 1][y][z] << 4))
+        #
+        # # pack the sky light array
+        # if section.sky_light is not None:
+        #     for y in range(16):
+        #         for z in range(16):
+        #             for x in range(0, 16, 2):
+        #                 out += cls.pack_byte(section.sky_light[x][y][z] | (section[x + 1][y][z] << 4))

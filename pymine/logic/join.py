@@ -61,33 +61,37 @@ async def join_2(stream: Stream, player: Player) -> None:
 
     # send tags (data about the different blocks and items)
     await server.send_packet(stream, packets.play.tags.PlayTags(TAGS))
+    await asyncio.sleep(3)
 
     # send entity status packet, apparently this is required, for now it'll just set player to op lvl 4 (value 28)
     await server.send_packet(stream, packets.play.entity.PlayEntityStatus(player.entity_id, 28))
+    await asyncio.sleep(3)
 
     # tell the client the commands, just send empty list for now
     await server.send_packet(stream, packets.play.command.PlayDeclareCommands([]))
+    await asyncio.sleep(3)
 
     # send unlocked recipes to the client
     await send_unlocked_recipes(stream, player)
-    await asyncio.sleep(2)
+    await asyncio.sleep(3)
 
     # send player position and look
     await send_positional_data(stream, world, player, only_ppos=True)
-    await asyncio.sleep(2)
+    await asyncio.sleep(3)
 
     # update tab list, maybe sent to all clients?
     await broadcast_player_info(player)
-    await asyncio.sleep(2)
+    await asyncio.sleep(3)
 
     # see here: https://wiki.vg/Protocol#Update_View_Position
     await server.send_packet(stream, packets.play.player.PlayUpdateViewPosition(player.x // 32, player.z // 32))
-    await asyncio.sleep(2)
+    await asyncio.sleep(3)
 
     await send_world_info(stream, world, player)
-    await asyncio.sleep(2)
+    await asyncio.sleep(3)
 
     await send_positional_data(stream, world, player)
+    await asyncio.sleep(3)
 
 
 # crucial info pertaining to the world and player status

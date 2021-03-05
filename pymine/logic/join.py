@@ -68,7 +68,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     await asyncio.sleep(3)
 
     # tell the client the commands, just send empty list for now
-    await server.send_packet(stream, packets.play.command.PlayDeclareCommands([]))
+    await send_command_nodes(stream)
     await asyncio.sleep(3)
 
     # send unlocked recipes to the client
@@ -137,6 +137,19 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
             flags.field, abilities["flySpeed"].data, abilities["walkSpeed"].data
         ),
     )
+
+async def send_command_nodes(stream: Stream) -> None:
+    flags = BitField.new(4)
+
+    flags.add(0x00, True)
+    flags.add(0x01, False)
+    flags.add(0x02, False)
+    flags.add(0x03, False)
+    flags.add(0x04, False)
+    flags.add(0x08, False)
+    flags.add(0x10, False)
+
+    await server.send_packet(stream, packets.play.command.PlayDeclareCommands([{"flags": flags, "children": []}]))
 
 
 # sends the previously unlocked + unviewed unlocked recipies to the client

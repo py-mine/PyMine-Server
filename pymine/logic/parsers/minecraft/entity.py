@@ -4,8 +4,11 @@ import uuid
 from pymine.api.errors import ParsingError
 from pymine.api.abc import AbstractParser
 
+from pymine.util.misc import DualMethod
+
 
 class UUID(AbstractParser):
+    @DualMethod
     def parse(self, s: str) -> tuple:
         try:
             section = s.split()[0]

@@ -4,10 +4,13 @@ import uuid
 from pymine.api.errors import ParsingError
 from pymine.api.abc import AbstractParser
 
+from pymine.util.misc import DualMethod
+
 from pymine.server import server
 
 
 class Player(AbstractParser):
+    @DualMethod
     def parse(self, s: str) -> tuple:
         try:
             section = s.split()[0]

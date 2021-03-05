@@ -63,7 +63,7 @@ async def main():
     process_executor.shutdown(wait=False)
     thread_executor.shutdown(wait=False)
 
-    if os.name == "posix":
+    if os.name == "posix":  # for some reason prompt_toolkit causes issues after exiting PyMine sometimes, this fixes those.
         os.system("stty sane")
 
     exit(0)

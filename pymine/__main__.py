@@ -55,7 +55,7 @@ async def main():
         except BaseException as e:
             console.critical(console.f_traceback(e))
 
-    if os.name == "posix":
+    if os.name == "posix":  # for some reason prompt_toolkit causes issues after exiting PyMine sometimes, this fixes those.
         os.system("stty sane")
 
     exit(0)

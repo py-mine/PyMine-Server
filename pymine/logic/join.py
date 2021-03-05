@@ -149,7 +149,7 @@ async def send_command_nodes(stream: Stream) -> None:
     flags.add(0x08, False)
     flags.add(0x10, False)
 
-    await server.send_packet(stream, packets.play.command.PlayDeclareCommands([{"flags": flags, "children": []}]))
+    await server.send_packet(stream, packets.play.command.PlayDeclareCommands([{"flags": flags.field, "children": []}]))
 
 
 # sends the previously unlocked + unviewed unlocked recipies to the client

@@ -67,7 +67,7 @@ class PlayChunkData(Packet):
         if self.full:
             out += Buffer.pack_varint(len(self.chunk["Biomes"])) + b"".join([Buffer.pack_varint(n) for n in self.chunk["Biomes"]])
 
-        out += len(chunk_sections_buffer) + chunk_sections_buffer.read()
+        out += Buffer.pack_varint(len(chunk_sections_buffer)) + chunk_sections_buffer.read()
 
         # here we would pack the block entities, but we don't support them yet so we just send an array with length of 0
         out += Buffer.pack_varint(0)

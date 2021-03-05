@@ -45,7 +45,7 @@ class CommandHandler:
         return deco
 
     async def handle_command(self, uuid_: uuid.UUID, full: str):
-        split = full.split(" ")
+        split = full.strip(" ").replace("  ", " ").replace("  ", " ").split(" ")
         command = self._commands.get(split[0])
         args_text = " ".join(split[1:])  # basically the text excluding the actual command name and the space following it
 
@@ -58,7 +58,13 @@ class CommandHandler:
         parsed_to = 0
         args = []
 
-        for arg in command.__code__.co_varnames[1 : command.__code__.co_argcount]:  # go through args skipping the first arg
+        # iterate through args skipping the first arg
+        for i, arg in enumerate(command.__code__.co_varnames[1 : command.__code__.co_argcount]):
+            if parsed_to > len(args_text):
+                missing = command.__code__.co_varnames[i + 1 : command.__code__.co_argcount]
+                self.console.warn(f"Missing parameter(s) for command {split[0]}: {', '.join(missing)}")
+                return
+
             parser = command.__annotations__.get(arg)  # get parser from annotations
 
             if parser is bool:  # allow for primitive bool type to be used as a typehint
@@ -76,8 +82,12 @@ class CommandHandler:
 
             try:
                 just_parsed_to, parsed = parser.parse(args_text[parsed_to:])
-            except ParsingError:  # either devs did a bad or user didn't put in the right arguments
-                self.console.warn(f"Invalid input for command {split[0]}: {repr(args_text[parsed_to:])}")
+            except ParsingError as e:  # either devs did a bad or user didn't put in the right arguments
+                try:
+                    self.console.warn(f"Invalid input for command {split[0]}: {e.msg}")
+                except AttributeError:
+                    self.console.warn(f"Invalid input for command {split[0]}: {repr(args_text[parsed_to:])}")
+
                 return
 
             parsed_to += just_parsed_to + 1  # +1 to account for space which differentiates arguments

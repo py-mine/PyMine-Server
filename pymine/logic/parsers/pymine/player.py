@@ -4,15 +4,15 @@ import uuid
 from pymine.api.errors import ParsingError
 from pymine.api.abc import AbstractParser
 
+from pymine.util.misc import DualMethod
+
 from pymine.server import server
 
 
 class Player(AbstractParser):
+    @DualMethod
     def parse(self, s: str) -> tuple:
-        try:
-            section = s.split()[0]
-        except IndexError:
-            raise ParsingError
+        section = s.split()[0]
 
         # check if section could be a valid username
         if 17 > len(section) > 1 and section.lower().strip("abcdefghijklmnopqrstuvwxyz1234567890_") == "":
@@ -27,4 +27,4 @@ class Player(AbstractParser):
             except (ValueError, KeyError):  # valueerror for if section isn't valid uuid, keyerror for if player isn't in cache
                 pass
 
-        raise ParsingError
+        raise ParsingError("invalid value for a username or UUID provided.")

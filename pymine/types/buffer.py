@@ -566,7 +566,6 @@ class Buffer:
 
         return out
 
-
     @classmethod
     def pack_block_palette(cls, palette: AbstractPalette) -> bytes:
         return cls.pack_varint(len(palette.registry.data)) + b"".join(  # map indirect ids to the global palette

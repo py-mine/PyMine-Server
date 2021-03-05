@@ -34,6 +34,9 @@ class Console:
         self.out = create_output(self.stdout)
         self.ses = PromptSession(output=self.out)
 
+    def set_prompt(self, prompt: str):
+        self.prompt = ANSI(prompt)
+
     async def fetch_input(self):
         return await self.ses.prompt_async(self.prompt)
 

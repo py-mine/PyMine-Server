@@ -48,7 +48,7 @@ class PlayBlockAction(Packet):
 
     def encode(self) -> bytes:
         return (
-            Buffer.pack_pos(self.x, self.y, self.z)
+            Buffer.pack_position(self.x, self.y, self.z)
             + Buffer.pack("B", self.action_id)
             + Buffer.pack("B", self.action_param)
             + Buffer.pack_varint(self.block_type)
@@ -79,7 +79,7 @@ class PlayBlockChange(Packet):
         self.block_id = block_id
 
     def encode(self) -> bytes:
-        return Buffer.pack_pos(self.x, self.y, self.z) + Buffer.pack_varint(self.block_id)
+        return Buffer.pack_position(self.x, self.y, self.z) + Buffer.pack_varint(self.block_id)
 
 
 class PlayQueryBlockNBT(Packet):
@@ -108,7 +108,7 @@ class PlayQueryBlockNBT(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayQueryBlockNBT:
-        return cls(buf.unpack_varint(), *buf.unpack_pos())
+        return cls(buf.unpack_varint(), *buf.unpack_position())
 
 
 class PlayBlockPlacement(Packet):
@@ -165,7 +165,7 @@ class PlayBlockPlacement(Packet):
     def decode(cls, buf: Buffer) -> PlayBlockPlacement:
         return cls(
             buf.unpack_varint(),
-            *buf.unpack_pos(),
+            *buf.unpack_position(),
             buf.unpack_varint(),
             buf.unpack("f"),
             buf.unpack("f"),

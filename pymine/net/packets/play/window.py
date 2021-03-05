@@ -305,4 +305,4 @@ class PlayOpenSignEditor(Packet):
         self.x, self.y, self.z = x, y, z
 
     def encode(self) -> bytes:
-        return Buffer.pack_pos(self.x, self.y, self.z)
+        return Buffer.pack_position(self.x, self.y, self.z)

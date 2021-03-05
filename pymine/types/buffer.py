@@ -251,7 +251,7 @@ class Buffer:
         return Chat(self.unpack_json())
 
     @classmethod
-    def pack_pos(cls, x: int, y: int, z: int) -> bytes:
+    def pack_position(cls, x: int, y: int, z: int) -> bytes:
         """Packs a Minecraft position (x, y, z) into bytes."""
 
         def to_twos_complement(num, bits):
@@ -261,7 +261,7 @@ class Buffer:
             ">Q", sum((to_twos_complement(x, 26) << 38, to_twos_complement(z, 26) << 12, to_twos_complement(y, 12)))
         )
 
-    def unpack_pos(self) -> tuple:
+    def unpack_position(self) -> tuple:
         """Unpacks a Minecraft position (x, y, z) from the buffer."""
 
         def from_twos_complement(num, bits):
@@ -322,12 +322,12 @@ class Buffer:
         return misc_data.DIRECTIONS[self.unpack_varint()]
 
     @classmethod
-    def pack_pose(cls, pose: str) -> bytes:
+    def pack_positione(cls, pose: str) -> bytes:
         """Packs a pose into bytes."""
 
         return cls.pack_varint(misc_data.POSES.index(pose))
 
-    def unpack_pose(self) -> str:
+    def unpack_positione(self) -> str:
         """Unpacks a pose from the buffer."""
 
         return misc_data.POSES[self.unpack_varint()]
@@ -507,10 +507,10 @@ class Buffer:
             elif type_ == 8:  # rotation
                 out += cls.pack_rotation(*value)
             elif type_ == 9:  # position
-                out += cls.pack_pos(*value)
+                out += cls.pack_position(*value)
             elif type_ == 10:  # optional position
                 if value is not None:
-                    out += cls.pack_bool("?", True) + cls.pack_pos(*value)
+                    out += cls.pack_bool("?", True) + cls.pack_position(*value)
                 else:
                     out += cls.pack_bool("?", False)
             elif type_ == 11:  # direction
@@ -528,7 +528,7 @@ class Buffer:
             elif type_ == 17:  # optional varint
                 out += cls.pack_optional_varint(value)
             elif type_ == 18:  # pose
-                out += cls.pack_pose(value)
+                out += cls.pack_positione(value)
 
         return out + b"\xFE"
 

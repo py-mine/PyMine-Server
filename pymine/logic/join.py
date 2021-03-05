@@ -138,6 +138,7 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
         ),
     )
 
+
 async def send_command_nodes(stream: Stream) -> None:
     flags = BitField.new(4)
 

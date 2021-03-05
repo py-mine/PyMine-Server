@@ -45,7 +45,8 @@ class CommandHandler:
         return deco
 
     async def handle_command(self, uuid_: uuid.UUID, full: str):
-        split = full.split(" ")
+        split = full.strip(" ").replace("  ", " ").replace("  ", " ").split(" ")
+        print(split)
         command = self._commands.get(split[0])
         args_text = " ".join(split[1:])  # basically the text excluding the actual command name and the space following it
 

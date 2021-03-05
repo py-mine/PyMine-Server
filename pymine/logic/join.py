@@ -248,7 +248,8 @@ async def send_world_info(stream: Stream, world: World, player: Player) -> None:
 async def send_positional_data(stream: Stream, world: World, player: Player, only_ppos: bool = False) -> None:
     if not only_ppos:
         await server.send_packet(
-            stream, packets.play.spawn.PlaySpawnPosition(world["SpawnX"], world["SpawnY"], world["SpawnZ"])
+            stream,
+            packets.play.spawn.PlaySpawnPosition(float(world["SpawnX"]), float(world["SpawnY"]), float(world["SpawnZ"])),
         )
 
     flags = BitField.new(5, (0x01, False), (0x02, False), (0x04, False), (0x08, False), (0x10, False))

@@ -40,7 +40,7 @@ def load_config():
             conf = yaml.safe_load(f.read())
     except FileNotFoundError:
         with open("server.yml", "w+") as f:
-            f.write(yaml.dump(DEFAULT_CONFIG))
+            f.write(yaml.dump(DEFAULT_CONFIG, default_style='"'))
 
     # Check for missing
     if any([(key not in conf) for key in DEFAULT_CONFIG.keys()]):

@@ -32,7 +32,7 @@ DEFAULT_CONFIG = {
 }
 
 
-def load_config():
+def load_config():  # FIXME Write directly to file with yaml lib instead of like this(can wait until we switch to new lib)
     conf = DEFAULT_CONFIG
 
     try:

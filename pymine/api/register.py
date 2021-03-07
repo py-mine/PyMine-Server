@@ -6,6 +6,12 @@ class Register:
         self._plugins = {}
         self._generators = {}
 
+    def plugin(self, plugin: AbstractPlugin) -> None:
+        if not isinstance(plugin, AbstractPlugin):
+            raise ValueError("Plugin must be an instance of AbstractPlugin.")
+
+        self._plugins[plugin.__name__] = plugin
+
     def world_generator(self, name: str):
         def deco(cls):
             if not issubclass(cls, AbstractWorldGenerator):
@@ -16,9 +22,3 @@ class Register:
             return cls
 
         return deco
-
-    def plugin(self, plugin: AbstractPlugin) -> None:
-        if not isinstance(plugin, AbstractPlugin):
-            raise ValueError("Plugin must be an instance of AbstractPlugin.")
-
-        self._plugins[plugin.__name__] = plugin

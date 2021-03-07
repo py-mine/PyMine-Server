@@ -11,7 +11,7 @@ class Register:
 
         self._on_packet = ({}, {}, {}, {})  # handshaking, login, play, status
 
-    def plugin(self, plugin: AbstractPlugin) -> None:
+    def add_plugin(self, plugin: AbstractPlugin) -> None:
         if not isinstance(plugin, AbstractPlugin):
             raise ValueError("Plugin must be an instance of AbstractPlugin.")
 

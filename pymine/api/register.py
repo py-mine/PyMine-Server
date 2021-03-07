@@ -1,4 +1,4 @@
-from pymine.api.abc import AbstractWorldGenerator
+from pymine.api.abc import AbstractWorldGenerator, AbstractPlugin
 
 
 class Register:

@@ -613,10 +613,10 @@ class Buffer:
     def pack_chunk_light(cls, chunk: Chunk) -> bytes:
         out = cls.pack_varint(chunk.x) + cls.pack_varint(chunk.z) + cls.pack("?", True)
 
-        sky_light_mask = BitField.new(18)
-        block_light_mask = BitField.new(18)
-        empty_sky_light_mask = BitField.new(18)
-        empty_block_light_mask = BitField.new(18)
+        sky_light_mask = 0
+        block_light_mask = 0
+        empty_sky_light_mask = 0
+        empty_block_light_mask = 0
 
         sky_light_arrays = []
         block_light_arrays = []
@@ -627,15 +627,15 @@ class Buffer:
             section_y += 1
 
             if section is None:
-                empty_sky_light_mask.set(section_y)
-                empty_block_light_mask.set(section_y)
+                empty_sky_light_mask |= 1 << section_y
+                empty_block_light_mask |= 1 << section_y
 
                 continue
 
             if section.sky_light is None or len(section.sky_light.nonzero()) == 0:
-                empty_sky_light_mask.set(section_y)
+                empty_sky_light_mask |= 1 << section_y
             else:
-                sky_light_mask.set(section_y)
+                sky_light_mask |= 1 << section_y
 
                 sky_light_array = b""
 
@@ -649,9 +649,9 @@ class Buffer:
                 sky_light_arrays.append(cls.pack_varint(len(sky_light_array)) + sky_light_array)
 
             if section.block_light is None or len(section.block_light.nonzero()) == 0:
-                empty_block_light_mask.set(section_y)
+                empty_block_light_mask |= 1 << section_y
             else:
-                block_light_mask.set(section_y)
+                block_light_mask |= 1 << section_y
 
                 block_light_array = b""
 
@@ -665,10 +665,10 @@ class Buffer:
                 block_light_arrays.append(cls.pack_varint(len(block_light_array)) + block_light_array)
 
         return (
-            cls.pack_varint(sky_light_mask.field)
-            + cls.pack_varint(block_light_mask.field)
-            + cls.pack_varint(empty_sky_light_mask.field)
-            + cls.pack_varint(empty_block_light_mask.field)
+            cls.pack_varint(sky_light_mask)
+            + cls.pack_varint(block_light_mask)
+            + cls.pack_varint(empty_sky_light_mask)
+            + cls.pack_varint(empty_block_light_mask)
             + b"".join(sky_light_arrays)
             + b"".join(block_light_arrays)
         )

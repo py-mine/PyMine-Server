@@ -15,12 +15,8 @@ async def send_status(stream: Stream, packet: Packet) -> tuple:
         "version": {"name": server.meta.version, "protocol": server.meta.protocol},
         "players": {
             "max": server.conf["max_players"],
-            "online": len(server.cache.states),
-            "sample": [
-                {"name": "Iapetus11", "id": "cbcfa252-867d-4bda-a214-776c881cf370"},
-                {"name": "Sh_wayz", "id": "cbcfa252-867d-4bda-a214-776c881cf370"},
-                {"name": "emeralddragonmc", "id": "eb86dc19-c3f5-4aef-a50e-a4bf435a7528"},
-            ],
+            "online": len(server.playerio.cache),
+            "sample": [{"name": p.username, "id": str(p.uuid)} for p in server.playerio.cache.values()],
         },
         "description": Chat(server.conf["motd"]).msg,  # a Chat
     }

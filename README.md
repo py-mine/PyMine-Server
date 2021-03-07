@@ -13,7 +13,8 @@
 
 ## Features
 *Note: This list is not always up to date, and doesn't contain all the features that PyMine offers*
-- [ ] **Joinable** - *the login process is complete, but users can not yet join the world*
+- [x] **Joinable** - *completed, players can load into the world*
+- [ ] **Playable** - *currently a work in progress*
 - [ ] **Packet Models** - *missing some clientbound packets*
 - [x] **Status + Login Logic** - *completed*
 - [ ] **Play Logic** - *currently a work in progress*

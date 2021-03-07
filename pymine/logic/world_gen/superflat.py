@@ -26,8 +26,20 @@ class SuperFlatWorldGenerator(AbstractWorldGenerator):
             chunk.sections[0].block_states[4] = palette.encode("minecraft:grass_block", {"snowy": "false"})
 
             chunk.sections[0].block_light[0:4] = 0
+
             chunk.sections[0].sky_light[0:3] = 0
             chunk.sections[0].sky_light[4] = 15
+        elif dimension == "minecraft:nether":
+            chunk.sections[0].block_states[0] = palette.encode("minecraft:bedrock")
+            chunk.sections[0].block_states[1:4] = palette.encode("minecraft:netherrack")
+
+            chunk.sections[0].block_light[0:4] = 0
+            chunk.sections[0].sky_light[4] = 7
+        elif dimension == "minecraft:the_end":
+            chunk.sections[0].block_states[0:4] = palette.encode("minecraft:end_stone")
+
+            chunk.sections[0].block_light[0:4] = 0
+            chunk.sections[0].sky_light[4] = 0
         else:
             raise ValueError(f"Unsupported dimension: {dimension}")
 

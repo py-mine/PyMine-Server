@@ -45,7 +45,7 @@ class PlayEffect(Packet):
     def encode(self) -> bytes:
         return (
             Buffer.pack("i", self.effect_id)
-            + Buffer.pack_pos(self.x, self.y, self.z)
+            + Buffer.pack_position(self.x, self.y, self.z)
             + Buffer.pack("i", self.data)
             + Buffer.pack("?", self.disable_relative_volume)
         )

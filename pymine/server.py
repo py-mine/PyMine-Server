@@ -42,9 +42,10 @@ class Server:
             self.login = {}  # {remote: {username: username, verify: verify token}}
             self.uuid = {}  # {remote: uuid as int}
 
-    def __init__(self, console, executor):
+    def __init__(self, console, process_executor, thread_executor):
         self.console = console  # console instance (see pymine/api/console.py)
-        self.executor = executor  # the process pool executor instance
+        self.process_executor = process_executor  # the process pool executor instance
+        self.thread_executor = thread_executor  # the thread pool executor instance
 
         self.meta = self.Meta()
         self.cache = self.Cache()
@@ -54,11 +55,8 @@ class Server:
         self.favicon = load_favicon()  # server-icon.png in the root dir, displayed in clients' server lists
         self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold since it's used so much
 
-        self.console.prompt = self.conf["prompt"]
-
+        self.console.set_prompt(self.conf["prompt"])
         self.console.debug_ = self.conf["debug"]
-        asyncio.get_event_loop().set_debug(False)
-
         self.console.debug("Debug mode enabled.")
 
         self.port = self.conf["server_port"]
@@ -99,12 +97,12 @@ class Server:
 
         # 24 / the second arg (the max chunk cache size per world instance), should be dynamically changed based on the
         # amount of players online on each world, probably something like (len(players)*24)
-        self.worlds = await load_worlds(self, self.conf["level_name"], 24)
+        self.worlds = await load_worlds(self, self.conf["level_name"], 1000)
         self.playerio = PlayerDataIO(self, self.conf["level_name"])  # Player data IO, used to load/dump player info
 
         try:
             self.generator = self.api.register._generators[self.conf["generator"]]
-            self.console.debug(f"World generator chosen is {self.generator.__name__}")
+            self.console.debug(f"World generator: {self.generator.__name__}")
         except KeyError:
             self.console.error("Invalid world generator chosen in server.yml.")
             return
@@ -139,11 +137,14 @@ class Server:
     async def close_connection(self, stream: Stream):  # Close a connection to a client
         try:
             await stream.drain()
-        except BaseException:
+        except (ConnectionResetError, BrokenPipeError):
             pass
 
-        stream.close()
-        await stream.wait_closed()
+        try:
+            stream.close()
+            await stream.wait_closed()
+        except (ConnectionResetError, BrokenPipeError):
+            pass
 
         try:
             del self.cache.states[stream.remote]
@@ -152,6 +153,16 @@ class Server:
 
         try:
             del self.cache.login[stream.remote]
+        except KeyError:
+            pass
+
+        try:
+            del self.playerio.cache[self.cache.uuid[stream.remote]]
+        except KeyError:
+            pass
+
+        try:
+            del self.cache.uuid[stream.remote]
         except KeyError:
             pass
 

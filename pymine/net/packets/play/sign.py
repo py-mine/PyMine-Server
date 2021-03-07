@@ -43,4 +43,4 @@ class PlayUpdateSign(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayUpdateSign:
-        return cls(*buf.unpack_pos(), buf.unpack_string(), buf.unpack_string(), buf.unpack_string(), buf.unpack_string())
+        return cls(*buf.unpack_position(), buf.unpack_string(), buf.unpack_string(), buf.unpack_string(), buf.unpack_string())

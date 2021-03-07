@@ -7,6 +7,7 @@ import zlib
 
 from pymine.types.block_palette import DirectPalette
 from pymine.types.chunk import Chunk, ChunkSection
+from pymine.types.bitfield import BitField
 from pymine.types.packet import Packet
 from pymine.types.chat import Chat
 import pymine.types.nbt as nbt
@@ -251,7 +252,7 @@ class Buffer:
         return Chat(self.unpack_json())
 
     @classmethod
-    def pack_pos(cls, x: int, y: int, z: int) -> bytes:
+    def pack_position(cls, x: int, y: int, z: int) -> bytes:
         """Packs a Minecraft position (x, y, z) into bytes."""
 
         def to_twos_complement(num, bits):
@@ -261,7 +262,7 @@ class Buffer:
             ">Q", sum((to_twos_complement(x, 26) << 38, to_twos_complement(z, 26) << 12, to_twos_complement(y, 12)))
         )
 
-    def unpack_pos(self) -> tuple:
+    def unpack_position(self) -> tuple:
         """Unpacks a Minecraft position (x, y, z) from the buffer."""
 
         def from_twos_complement(num, bits):
@@ -322,12 +323,12 @@ class Buffer:
         return misc_data.DIRECTIONS[self.unpack_varint()]
 
     @classmethod
-    def pack_pose(cls, pose: str) -> bytes:
+    def pack_positione(cls, pose: str) -> bytes:
         """Packs a pose into bytes."""
 
         return cls.pack_varint(misc_data.POSES.index(pose))
 
-    def unpack_pose(self) -> str:
+    def unpack_positione(self) -> str:
         """Unpacks a pose from the buffer."""
 
         return misc_data.POSES[self.unpack_varint()]
@@ -507,10 +508,10 @@ class Buffer:
             elif type_ == 8:  # rotation
                 out += cls.pack_rotation(*value)
             elif type_ == 9:  # position
-                out += cls.pack_pos(*value)
+                out += cls.pack_position(*value)
             elif type_ == 10:  # optional position
                 if value is not None:
-                    out += cls.pack_bool("?", True) + cls.pack_pos(*value)
+                    out += cls.pack_bool("?", True) + cls.pack_position(*value)
                 else:
                     out += cls.pack_bool("?", False)
             elif type_ == 11:  # direction
@@ -528,7 +529,7 @@ class Buffer:
             elif type_ == 17:  # optional varint
                 out += cls.pack_optional_varint(value)
             elif type_ == 18:  # pose
-                out += cls.pack_pose(value)
+                out += cls.pack_positione(value)
 
         return out + b"\xFE"
 
@@ -541,14 +542,45 @@ class Buffer:
         return self.unpack_uuid(), self.unpack("d"), self.unpack("b")
 
     @classmethod
+    def pack_node(cls, node: dict) -> bytes:
+        out = (
+            cls.pack_byte(node["flags"])
+            + cls.pack_varint(len(node["children"]))
+            + b"".join([cls.pack_node(child) for child in node["children"]])
+        )
+
+        if node["flags"] & 0x08:
+            out += cls.pack_varint(node["redirect_node"])
+
+        if node["flags"] & 0x03 in (1, 2):  # argument or literal node
+            out += cls.pack_string(node["name"])
+
+        if node["flags"] & 0x03 == 2:  # argument node
+            out += cls.pack_string(node["parser"])
+
+            if node.get("properties"):
+                for packer, data in node["properties"]:
+                    out += packer(data)
+
+        if node["flags"] & 0x10:
+            out += cls.pack_string(node["suggestions_type"])
+
+        return out
+
+    @classmethod
     def pack_block_palette(cls, palette: AbstractPalette) -> bytes:
+        if palette is DirectPalette:
+            return b""
+
         return cls.pack_varint(len(palette.registry.data)) + b"".join(  # map indirect ids to the global palette
             [cls.pack_varint(DirectPalette.encode(palette.decode(state_id))) for state_id in range(len(palette.registry.data))]
         )
 
     @classmethod
-    def pack_chunk_section(cls, section: ChunkSection) -> bytes:
-        if section.block_states is not None:
+    def pack_chunk_section_blocks(cls, section: ChunkSection) -> bytes:
+        if section.block_states is None:
+            return cls.pack_varint(0)  # length is 0
+        else:
             palette = section.palette
             bits_per_block = palette.get_bits_per_block()
 
@@ -574,21 +606,65 @@ class Buffer:
                         if start_long != end_long:
                             data[end_long] = value >> (64 - start_offset)
 
-            # pack the block state long array
-            out += cls.pack_varint(len(data)) + b"".join([cls.pack("q", q) for q in data])
-        else:
-            out += cls.pack_varint(0)  # length is 0
+            # pack and return the block state long array
+            return cls.pack_varint(len(data)) + b"".join([cls.pack("q", q) for q in data])
 
-        # pack the block light array
-        if section.block_light is not None:
-            for y in range(16):
-                for z in range(16):
-                    for x in range(0, 16, 2):
-                        out += cls.pack_byte(section.block_light[x][y][z] | (section[x + 1][y][z] << 4))
+    @classmethod
+    def pack_chunk_light(cls, chunk: Chunk) -> bytes:
+        out = cls.pack_varint(chunk.x) + cls.pack_varint(chunk.z) + cls.pack("?", True)
 
-        # pack the sky light array
-        if section.sky_light is not None:
-            for y in range(16):
-                for z in range(16):
-                    for x in range(0, 16, 2):
-                        out += cls.pack_byte(section.sky_light[x][y][z] | (section[x + 1][y][z] << 4))
+        sky_light_mask = BitField.new(18)
+        block_light_mask = BitField.new(18)
+        empty_sky_light_mask = BitField.new(18)
+        empty_block_light_mask = BitField.new(18)
+
+        sky_light_arrays = []
+        block_light_arrays = []
+
+        for section_y in range(-1, 17, 1):
+            section = chunk.get(section_y)
+
+            section_y += 1
+
+            if section is None:
+                empty_sky_light_mask.set(section_y)
+                empty_block_light_mask.set(section_y)
+
+                continue
+
+            if section.sky_light is None or len(section.sky_light.nonzero()) == 0:
+                empty_sky_light_mask.set(section_y)
+            else:
+                sky_light_mask.set(section_y)
+
+                sky_light_array = b""
+
+                for y in range(16):
+                    for z in range(16):
+                        for x in range(0, 16, 2):
+                            sky_light_array += section.sky_light[x][y][z] | (section.sky_light[x + 1][y][z] << 4)
+
+                sky_light_arrays.append(cls.pack_varint(len(sky_light_array)) + sky_light_array)
+
+            if section.block_light is None or len(section.block_light.nonzero()) == 0:
+                empty_block_light_mask.set(section_y)
+            else:
+                block_light_mask.set(section_y)
+
+                block_light_array = b""
+
+                for y in range(16):
+                    for z in range(16):
+                        for x in range(0, 16, 2):
+                            block_light_array += section.block_light[x][y][z] | (section.block_light[x + 1][y][z] << 4)
+
+                block_light_arrays.append(cls.pack_varint(len(block_light_array)) + block_light_array)
+
+        return (
+            cls.pack_varint(sky_light_mask.field)
+            + cls.pack_varint(block_light_mask.field)
+            + cls.pack_varint(empty_sky_light_mask.field)
+            + cls.pack_varint(empty_block_light_mask.field)
+            + b"".join(sky_light_arrays)
+            + b"".join(block_light_arrays)
+        )

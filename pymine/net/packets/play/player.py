@@ -67,7 +67,7 @@ class PlayPlayerDigging(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayPlayerDigging:
-        return cls(buf.unpack_varint(), *buf.unpack_pos(), buf.unpack("b"))
+        return cls(buf.unpack_varint(), *buf.unpack_position(), buf.unpack("b"))
 
 
 class PlayAcknowledgePlayerDigging(Packet):
@@ -102,7 +102,7 @@ class PlayAcknowledgePlayerDigging(Packet):
 
     def encode(self) -> bytes:
         return (
-            Buffer.pack_pos(self.x, self.y, self.z)
+            Buffer.pack_position(self.x, self.y, self.z)
             + Buffer.pack_varint(self.block)
             + Buffer.pack_varint(self.status)
             + Buffer.pack("?", self.successful)

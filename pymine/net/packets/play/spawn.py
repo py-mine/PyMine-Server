@@ -161,7 +161,7 @@ class PlayPaintingSpawn(Packet):
             Buffer.pack_varint(self.entity_id)
             + Buffer.pack_uuid(self.entity_uuid)
             + Buffer.pack_varint(self.motive)
-            + Buffer.pack_pos(self.location)
+            + Buffer.pack_position(self.location)
             + Buffer.pack("b", self.direction)
         )
 
@@ -205,4 +205,4 @@ class PlaySpawnPosition(Packet):
         self.x, self.y, self.z = x, y, z
 
     def encode(self) -> bytes:
-        return Buffer.pack("d", self.x) + Buffer.pack("d", self.y) + Buffer.pack("d", self.z)
+        return Buffer.pack_position(self.x, self.y, self.z)

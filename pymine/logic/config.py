@@ -2,7 +2,7 @@ from immutables import Map
 import base64
 import yaml
 
-from pymine.util.misc import string_hash_code, gen_seed
+from pymine.util.misc import java_string_hash, gen_seed
 
 DEFAULT_CONFIG = {
     "debug": True,
@@ -50,7 +50,7 @@ def load_config():
             f.write(yaml.dump(conf))
 
     if isinstance(conf["seed"], str):  # seed is str, we need int
-        conf["seed"] = string_hash_code(conf["seed"][:20])
+        conf["seed"] = java_string_hash(conf["seed"][:20])
 
     if conf["seed"] > 2 ** 64:  # seed is too big
         conf["seed"] = gen_seed()

@@ -42,21 +42,29 @@ async def main():
 
     asyncio.get_event_loop().set_exception_handler(console.task_exception_handler)
 
-    with concurrent.futures.ProcessPoolExecutor() as executor:
-        server = pymine.server.Server(console, executor)
-        pymine.server.server = server
+    process_executor = concurrent.futures.ProcessPoolExecutor()
+    thread_executor = concurrent.futures.ThreadPoolExecutor()
 
-        try:
-            await server.start()
-        except ServerBindingError as e:
-            console.error(e.msg)
-        except BaseException as e:
-            console.critical(console.f_traceback(e))
+    server = pymine.server.Server(console, process_executor, thread_executor)
+    pymine.server.server = server
 
-        try:
-            await server.stop()
-        except BaseException as e:
-            console.critical(console.f_traceback(e))
+    try:
+        await server.start()
+    except ServerBindingError as e:
+        console.error(e.msg)
+    except BaseException as e:
+        console.critical(console.f_traceback(e))
+
+    try:
+        await server.stop()
+    except BaseException as e:
+        console.critical(console.f_traceback(e))
+
+    process_executor.shutdown(wait=False)
+    thread_executor.shutdown(wait=False)
+
+    if os.name == "posix":  # for some reason prompt_toolkit causes issues after exiting PyMine sometimes, this fixes those.
+        os.system("stty sane")
 
     exit(0)
 

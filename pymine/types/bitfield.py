@@ -26,7 +26,7 @@ class BitField:
 
         return cls(length, field)
 
-    def add(self, flag: int, state: bool) -> None:
+    def set(self, flag: int, state: bool = True) -> None:
         if state:
             self.field |= 2 ** flag
         else:

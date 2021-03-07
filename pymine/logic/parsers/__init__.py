@@ -1,15 +1,18 @@
-from pymine.logic.parsers.brigadier import *
-from pymine.logic.parsers.minecraft import *
+import classyjson
+import importlib
+import os
 
+from pymine.api.abc import AbstractParser
 
-# parsers = []
-#
-# for root, dirs, files in os.walk(os.path.join("pymine", "api", "parsers")):
-#     for file in files:
-#         if file.endswith(".py"):
-#             module = importlib.import_module(os.path.join(root, file[:-3]).replace("\\", "/").replace("/", "."))
-#             parsers += [
-#                 p
-#                 for p in module.__dict__.values()
-#                 if (inspect.isclass(p) and p is not AbstractParser and issubclass(p, AbstractParser))
-#             ]
+parsers = classyjson.ClassyDict()
+
+for root, dirs, files in os.walk(os.path.join("pymine", "logic", "parsers")):
+    for file in filter((lambda f: f.endswith(".py") and "__" not in f), files):
+        module = importlib.import_module(os.path.join(root, file)[:-3].replace("\\", "/").replace("/", "."))
+
+        for name, obj in module.__dict__.items():
+            try:
+                if issubclass(obj, AbstractParser):
+                    parsers[name] = obj
+            except (TypeError, KeyError):  # can't call issubclass() on non-classes
+                pass

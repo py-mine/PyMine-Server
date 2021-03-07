@@ -195,7 +195,7 @@ class PyMineAPI:
             for file in filter((lambda f: f.endswith(".py")), files):
                 importlib.import_module(os.path.join(root, file)[:-3].replace("\\", "/").replace("/", "."))
 
-        # Load world generators from pymine/logc/world_gen
+        # Load world generators from pymine/logic/world_gen
         for root, dirs, files in os.walk(os.path.join("pymine", "logic", "world_gen")):
             for file in filter((lambda f: f.endswith(".py")), files):
                 importlib.import_module(os.path.join(root, file)[:-3].replace("\\", "/").replace("/", "."))

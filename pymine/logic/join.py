@@ -1,3 +1,4 @@
+import asyncio
 import random
 import time
 import uuid
@@ -65,7 +66,7 @@ async def join_2(stream: Stream, player: Player) -> None:
     await server.send_packet(stream, packets.play.entity.PlayEntityStatus(player.entity_id, 28))
 
     # tell the client the commands, just send empty list for now
-    await server.send_packet(stream, packets.play.command.PlayDeclareCommands([]))
+    await send_command_nodes(stream)
 
     # send unlocked recipes to the client
     await send_unlocked_recipes(stream, player)
@@ -116,10 +117,10 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
     abilities = player["abilities"]
     flags = BitField.new(4)
 
-    flags.add(0x01, abilities["invulnerable"].data)
-    flags.add(0x02, abilities["flying"].data)
-    flags.add(0x04, abilities["mayfly"].data)
-    flags.add(0x08, abilities["instabuild"].data)
+    flags.set(0x01, abilities["invulnerable"].data)
+    flags.set(0x02, abilities["flying"].data)
+    flags.set(0x04, abilities["mayfly"].data)
+    flags.set(0x08, abilities["instabuild"].data)
 
     await server.send_packet(  # yes the last arg is supposed to be fov, but the values are actually the same
         stream,
@@ -127,6 +128,20 @@ async def send_player_abilities(stream: Stream, player: Player) -> None:
             flags.field, abilities["flySpeed"].data, abilities["walkSpeed"].data
         ),
     )
+
+
+async def send_command_nodes(stream: Stream) -> None:
+    flags = BitField.new(4)
+
+    flags.set(0x00, True)
+    flags.set(0x01, False)
+    flags.set(0x02, False)
+    flags.set(0x03, False)
+    flags.set(0x04, False)
+    flags.set(0x08, False)
+    flags.set(0x10, False)
+
+    await server.send_packet(stream, packets.play.command.PlayDeclareCommands([{"flags": flags.field, "children": []}]))
 
 
 # sends the previously unlocked + unviewed unlocked recipies to the client
@@ -205,8 +220,14 @@ async def send_world_info(stream: Stream, world: World, player: Player) -> None:
     for chunk in chunks.values():  # send update light packet for each chunk in the player's view distance
         await server.send_packet(stream, packets.play.chunk.PlayUpdateLight(chunk))
 
-    for chunk in chunks.values():  # send chunk data packet for each chunk in player's view distance
-        await server.send_packet(stream, packets.play.chunk.PlayChunkData(chunk, True))
+    # for chunk in chunks.values():  # send chunk data packet for each chunk in player's view distance
+    #     await server.send_packet(stream, packets.play.chunk.PlayChunkData(chunk, True))
+
+    loop = asyncio.get_event_loop()
+
+    for chunk in chunks.values():  # send chunk data packet for every chunk in server render distance
+        packet = await loop.run_in_executor(server.thread_executor, packets.play.chunk.PlayChunkData, chunk, True)
+        asyncio.create_task(server.send_packet(stream, packet))
 
     del chunks  # no longer needed so free the memoryyyy
 
@@ -233,7 +254,7 @@ async def send_world_info(stream: Stream, world: World, player: Player) -> None:
 async def send_positional_data(stream: Stream, world: World, player: Player, only_ppos: bool = False) -> None:
     if not only_ppos:
         await server.send_packet(
-            stream, packets.play.spawn.PlaySpawnPosition(world["SpawnX"], world["SpawnY"], world["SpawnZ"])
+            stream, packets.play.spawn.PlaySpawnPosition(world["SpawnX"].data, world["SpawnY"].data, world["SpawnZ"].data)
         )
 
     flags = BitField.new(5, (0x01, False), (0x02, False), (0x04, False), (0x08, False), (0x10, False))

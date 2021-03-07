@@ -26,13 +26,17 @@ BG_RED = "\x1b[41;1m"
 class Console:
     """Custom logging + input implementation."""
 
-    def __init__(self, debug: bool = True, prompt: str = "> ") -> None:
+    def __init__(self, debug: bool = True) -> None:
         self.debug_ = debug
-        self.prompt = ANSI("> " if prompt is None else prompt)
+        self.prompt = "> "
 
         self.stdout = StdoutProxy(sleep_between_writes=0.5)
         self.out = create_output(self.stdout)
         self.ses = PromptSession(output=self.out)
+
+    def set_prompt(self, prompt: str = None):
+        if prompt is not None:
+            self.prompt = ANSI(prompt)
 
     async def fetch_input(self):
         return await self.ses.prompt_async(self.prompt)
@@ -44,23 +48,33 @@ class Console:
     def debug(self, *message):
         if self.debug_:
             message = " ".join([str(m) for m in message])
-            self.write(f"{WHITE}[{f_time()} {GREY}DEBUG{WHITE}]: {GREY}{message}{END}")
+
+            for line in message.split("\n"):
+                self.write(f"{WHITE}[{f_time()} {GREY}DEBUG{WHITE}]: {GREY}{line}{END}")
 
     def info(self, *message):
         message = " ".join([str(m) for m in message])
-        self.write(f"{BRIGHT}{WHITE}[{f_time()} {BLUE}INFO{WHITE}]: {message}{END}")
+
+        for line in message.split("\n"):
+            self.write(f"{BRIGHT}{WHITE}[{f_time()} {BLUE}INFO{WHITE}]: {line}{END}")
 
     def warn(self, *message):
         message = " ".join([str(m) for m in message])
-        self.write(f"{BRIGHT}{WHITE}[{f_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{message}{END}")
+
+        for line in message.split("\n"):
+            self.write(f"{BRIGHT}{WHITE}[{f_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{line}{END}")
 
     def error(self, *message):
         message = " ".join([str(m) for m in message])
-        self.write(f"{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{message}{END}")
+
+        for line in message.split("\n"):
+            self.write(f"{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{line}{END}")
 
     def critical(self, *message):
         message = " ".join([str(m) for m in message])
-        self.write(f"{BRIGHT}{WHITE}{BG_RED}[{f_time()} CRITICAL]: {message}{END}")
+
+        for line in message.split("\n"):
+            self.write(f"{BRIGHT}{WHITE}{BG_RED}[{f_time()} CRITICAL]: {line}{END}")
 
     @staticmethod
     def f_traceback(e: BaseException):

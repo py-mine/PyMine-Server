@@ -17,7 +17,7 @@ class Register:
 
         self._plugins[plugin.__name__] = plugin
 
-    def world_generator(self, name: str):
+    def add_world_generator(self, name: str):
         def deco(cls):
             if not issubclass(cls, AbstractWorldGenerator):
                 raise ValueError(f"Decorated class must be a subclass of AbstractWorldGenerator")

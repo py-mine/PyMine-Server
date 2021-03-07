@@ -1,4 +1,5 @@
 from pymine.api.abc import AbstractWorldGenerator, AbstractPlugin
+from pymine.api.events import PacketEvent
 
 from pymine.data.states import STATES
 
@@ -28,18 +29,13 @@ class Register:
 
         return deco
 
-    def on_packet(self, state: str, id_: int):
+    def on_packet(self, state: str, packet_id: int):
         state = STATES.encode(state)
 
         def deco(func):
             if not asyncio.iscoroutinefunction(func):
                 raise ValueError("Decorated object must be a coroutine function.")
 
-            try:
-                self._packet[state][id_].append(func)
-            except KeyError:
-                self._packet[state][id_] = [func]
-
-            return func
+            return PacketEvent(state, packet_id)
 
         return deco

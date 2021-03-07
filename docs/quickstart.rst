@@ -10,11 +10,15 @@ This pages explains on how to install and setup your PyMine server.
 Installing from Source
 ======================= 
 
-You can get PyMine from the git repository: ::
+You can get PyMine from the git repository: 
+
+.. code-block:: bash
 
     git clone https://github.com/py-mine/PyMine.git
 
-Next, move into the directory and install the required Python packages. ::
+Next, move into the directory and install the required Python packages. 
+
+.. code-block:: bash
     
     cd PyMine
     pip install -r requirements.txt
@@ -27,9 +31,29 @@ Next, move into the directory and install the required Python packages. ::
 Starting the Server
 ====================
 
-To start the server run ::
+To start the server run 
 
-    python3 pymine
+.. tabs::
+
+    .. tab:: Windows
+
+
+        .. code-block:: bash
+        
+            python3 pymine
+    
+    .. tab:: Linux
+
+        To start the server, execute the command in console while being in pymine directory
+
+        .. code-block:: bash
+            
+                ./startserver.sh
+
+        .. note:: 
+
+        If you are starting pymine for the first time, give permission for the file to execute
+        by executing ``chmod +x startserver.sh``
 
 .. note::
 

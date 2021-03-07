@@ -1,10 +1,15 @@
 from pymine.api.abc import AbstractWorldGenerator, AbstractPlugin
 
+from pymine.data.states import STATES
+
 
 class Register:
     def __init__(self) -> None:
         self._plugins = {}
+
         self._generators = {}
+
+        self._on_packet = ({}, {}, {}, {})  # handshaking, login, play, status
 
     def plugin(self, plugin: AbstractPlugin) -> None:
         if not isinstance(plugin, AbstractPlugin):
@@ -20,5 +25,21 @@ class Register:
             self._generators[name] = cls
 
             return cls
+
+        return deco
+
+    def on_packet(self, state: str, id_: int):
+        state = STATES.encode(state)
+
+        def deco(func):
+            if not asyncio.iscoroutinefunction(func):
+                raise ValueError("Decorated object must be a coroutine function.")
+
+            try:
+                self._packet[state][id_].append(func)
+            except KeyError:
+                self._packet[state][id_] = [func]
+
+            return func
 
         return deco

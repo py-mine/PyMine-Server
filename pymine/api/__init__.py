@@ -185,7 +185,17 @@ class PyMineAPI:
             self.console.error(f"Error while setting up {plugin_name}: {self.console.f_traceback(e)}")
             return
 
-        self.plugins[plugin_path] = plugin_module
+    def add_plugin(self, plugin: AbstractPlugin) -> None:
+        if not isinstance(plugin, AbstractPlugin):
+            raise ValueError("Plugin must be an instance of AbstractPlugin.")
+
+        self.plugins[f"{plugin.__module__}.{plugin.__class__.__name__}"] = plugin
+
+        for attr in dir(plugin):
+            thing = getattr(plugin, attr)
+
+            if isinstance(thing, PacketEvent):
+                pass
 
     async def init(self):  # called when server starts up
         self.commands.load_commands()

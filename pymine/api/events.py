@@ -1,45 +1,25 @@
-import asyncio
-
-from pymine.data.states import STATES
+from pymine.api.abc import AbstractEvent
 
 
-class EventHandler:
-    def __init__(self):
-        self.must_be_coroutine = "Decorated object must be a coroutine function."
+class GenericEvent(AbstractEvent):
+    """Used to create events which take no extra parameters."""
 
-        # handshaking, login, play, status
-        self._packet = ({}, {}, {}, {})
-        self._server_ready = []  # [func, func, func,..]
-        self._server_stop = []  # [func, func, func,..]
+    def __init__(self, handler):
+        self.handler = handler
 
-    def on_packet(self, state: str, id_: int):
-        state = STATES.encode(state)
 
-        def deco(func):
-            if not asyncio.iscoroutinefunction(func):
-                raise ValueError(self.must_be_coroutine)
+class PacketEvent(AbstractEvent):
+    """Triggered when an oncoming packet for the specified state id and packet id is received."""
 
-            try:
-                self._packet[state][id_].append(func)
-            except KeyError:
-                self._packet[state][id_] = [func]
+    def __init__(self, handler, state_id: int, packet_id: int):
+        self.handler = handler
+        self.state_id = state_id
+        self.packet_id = packet_id
 
-            return func
 
-        return deco
+class ServerStartEvent(GenericEvent):
+    """Triggered when the server starts up."""
 
-    def on_server_ready(self, func):
-        if not asyncio.iscoroutinefunction(func):
-            raise ValueError(self.must_be_coroutine)
 
-        self._server_ready.append(func)
-
-        return func
-
-    def on_server_stop(self, func):
-        if not asyncio.iscoroutinefunction(func):
-            raise ValueError(self.must_be_coroutine)
-
-        self._server_stop.append(func)
-
-        return func
+class ServerStopEvent(GenericEvent):
+    """Triggered when the server shuts down, before each plugin cog is teared down."""

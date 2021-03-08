@@ -18,7 +18,7 @@ from pymine.logic.join import join
 from pymine.server import server
 
 
-@server.api.events.on_packet("login", 0x00)
+@server.api.register.on_packet("login", 0x00)
 async def login_start(stream: Stream, packet: Packet) -> None:
     if server.conf["online_mode"]:  # Online mode is enabled, so we request encryption
         lc = server.cache.login[stream.remote] = {"username": packet.username, "verify": None}
@@ -45,7 +45,7 @@ async def login_start(stream: Stream, packet: Packet) -> None:
         await join(stream, uuid_, packet.username, [])
 
 
-@server.api.events.on_packet("login", 0x01)
+@server.api.register.on_packet("login", 0x01)
 async def encrypted_login(stream: Stream, packet: Packet) -> Stream:
     shared_key, auth, props = await server_auth(packet, stream.remote, server.cache.login[stream.remote])
 

@@ -109,7 +109,7 @@ class Server:
 
         self.console.info(f"PyMine {self.meta.server:.1f} started on {self.addr}:{self.port}!")
 
-        self.api.taskify_handlers(self.api.events._server_ready)
+        self.api.trigger_handlers(self.api.register._on_server_start)
 
         try:
             await self.server.serve_forever()
@@ -118,6 +118,8 @@ class Server:
 
     async def stop(self):
         self.console.info("Closing server...")
+
+        self.api.trigger_handlers(self.api.register._on_server_stop)
 
         if self.server is not None:
             self.server.close()
@@ -232,11 +234,11 @@ class Server:
 
         self.console.debug(f"IN : state: {state} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
-        if self.api.events._packet[state].get(packet.id) is None:
+        if self.api.register._on_packet[state].get(packet.id) is None:
             self.console.warn(f"No packet handler found for packet: 0x{packet.id:02X} {type(packet).__name__}")
             return stream
 
-        for handler in self.api.events._packet[state][packet.id]:
+        for handler in self.api.register._on_packet[state][packet.id].values():
             try:
                 res = await handler(stream, packet)
 

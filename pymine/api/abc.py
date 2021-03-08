@@ -1,3 +1,7 @@
+class AbstractPlugin:
+    """Used to create plugin cogs."""
+
+
 class AbstractWorldGenerator:
     """Abstract class used to create a world generator."""
 
@@ -27,7 +31,7 @@ class AbstractChunkIO:
 
 
 class AbstractParser:
-    """Abstract class used to create command argument parsers"""
+    """Abstract class used to create command argument parsers."""
 
     @classmethod
     def parse(cls, s: str) -> tuple:  # should return the chars used and data
@@ -35,7 +39,7 @@ class AbstractParser:
 
 
 class AbstractPalette:
-    """Abstract class used to distinguish whether a class is a block palette or not"""
+    """Abstract class used to distinguish whether a class is a block palette or not."""
 
     @classmethod
     def get_bits_per_block(cls):
@@ -48,3 +52,10 @@ class AbstractPalette:
     @classmethod
     def decode(cls):
         raise NotImplementedError(cls.__name__)
+
+
+class AbstractEvent:
+    """Used to create event classes for event handling."""
+
+    def __call__(self, *args, **kwargs):
+        return self.handler(*args, **kwargs)

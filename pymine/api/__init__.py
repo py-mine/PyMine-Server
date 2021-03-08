@@ -11,8 +11,8 @@ from pymine.util.immutable import make_immutable
 
 from pymine.api.commands import CommandHandler
 from pymine.api.abc import AbstractPlugin
-from pymine.api.events import PacketEvent
 from pymine.api.register import Register
+import pymine.api.events as events
 
 
 class PyMineAPI:
@@ -203,14 +203,14 @@ class PyMineAPI:
         for attr in dir(plugin):
             thing = getattr(plugin, attr)
 
-            if isinstance(thing, PacketEvent):
+            if isinstance(thing, events.PacketEvent):
                 try:
                     self.register._on_packet[thing.state_id][thing.packet_id][plugin_quali_name] = thing
                 except KeyError:
                     self.register._on_packet[thing.state_id][thing.packet_id] = {plugin_quali_name: thing}
-            elif isinstance(thing, ServerStartEvent):
+            elif isinstance(thing, events.ServerStartEvent):
                 self.register._on_server_start[plugin_quali_name] = thing
-            elif isinstance(thing, ServerStopEvent):
+            elif isinstance(thing, events.ServerStopEvent):
                 self.register._on_server_stop[plugin_quali_name] = thing
 
     async def init(self):  # called when server starts up

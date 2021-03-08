@@ -54,3 +54,7 @@ class AbstractPalette:
     @classmethod
     def decode(cls):
         raise NotImplementedError(cls.__name__)
+
+
+class AbstractEvent:
+    """Used to create event classes for event handling."""

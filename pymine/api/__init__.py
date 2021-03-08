@@ -203,15 +203,18 @@ class PyMineAPI:
         for attr in dir(plugin):
             thing = getattr(plugin, attr)
 
-            if isinstance(thing, events.PacketEvent):
-                try:
-                    self.register._on_packet[thing.state_id][thing.packet_id][plugin_quali_name] = thing
-                except KeyError:
-                    self.register._on_packet[thing.state_id][thing.packet_id] = {plugin_quali_name: thing}
-            elif isinstance(thing, events.ServerStartEvent):
-                self.register._on_server_start[plugin_quali_name] = thing
-            elif isinstance(thing, events.ServerStopEvent):
-                self.register._on_server_stop[plugin_quali_name] = thing
+            if isinstance(thing, AbstractEvent):
+                if isinstance(thing, events.PacketEvent):
+                    try:
+                        self.register._on_packet[thing.state_id][thing.packet_id][plugin_quali_name] = thing
+                    except KeyError:
+                        self.register._on_packet[thing.state_id][thing.packet_id] = {plugin_quali_name: thing}
+                elif isinstance(thing, events.ServerStartEvent):
+                    self.register._on_server_start[plugin_quali_name] = thing
+                elif isinstance(thing, events.ServerStopEvent):
+                    self.register._on_server_stop[plugin_quali_name] = thing
+
+                self.console.warn(f"Unsupported event type: {thing.__module__}.{thing.__qualname__}")
 
     async def init(self):  # called when server starts up
         self.commands.load_commands()

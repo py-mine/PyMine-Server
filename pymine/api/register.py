@@ -36,6 +36,6 @@ class Register:
             if not asyncio.iscoroutinefunction(func):
                 raise ValueError("Decorated object must be a coroutine function.")
 
-            return PacketEvent(func.__self__, state, packet_id)
+            return PacketEvent(func, state, packet_id)
 
         return deco

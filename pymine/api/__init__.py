@@ -183,7 +183,6 @@ class PyMineAPI:
             await plugin_module.setup(self.server, conf)
         except BaseException as e:
             self.console.error(f"Error while setting up {plugin_name}: {self.console.f_traceback(e)}")
-            return
 
     def add_plugin(self, plugin: AbstractPlugin) -> None:
         if not isinstance(plugin, AbstractPlugin):

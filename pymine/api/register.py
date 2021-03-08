@@ -1,5 +1,5 @@
 from pymine.api.abc import AbstractWorldGenerator, AbstractPlugin
-from pymine.api.events import PacketEvent
+from pymine.api.events import PacketEvent, ServerStartEvent
 
 from pymine.data.states import STATES
 
@@ -39,3 +39,6 @@ class Register:
             return PacketEvent(func, state, packet_id)
 
         return deco
+
+    def on_server_start(self, func):
+        return ServerStartEvent(func)

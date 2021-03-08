@@ -198,6 +198,8 @@ class PyMineAPI:
                     self.register.on_packet[thing.state_id][thing.packet_id].append(thing)
                 except KeyError:
                     self.register.on_packet[thing.state_id][thing.packet_id] = [thing]
+            elif isinstance(thing, ServerStartEvent):
+                self.register.
 
     async def init(self):  # called when server starts up
         self.commands.load_commands()

@@ -33,7 +33,7 @@ class AbstractChunkIO:
 
 
 class AbstractParser:
-    """Abstract class used to create command argument parsers"""
+    """Abstract class used to create command argument parsers."""
 
     @classmethod
     def parse(cls, s: str) -> tuple:  # should return the chars used and data
@@ -41,7 +41,7 @@ class AbstractParser:
 
 
 class AbstractPalette:
-    """Abstract class used to distinguish whether a class is a block palette or not"""
+    """Abstract class used to distinguish whether a class is a block palette or not."""
 
     @classmethod
     def get_bits_per_block(cls):

@@ -19,6 +19,7 @@ class Register:
 
         # other events, {plugin_quali_name: event_object}
         self._on_server_start = {}
+        self._on_server_stop = {}
 
     def add_plugin(self, plugin: AbstractPlugin) -> None:
         if not isinstance(plugin, AbstractPlugin):

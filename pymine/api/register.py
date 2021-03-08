@@ -37,7 +37,10 @@ class Register:
             if not asyncio.iscoroutinefunction(func):
                 raise ValueError("Decorated object must be a coroutine function.")
 
-            return events.PacketEvent(func, state, packet_id)
+            if hasattr(func, "__self__"):  # is a method of a class, so prob in a plugin class cog
+                return events.PacketEvent(func, state, packet_id)
+
+            return func
 
         return deco
 

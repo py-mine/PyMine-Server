@@ -1,8 +1,6 @@
 class AbstractPlugin:
     """Used to create plugin cogs."""
 
-    pass
-
 
 class AbstractWorldGenerator:
     """Abstract class used to create a world generator."""

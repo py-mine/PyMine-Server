@@ -20,10 +20,6 @@ class PacketEvent(AbstractEvent):
 class ServerStartEvent(GenericEvent):
     """Triggered when the server starts up."""
 
-    pass
-
 
 class ServerStopEvent(GenericEvent):
     """Triggered when the server shuts down, before each plugin cog is teared down."""
-
-    pass

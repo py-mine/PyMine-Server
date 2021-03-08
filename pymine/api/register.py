@@ -19,12 +19,6 @@ class Register:
         self._on_server_start = {}
         self._on_server_stop = {}
 
-    def add_plugin(self, plugin: AbstractPlugin) -> None:
-        if not isinstance(plugin, AbstractPlugin):
-            raise ValueError("Plugin must be an instance of AbstractPlugin.")
-
-        self._plugins[plugin.__name__] = plugin
-
     def add_world_generator(self, name: str):
         def deco(cls):
             if not issubclass(cls, AbstractWorldGenerator):

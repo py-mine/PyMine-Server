@@ -212,7 +212,7 @@ class PyMineAPI:
                 elif isinstance(thing, events.ServerStopEvent):
                     self.register._on_server_stop[plugin_quali_name] = thing
 
-                self.console.warn(f"Unsupported event type: {thing.__module__}.{thing.__qualname__}")
+                self.console.warn(f"Unsupported event type: {thing.__module__}.{thing.__class__.__qualname__}")
 
     async def init(self):  # called when server starts up
         self.commands.load_commands()

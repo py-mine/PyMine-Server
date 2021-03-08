@@ -26,8 +26,8 @@ class PyMineAPI:
 
         self.eid_current = 0  # used to not generate duplicate entity ids
 
-    def taskify_handlers(self, handlers: list):
-        for handler in handlers:
+    def trigger_handlers(self, handlers: dict) -> None:
+        for handler in handlers.values():
             try:
                 self.tasks.append(asyncio.create_task(handler()))
             except BaseException as e:

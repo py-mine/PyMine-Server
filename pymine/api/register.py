@@ -12,9 +12,12 @@ class Register:
 
         self._generators = {}  # world generators {name: object}
 
-        self._packet_handlers = ({}, {}, {}, {})  # handshaking, login, play, status
+        # handshaking, login, play, status
+        # (state, state, state, state)
+        # {packet_id: {plugin_quali_name: event_object}}
+        self._on_packet = ({}, {}, {}, {})
 
-        # other events, {plugin_cog_qualified_name: event_object}
+        # other events, {plugin_quali_name: event_object}
         self._on_server_start = {}
 
     def add_plugin(self, plugin: AbstractPlugin) -> None:

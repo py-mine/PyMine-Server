@@ -8,8 +8,6 @@ from pymine.data.states import STATES
 
 class Register:
     def __init__(self) -> None:
-        self._plugins = {}  # {plugin_quali_name: plugin_class}
-
         self._generators = {}  # world generators {name: object}
 
         # handshaking, login, play, status

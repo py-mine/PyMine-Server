@@ -18,7 +18,7 @@ class PyMineAPI:
         self.server = server
         self.console = server.console
 
-        self.plugins = {}
+        self.plugins = {}  # {plugin_quali_name: plugin_cog_instance}
         self.tasks = []
 
         self.commands = CommandHandler(server)  # for commands

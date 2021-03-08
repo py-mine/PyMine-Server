@@ -1,11 +1,6 @@
-import asyncio
+from pymine.api.abc import AbstractEvent
 
-from pymine.data.states import STATES
-
-class Event:
-    pass
-
-class PacketEvent(Event):
+class PacketEvent(AbstractEvent):
     def __init__(self, state_id: int, packet_id: int):
         self.state_id = state_id
         self.packet_id = packet_id

@@ -225,7 +225,7 @@ class Server:
             self.console.warn(f"No packet handler found for packet: 0x{packet.id:02X} {type(packet).__name__}")
             return stream
 
-        for handler in self.api.events._packet[state][packet.id]:
+        for handler in self.api.events._packet[state][packet.id].values():
             try:
                 res = await handler(stream, packet)
 

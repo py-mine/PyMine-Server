@@ -7,10 +7,10 @@ import git
 import sys
 import os
 
+from pymine.api.events import PacketEvent, ServerStartEvent, ServerStopEvent
 from pymine.api.abc import AbstractPlugin, AbstractEvent
 from pymine.api.commands import CommandHandler
 from pymine.api.register import Register
-import pymine.api.events as events
 
 
 class PyMineAPI:

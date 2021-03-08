@@ -243,9 +243,6 @@ class PyMineAPI:
             if isinstance(result, BaseException):
                 self.console.error(f"Error while loading {plugin}: {self.console.f_traceback(result)}")
 
-        # *should* make packet handling slightly faster
-        self.events._packet = make_immutable(self.events._packet)
-
         # start console command handler task
         self.tasks.append(asyncio.create_task(self.commands.handle_console_commands()))
 

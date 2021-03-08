@@ -10,6 +10,7 @@ import os
 from pymine.util.immutable import make_immutable
 
 from pymine.api.commands import CommandHandler
+from pymine.api.abc import AbstractPlugin
 from pymine.api.events import PacketEvent
 from pymine.api.register import Register
 

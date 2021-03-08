@@ -255,6 +255,6 @@ class PyMineAPI:
 
         for plugin_name, plugin_module in self.plugins.items():
             try:
-                await plugin_module.teardown(self.server)
+                await plugin_module.teardown()
             except BaseException as e:
                 self.console.error(f"Error while tearing down {plugin_name}: {self.console.f_traceback(e)}")

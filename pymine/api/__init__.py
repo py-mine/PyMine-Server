@@ -201,9 +201,9 @@ class PyMineAPI:
 
             if isinstance(thing, PacketEvent):
                 try:
-                    self.register.on_packet[thing.state_id][thing.packet_id].append(thing)
+                    self.register._packet_handlers[thing.state_id][thing.packet_id].append(thing)
                 except KeyError:
-                    self.register.on_packet[thing.state_id][thing.packet_id] = [thing]
+                    self.register._packet_handlers[thing.state_id][thing.packet_id] = [thing]
             elif isinstance(thing, ServerStartEvent):
                 self.register.
 

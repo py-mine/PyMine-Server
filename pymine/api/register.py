@@ -8,11 +8,14 @@ from pymine.data.states import STATES
 
 class Register:
     def __init__(self) -> None:
-        self._plugins = {}
+        self._plugins = {}  # {}
 
-        self._generators = {}
+        self._generators = {}  # world generators {name: object}
 
-        self._on_packet = ({}, {}, {}, {})  # handshaking, login, play, status
+        self._packet_handlers = ({}, {}, {}, {})  # handshaking, login, play, status
+
+        # other events, {plugin_cog_qualified_name: event_object}
+        self._on_server_start = {}
 
     def add_plugin(self, plugin: AbstractPlugin) -> None:
         if not isinstance(plugin, AbstractPlugin):

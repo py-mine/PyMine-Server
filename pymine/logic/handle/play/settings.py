@@ -6,7 +6,7 @@ from pymine.logic.join import join_2
 from pymine.server import server
 
 
-@server.api.events.on_packet("play", 0x05)
+@server.api.register.on_packet("play", 0x05)
 async def client_settings_recv(stream: Stream, packet: Packet) -> None:
     player = await server.playerio.fetch_player(server.cache.uuid[stream.remote])
 

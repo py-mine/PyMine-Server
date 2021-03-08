@@ -203,14 +203,14 @@ class PyMineAPI:
             thing = getattr(plugin, attr)
 
             if isinstance(thing, AbstractEvent):
-                if isinstance(thing, events.PacketEvent):
+                if isinstance(thing, PacketEvent):
                     try:
                         self.register._on_packet[thing.state_id][thing.packet_id][plugin_quali_name] = thing
                     except KeyError:
                         self.register._on_packet[thing.state_id][thing.packet_id] = {plugin_quali_name: thing}
-                elif isinstance(thing, events.ServerStartEvent):
+                elif isinstance(thing, ServerStartEvent):
                     self.register._on_server_start[plugin_quali_name] = thing
-                elif isinstance(thing, events.ServerStopEvent):
+                elif isinstance(thing, ServerStopEvent):
                     self.register._on_server_stop[plugin_quali_name] = thing
                 else:
                     self.console.warn(f"Unsupported event type: {thing.__module__}.{thing.__class__.__qualname__}")

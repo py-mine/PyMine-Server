@@ -1,3 +1,5 @@
+import asyncio
+
 from pymine.api.abc import AbstractWorldGenerator, AbstractPlugin
 from pymine.api.events import PacketEvent, ServerStartEvent
 

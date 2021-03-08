@@ -131,7 +131,7 @@ class PyMineAPI:
                     plugin_path = root.rstrip(".py").replace("\\", "/").replace("/", ".")
 
                     plugin_module = importlib.import_module(plugin_path)
-                    plugin_module.setup(self.server, None)
+                    await plugin_module.setup(self.server, None)
 
                     self.plugins[plugin_path] = plugin_module
                 except BaseException as e:
@@ -182,7 +182,7 @@ class PyMineAPI:
             return
 
         try:
-            plugin_module.setup(self.server, conf)
+            await plugin_module.setup(self.server, conf)
         except BaseException as e:
             self.console.error(f"Error while setting up {plugin_name}: {self.console.f_traceback(e)}")
 

@@ -249,9 +249,9 @@ class PyMineAPI:
     async def stop(self):  # called when server is stopping
         for task in self.tasks:
             try:
+                await asyncio.wait_for(task, 5)
+            except asyncio.TimeoutError:
                 task.cancel()
-            except BaseException:
-                pass
 
         for plugin_name, plugin_cog in self.plugins.items():
             try:

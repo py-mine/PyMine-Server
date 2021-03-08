@@ -258,6 +258,3 @@ class PyMineAPI:
                 await plugin_module.teardown(self.server)
             except BaseException as e:
                 self.console.error(f"Error while tearing down {plugin_name}: {self.console.f_traceback(e)}")
-
-        # call and await upon all registered on_server_stop handlers
-        self.taskify_handlers(self.events._server_stop)

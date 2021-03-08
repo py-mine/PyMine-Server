@@ -40,6 +40,12 @@ class Register:
             if hasattr(func, "__self__"):  # is a method of a class, so prob in a plugin class cog
                 return events.PacketEvent(func, state, packet_id)
 
+            # If we're here, this is probably a packet handler under logic/handle, so we need to account for that
+            try:
+                self._on_packet[state_id][packet_id][f"{func.__module__}.{func.__qualname__}"] = thing
+            except KeyError:
+                self._on_packet[state_id][packet_id] = {f"{func.__module__}.{func.__qualname__}": thing}
+
             return func
 
         return deco

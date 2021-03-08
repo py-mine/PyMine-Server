@@ -205,9 +205,9 @@ class PyMineAPI:
 
             if isinstance(thing, PacketEvent):
                 try:
-                    self.register._packet_handlers[thing.state_id][thing.packet_id].append(thing)
+                    self.register._on_packet[thing.state_id][thing.packet_id][plugin_quali_name] = thing
                 except KeyError:
-                    self.register._packet_handlers[thing.state_id][thing.packet_id] = [thing]
+                    self.register._on_packet[thing.state_id][thing.packet_id] = {plugin_quali_name: thing}
             elif isinstance(thing, ServerStartEvent):
                 self.register._on_server_start[plugin_quali_name] = thing
 

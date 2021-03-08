@@ -9,7 +9,7 @@ class PacketEvent(AbstractEvent):
         self.packet_id = packet_id
 
 
-class ServerReadyEvent(AbstractEvent):
+class ServerStartEvent(AbstractEvent):
     def __init__(self, handler):
         self.handler = handler
         self.cls = handler.__self__

@@ -10,7 +10,7 @@ import os
 from pymine.util.immutable import make_immutable
 
 from pymine.api.commands import CommandHandler
-from pymine.api.events import EventHandler
+from pymine.api.events import PacketEvent
 from pymine.api.register import Register
 
 
@@ -22,7 +22,6 @@ class PyMineAPI:
         self.plugins = {}
         self.tasks = []
 
-        self.events = EventHandler()  # for registering events
         self.commands = CommandHandler(server)  # for commands
         self.register = Register()  # for non-event registering, like world generators
 
@@ -194,7 +193,10 @@ class PyMineAPI:
             thing = getattr(plugin, attr)
 
             if isinstance(thing, PacketEvent):
-                pass
+                try:
+                    self.register.on_packet[thing.state_id][thing.packet_id].append(thing)
+                except KeyError:
+                    self.register.on_packet[thing.state_id][thing.packet_id] = [thing]
 
     async def init(self):  # called when server starts up
         self.commands.load_commands()

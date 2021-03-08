@@ -223,6 +223,8 @@ class Server:
 
         self.console.debug(f"IN : state: {state} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
+        print(self.api.register._on_packet[state])
+
         if self.api.register._on_packet[state].get(packet.id) is None:
             self.console.warn(f"No packet handler found for packet: 0x{packet.id:02X} {type(packet).__name__}")
             return stream

@@ -15,5 +15,5 @@ class PacketEvent(AbstractEvent):
         self.packet_id = packet_id
 
 
-class ServerStartEvent(GenericEvent):    
+class ServerStartEvent(GenericEvent):
     pass

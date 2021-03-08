@@ -59,5 +59,5 @@ class Register:
     def on_server_stop(self, func):
         if not asyncio.iscoroutinefunction(func):
             raise ValueError("Decorated object must be a coroutine function.")
-            
+
         return events.ServerStopEvent(func)

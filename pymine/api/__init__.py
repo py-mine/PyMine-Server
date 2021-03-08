@@ -99,7 +99,9 @@ class PyMineAPI:
         return conf
 
     @staticmethod
-    async def install_plugin_deps(root):
+    async def install_plugin_deps(root):  # may need to be altered to support poetry.
+        """Installs dependencies for a plugin."""
+
         requirements_file = os.path.join(root, "requirements.txt")
 
         if os.path.isfile(requirements_file):
@@ -118,6 +120,8 @@ class PyMineAPI:
                 raise RuntimeError(stderr.decode())
 
     async def load_plugin(self, git_dir, plugin_name):
+        """Handles plugin-auto-updating, loading plugin configs, and importing + calling the setup() function in a plugin."""
+
         if plugin_name.startswith("."):
             return
 
@@ -185,6 +189,8 @@ class PyMineAPI:
             self.console.error(f"Error while setting up {plugin_name}: {self.console.f_traceback(e)}")
 
     def add_plugin(self, plugin: AbstractPlugin) -> None:
+        """Actually registers the plugin cog and all of its events / registered things."""
+
         if not isinstance(plugin, AbstractPlugin):
             raise ValueError("Plugin must be an instance of AbstractPlugin.")
 

@@ -194,7 +194,11 @@ class PyMineAPI:
         if not isinstance(plugin, AbstractPlugin):
             raise ValueError("Plugin must be an instance of AbstractPlugin.")
 
-        self.plugins[f"{plugin.__module__}.{plugin.__class__.__name__}"] = plugin
+        plugin_quali_name = f"{plugin.__module__}.{plugin.__class__.__name__}"
+
+        self.console.debug("add_plugin() called for " + plugin_quali_name)
+
+        self.plugins[plugin_quali_name] = plugin
 
         for attr in dir(plugin):
             thing = getattr(plugin, attr)
@@ -205,7 +209,7 @@ class PyMineAPI:
                 except KeyError:
                     self.register._packet_handlers[thing.state_id][thing.packet_id] = [thing]
             elif isinstance(thing, ServerStartEvent):
-                self.register.
+                self.register._on_server_start[plugin_quali_name] = thing
 
     async def init(self):  # called when server starts up
         self.commands.load_commands()

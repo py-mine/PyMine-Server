@@ -17,7 +17,7 @@ class Register:
         # {packet_id: {plugin_quali_name: event_object}}
         self._on_packet = ({}, {}, {}, {})
 
-        # other events, {plugin_quali_name: event_object}
+        # other/generic events, {plugin_quali_name: event_object}
         self._on_server_start = {}
         self._on_server_stop = {}
 

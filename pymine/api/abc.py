@@ -58,3 +58,6 @@ class AbstractPalette:
 
 class AbstractEvent:
     """Used to create event classes for event handling."""
+
+    def __call__(self *args, **kwargs):
+        return self.handler(*args, **kwargs)

@@ -7,10 +7,9 @@ import git
 import sys
 import os
 
-from pymine.util.immutable import make_immutable
-
+from pymine.api.events import PacketEvent, ServerStartEvent, ServerStopEvent
+from pymine.api.abc import AbstractPlugin, AbstractEvent
 from pymine.api.commands import CommandHandler
-from pymine.api.events import EventHandler
 from pymine.api.register import Register
 
 
@@ -19,17 +18,17 @@ class PyMineAPI:
         self.server = server
         self.console = server.console
 
-        self.plugins = {}
+        self.plugins = {}  # {plugin_quali_name: plugin_cog_instance}
         self.tasks = []
+        self.console_task = None
 
-        self.events = EventHandler()  # for registering events
         self.commands = CommandHandler(server)  # for commands
         self.register = Register()  # for non-event registering, like world generators
 
         self.eid_current = 0  # used to not generate duplicate entity ids
 
-    def taskify_handlers(self, handlers: list):
-        for handler in handlers:
+    def trigger_handlers(self, handlers: dict) -> None:
+        for handler in handlers.values():
             try:
                 self.tasks.append(asyncio.create_task(handler()))
             except BaseException as e:
@@ -99,7 +98,9 @@ class PyMineAPI:
         return conf
 
     @staticmethod
-    async def install_plugin_deps(root):
+    async def install_plugin_deps(root):  # may need to be altered to support poetry.
+        """Installs dependencies for a plugin."""
+
         requirements_file = os.path.join(root, "requirements.txt")
 
         if os.path.isfile(requirements_file):
@@ -118,6 +119,8 @@ class PyMineAPI:
                 raise RuntimeError(stderr.decode())
 
     async def load_plugin(self, git_dir, plugin_name):
+        """Handles plugin-auto-updating, loading plugin configs, and importing + calling the setup() function in a plugin."""
+
         if plugin_name.startswith("."):
             return
 
@@ -129,7 +132,7 @@ class PyMineAPI:
                     plugin_path = root.rstrip(".py").replace("\\", "/").replace("/", ".")
 
                     plugin_module = importlib.import_module(plugin_path)
-                    await plugin_module.setup(self.server, None)
+                    await plugin_module.setup(None)
 
                     self.plugins[plugin_path] = plugin_module
                 except BaseException as e:
@@ -180,12 +183,37 @@ class PyMineAPI:
             return
 
         try:
-            await plugin_module.setup(self.server, conf)
+            await plugin_module.setup(conf)
         except BaseException as e:
             self.console.error(f"Error while setting up {plugin_name}: {self.console.f_traceback(e)}")
-            return
 
-        self.plugins[plugin_path] = plugin_module
+    def add_plugin(self, plugin: AbstractPlugin) -> None:
+        """Actually registers the plugin cog and all of its events / registered things."""
+
+        if not isinstance(plugin, AbstractPlugin):
+            raise ValueError("Plugin must be an instance of AbstractPlugin.")
+
+        plugin_quali_name = f"{plugin.__module__}.{plugin.__class__.__name__}"
+
+        self.console.debug("add_plugin() called for " + plugin_quali_name)
+
+        self.plugins[plugin_quali_name] = plugin
+
+        for attr in dir(plugin):
+            thing = getattr(plugin, attr)
+
+            if isinstance(thing, AbstractEvent):
+                if isinstance(thing, PacketEvent):
+                    try:
+                        self.register._on_packet[thing.state_id][thing.packet_id][plugin_quali_name] = thing
+                    except KeyError:
+                        self.register._on_packet[thing.state_id][thing.packet_id] = {plugin_quali_name: thing}
+                elif isinstance(thing, ServerStartEvent):
+                    self.register._on_server_start[plugin_quali_name] = thing
+                elif isinstance(thing, ServerStopEvent):
+                    self.register._on_server_stop[plugin_quali_name] = thing
+                else:
+                    self.console.warn(f"Unsupported event type: {thing.__module__}.{thing.__class__.__qualname__}")
 
     async def init(self):  # called when server starts up
         self.commands.load_commands()
@@ -214,26 +242,22 @@ class PyMineAPI:
             if isinstance(result, BaseException):
                 self.console.error(f"Error while loading {plugin}: {self.console.f_traceback(result)}")
 
-        # *should* make packet handling slightly faster
-        self.events._packet = make_immutable(self.events._packet)
-
         # start console command handler task
-        self.tasks.append(asyncio.create_task(self.commands.handle_console_commands()))
+        self.console_task = asyncio.create_task(self.commands.handle_console_commands())
 
         return self
 
     async def stop(self):  # called when server is stopping
+        self.console_task.cancel()
+
         for task in self.tasks:
             try:
+                await asyncio.wait_for(task, 5)
+            except asyncio.TimeoutError:
                 task.cancel()
-            except BaseException:
-                pass
 
-        for plugin_name, plugin_module in self.plugins.items():
+        for plugin_name, plugin_cog in self.plugins.items():
             try:
-                await plugin_module.teardown(self.server)
+                await plugin_cog.teardown()
             except BaseException as e:
                 self.console.error(f"Error while tearing down {plugin_name}: {self.console.f_traceback(e)}")
-
-        # call and await upon all registered on_server_stop handlers
-        self.taskify_handlers(self.events._server_stop)

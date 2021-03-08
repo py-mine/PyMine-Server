@@ -6,7 +6,7 @@ from pymine.net.packets.play.player import PlayDisconnect
 from pymine.server import server
 
 
-@server.api.events.on_packet("play", 0x00)
+@server.api.register.on_packet("play", 0x00)
 async def on_teleport_confirm(stream: Stream, packet: Packet) -> None:
     player = await server.playerio.fetch_player(server.cache.uuid[stream.remote])
 

@@ -9,7 +9,7 @@ from pymine.api.errors import StopHandling
 from pymine.server import server
 
 
-@server.api.events.on_packet("status", 0x00)
+@server.api.register.on_packet("status", 0x00)
 async def send_status(stream: Stream, packet: Packet) -> tuple:
     data = {
         "version": {"name": server.meta.version, "protocol": server.meta.protocol},
@@ -27,7 +27,7 @@ async def send_status(stream: Stream, packet: Packet) -> tuple:
     await server.send_packet(stream, status_packets.StatusStatusResponse(data), -1)
 
 
-@server.api.events.on_packet("status", 0x01)
+@server.api.register.on_packet("status", 0x01)
 async def send_pong(stream: Stream, packet: Packet) -> tuple:
     await server.send_packet(stream, packet, -1)
     raise StopHandling

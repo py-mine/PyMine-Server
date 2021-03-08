@@ -31,14 +31,14 @@ class Register:
         return deco
 
     def on_packet(self, state: str, packet_id: int):
-        state = STATES.encode(state)
+        state_id = STATES.encode(state)
 
         def deco(func):
             if not asyncio.iscoroutinefunction(func):
                 raise ValueError("Decorated object must be a coroutine function.")
 
             if hasattr(func, "__self__"):  # is a method of a class, so prob in a plugin class cog
-                return events.PacketEvent(func, state, packet_id)
+                return events.PacketEvent(func, state_id, packet_id)
 
             # If we're here, this is probably a packet handler under logic/handle, so we need to account for that
             try:

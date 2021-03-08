@@ -20,6 +20,7 @@ class PyMineAPI:
 
         self.plugins = {}  # {plugin_quali_name: plugin_cog_instance}
         self.tasks = []
+        self.console_task = None
 
         self.commands = CommandHandler(server)  # for commands
         self.register = Register()  # for non-event registering, like world generators
@@ -242,11 +243,13 @@ class PyMineAPI:
                 self.console.error(f"Error while loading {plugin}: {self.console.f_traceback(result)}")
 
         # start console command handler task
-        self.tasks.append(asyncio.create_task(self.commands.handle_console_commands()))
+        self.console_task = asyncio.create_task(self.commands.handle_console_commands())
 
         return self
 
     async def stop(self):  # called when server is stopping
+        self.console_task.cancel()
+
         for task in self.tasks:
             try:
                 await asyncio.wait_for(task, 5)

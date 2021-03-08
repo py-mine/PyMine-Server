@@ -1,4 +1,4 @@
-from pymine.api.abc import AbstractEvent, AbstractPlugin
+from pymine.api.abc import AbstractEvent
 
 
 class GenericEvent(AbstractEvent):

@@ -210,6 +210,8 @@ class PyMineAPI:
                     self.register._on_packet[thing.state_id][thing.packet_id] = {plugin_quali_name: thing}
             elif isinstance(thing, ServerStartEvent):
                 self.register._on_server_start[plugin_quali_name] = thing
+            elif isinstance(thing, ServerStopEvent):
+                self.register._on_server_stop[plugin_quali_name] = thing
 
     async def init(self):  # called when server starts up
         self.commands.load_commands()

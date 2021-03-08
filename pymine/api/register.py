@@ -51,7 +51,13 @@ class Register:
         return deco
 
     def on_server_start(self, func):
+        if not asyncio.iscoroutinefunction(func):
+            raise ValueError("Decorated object must be a coroutine function.")
+
         return events.ServerStartEvent(func)
 
     def on_server_stop(self, func):
+        if not asyncio.iscoroutinefunction(func):
+            raise ValueError("Decorated object must be a coroutine function.")
+            
         return events.ServerStopEvent(func)

@@ -1,7 +1,7 @@
 import asyncio
 
 from pymine.api.abc import AbstractWorldGenerator, AbstractPlugin
-from pymine.api.events import PacketEvent, ServerStartEvent
+import pymine.api.events as events
 
 from pymine.data.states import STATES
 
@@ -43,9 +43,12 @@ class Register:
             if not asyncio.iscoroutinefunction(func):
                 raise ValueError("Decorated object must be a coroutine function.")
 
-            return PacketEvent(func, state, packet_id)
+            return events.PacketEvent(func, state, packet_id)
 
         return deco
 
     def on_server_start(self, func):
-        return ServerStartEvent(func)
+        return events.ServerStartEvent(func)
+
+    def on_server_stop(self, func):
+        return events.ServerStopEvent(func)

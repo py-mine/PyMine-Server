@@ -7,3 +7,9 @@ class PacketEvent(AbstractEvent):
         self.cls = handler.__self__
         self.state_id = state_id
         self.packet_id = packet_id
+
+
+class ServerReadyEvent(AbstractEvent):
+    def __init__(self, handler):
+        self.handler = handler
+        self.cls = handler.__self__

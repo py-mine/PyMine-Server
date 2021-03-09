@@ -37,10 +37,11 @@ To start the server run
 
     .. tab:: Windows
 
+        To start the server, execute the command in powershell console while being in pymine directory
 
         .. code-block:: bash
         
-            python3 pymine
+                startserver.ps1
     
     .. tab:: Linux
 

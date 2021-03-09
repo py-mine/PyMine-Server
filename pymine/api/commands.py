@@ -3,6 +3,7 @@ import asyncio
 import uuid
 import os
 
+from pymine.util.misc import nice_eval
 from pymine.util.stop import stop
 
 from pymine.api.errors import ParsingError

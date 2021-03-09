@@ -13,6 +13,8 @@
 
 ## Features
 *Note: This list is not always up to date, and doesn't contain all the features that PyMine offers*
+
+- [X] **Windows & Linux Support** - *completed and always will be a thing*
 - [x] **Joinable** - *completed, players can load into the world*
 - [ ] **Playable** - *currently a work in progress*
 - [ ] **Packet Models** - *missing some clientbound packets*

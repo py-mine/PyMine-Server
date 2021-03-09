@@ -108,6 +108,8 @@ class CommandHandler:
             self.console.error(f"Error while executing command {split[0]}: {self.console.f_traceback(e)}")
 
     async def handle_console_commands(self):
+        await asyncio.sleep(1)
+
         while True:
             in_ = await self.console.fetch_input()
 

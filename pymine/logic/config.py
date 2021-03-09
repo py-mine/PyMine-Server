@@ -32,15 +32,15 @@ DEFAULT_CONFIG = {
 }
 
 
-def load_config():
+def load_config():  # FIXME Write directly to file with yaml lib instead of like this(can wait until we switch to new lib)
     conf = DEFAULT_CONFIG
 
     try:
-        with open("server.yml", "r") as f:
+        with open("server.yml", "r", encoding="utf8") as f:
             conf = yaml.safe_load(f.read())
     except FileNotFoundError:
         with open("server.yml", "w+") as f:
-            f.write(yaml.dump(DEFAULT_CONFIG))
+            f.write(yaml.dump(DEFAULT_CONFIG, default_style='"'))
 
     # Check for missing
     if any([(key not in conf) for key in DEFAULT_CONFIG.keys()]):

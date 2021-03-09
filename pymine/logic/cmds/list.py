@@ -3,6 +3,8 @@ from pymine.server import server
 
 @server.api.commands.on_command(name="list", node="minecraft.cmd.list")
 async def list(uuid):
+    """Lists the players online on the server."""
+
     players_online = len(server.playerio.cache)
 
     if players_online > 0:

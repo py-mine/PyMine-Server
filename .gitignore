@@ -21,8 +21,9 @@ docs/_build/
 # Sh-wayz's shit
 /tags
 .tmuxinator.yml
-
-# Ewww
-.vscode/
-.shwayzrun.sh
 pp*
+*.bak
+
+# gross
+.vscode/
+

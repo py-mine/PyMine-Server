@@ -3,6 +3,7 @@ import asyncio
 import uuid
 import os
 
+from pymine.util.misc import nice_eval
 from pymine.util.stop import stop
 
 from pymine.api.errors import ParsingError
@@ -50,7 +51,14 @@ class CommandHandler:
         args_text = " ".join(split[1:])  # basically the text excluding the actual command name and the space following it
 
         if command is None:  # user error
-            self.console.warn(f"Invalid/unknown command: {split[0]}")
+            if self.server.conf["debug"]:  # eval input if debug mode is on
+                try:
+                    await nice_eval(full, {"server": self.server})
+                except BaseException as e:
+                    self.server.console.error(self.server.console.f_traceback(e))
+            else:
+                self.console.warn(f"Invalid/unknown command: {split[0]}")
+
             return
 
         command = command[0]  # we don't need the permission node for now so yeah
@@ -100,6 +108,8 @@ class CommandHandler:
             self.console.error(f"Error while executing command {split[0]}: {self.console.f_traceback(e)}")
 
     async def handle_console_commands(self):
+        await asyncio.sleep(1)
+
         while True:
             in_ = await self.console.fetch_input()
 

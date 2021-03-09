@@ -3,6 +3,7 @@ import functools
 import asyncio
 import hashlib
 import types
+import ast
 
 # An implementation of java's String.hashCode()
 def java_string_hash(s: str) -> int:
@@ -26,6 +27,29 @@ def remove_namespace(s: str) -> str:
         return "".join(s.split(":")[1:])
 
     return s
+
+
+async def nice_eval(code: str, env: dict) -> str:
+    code_nice = f"async def nice_eval():\n" + "\n".join(f"    {i}" for i in code.strip(" `py\n ").splitlines())
+    code_parsed = ast.parse(code_nice)
+    code_final = code_parsed.body[0].body
+
+    def insert_returns():
+        if isinstance(code_final[-1], ast.Expr):
+            code_final[-1] = ast.Return(code_final[-1].value)
+            ast.fix_missing_locations(code_final[-1])
+
+        if isinstance(code_final[-1], ast.If):
+            insert_returns(code_final[-1].body)
+            insert_returns(code_final[-1].orelse)
+
+        if isinstance(code_final[-1], ast.With):
+            insert_returns(code_final[-1].body)
+
+    insert_returns()
+
+    exec(compile(code_parsed, filename="<ast>", mode="exec"), env)
+    return repr(await eval(f"nice_eval()", env))
 
 
 class DualMethod:

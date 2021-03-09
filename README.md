@@ -13,6 +13,7 @@
 
 ## Features
 *Note: This list is not always up to date, and doesn't contain all the features that PyMine offers*
+- [X] **Windows & Linux Support** - *completed and always will be a thing*
 - [ ] **Joinable** - *the login process is complete, but users can not yet join the world*
 - [ ] **Packet Models** - *missing some clientbound packets*
 - [x] **Status + Login Logic** - *completed*

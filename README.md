@@ -21,7 +21,7 @@
 - [ ] **World Generation** - *superflat world generation has been started*
 - [ ] **Entities/Entity AI** - *not started yet*
 - [x] **Plugin API** - *completed, but more will be added as the development continues*
-- [ ] **Command/Argument Parsing** - *currently a work in progress*
+- [x] **Command/Argument Parsing** - *parsers for primitive types and actual parsing has been completed*
 - [x] **Query Support** - *completed*
 - [ ] **RCON Support** - *not started yet*
 

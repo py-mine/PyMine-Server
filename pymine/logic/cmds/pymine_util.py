@@ -8,7 +8,7 @@ from pymine.server import server
 @server.api.commands.on_command(name="eval", node="pymine.cmds.eval")
 async def eval_(uuid, text: String(2)):
     try:
-        server.console.info(await nice_eval(text, {**globals(), **locals()}))
+        server.console.info(await nice_eval(text, {"server": server}))
     except BaseException as e:
         server.console.error(server.console.f_traceback(e))
 

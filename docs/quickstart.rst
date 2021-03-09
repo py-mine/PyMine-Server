@@ -54,7 +54,3 @@ To start the server run
 
         If you are starting pymine for the first time, give permission for the file to execute
         by executing ``chmod +x startserver.sh``
-
-.. note::
-
-    If you are using PyPy3 run ``pypy3 pymine``

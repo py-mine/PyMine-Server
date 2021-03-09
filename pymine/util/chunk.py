@@ -2,6 +2,7 @@ import numpy
 
 from pymine.api.abc import AbstractPalette
 
+
 def dump_to_obj(file, chunk: numpy.ndarray, palette: AbstractPalette):
     air = palette.encode("minecraft:air")
 

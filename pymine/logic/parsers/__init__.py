@@ -2,7 +2,7 @@ import classyjson
 import importlib
 import os
 
-from pymine.api.abc import AbstractParser
+from pymine.types.abc import AbstractParser
 
 parsers = classyjson.ClassyDict()
 

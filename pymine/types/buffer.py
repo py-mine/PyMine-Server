@@ -17,7 +17,7 @@ import pymine.data.misc as misc_data
 from pymine.data.tags import TAGS
 
 from pymine.api.errors import InvalidPacketID
-from pymine.api.abc import AbstractPalette
+from pymine.types.abc import AbstractPalette
 
 
 class Buffer:

@@ -1,7 +1,7 @@
 import asyncio
 
 from pymine.api.events import PacketEvent, ServerStartEvent, ServerStopEvent
-from pymine.api.abc import AbstractWorldGenerator, AbstractPlugin
+from pymine.types.abc import AbstractWorldGenerator, AbstractPlugin
 
 from pymine.data.states import STATES
 

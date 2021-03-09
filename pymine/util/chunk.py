@@ -1,6 +1,6 @@
 import numpy
 
-from pymine.api.abc import AbstractPalette
+from pymine.types.abc import AbstractPalette
 from pymine.types.chunk import Chunk
 
 

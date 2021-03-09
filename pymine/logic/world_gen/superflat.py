@@ -4,7 +4,7 @@ import time
 from pymine.types.chunk import Chunk, ChunkSection
 
 from pymine.types.block_palette import DirectPalette
-from pymine.api.abc import AbstractWorldGenerator
+from pymine.types.abc import AbstractWorldGenerator
 from pymine.data.registries import BLOCK_REGISTRY
 
 from pymine.server import server

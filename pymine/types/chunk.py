@@ -6,7 +6,7 @@ import numpy
 from pymine.types.block_palette import DirectPalette, IndirectPalette
 import pymine.types.nbt as nbt
 
-from pymine.api.abc import AbstractPalette
+from pymine.types.abc import AbstractPalette
 
 
 class ChunkSection:

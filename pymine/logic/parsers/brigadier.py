@@ -1,5 +1,5 @@
 from pymine.api.errors import ParsingError
-from pymine.api.abc import AbstractParser
+from pymine.types.abc import AbstractParser
 
 from pymine.util.misc import DualMethod
 

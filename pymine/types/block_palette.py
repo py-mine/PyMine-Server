@@ -8,7 +8,7 @@ import pymine.types.nbt as nbt
 
 from pymine.data.block_states import BLOCK_STATES
 
-from pymine.api.abc import AbstractPalette
+from pymine.types.abc import AbstractPalette
 
 
 class DirectPalette(AbstractPalette):

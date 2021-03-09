@@ -36,7 +36,7 @@ def load_config():  # FIXME Write directly to file with yaml lib instead of like
     conf = DEFAULT_CONFIG
 
     try:
-        with open("server.yml", "r") as f:
+        with open("server.yml", "r", encoding="utf8") as f:
             conf = yaml.safe_load(f.read())
     except FileNotFoundError:
         with open("server.yml", "w+") as f:

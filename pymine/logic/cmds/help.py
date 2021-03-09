@@ -15,8 +15,8 @@ from pymine.server import server
 async def help(uuid: str):
     """Shows this message."""
 
-    cols = os.get_terminal_size().columns
-    server.console.info(f"{'='*(cols//4)}HELP{'='*(cols//4)}")
+    equal_signs = '='*min(25, os.get_terminal_size().columns//4)
+    server.console.info(f"{equal_signs} HELP {equal_signs}")
 
     for name, command in server.api.commands._commands.items():
         func, node = command

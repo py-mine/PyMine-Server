@@ -1,12 +1,14 @@
 from pymine.logic.parsers.brigadier import *
 
+from pymine.util.misc import nice_eval
+
 from pymine.server import server
 
 
 @server.api.commands.on_command(name="eval", node="pymine.cmds.eval")
 async def eval_(uuid, text: String(2)):
     try:
-        server.console.info(repr(eval(text)))
+        server.console.info(await nice_eval(text))
     except BaseException as e:
         server.console.error(server.console.f_traceback(e))
 

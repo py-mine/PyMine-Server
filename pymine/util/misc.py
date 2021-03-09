@@ -3,6 +3,7 @@ import functools
 import asyncio
 import hashlib
 import types
+import ast
 
 # An implementation of java's String.hashCode()
 def java_string_hash(s: str) -> int:

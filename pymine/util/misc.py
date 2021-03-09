@@ -27,6 +27,7 @@ def remove_namespace(s: str) -> str:
 
     return s
 
+
 async def nice_eval(code: str, env: dict) -> str:
     code_nice = f"async def nice_eval():\n" + "\n".join(f"    {i}" for i in code.strip(" `py\n ").splitlines())
     code_parsed = ast.parse(code_nice)

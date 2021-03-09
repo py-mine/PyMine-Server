@@ -11,6 +11,7 @@ from pymine.server import server
 #     )
 
 
+
 @server.api.commands.on_command(name="help", node="pymine.cmds.help")
 async def help(uuid: str):
     cols = os.get_terminal_size().columns

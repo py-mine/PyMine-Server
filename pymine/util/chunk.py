@@ -51,7 +51,7 @@ def dump_to_obj(file, pymine_chunk: Chunk, palette: AbstractPalette):
                 if block == air:
                     continue
 
-                block = remove_namespace(palette.decode(block))
+                block = remove_namespace(palette.decode(block)["name"])
 
                 i1 = rpoints.get((x, y, z)) + 1
                 i2 = rpoints.get((x + 1, y, z)) + 1

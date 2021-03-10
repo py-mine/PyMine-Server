@@ -1,19 +1,23 @@
 import numpy
 
+from pymine.types.block_palette import DirectPalette
 from pymine.util.misc import remove_namespace
-from pymine.types.abc import AbstractPalette
 from pymine.types.chunk import Chunk
 
 
-def dump_to_obj(file, pymine_chunk: Chunk, palette: AbstractPalette):
+def dump_to_obj(file, pymine_chunk: Chunk):
     chunk = numpy.zeros((256, 16, 16), numpy.uint64)
 
     for y, section in pymine_chunk.sections.items():
         if 0 <= y < 17:
-            y *= 16
-            chunk[y : y + 16] = section.block_states
+            # y *= 16
+            # chunk[y : y + 16] = section.block_states
+            for z in range(16):
+                for x in range(16):
+                    block_data = section.palette.decode(section.block_states[y, z, x])
+                    chunk[y, z, x] = DirectPalette.encode(block_data["name"], block_data.get("properties", {}))
 
-    air = palette.encode("minecraft:air")
+    air = DirectPalette.encode("minecraft:air")
 
     points = {}
     rpoints = {}
@@ -53,7 +57,7 @@ def dump_to_obj(file, pymine_chunk: Chunk, palette: AbstractPalette):
                 if block == air:
                     continue
 
-                block = remove_namespace(palette.decode(block)["name"])
+                block = remove_namespace(DirectPalette.decode(block)["name"])
 
                 i1 = rpoints.get((x, y, z)) + 1
                 i2 = rpoints.get((x + 1, y, z)) + 1

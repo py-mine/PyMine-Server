@@ -40,6 +40,7 @@ class ChunkSection:
     def new(cls, *args, **kwargs):
         section = cls(*args, **kwargs)
 
+        #                                     y   z   x
         section.block_states = numpy.ndarray((16, 16, 16), numpy.uint16)
         section.block_light = numpy.ndarray((16, 16, 16), numpy.int8)
         section.sky_light = numpy.ndarray((16, 16, 16), numpy.int8)
@@ -92,7 +93,7 @@ class ChunkSection:
                         else:
                             data = state_bytes[start_long] >> start_offset | state_bytes[end_long] << (64 - start_offset)
 
-                        section.block_states[x, y, z] = data & individual_value_mask
+                        section.block_states[y, z, x] = data & individual_value_mask
         else:
             section = cls(tag["Y"], None)
 

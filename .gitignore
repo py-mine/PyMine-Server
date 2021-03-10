@@ -4,6 +4,9 @@ server-icon.png
 plugins/*
 worlds/*
 
+chunk_test.mtl
+chunk_test.obj
+
 # VirtualEnv
 venv/
 
@@ -26,4 +29,3 @@ pp*
 
 # gross
 .vscode/
-

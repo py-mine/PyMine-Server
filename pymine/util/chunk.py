@@ -8,7 +8,7 @@ from pymine.types.chunk import Chunk
 def dump_to_obj(file, pymine_chunk: Chunk, palette: AbstractPalette):
     chunk = numpy.ndarray((256, 16, 16))
 
-    for section in pymine_chunk.sections:
+    for section in pymine_chunk.sections.values():
         pymine_chunk[section.y : section.y + 16] = section.block_states
 
     air = palette.encode("minecraft:air")

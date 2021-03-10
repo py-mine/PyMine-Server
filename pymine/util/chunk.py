@@ -8,14 +8,15 @@ from pymine.types.chunk import Chunk
 def dump_to_obj(file, pymine_chunk: Chunk):
     chunk = numpy.zeros((256, 16, 16), numpy.uint64)
 
-    for y, section in pymine_chunk.sections.items():
-        if 0 <= y < 17:
+    for section_y, section in pymine_chunk.sections.items():
+        if 0 <= section_y < 17:
             # y *= 16
             # chunk[y : y + 16] = section.block_states
-            for z in range(16):
-                for x in range(16):
-                    block_data = section.palette.decode(section.block_states[y, z, x])
-                    chunk[y, z, x] = DirectPalette.encode(block_data["name"], block_data.get("properties", {}))
+            for y in range(16):
+                for z in range(16):
+                    for x in range(16):
+                        block_data = section.palette.decode(section.block_states[y, z, x])
+                        chunk[section_y * 16 + y, z, x] = DirectPalette.encode(block_data["name"], block_data.get("properties"))
 
     air = DirectPalette.encode("minecraft:air")
 

@@ -4,7 +4,7 @@ Kd 0.00 0.00 0.00
 newmtl stone
 Kd 0.25 0.25 0.25
 
-newmtl grass
+newmtl grass_block
 Kd 0.00 1.00 0.00
 
 newmtl dirt

@@ -16,7 +16,9 @@ def dump_to_obj(file, pymine_chunk: Chunk):
                 for z in range(16):
                     for x in range(16):
                         block_data = section.palette.decode(section.block_states[y, z, x])
-                        chunk[section_y * 16 + y, z, x] = DirectPalette.encode(block_data["name"], block_data.get("properties"))
+                        chunk[section_y * 16 + y, z, x] = DirectPalette.encode(
+                            block_data["name"], block_data.get("properties")
+                        )
 
     air = DirectPalette.encode("minecraft:air")
 

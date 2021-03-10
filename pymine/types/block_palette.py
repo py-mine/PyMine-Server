@@ -20,6 +20,7 @@ class DirectPalette(AbstractPalette):
 
     @staticmethod
     def encode(block: str, props: dict = None) -> int:
+        props = None if props == {} else props
         block_data = BLOCK_STATES.encode(block)
 
         for state in block_data["states"]:
@@ -71,6 +72,7 @@ class IndirectPalette(AbstractPalette):
         return cls(Registry(data, reverse_data))
 
     def encode(self, block: str, props: dict = None) -> int:
+        props = None if props == {} else props
         block_data = self.registry.encode(block)
 
         for state in block_data["states"]:

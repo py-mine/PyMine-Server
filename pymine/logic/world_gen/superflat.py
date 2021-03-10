@@ -23,23 +23,23 @@ class SuperFlatWorldGenerator(AbstractWorldGenerator):
         if dimension == "minecraft:overworld":
             chunk.sections[0].block_states[0] = palette.encode("minecraft:bedrock")
             chunk.sections[0].block_states[1:3] = palette.encode("minecraft:dirt")
-            chunk.sections[0].block_states[4] = palette.encode("minecraft:grass_block", {"snowy": "false"})
+            chunk.sections[0].block_states[3] = palette.encode("minecraft:grass_block", {"snowy": "false"})
 
             chunk.sections[0].block_light[0:4] = 0
 
             chunk.sections[0].sky_light[0:3] = 0
-            chunk.sections[0].sky_light[4] = 15
+            chunk.sections[0].sky_light[3:] = 15
         elif dimension == "minecraft:nether":
             chunk.sections[0].block_states[0] = palette.encode("minecraft:bedrock")
             chunk.sections[0].block_states[1:4] = palette.encode("minecraft:netherrack")
 
             chunk.sections[0].block_light[0:4] = 0
-            chunk.sections[0].sky_light[4] = 7
+            chunk.sections[0].sky_light[4:] = 7
         elif dimension == "minecraft:the_end":
             chunk.sections[0].block_states[0:4] = palette.encode("minecraft:end_stone")
 
             chunk.sections[0].block_light[0:4] = 0
-            chunk.sections[0].sky_light[4] = 0
+            chunk.sections[0].sky_light[4:] = 0
         else:
             raise ValueError(f"Unsupported dimension: {dimension}")
 

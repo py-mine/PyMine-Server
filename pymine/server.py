@@ -26,7 +26,7 @@ server = None
 class Server:
     class Meta:
         def __init__(self):
-            self.server = 0.1
+            self.server = 0.2
             self.version = "1.16.5"
             self.protocol = 754
             self.pymine = f"PyMine {self.server}"

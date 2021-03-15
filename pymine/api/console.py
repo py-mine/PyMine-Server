@@ -42,6 +42,7 @@ class Console:
             history=FileHistory("./.pmhist"),
             auto_suggest=AutoSuggestFromHistory(),
             key_bindings=self.bindings,
+            mouse_support=True,
             output=self.out,
         )
 

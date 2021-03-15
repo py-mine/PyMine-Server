@@ -80,3 +80,6 @@ class World:
             return self.cache_chunk(
                 self.server.generator.generate_chunk(self.data["RandomSeed"].data, self.cached_name, chunk_x, chunk_z), key
             )
+
+    async def fetch_chunks(self, chunk_coords: list) -> list:
+        raise NotImplementedError

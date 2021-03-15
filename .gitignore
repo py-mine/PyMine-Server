@@ -3,6 +3,7 @@ server.yml
 server-icon.png
 plugins/*
 worlds/*
+.pmhist
 
 # VirtualEnv
 venv/
@@ -26,5 +27,3 @@ pp*
 
 # gross
 .vscode/
-
-.pmhist

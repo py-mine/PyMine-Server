@@ -53,7 +53,10 @@ class CommandHandler:
         if command is None:  # user error
             if self.server.conf["debug"]:  # eval input if debug mode is on
                 try:
-                    await nice_eval(full, {"server": self.server})
+                    res = await nice_eval(full, {"server": self.server})
+
+                    if res is not None:
+                        self.console.info(res)
                 except BaseException as e:
                     self.server.console.error(self.server.console.f_traceback(e))
             else:

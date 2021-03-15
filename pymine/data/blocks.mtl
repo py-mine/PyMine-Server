@@ -1,0 +1,15 @@
+newmtl bedrock
+Kd 0.00 0.00 0.00
+
+newmtl stone
+Kd 0.25 0.25 0.25
+
+newmtl grass_block
+Kd 0.00 1.00 0.00
+
+newmtl dirt
+Kd 0.82 0.41 0.11
+
+newmtl water
+Kd 0.07 0.18 0.98
+Tr 0.5

@@ -3,6 +3,10 @@ server.yml
 server-icon.png
 plugins/*
 worlds/*
+.pmhist
+
+chunk_test.mtl
+chunk_test.obj
 
 # VirtualEnv
 venv/
@@ -26,5 +30,3 @@ pp*
 
 # gross
 .vscode/
-
-.pmhist

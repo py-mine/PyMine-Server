@@ -5,6 +5,9 @@ plugins/*
 worlds/*
 .pmhist
 
+chunk_test.mtl
+chunk_test.obj
+
 # VirtualEnv
 venv/
 

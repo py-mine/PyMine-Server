@@ -1,14 +1,17 @@
 import numpy
 
+from pymine.util.misc import remove_namespace
 from pymine.types.abc import AbstractPalette
 from pymine.types.chunk import Chunk
 
 
 def dump_to_obj(file, pymine_chunk: Chunk, palette: AbstractPalette):
-    chunk = numpy.ndarray((256, 16, 16))
+    chunk = numpy.zeros((256, 16, 16), numpy.uint64)
 
-    for section in pymine_chunk.sections:
-        pymine_chunk[section.y : section.y + 16] = section.block_states
+    for y, section in pymine_chunk.sections.items():
+        if 0 <= y < 17:
+            y *= 16
+            chunk[y : y + 16] = section.block_states
 
     air = palette.encode("minecraft:air")
 
@@ -50,7 +53,7 @@ def dump_to_obj(file, pymine_chunk: Chunk, palette: AbstractPalette):
                 if block == air:
                     continue
 
-                block = palette.encode(block)
+                block = remove_namespace(palette.decode(block)["name"])
 
                 i1 = rpoints.get((x, y, z)) + 1
                 i2 = rpoints.get((x + 1, y, z)) + 1

@@ -91,7 +91,7 @@ class PlayTabCompleteServerBound(Packet):
 
 
 class PlayTabCompleteClientBound(Packet):
-    """"TODO: make good docstring. (Server -> Client)"""
+    """The server responds with a list of auto-completions of the last word sent to it. In the case of regular chat, this is a player username. Command names and parameters are also supported. he client sorts these alphabetically before listing them. (Server -> Client)"""
 
     id = 0xF
     to = 1

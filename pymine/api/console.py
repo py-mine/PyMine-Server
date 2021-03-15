@@ -1,4 +1,5 @@
 from prompt_toolkit import PromptSession, ANSI, print_formatted_text
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.patch_stdout import StdoutProxy
 from prompt_toolkit.output import create_output
 from prompt_toolkit.history import FileHistory
@@ -33,7 +34,7 @@ class Console:
 
         self.stdout = StdoutProxy(sleep_between_writes=0.5)
         self.out = create_output(self.stdout)
-        self.ses = PromptSession(history=FileHistory("./.pmhist"), output=self.out)
+        self.ses = PromptSession(history=FileHistory("./.pmhist"), auto_suggest=AutoSuggestFromHistory(), output=self.out)
 
     def set_prompt(self, prompt: str = None):
         if prompt is not None:

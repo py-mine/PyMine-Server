@@ -4,6 +4,8 @@ import random
 import socket
 import struct
 
+from prompt_toolkit.enums import EditingMode
+
 from pymine.types.buffer import Buffer
 from pymine.types.stream import Stream
 from pymine.types.packet import Packet
@@ -55,6 +57,7 @@ class Server:
         self.favicon = load_favicon()  # server-icon.png in the root dir, displayed in clients' server lists
         self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold since it's used so much
 
+        self.console.ses.vi_mode = self.conf["vi_mode"]
         self.console.set_prompt(self.conf["prompt"])
         self.console.debug_ = self.conf["debug"]
         self.console.debug("Debug mode enabled.")
@@ -64,6 +67,9 @@ class Server:
 
         if self.addr is None:  # find local addr if none was supplied
             self.addr = socket.gethostbyname(socket.gethostname())
+
+        if self.conf["vi_mode"] == True:
+            self.console.ses.editing_mode = EditingMode.VI
 
         self.playerio = None  # used to fetch/dump players
         self.chunkio = ChunkIO  # used to fetch chunks from the disk

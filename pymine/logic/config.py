@@ -29,6 +29,7 @@ DEFAULT_CONFIG = {
     "query_port": None,
     "prompt": "> ",
     "generator": "default",
+    "vi_mode": False,
 }
 
 

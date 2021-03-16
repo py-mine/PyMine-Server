@@ -673,4 +673,4 @@ class Buffer:
             + b"".join(block_light_arrays)
         )
 
-        return out#[:len(out) - 4095]
+        return out  # [:len(out) - 4095]

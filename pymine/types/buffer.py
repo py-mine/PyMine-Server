@@ -627,7 +627,7 @@ class Buffer:
             if section is None:
                 continue
 
-            section_y += 1
+            print("Section y/index:", section_y)
 
             if section.sky_light is not None and len(section.sky_light.nonzero()) > 0:
                 sky_light_mask |= 1 << section_y
@@ -640,6 +640,8 @@ class Buffer:
                             sky_light_array += cls.pack(
                                 "B", (section.sky_light[y][z][x] << 4) | (section.sky_light[y][z][x + 1])
                             )
+
+                print("Sky light array length:", len(sky_light_array))
 
                 sky_light_arrays.append(cls.pack_varint(len(sky_light_array)) + sky_light_array)
 
@@ -655,12 +657,14 @@ class Buffer:
                                 "B", (section.block_light[y][z][x] << 4) | (section.block_light[y][z][x + 1])
                             )
 
+                print("Block light array length:", len(block_light_array))
+
                 block_light_arrays.append(cls.pack_varint(len(block_light_array)) + block_light_array)
 
-        print(f"sky_light:{sky_light_mask}\nempty_sky_light:{empty_sky_light_mask}")
-        print(f"block_light:{block_light_mask}\nempty_block_light:{empty_block_light_mask}")
+        print("Sky light mask:", sky_light_mask)
+        print("Block light mask:", block_light_mask)
 
-        return (
+        out = (
             cls.pack_varint(sky_light_mask)
             + cls.pack_varint(block_light_mask)
             + cls.pack_varint(empty_sky_light_mask)
@@ -668,3 +672,5 @@ class Buffer:
             + b"".join(sky_light_arrays)
             + b"".join(block_light_arrays)
         )
+
+        return out#[:len(out) - 4095]

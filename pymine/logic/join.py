@@ -217,8 +217,8 @@ async def send_world_info(stream: Stream, world: World, player: Player) -> None:
         for z in range(-server.conf["view_distance"] - 1, server.conf["view_distance"] + 1):
             chunks[x, z] = await world.fetch_chunk(x, z)
 
-    for chunk in chunks.values():  # send update light packet for each chunk in the player's view distance
-        await server.send_packet(stream, packets.play.chunk.PlayUpdateLight(chunk))
+    # for chunk in chunks.values():  # send update light packet for each chunk in the player's view distance
+    #     await server.send_packet(stream, packets.play.chunk.PlayUpdateLight(chunk))
 
     # for chunk in chunks.values():  # send chunk data packet for each chunk in player's view distance
     #     await server.send_packet(stream, packets.play.chunk.PlayChunkData(chunk, True))

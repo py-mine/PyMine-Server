@@ -20,7 +20,7 @@
 - [ ] **Packet Models** - *missing some clientbound packets*
 - [x] **Status + Login Logic** - *completed*
 - [ ] **Play Logic** - *currently a work in progress*
-- [ ] **World Generation** - *superflat world generation has been started*
+- [ ] **World Generation** - *superflat world generation has been completed, normal world gen is a work in progress*
 - [ ] **Entities/Entity AI** - *not started yet*
 - [x] **Plugin API** - *completed, but more will be added as the development continues*
 - [x] **Command/Argument Parsing** - *parsers for primitive types and actual parsing has been completed*

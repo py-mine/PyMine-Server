@@ -624,17 +624,12 @@ class Buffer:
         for section_y in range(-1, 17, 1):
             section = chunk.get(section_y)
 
-            section_y += 1
-
             if section is None:
-                empty_sky_light_mask |= 1 << section_y
-                empty_block_light_mask |= 1 << section_y
-
                 continue
 
-            if section.sky_light is None or len(section.sky_light.nonzero()) == 0:
-                empty_sky_light_mask |= 1 << section_y
-            else:
+            section_y += 1
+
+            if section.sky_light is not None and len(section.sky_light.nonzero()) > 0:
                 sky_light_mask |= 1 << section_y
 
                 sky_light_array = b""
@@ -648,9 +643,7 @@ class Buffer:
 
                 sky_light_arrays.append(cls.pack_varint(len(sky_light_array)) + sky_light_array)
 
-            if section.block_light is None or len(section.block_light.nonzero()) == 0:
-                empty_block_light_mask |= 1 << section_y
-            else:
+            if section.block_light is not None and len(section.block_light.nonzero()) > 0:
                 block_light_mask |= 1 << section_y
 
                 block_light_array = b""
@@ -663,6 +656,9 @@ class Buffer:
                             )
 
                 block_light_arrays.append(cls.pack_varint(len(block_light_array)) + block_light_array)
+
+        print(f"sky_light:{sky_light_mask}\nempty_sky_light:{empty_sky_light_mask}")
+        print(f"block_light:{block_light_mask}\nempty_block_light:{empty_block_light_mask}")
 
         return (
             cls.pack_varint(sky_light_mask)

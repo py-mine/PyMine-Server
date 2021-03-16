@@ -80,8 +80,6 @@ async def join_2(stream: Stream, player: Player) -> None:
     # see here: https://wiki.vg/Protocol#Update_View_Position
     await server.send_packet(stream, packets.play.player.PlayUpdateViewPosition(player.x // 32, player.z // 32))
 
-    await asyncio.sleep(2)
-
     await send_world_info(stream, world, player)
 
     await send_positional_data(stream, world, player)
@@ -221,7 +219,6 @@ async def send_world_info(stream: Stream, world: World, player: Player) -> None:
 
     for chunk in chunks.values():  # send update light packet for each chunk in the player's view distance
         await server.send_packet(stream, packets.play.chunk.PlayUpdateLight(chunk))
-        await asyncio.sleep(2)
 
     # for chunk in chunks.values():  # send chunk data packet for each chunk in player's view distance
     #     await server.send_packet(stream, packets.play.chunk.PlayChunkData(chunk, True))

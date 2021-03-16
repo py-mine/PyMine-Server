@@ -642,7 +642,7 @@ class Buffer:
                 for y in range(16):
                     for z in range(16):
                         for x in range(0, 16, 2):
-                            sky_light_array += cls.pack_byte(
+                            sky_light_array += cls.pack_varint(
                                 section.sky_light[x][y][z] | (section.sky_light[x + 1][y][z] << 4)
                             )
 
@@ -658,7 +658,7 @@ class Buffer:
                 for y in range(16):
                     for z in range(16):
                         for x in range(0, 16, 2):
-                            block_light_array += cls.pack_byte(
+                            block_light_array += cls.pack_varint(
                                 section.block_light[x][y][z] | (section.block_light[x + 1][y][z] << 4)
                             )
 

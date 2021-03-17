@@ -599,7 +599,7 @@ class Buffer:
                         start_offset = (block_num * bits_per_block) % 64
                         end_long = ((block_num + 1) * bits_per_block - 1) // 64
 
-                        value = section.block_states[x][y][z] & individual_value_mask
+                        value = section.block_states[y][z][x] & individual_value_mask
 
                         data[start_long] |= value << start_offset
 

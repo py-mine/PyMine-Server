@@ -16,8 +16,11 @@ from pymine.data.default_nbt.dimension_codec import new_dim_codec_nbt, get_dimen
 from pymine.data.recipes import RECIPES
 from pymine.data.tags import TAGS
 
-from pymine.util.misc import seed_hash, spiral
+from pymine.util.misc import seed_hash
+from pymine.util.spiral import spiral
+
 import pymine.net.packets as packets
+
 from pymine.server import server
 
 
@@ -225,7 +228,7 @@ async def send_world_info(stream: Stream, world: World, player: Player) -> None:
 
     loop = asyncio.get_event_loop()
 
-    for chunk in spiral(chunks).values():  # send chunk data packet for every chunk in server render distance
+    for chunk in chunks.values():  # send chunk data packet for every chunk in server render distance
         packet = await loop.run_in_executor(server.thread_executor, packets.play.chunk.PlayChunkData, chunk, True)
         asyncio.create_task(server.send_packet(stream, packet))
 

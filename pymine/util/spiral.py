@@ -37,6 +37,7 @@ def position(index: int):
     # else, west
     return c - offset - 1, -c
 
+
 def spiral(iterable):
     for i in range(len(iterable)):
         yield iterable[position(i)]

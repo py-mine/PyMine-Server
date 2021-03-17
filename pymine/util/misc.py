@@ -1,25 +1,9 @@
 from random import randint
 import functools
-import itertools
 import asyncio
 import hashlib
 import types
 import ast
-
-
-def spiral(chunks: dict):
-    def spiral_(l):
-        while l:
-            yield l[0]
-            l = list(reversed(list(zip(*l[1:]))))
-
-    spiraled = list(itertools.chain.from_iterable(spiral_(list(chunks.items()))))
-    out = {}
-
-    for i in range(0, len(spiraled), 2):
-        out[spiraled[i]] = spiraled[i + 1]
-
-    return out
 
 
 # An implementation of java's String.hashCode()

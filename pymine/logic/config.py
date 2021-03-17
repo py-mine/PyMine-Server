@@ -5,10 +5,12 @@ import yaml
 from pymine.util.misc import java_string_hash, gen_seed
 
 DEFAULT_CONFIG = {
+    "rcon_broadcast_to_ops": False,
     "comp_thresh": 256,
     "debug": True,
     "difficulty": "easy",
     "enable_query": True,
+    "enable_rcon": True,
     "gamemode": "survival",
     "generate_structures": True,
     "generator": "default",
@@ -20,6 +22,8 @@ DEFAULT_CONFIG = {
     "prompt": "> ",
     "pvp": True,
     "query_port": None,
+    "rcon_password": "hunter2",  # Your pass here.
+    "rcon_port": 15575,  # 1-6553
     "seed": gen_seed(),
     "server_ip": None,
     "server_port": 25565,

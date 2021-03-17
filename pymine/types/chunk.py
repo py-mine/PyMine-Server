@@ -41,13 +41,9 @@ class ChunkSection:
         section = cls(*args, **kwargs)
 
         #                                     y   z   x
-        section.block_states = numpy.ndarray((16, 16, 16), numpy.uint16)
-        section.block_light = numpy.ndarray((16, 16, 16), numpy.int8)
-        section.sky_light = numpy.ndarray((16, 16, 16), numpy.int8)
-
-        section.block_states.fill(0)
-        section.block_light.fill(0)
-        section.sky_light.fill(0)
+        section.block_states = numpy.zeros((16, 16, 16), numpy.int32)
+        section.block_light = numpy.zeros((16, 16, 16), numpy.int16)
+        section.sky_light = numpy.zeros((16, 16, 16), numpy.int16)
 
         return section
 
@@ -72,7 +68,7 @@ class ChunkSection:
 
             section = cls(tag["Y"].data, palette)
 
-            section.block_states = numpy.ndarray((16, 16, 16), numpy.uint16)
+            section.block_states = numpy.ndarray((16, 16, 16), numpy.int32)
 
             # yoinked most of the logic for chunk deserialization from https://wiki.vg/Chunk_Format
             # however, that is for deserialization of a chunk packet, not the nbt data so it's a bit
@@ -103,14 +99,14 @@ class ChunkSection:
             section.block_light = None
         else:
             section.block_light = numpy.asarray(
-                [n for n in ((b & 0x0F, b >> 4 & 0x0F) for b in tag["BlockLight"])], numpy.uint8
+                [n for n in ((b & 0x0F, b >> 4 & 0x0F) for b in tag["BlockLight"])], numpy.int16
             ).reshape(16, 16, 16)
 
         if tag.get("SkyLight") is None:
             section.sky_light = None
         else:
             section.sky_light = numpy.asarray(
-                [n for n in ((b & 0x0F, b >> 4 & 0x0F) for b in tag["SkyLight"])], numpy.uint8
+                [n for n in ((b & 0x0F, b >> 4 & 0x0F) for b in tag["SkyLight"])], numpy.int16
             ).reshape(16, 16, 16)
 
         return section

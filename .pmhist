@@ -1,0 +1,273 @@
+
+# 2021-03-15 10:03:17.064063
++help
+
+# 2021-03-15 10:03:22.573955
++list
+
+# 2021-03-15 10:03:34.758147
++eval server.plugins
+
+# 2021-03-15 10:03:43.610896
++eval server.api.plugins
+
+# 2021-03-15 10:10:47.484490
++history
+
+# 2021-03-15 10:11:06.319779
++pp
+
+# 2021-03-15 10:15:27.191880
++help
+
+# 2021-03-15 10:15:36.389231
++eval server.ses
+
+# 2021-03-15 10:15:41.129643
++eval server.console.ses
+
+# 2021-03-15 10:15:45.959454
++eval server.console.ses.vi_mode
+
+# 2021-03-15 10:16:18.924513
++eval server.console.ses.prompt.vi_mode
+
+# 2021-03-15 10:16:22.885355
++eval server.console.ses.prompt
+
+# 2021-03-15 10:17:55.499986
++help
+
+# 2021-03-15 10:50:38.430481
++eval server.console
+
+# 2021-03-15 10:50:40.890213
++eval server.console.ses
+
+# 2021-03-15 10:50:45.162660
++eval server.console.ses.vi_mode
+
+# 2021-03-15 10:51:35.991347
++eval server.console.ses
+
+# 2021-03-15 10:51:41.684797
++eval server.console.ses.EditingMode
+
+# 2021-03-15 10:52:09.211746
++eval dict(server.console.ses)
+
+# 2021-03-15 10:52:23.659005
++eval server.console.ses.EditingMode
+
+# 2021-03-15 10:52:28.212596
++eval server.console.ses.vi_mode
+
+# 2021-03-15 10:53:16.840620
++eval server.console.ses.message
+
+# 2021-03-15 10:53:31.591724
++eval server.console.ses.editing_mode
+
+# 2021-03-15 10:53:36.224820
++eval server.console.ses.vi_mode
+
+# 2021-03-15 10:53:38.169334
++eval server.console.ses.editing_mode
+
+# 2021-03-15 11:13:13.483860
++help
+
+# 2021-03-15 11:32:18.598449
++eval server.console.ses.editing_mod
+
+# 2021-03-15 11:32:21.220598
++eval server.console.ses.editing_mode
+
+# 2021-03-15 11:33:59.717211
++help
+
+# 2021-03-16 09:57:36.046875
++eval server.console.ses.vi_state.input_mode
+
+# 2021-03-16 09:57:39.947089
++eval server.console.ses.vi_state
+
+# 2021-03-16 10:04:39.455897
++eval server.console.ses.input_mode
+
+# 2021-03-16 10:04:45.118558
++eval server.console.ses.InputMode
+
+# 2021-03-16 10:04:57.580687
++eval server.console.ses
+
+# 2021-03-16 10:05:29.696608
++eval dir(server.console.ses)
+
+# 2021-03-16 10:05:40.327016
++eval dir(server.console.ses.vi_mode)
+
+# 2021-03-16 10:06:00.671304
++eval server.console.ses.vi_mode.real
+
+# 2021-03-16 10:06:46.621253
++eval server.console.ses.editing_mode
+
+# 2021-03-16 10:08:33.995481
++eval server.console.ses.rprompt = "HECK"
+
+# 2021-03-16 10:08:40.153796
++#oh yeah
+
+# 2021-03-16 10:08:59.912696
++eval dir(server.console.ses.vi_mode)
+
+# 2021-03-16 10:09:28.037213
++eval dir(server.console.ses)
+
+# 2021-03-16 10:10:09.334895
++eval server.console.ses.editing_mode = EditingMode.EMACS
+
+# 2021-03-16 10:10:16.927983
++eval dir(server.console.ses.vi_mode)
+
+# 2021-03-16 10:10:58.746478
++eval dir(server.console.ses.editing_mode)
+
+# 2021-03-16 10:11:02.283243
++eval dir(server.console.ses)
+
+# 2021-03-16 10:11:37.934662
++server.console.ses.rprompt = 69+1
+
+# 2021-03-16 10:12:02.169079
++eval server.console.ses.rprompt = 69+1
+
+# 2021-03-16 10:12:58.601780
++eval server.console.ses.rprompt = "pp"
+
+# 2021-03-16 10:13:03.945324
++eval dir(server.console.ses)
+
+# 2021-03-16 10:13:21.307647
++eval server.console.ses.rprompt = "HECK"
+
+# 2021-03-16 10:13:25.882031
++help
+
+# 2021-03-16 10:13:43.971495
++list
+
+# 2021-03-16 10:13:52.470288
++help
+
+# 2021-03-16 10:18:30.269817
++eval server.console.ses.rprompt = "HECK"
+
+# 2021-03-16 10:18:36.456553
++eval server.console.ses.rprompt = None
+
+# 2021-03-16 10:18:44.590471
++help
+
+# 2021-03-16 10:19:04.759054
++eval dir(server.console.ses)
+
+# 2021-03-16 10:19:19.967886
++eval dir(server.console.ses.app)
+
+# 2021-03-16 10:19:32.691835
++eval dir(server.console.ses.app.vi_state)
+
+# 2021-03-16 10:19:41.646710
++eval server.console.ses.app.vi_state
+
+# 2021-03-16 10:20:15.909510
++eval server.console.ses.app.vi_state.__repr__
+
+# 2021-03-16 10:20:18.049499
++eval server.console.ses.app.vi_state.__repr__()
+
+# 2021-03-16 10:20:22.130684
++eval server.console.ses.app.vi_state()
+
+# 2021-03-16 10:20:23.697477
++eval server.console.ses.app.vi_state
+
+# 2021-03-16 10:20:29.109622
++eval dir(server.console.ses.app.vi_state)
+
+# 2021-03-16 10:20:45.673687
++eval server.console.ses.app.vi_state
+
+# 2021-03-16 10:21:06.112818
++eval dir(server.console.ses.app.vi_state)
+
+# 2021-03-16 10:21:16.303641
++eval str(server.console.ses.app.vi_state)
+
+# 2021-03-16 10:21:45.435399
++eval doc(server.console.ses.app.vi_state)
+
+# 2021-03-16 10:21:51.599227
++eval help(server.console.ses.app.vi_state)
+
+# 2021-03-16 10:22:10.102356
++eval server.console.ses.app.vi_state.input_mode
+
+# 2021-03-16 10:23:39.927968
++eval str(server.console.ses.app.vi_state.input_mode)
+
+# 2021-03-16 10:24:07.487048
++eval server.console.ses.app.vi_state.input_mode
+
+# 2021-03-16 10:27:01.592994
++eval dir(server.console.ses.app.vi_state.input_mode)
+
+# 2021-03-16 10:28:36.438564
++eval server.console.ses.app.vi_state.input_mode.__dict__
+
+# 2021-03-16 10:30:59.580255
++help
+
+# 2021-03-16 10:42:57.469401
++list
+
+# 2021-03-16 10:43:36.382192
++eval server.conf
+
+# 2021-03-16 10:45:23.043280
++help
+
+# 2021-03-16 10:45:31.074865
++eval server.conf
+
+# 2021-03-16 10:46:35.375270
++list
+
+# 2021-03-16 10:46:38.126192
++help
+
+# 2021-03-16 10:50:58.998307
++eval server.conf
+
+# 2021-03-16 10:51:43.447310
++eval server.conf['online_mode'] = False
+
+# 2021-03-16 10:52:40.527704
++stop
+
+# 2021-03-16 10:58:00.070170
++help
+
+# 2021-03-16 10:58:20.790055
++eval dict(server.conf)
+
+# 2021-03-16 10:58:28.279563
++eval server.conf = dict(server.conf)
+
+# 2021-03-16 10:59:01.538184
++eval server.conf['prompt'] = ">>>"
+
+# 2021-03-16 10:59:13.935226
++eval server.conf

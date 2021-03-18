@@ -53,7 +53,10 @@ class CommandHandler:
         if command is None:  # user error
             if self.server.conf["debug"]:  # eval input if debug mode is on
                 try:
-                    await nice_eval(full, {"server": self.server})
+                    res = await nice_eval(full, {"server": self.server})
+
+                    if res is not None:
+                        self.console.info(res)
                 except BaseException as e:
                     self.server.console.error(self.server.console.f_traceback(e))
             else:
@@ -78,9 +81,9 @@ class CommandHandler:
             if parser is bool:  # allow for primitive bool type to be used as a typehint
                 parser = self._parsers.Bool()
             elif parser is float:  # allow for primitive float type to be used as a typehint
-                parser = self._parsers.Double()
+                parser = self._parsers.Double(None)
             elif parser is int:  # allow for primitive int type to be used as a typehint
-                parser = self._parsers.Integer()
+                parser = self._parsers.Integer(None)
             elif parser is str:  # allow for primitive str type to be used as a typehint
                 parser = self._parsers.String(0)  # a single word
             elif not (isinstance(parser, AbstractParser) or issubclass(parser, AbstractParser)):  # dev error

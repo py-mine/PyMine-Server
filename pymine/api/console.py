@@ -43,6 +43,7 @@ class Console:
             auto_suggest=AutoSuggestFromHistory(),
             key_bindings=self.bindings,
             mouse_support=True,
+            enable_system_prompt=True,
             output=self.out,
         )
 

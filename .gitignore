@@ -23,7 +23,7 @@ docs/_build/
 .pytest_cache
 
 # Sh-wayz's shit
-/tags
+tags
 .tmuxinator.yml
 pp*
 *.bak

@@ -126,10 +126,7 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
         )
     await server.send_packet(stream, join_packet,)
 
-    if server.api.register._on_packet[state].get(join_packet.id) is None:
-        #is warning usefull since only plugin are suppose to use this event?
-        server.console.warn(f"No packet handler found for packet: 0x{join_packet.id:02X} {type(join_packet).__name__}")
-    else:
+    if not (server.api.register._on_packet[state].get(join_packet.id) is None):
         for handler in server.api.register._on_packet[state][join_packet.id].values():
             await handler(stream, join_packet)
 

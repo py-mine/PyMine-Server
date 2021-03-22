@@ -86,10 +86,7 @@ async def encrypted_login(stream: Stream, packet: Packet) -> Stream:
     state = STATES.encode("login")
     await server.send_packet(stream, success_packet)
 
-    if server.api.register._on_packet[state].get(success_packet.id) is None:
-        #is warning usefull since only plugin are suppose to use this event?
-        server.console.warn(f"No packet handler found for packet: 0x{success_packet.id:02X} {type(success_packet).__name__}")
-    else:
+    if not (server.api.register._on_packet[state].get(success_packet.id) is None):
         for handler in server.api.register._on_packet[state][success_packet.id].values():
             server.console.debug(handler)
             await handler(stream, success_packet)

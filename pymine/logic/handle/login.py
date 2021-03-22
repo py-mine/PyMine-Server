@@ -1,3 +1,4 @@
+from pymine.data.states import STATES
 from cryptography.hazmat.primitives.asymmetric.padding import PKCS1v15
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
@@ -65,7 +66,17 @@ async def encrypted_login(stream: Stream, packet: Packet) -> Stream:
         await server.send_packet(stream, LoginSetCompression(server.comp_thresh), -1)
 
     # Send LoginSuccess packet, tells client they've logged in succesfully
-    await server.send_packet(stream, login_packets.LoginSuccess(*auth))
+    success_packet = login_packets.LoginSuccess(*auth)
+    state = STATES.encode("login")
+    await server.send_packet(stream, success_packet)
+
+    if server.api.register._on_packet[state].get(success_packet.id) is None:
+        #is warning usefull since only plugin are suppose to use this event?
+        server.console.warn(f"No packet handler found for packet: 0x{success_packet.id:02X} {type(success_packet).__name__}")
+    else:
+        for handler in server.api.register._on_packet[state][success_packet.id].values():
+            server.console.debug(handler)
+            await handler(stream, success_packet)
 
     server.cache.states[stream.remote] = 3  # Update state to play
     await join(stream, *auth, props)

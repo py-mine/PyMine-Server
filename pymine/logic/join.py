@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import asyncio
-from pymine.data.states import STATES
 import random
 import time
 import uuid
@@ -29,6 +28,7 @@ from pymine.types.chat import Chat
 import pymine.types.nbt as nbt
 
 from pymine.data.default_nbt.dimension_codec import new_dim_codec_nbt, get_dimension_data
+from pymine.data.states import STATES
 from pymine.data.recipes import RECIPES
 from pymine.data.tags import TAGS
 

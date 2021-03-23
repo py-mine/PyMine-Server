@@ -1,8 +1,26 @@
+# A flexible and fast Minecraft server software written completely in Python.
+# Copyright (C) 2021 PyMine
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from prompt_toolkit import PromptSession, ANSI, print_formatted_text
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+from prompt_toolkit.application.current import get_app
 from prompt_toolkit.patch_stdout import StdoutProxy
+from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.output import create_output
 from prompt_toolkit.history import FileHistory
+from prompt_toolkit.enums import EditingMode
 import traceback
 import asyncio
 import time
@@ -31,10 +49,17 @@ class Console:
     def __init__(self, debug: bool = True) -> None:
         self.debug_ = debug
         self.prompt = "> "
+        self.bindings = KeyBindings()
 
         self.stdout = StdoutProxy(sleep_between_writes=0.5)
         self.out = create_output(self.stdout)
-        self.ses = PromptSession(history=FileHistory("./.pmhist"), auto_suggest=AutoSuggestFromHistory(), output=self.out)
+        self.ses = PromptSession(
+            history=FileHistory("./.pmhist"),
+            auto_suggest=AutoSuggestFromHistory(),
+            key_bindings=self.bindings,
+            mouse_support=True,
+            output=self.out,
+        )
 
     def set_prompt(self, prompt: str = None):
         if prompt is not None:

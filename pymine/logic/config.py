@@ -1,3 +1,18 @@
+# A flexible and fast Minecraft server software written completely in Python.
+# Copyright (C) 2021 PyMine
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from immutables import Map
 import base64
 import yaml
@@ -5,7 +20,6 @@ import yaml
 from pymine.util.misc import java_string_hash, gen_seed
 
 DEFAULT_CONFIG = {
-    "rcon_broadcast_to_ops": False,
     "comp_thresh": 256,
     "debug": True,
     "difficulty": "easy",
@@ -22,6 +36,7 @@ DEFAULT_CONFIG = {
     "prompt": "> ",
     "pvp": True,
     "query_port": None,
+    "rcon_broadcast_to_ops": False,
     "rcon_password": "hunter2",  # Your pass here.
     "rcon_port": 15575,  # 1-6553
     "seed": gen_seed(),
@@ -31,6 +46,7 @@ DEFAULT_CONFIG = {
     "spawn_monsters": True,
     "spawn_npcs": True,
     "spawn_protection": 16,
+    "vi_mode": False,
     "view_distance": 10,
     "white_list": True,
 }

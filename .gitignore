@@ -3,6 +3,10 @@ server.yml
 server-icon.png
 plugins/*
 worlds/*
+.pmhist
+
+chunk_test.mtl
+chunk_test.obj
 
 # VirtualEnv
 venv/
@@ -19,10 +23,10 @@ docs/_build/
 .pytest_cache
 
 # Sh-wayz's shit
-/tags
+tags
 .tmuxinator.yml
-
-# Ewww
-.vscode/
-.shwayzrun.sh
 pp*
+*.bak
+
+# gross
+.vscode/

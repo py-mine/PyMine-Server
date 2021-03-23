@@ -1,3 +1,18 @@
+# A flexible and fast Minecraft server software written completely in Python.
+# Copyright (C) 2021 PyMine
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
 import struct
@@ -6,7 +21,7 @@ import numpy
 from pymine.types.block_palette import DirectPalette, IndirectPalette
 import pymine.types.nbt as nbt
 
-from pymine.api.abc import AbstractPalette
+from pymine.types.abc import AbstractPalette
 
 
 class ChunkSection:
@@ -40,6 +55,7 @@ class ChunkSection:
     def new(cls, *args, **kwargs):
         section = cls(*args, **kwargs)
 
+        #                                     y   z   x
         section.block_states = numpy.ndarray((16, 16, 16), numpy.uint16)
         section.block_light = numpy.ndarray((16, 16, 16), numpy.int8)
         section.sky_light = numpy.ndarray((16, 16, 16), numpy.int8)
@@ -92,7 +108,7 @@ class ChunkSection:
                         else:
                             data = state_bytes[start_long] >> start_offset | state_bytes[end_long] << (64 - start_offset)
 
-                        section.block_states[x, y, z] = data & individual_value_mask
+                        section.block_states[y, z, x] = data & individual_value_mask
         else:
             section = cls(tag["Y"], None)
 

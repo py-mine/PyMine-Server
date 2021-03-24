@@ -13,7 +13,7 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-            
+
 from pymine.logic.parsers.brigadier import *
 
 from pymine.util.misc import nice_eval

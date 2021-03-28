@@ -108,30 +108,31 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
 
     state = STATES.encode("play")
     join_packet = packets.play.player.PlayJoinGame(
-            player.entity_id,
-            server.conf["hardcore"],  # whether world is hardcore or not
-            player["playerGameType"].data,  # gamemode
-            player["previousPlayerGameType"].data,  # previous gamemode
-            [level_name, f"{level_name}_nether", f"{level_name}_the_end"],  # world names
-            new_dim_codec_nbt(),  # Shouldn't change unless CUSTOM DIMENSIONS are added fml
-            # This is like the the dimension data for the dim the player is currently spawning into
-            get_dimension_data(player["Dimension"].data),  # player['Dimension'] should be like minecraft:overworld
-            server.conf["level_name"],  # level name of the world the player is spawning into
-            seed_hash(server.conf["seed"]),
-            server.conf["max_players"],
-            server.conf["view_distance"],
-            (not server.conf["debug"]),
-            (world["GameRules"]["doImmediateRespawn"].data != "true"),  # (not doImmediateRespawn gamerule)
-            False,  # If world is a debug world iirc
-            False,  # ShouFld be true if world is superflat
-        )
-    await server.send_packet(stream, join_packet,)
+        player.entity_id,
+        server.conf["hardcore"],  # whether world is hardcore or not
+        player["playerGameType"].data,  # gamemode
+        player["previousPlayerGameType"].data,  # previous gamemode
+        [level_name, f"{level_name}_nether", f"{level_name}_the_end"],  # world names
+        new_dim_codec_nbt(),  # Shouldn't change unless CUSTOM DIMENSIONS are added fml
+        # This is like the the dimension data for the dim the player is currently spawning into
+        get_dimension_data(player["Dimension"].data),  # player['Dimension'] should be like minecraft:overworld
+        server.conf["level_name"],  # level name of the world the player is spawning into
+        seed_hash(server.conf["seed"]),
+        server.conf["max_players"],
+        server.conf["view_distance"],
+        (not server.conf["debug"]),
+        (world["GameRules"]["doImmediateRespawn"].data != "true"),  # (not doImmediateRespawn gamerule)
+        False,  # If world is a debug world iirc
+        False,  # ShouFld be true if world is superflat
+    )
+    await server.send_packet(
+        stream,
+        join_packet,
+    )
 
     if not (server.api.register._on_packet[state].get(join_packet.id) is None):
         for handler in server.api.register._on_packet[state][join_packet.id].values():
             await handler(stream, join_packet)
-
-
 
 
 # send what the player can/can't do

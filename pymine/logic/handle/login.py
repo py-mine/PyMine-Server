@@ -30,7 +30,6 @@ from pymine.net.packets.login.set_comp import LoginSetCompression
 import pymine.net.packets.login.login as login_packets
 
 from pymine.api.errors import StopHandling
-from pymine.data.states import STATES
 from pymine.logic.join import join
 from pymine.server import server
 
@@ -82,14 +81,7 @@ async def encrypted_login(stream: Stream, packet: Packet) -> Stream:
         await server.send_packet(stream, LoginSetCompression(server.comp_thresh), -1)
 
     # Send LoginSuccess packet, tells client they've logged in succesfully
-    success_packet = login_packets.LoginSuccess(*auth)
-    state = STATES.encode("login")
-    await server.send_packet(stream, success_packet)
-
-    if not (server.api.register._on_packet[state].get(success_packet.id) is None):
-        for handler in server.api.register._on_packet[state][success_packet.id].values():
-            server.console.debug(handler)
-            await handler(stream, success_packet)
+    await server.send_packet(stream, login_packets.LoginSuccess(*auth))
 
     server.cache.states[stream.remote] = 3  # Update state to play
     await join(stream, *auth, props)

@@ -29,7 +29,6 @@ from pymine.types.chat import Chat
 import pymine.types.nbt as nbt
 
 from pymine.data.default_nbt.dimension_codec import new_dim_codec_nbt, get_dimension_data
-from pymine.data.states import STATES
 from pymine.data.recipes import RECIPES
 from pymine.data.tags import TAGS
 
@@ -106,8 +105,9 @@ async def join_2(stream: Stream, player: Player) -> None:
 async def send_join_game_packet(stream: Stream, world: World, player: Player) -> None:
     level_name = server.conf["level_name"]  # level name, i.e. Xenon
 
-    state = STATES.encode("play")
-    join_packet = packets.play.player.PlayJoinGame(
+    await server.send_packet(
+        stream,
+        packets.play.player.PlayJoinGame(
             player.entity_id,
             server.conf["hardcore"],  # whether world is hardcore or not
             player["playerGameType"].data,  # gamemode
@@ -124,14 +124,8 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
             (world["GameRules"]["doImmediateRespawn"].data != "true"),  # (not doImmediateRespawn gamerule)
             False,  # If world is a debug world iirc
             False,  # ShouFld be true if world is superflat
-        )
-    await server.send_packet(stream, join_packet,)
-
-    if not (server.api.register._on_packet[state].get(join_packet.id) is None):
-        for handler in server.api.register._on_packet[state][join_packet.id].values():
-            await handler(stream, join_packet)
-
-
+        ),
+    )
 
 
 # send what the player can/can't do

@@ -15,8 +15,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import asyncio
-from pymine.net.packets.login.login import LoginSuccess
-from pymine.net.packets.play.player import PlayJoinGame
 
 from pymine.api.events import PacketEvent, ServerStartEvent, ServerStopEvent
 from pymine.types.abc import AbstractWorldGenerator, AbstractPlugin
@@ -67,12 +65,6 @@ class Register:
             return func
 
         return deco
-
-    def on_login_success(self, func):
-        return PacketEvent(func, STATES.encode("login"), LoginSuccess.id)
-
-    def on_join(self, func):
-        return PacketEvent(func, STATES.encode("play"), PlayJoinGame.id)
 
     def on_server_start(self, func):
         if not asyncio.iscoroutinefunction(func):

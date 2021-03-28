@@ -123,7 +123,7 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
         (not server.conf["debug"]),
         (world["GameRules"]["doImmediateRespawn"].data != "true"),  # (not doImmediateRespawn gamerule)
         False,  # If world is a debug world iirc
-        False,  # Should be true if world is superflat
+        False,  # ShouFld be true if world is superflat
     )
     await server.send_packet(
         stream,

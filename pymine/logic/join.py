@@ -33,7 +33,10 @@ from pymine.data.recipes import RECIPES
 from pymine.data.tags import TAGS
 
 from pymine.util.misc import seed_hash
+from pymine.util.spiral import spiral
+
 import pymine.net.packets as packets
+
 from pymine.server import server
 
 
@@ -227,17 +230,15 @@ async def send_update_view_distance(stream: Stream, player: Player) -> None:
 
 # sends information about the world to the client, like chunk data and other stuff
 async def send_world_info(stream: Stream, world: World, player: Player) -> None:
+    view_distance = server.conf["view_distance"] + 1
     chunks = {}  # cache chunks here because they're used multiple times and shouldn't be garbage collected
 
-    for x in range(-server.conf["view_distance"] - 1, server.conf["view_distance"] + 1):
-        for z in range(-server.conf["view_distance"] - 1, server.conf["view_distance"] + 1):
+    for x in range(-view_distance, view_distance):
+        for z in range(-view_distance, view_distance):
             chunks[x, z] = await world.fetch_chunk(x, z)
 
-    for chunk in chunks.values():  # send update light packet for each chunk in the player's view distance
-        await server.send_packet(stream, packets.play.chunk.PlayUpdateLight(chunk))
-
-    # for chunk in chunks.values():  # send chunk data packet for each chunk in player's view distance
-    #     await server.send_packet(stream, packets.play.chunk.PlayChunkData(chunk, True))
+    # for chunk in chunks.values():  # send update light packet for each chunk in the player's view distance
+    #     await server.send_packet(stream, packets.play.chunk.PlayUpdateLight(chunk))
 
     loop = asyncio.get_event_loop()
 

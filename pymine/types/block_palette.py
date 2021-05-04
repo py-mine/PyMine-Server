@@ -36,6 +36,7 @@ class DirectPalette(AbstractPalette):
 
     @staticmethod
     def encode(block: str, props: dict = None) -> int:
+        props = {} if props is None else props
         block_data = BLOCK_STATES.encode(block)
 
         for state in block_data["states"]:
@@ -44,7 +45,7 @@ class DirectPalette(AbstractPalette):
 
             state_props = state.get("properties")
 
-            if state_props and dict(state_props.items()) == props:
+            if state_props and dict(state_props.items()) == dict(props):
                 return state["id"]
 
         raise ValueError(f"{block} doesn't have a state with those properties.")
@@ -87,6 +88,7 @@ class IndirectPalette(AbstractPalette):
         return cls(Registry(data, reverse_data))
 
     def encode(self, block: str, props: dict = None) -> int:
+        props = {} if props is None else props
         block_data = self.registry.encode(block)
 
         for state in block_data["states"]:
@@ -95,7 +97,7 @@ class IndirectPalette(AbstractPalette):
 
             state_props = state.get("properties")
 
-            if state_props and dict(state_props.items()) == props:
+            if state_props and dict(state_props.items()) == dict(props):
                 return state["id"]
 
         raise ValueError(f"{block} doesn't have a state with those properties.")

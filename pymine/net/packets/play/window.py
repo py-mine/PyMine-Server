@@ -195,7 +195,7 @@ class PlayCloseWindowServerBound(Packet):
 
 
 class PlayCloseWindowClientBound(Packet):
-    """This packet is sent from the server to the client when a window is forcibly closed, such as when a chest is destroyed while it's open. """
+    """This packet is sent from the server to the client when a window is forcibly closed, such as when a chest is destroyed while it's open."""
 
     id = 0x12
     to = 1

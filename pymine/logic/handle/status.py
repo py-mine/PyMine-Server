@@ -13,6 +13,7 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
 from pymine.types.stream import Stream

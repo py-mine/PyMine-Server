@@ -1,3 +1,19 @@
+# A flexible and fast Minecraft server software written completely in Python.
+# Copyright (C) 2021 PyMine
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 from __future__ import annotations
 import immutables
 import struct
@@ -17,7 +33,7 @@ import pymine.data.misc as misc_data
 from pymine.data.tags import TAGS
 
 from pymine.api.errors import InvalidPacketID
-from pymine.api.abc import AbstractPalette
+from pymine.types.abc import AbstractPalette
 
 
 class Buffer:
@@ -599,7 +615,7 @@ class Buffer:
                         start_offset = (block_num * bits_per_block) % 64
                         end_long = ((block_num + 1) * bits_per_block - 1) // 64
 
-                        value = section.block_states[x][y][z] & individual_value_mask
+                        value = section.block_states[y][z][x] & individual_value_mask
 
                         data[start_long] |= value << start_offset
 
@@ -613,10 +629,10 @@ class Buffer:
     def pack_chunk_light(cls, chunk: Chunk) -> bytes:
         out = cls.pack_varint(chunk.x) + cls.pack_varint(chunk.z) + cls.pack("?", True)
 
-        sky_light_mask = BitField.new(18)
-        block_light_mask = BitField.new(18)
-        empty_sky_light_mask = BitField.new(18)
-        empty_block_light_mask = BitField.new(18)
+        sky_light_mask = 0
+        block_light_mask = 0
+        empty_sky_light_mask = 0
+        empty_block_light_mask = 0
 
         sky_light_arrays = []
         block_light_arrays = []
@@ -624,47 +640,53 @@ class Buffer:
         for section_y in range(-1, 17, 1):
             section = chunk.get(section_y)
 
-            section_y += 1
-
             if section is None:
-                empty_sky_light_mask.set(section_y)
-                empty_block_light_mask.set(section_y)
-
                 continue
 
-            if section.sky_light is None or len(section.sky_light.nonzero()) == 0:
-                empty_sky_light_mask.set(section_y)
-            else:
-                sky_light_mask.set(section_y)
+            print("Section y/index:", section_y)
+
+            if section.sky_light is not None and len(section.sky_light.nonzero()) > 0:
+                sky_light_mask |= 1 << section_y
 
                 sky_light_array = b""
 
                 for y in range(16):
                     for z in range(16):
                         for x in range(0, 16, 2):
-                            sky_light_array += section.sky_light[x][y][z] | (section.sky_light[x + 1][y][z] << 4)
+                            sky_light_array += cls.pack(
+                                "B", (section.sky_light[y][z][x] << 4) | (section.sky_light[y][z][x + 1])
+                            )
+
+                print("Sky light array length:", len(sky_light_array))
 
                 sky_light_arrays.append(cls.pack_varint(len(sky_light_array)) + sky_light_array)
 
-            if section.block_light is None or len(section.block_light.nonzero()) == 0:
-                empty_block_light_mask.set(section_y)
-            else:
-                block_light_mask.set(section_y)
+            if section.block_light is not None and len(section.block_light.nonzero()) > 0:
+                block_light_mask |= 1 << section_y
 
                 block_light_array = b""
 
                 for y in range(16):
                     for z in range(16):
                         for x in range(0, 16, 2):
-                            block_light_array += section.block_light[x][y][z] | (section.block_light[x + 1][y][z] << 4)
+                            block_light_array += cls.pack(
+                                "B", (section.block_light[y][z][x] << 4) | (section.block_light[y][z][x + 1])
+                            )
+
+                print("Block light array length:", len(block_light_array))
 
                 block_light_arrays.append(cls.pack_varint(len(block_light_array)) + block_light_array)
 
-        return (
-            cls.pack_varint(sky_light_mask.field)
-            + cls.pack_varint(block_light_mask.field)
-            + cls.pack_varint(empty_sky_light_mask.field)
-            + cls.pack_varint(empty_block_light_mask.field)
+        print("Sky light mask:", sky_light_mask)
+        print("Block light mask:", block_light_mask)
+
+        out = (
+            cls.pack_varint(sky_light_mask)
+            + cls.pack_varint(block_light_mask)
+            + cls.pack_varint(empty_sky_light_mask)
+            + cls.pack_varint(empty_block_light_mask)
             + b"".join(sky_light_arrays)
             + b"".join(block_light_arrays)
         )
+
+        return out  # [:len(out) - 4095]

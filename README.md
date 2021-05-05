@@ -13,15 +13,17 @@
 
 ## Features
 *Note: This list is not always up to date, and doesn't contain all the features that PyMine offers*
+
+- [X] **Windows & Linux Support** - *completed and always will be a thing*
 - [x] **Joinable** - *completed, players can load into the world*
 - [ ] **Playable** - *currently a work in progress*
 - [ ] **Packet Models** - *missing some clientbound packets*
 - [x] **Status + Login Logic** - *completed*
 - [ ] **Play Logic** - *currently a work in progress*
-- [ ] **World Generation** - *superflat world generation has been started*
+- [ ] **World Generation** - *superflat world generation has been completed, normal world gen is a work in progress*
 - [ ] **Entities/Entity AI** - *not started yet*
 - [x] **Plugin API** - *completed, but more will be added as the development continues*
-- [ ] **Command/Argument Parsing** - *currently a work in progress*
+- [x] **Command/Argument Parsing** - *parsers for primitive types and actual parsing has been completed*
 - [x] **Query Support** - *completed*
 - [ ] **RCON Support** - *not started yet*
 
@@ -34,7 +36,7 @@
 *Check out [the docs](https://pymine.readthedocs.io/) for more info*
 ### Installing from source
 - First, clone the repository `git clone https://github.com/py-mine/PyMine.git` and move into that directory (`cd PyMine`)
-- Next, install the required Python packages via pip (`python3 -m pip install -r requirements.txt`)
+- Next, install the required Python packages via pip (`python3 -m pip install -r requirements.txt`, `poetry install`)
 - To run the server, you should run `python3 pymine`.
 - It is recommended you do not use regular Python, but [PyPy3](https://www.pypy.org/)
 

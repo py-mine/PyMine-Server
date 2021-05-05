@@ -1,3 +1,19 @@
+# A flexible and fast Minecraft server software written completely in Python.
+# Copyright (C) 2021 PyMine
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 """Contains packets related to windows."""
 
 from __future__ import annotations
@@ -180,7 +196,7 @@ class PlayCloseWindowServerBound(Packet):
 
 
 class PlayCloseWindowClientBound(Packet):
-    """This packet is sent from the server to the client when a window is forcibly closed, such as when a chest is destroyed while it's open. """
+    """This packet is sent from the server to the client when a window is forcibly closed, such as when a chest is destroyed while it's open."""
 
     id = 0x12
     to = 1

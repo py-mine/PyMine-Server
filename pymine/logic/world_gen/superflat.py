@@ -1,10 +1,26 @@
+# A flexible and fast Minecraft server software written completely in Python.
+# Copyright (C) 2021 PyMine
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import numpy
 import time
 
 from pymine.types.chunk import Chunk, ChunkSection
 
 from pymine.types.block_palette import DirectPalette
-from pymine.api.abc import AbstractWorldGenerator
+from pymine.types.abc import AbstractWorldGenerator
 from pymine.data.registries import BLOCK_REGISTRY
 
 from pymine.server import server
@@ -23,23 +39,23 @@ class SuperFlatWorldGenerator(AbstractWorldGenerator):
         if dimension == "minecraft:overworld":
             chunk.sections[0].block_states[0] = palette.encode("minecraft:bedrock")
             chunk.sections[0].block_states[1:3] = palette.encode("minecraft:dirt")
-            chunk.sections[0].block_states[4] = palette.encode("minecraft:grass_block", {"snowy": "false"})
+            chunk.sections[0].block_states[3] = palette.encode("minecraft:grass_block", {"snowy": "false"})
 
             chunk.sections[0].block_light[0:4] = 0
 
             chunk.sections[0].sky_light[0:3] = 0
-            chunk.sections[0].sky_light[4] = 15
+            chunk.sections[0].sky_light[3:] = 15
         elif dimension == "minecraft:nether":
             chunk.sections[0].block_states[0] = palette.encode("minecraft:bedrock")
             chunk.sections[0].block_states[1:4] = palette.encode("minecraft:netherrack")
 
             chunk.sections[0].block_light[0:4] = 0
-            chunk.sections[0].sky_light[4] = 7
+            chunk.sections[0].sky_light[4:] = 7
         elif dimension == "minecraft:the_end":
             chunk.sections[0].block_states[0:4] = palette.encode("minecraft:end_stone")
 
             chunk.sections[0].block_light[0:4] = 0
-            chunk.sections[0].sky_light[4] = 0
+            chunk.sections[0].sky_light[4:] = 0
         else:
             raise ValueError(f"Unsupported dimension: {dimension}")
 

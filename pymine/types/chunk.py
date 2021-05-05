@@ -1,3 +1,19 @@
+# A flexible and fast Minecraft server software written completely in Python.
+# Copyright (C) 2021 PyMine
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 from __future__ import annotations
 
 import struct
@@ -6,7 +22,7 @@ import numpy
 from pymine.types.block_palette import DirectPalette, IndirectPalette
 import pymine.types.nbt as nbt
 
-from pymine.api.abc import AbstractPalette
+from pymine.types.abc import AbstractPalette
 
 
 class ChunkSection:
@@ -40,13 +56,10 @@ class ChunkSection:
     def new(cls, *args, **kwargs):
         section = cls(*args, **kwargs)
 
-        section.block_states = numpy.ndarray((16, 16, 16), numpy.uint16)
-        section.block_light = numpy.ndarray((16, 16, 16), numpy.int8)
-        section.sky_light = numpy.ndarray((16, 16, 16), numpy.int8)
-
-        section.block_states.fill(0)
-        section.block_light.fill(0)
-        section.sky_light.fill(0)
+        #                                     y   z   x
+        section.block_states = numpy.zeros((16, 16, 16), numpy.int32)
+        section.block_light = numpy.zeros((16, 16, 16), numpy.int16)
+        section.sky_light = numpy.zeros((16, 16, 16), numpy.int16)
 
         return section
 
@@ -71,7 +84,7 @@ class ChunkSection:
 
             section = cls(tag["Y"].data, palette)
 
-            section.block_states = numpy.ndarray((16, 16, 16), numpy.uint16)
+            section.block_states = numpy.ndarray((16, 16, 16), numpy.int32)
 
             # yoinked most of the logic for chunk deserialization from https://wiki.vg/Chunk_Format
             # however, that is for deserialization of a chunk packet, not the nbt data so it's a bit
@@ -92,7 +105,7 @@ class ChunkSection:
                         else:
                             data = state_bytes[start_long] >> start_offset | state_bytes[end_long] << (64 - start_offset)
 
-                        section.block_states[x, y, z] = data & individual_value_mask
+                        section.block_states[y, z, x] = data & individual_value_mask
         else:
             section = cls(tag["Y"], None)
 
@@ -102,14 +115,14 @@ class ChunkSection:
             section.block_light = None
         else:
             section.block_light = numpy.asarray(
-                [n for n in ((b & 0x0F, b >> 4 & 0x0F) for b in tag["BlockLight"])], numpy.uint8
+                [n for n in ((b & 0x0F, b >> 4 & 0x0F) for b in tag["BlockLight"])], numpy.int16
             ).reshape(16, 16, 16)
 
         if tag.get("SkyLight") is None:
             section.sky_light = None
         else:
             section.sky_light = numpy.asarray(
-                [n for n in ((b & 0x0F, b >> 4 & 0x0F) for b in tag["SkyLight"])], numpy.uint8
+                [n for n in ((b & 0x0F, b >> 4 & 0x0F) for b in tag["SkyLight"])], numpy.int16
             ).reshape(16, 16, 16)
 
         return section

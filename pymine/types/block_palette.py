@@ -1,3 +1,19 @@
+# A flexible and fast Minecraft server software written completely in Python.
+# Copyright (C) 2021 PyMine
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 from __future__ import annotations
 
 import immutables
@@ -8,7 +24,7 @@ import pymine.types.nbt as nbt
 
 from pymine.data.block_states import BLOCK_STATES
 
-from pymine.api.abc import AbstractPalette
+from pymine.types.abc import AbstractPalette
 
 
 class DirectPalette(AbstractPalette):
@@ -20,6 +36,7 @@ class DirectPalette(AbstractPalette):
 
     @staticmethod
     def encode(block: str, props: dict = None) -> int:
+        props = {} if props is None else props
         block_data = BLOCK_STATES.encode(block)
 
         for state in block_data["states"]:
@@ -28,7 +45,7 @@ class DirectPalette(AbstractPalette):
 
             state_props = state.get("properties")
 
-            if state_props and dict(state_props.items()) == props:
+            if state_props and dict(state_props.items()) == dict(props):
                 return state["id"]
 
         raise ValueError(f"{block} doesn't have a state with those properties.")
@@ -71,6 +88,7 @@ class IndirectPalette(AbstractPalette):
         return cls(Registry(data, reverse_data))
 
     def encode(self, block: str, props: dict = None) -> int:
+        props = {} if props is None else props
         block_data = self.registry.encode(block)
 
         for state in block_data["states"]:
@@ -79,7 +97,7 @@ class IndirectPalette(AbstractPalette):
 
             state_props = state.get("properties")
 
-            if state_props and dict(state_props.items()) == props:
+            if state_props and dict(state_props.items()) == dict(props):
                 return state["id"]
 
         raise ValueError(f"{block} doesn't have a state with those properties.")

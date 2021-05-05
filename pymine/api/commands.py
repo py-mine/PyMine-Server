@@ -1,12 +1,29 @@
+# A flexible and fast Minecraft server software written completely in Python.
+# Copyright (C) 2021 PyMine
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import importlib
 import asyncio
 import uuid
 import os
 
+from pymine.util.misc import nice_eval
 from pymine.util.stop import stop
 
 from pymine.api.errors import ParsingError
-from pymine.api.abc import AbstractParser
+from pymine.types.abc import AbstractParser
 
 
 class CommandHandler:
@@ -50,7 +67,17 @@ class CommandHandler:
         args_text = " ".join(split[1:])  # basically the text excluding the actual command name and the space following it
 
         if command is None:  # user error
-            self.console.warn(f"Invalid/unknown command: {split[0]}")
+            if self.server.conf["debug"]:  # eval input if debug mode is on
+                try:
+                    res = await nice_eval(full, {"server": self.server})
+
+                    if res is not None:
+                        self.console.info(res)
+                except BaseException as e:
+                    self.server.console.error(self.server.console.f_traceback(e))
+            else:
+                self.console.warn(f"Invalid/unknown command: {split[0]}")
+
             return
 
         command = command[0]  # we don't need the permission node for now so yeah
@@ -70,9 +97,9 @@ class CommandHandler:
             if parser is bool:  # allow for primitive bool type to be used as a typehint
                 parser = self._parsers.Bool()
             elif parser is float:  # allow for primitive float type to be used as a typehint
-                parser = self._parsers.Double()
+                parser = self._parsers.Double(None)
             elif parser is int:  # allow for primitive int type to be used as a typehint
-                parser = self._parsers.Integer()
+                parser = self._parsers.Integer(None)
             elif parser is str:  # allow for primitive str type to be used as a typehint
                 parser = self._parsers.String(0)  # a single word
             elif not (isinstance(parser, AbstractParser) or issubclass(parser, AbstractParser)):  # dev error
@@ -100,6 +127,8 @@ class CommandHandler:
             self.console.error(f"Error while executing command {split[0]}: {self.console.f_traceback(e)}")
 
     async def handle_console_commands(self):
+        await asyncio.sleep(1)
+
         while True:
             in_ = await self.console.fetch_input()
 

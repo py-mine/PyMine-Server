@@ -1,8 +1,26 @@
+# A flexible and fast Minecraft server software written completely in Python.
+# Copyright (C) 2021 PyMine
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import asyncio
 import aiohttp
 import random
 import socket
 import struct
+
+from prompt_toolkit.enums import EditingMode
 
 from pymine.types.buffer import Buffer
 from pymine.types.stream import Stream
@@ -26,7 +44,7 @@ server = None
 class Server:
     class Meta:
         def __init__(self):
-            self.server = 0.1
+            self.server = 0.2
             self.version = "1.16.5"
             self.protocol = 754
             self.pymine = f"PyMine {self.server}"
@@ -55,6 +73,7 @@ class Server:
         self.favicon = load_favicon()  # server-icon.png in the root dir, displayed in clients' server lists
         self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold since it's used so much
 
+        self.console.ses.vi_mode = self.conf["vi_mode"]
         self.console.set_prompt(self.conf["prompt"])
         self.console.debug_ = self.conf["debug"]
         self.console.debug("Debug mode enabled.")
@@ -64,6 +83,9 @@ class Server:
 
         if self.addr is None:  # find local addr if none was supplied
             self.addr = socket.gethostbyname(socket.gethostname())
+
+        if self.conf["vi_mode"] == True:
+            self.console.ses.editing_mode = EditingMode.VI
 
         self.playerio = None  # used to fetch/dump players
         self.chunkio = ChunkIO  # used to fetch chunks from the disk

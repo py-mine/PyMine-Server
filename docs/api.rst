@@ -272,7 +272,19 @@ World
 .. automodule:: pymine.net.packets.play.world
     :members:
 
+Legacy Ping 
+------------
+.. automodule:: pymine.net.packets.handshaking.legacy_ping
+    :members:
 
+Status
+-------
+
+.. automodule:: pymine.net.packets.status.status
+    :members:
+
+Login Reference
+=================
 
 Login
 ------
@@ -289,15 +301,4 @@ Handshake
 ------------
 
 .. automodule:: pymine.net.packets.handshaking.handshake
-    :members:
-
-Legacy Ping 
-------------
-.. automodule:: pymine.net.packets.handshaking.legacy_ping
-    :members:
-
-Status
--------
-
-.. automodule:: pymine.net.packets.status.status
     :members:

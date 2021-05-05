@@ -67,13 +67,10 @@ html_theme_options = {
     "repo_url": "https://github.com/py-mine/PyMine",
     "repo_type": "github",
     "repo_name": "PyMine",
-
     # 'html_minify': True,
     # 'css_minify': True,
-
-    "color_primary" : "teal",
+    "color_primary": "teal",
     "color_accent": "red",
-
     "master_doc": False,
     "heroes": {
         "index": "The fastest, easiest to use, Python-based Minecraft Server!",

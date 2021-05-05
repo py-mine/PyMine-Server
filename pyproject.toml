@@ -46,6 +46,8 @@ classy-json = "^3.0.3"
 black = "^20.8b1"
 flake8 = "^3.8.4"
 pytest = "^6.2.2"
+sphinx-material = {git = "https://github.com/bashtage/sphinx-material.git"}
+sphinx-tabs = "^2.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

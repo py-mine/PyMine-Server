@@ -12,7 +12,7 @@
 #
 import os
 import sys
-import sphinx_rtd_theme
+import sphinx_material
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -36,7 +36,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.autodoc",
     "sphinx.ext.viewcode",
-    "sphinx_rtd_theme",
+    "sphinx_material",
     "sphinx_tabs.tabs",
 ]
 
@@ -59,13 +59,31 @@ source_suffix = {".rst": "restructuredtext"}
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "sphinx_material"
 
-html_title = project
+html_theme_options = {
+    "nav_title": "PyMine",
+    "base_url": "https://github.com/py-mine/PyMine",
+    "repo_url": "https://github.com/py-mine/PyMine",
+    "repo_type": "github",
+    "repo_name": "PyMine",
 
-# import sphinx_modern_theme
-# html_theme = "sphinx_modern_theme"
-# html_theme_path = [sphinx_modern_theme.get_html_theme_path()]
+    # 'html_minify': True,
+    # 'css_minify': True,
+
+    "color_primary" : "teal",
+    "color_accent": "red",
+
+    "master_doc": False,
+    "heroes": {
+        "index": "The fastest, easiest to use, Python-based Minecraft Server!",
+    },
+}
+
+html_use_index = True
+html_domain_indices = True
+
+html_sidebars = {"**": ["globaltoc.html", "localtoc.html", "searchbox.html"]}
 
 
 # Add any paths that contain custom static files (such as style sheets) here,

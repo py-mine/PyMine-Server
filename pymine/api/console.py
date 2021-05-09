@@ -24,24 +24,30 @@ from prompt_toolkit.history import FileHistory
 from prompt_toolkit.enums import EditingMode
 import traceback
 import asyncio
+import logging
+import inspect
 import time
+import sys
 import os
+import pymine.api.console_log_formatter
+import io
 
 if os.name == "nt":
     import colorama
 
     colorama.init()
 
+
 f_time = lambda: time.strftime("%x %H:%M:%S")
 
-BRIGHT = "\x1b[1m"
-END = "\x1b[0m\n"
-WHITE = "\x1b[97m"
-GREY = "\x1b[37m"
-BLUE = "\x1b[34m"
-YELLOW = "\x1b[33m"
-RED = "\x1b[91m"
-BG_RED = "\x1b[41;1m"
+# BRIGHT = "\x1b[1m"
+# END = "\x1b[0m\n"
+# WHITE = "\x1b[97m"
+# GREY = "\x1b[37m"
+# BLUE = "\x1b[34m"
+# YELLOW = "\x1b[33m"
+# RED = "\x1b[91m"
+# BG_RED = "\x1b[41;1m"
 
 
 class Console:
@@ -54,6 +60,29 @@ class Console:
 
         self.stdout = StdoutProxy(sleep_between_writes=0.5)
         self.out = create_output(self.stdout)
+        self.alt_out = io.IOBase()
+        self.alt_out.write = self.out.write_raw
+        self.alt_out.flush = self.out.flush
+        self.log_handler = logging.StreamHandler(self.alt_out)
+
+        log_format = "[{asctime} {levelname}:'{name}']: {message}"
+        time_format = "%Y-%m-%d %H:%M:%S"
+
+        self.log_formatter = pymine.api.console_log_formatter.CustomFormatter(
+            fmt=log_format,
+            datefmt=time_format,
+        )
+
+        self.log_handler.setFormatter(self.log_formatter)
+        self.logger = logging.getLogger()
+        self.logger.addHandler(self.log_handler)
+
+        if self.debug_:
+            self.logger.setLevel(logging.DEBUG)
+        else:
+            self.logger.setLevel(logging.INFO)
+        self.debug("Started Logger")
+
         self.ses = PromptSession(
             history=FileHistory("./.pmhist"),
             auto_suggest=AutoSuggestFromHistory(),
@@ -74,35 +103,34 @@ class Console:
         self.out.flush()
 
     def debug(self, *message):
-        if self.debug_:
-            message = " ".join([str(m) for m in message])
-
-            for line in message.split("\n"):
-                self.write(f"{WHITE}[{f_time()} {GREY}DEBUG{WHITE}]: {GREY}{line}{END}")
+        caller_frame = sys._getframe(1)
+        logger = logging.getLogger(inspect.getmodule(caller_frame).__name__)
+        message = " ".join([str(m) for m in message])
+        logger.debug(message)
 
     def info(self, *message):
+        caller_frame = sys._getframe(1)
+        logger = logging.getLogger(inspect.getmodule(caller_frame).__name__)
         message = " ".join([str(m) for m in message])
-
-        for line in message.split("\n"):
-            self.write(f"{BRIGHT}{WHITE}[{f_time()} {BLUE}INFO{WHITE}]: {line}{END}")
+        logger.info(message)
 
     def warn(self, *message):
+        caller_frame = sys._getframe(1)
+        logger = logging.getLogger(inspect.getmodule(caller_frame).__name__)
         message = " ".join([str(m) for m in message])
-
-        for line in message.split("\n"):
-            self.write(f"{BRIGHT}{WHITE}[{f_time()} {YELLOW}WARNING{WHITE}]: {YELLOW}{line}{END}")
+        logger.warning(message)
 
     def error(self, *message):
+        caller_frame = sys._getframe(1)
+        logger = logging.getLogger(inspect.getmodule(caller_frame).__name__)
         message = " ".join([str(m) for m in message])
-
-        for line in message.split("\n"):
-            self.write(f"{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{line}{END}")
+        logger.error(message)
 
     def critical(self, *message):
+        caller_frame = sys._getframe(1)
+        logger = logging.getLogger(inspect.getmodule(caller_frame).__name__)
         message = " ".join([str(m) for m in message])
-
-        for line in message.split("\n"):
-            self.write(f"{BRIGHT}{WHITE}{BG_RED}[{f_time()} CRITICAL]: {line}{END}")
+        logger.critical(message)
 
     @staticmethod
     def f_traceback(e: BaseException):
@@ -110,9 +138,9 @@ class Console:
 
     def task_exception_handler(self, loop, ctx):
         if ctx.get("exception"):
-            print(f'{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{self.f_traceback(ctx["exception"])}{END}')
+            self.error(self.f_traceback(ctx["exception"]))
         else:
-            print(f'{BRIGHT}{WHITE}[{f_time()} {RED}ERROR{WHITE}]: {RED}{ctx["message"]}{END}')
+            self.error(ctx["message"])
 
 
 if __name__ == "__main__":  # Used to test colors

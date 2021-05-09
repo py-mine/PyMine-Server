@@ -38,18 +38,6 @@ if os.name == "nt":
     colorama.init()
 
 
-f_time = lambda: time.strftime("%x %H:%M:%S")
-
-# BRIGHT = "\x1b[1m"
-# END = "\x1b[0m\n"
-# WHITE = "\x1b[97m"
-# GREY = "\x1b[37m"
-# BLUE = "\x1b[34m"
-# YELLOW = "\x1b[33m"
-# RED = "\x1b[91m"
-# BG_RED = "\x1b[41;1m"
-
-
 class Console:
     """Custom logging + input implementation."""
 
@@ -102,35 +90,28 @@ class Console:
         self.out.write_raw(text)
         self.out.flush()
 
+    def get_logger(self):
+        curframe = inspect.currentframe().f_back.f_back
+        logger = logging.getLogger(inspect.getmodule(curframe).__name__)
+        return logger
+
+    def build_msg(self, message):
+        return " ".join([str(m) for m in message])
+
     def debug(self, *message):
-        caller_frame = sys._getframe(1)
-        logger = logging.getLogger(inspect.getmodule(caller_frame).__name__)
-        message = " ".join([str(m) for m in message])
-        logger.debug(message)
+        self.get_logger().debug(self.build_msg(message))
 
     def info(self, *message):
-        caller_frame = sys._getframe(1)
-        logger = logging.getLogger(inspect.getmodule(caller_frame).__name__)
-        message = " ".join([str(m) for m in message])
-        logger.info(message)
+        self.get_logger().info(self.build_msg(message))
 
     def warn(self, *message):
-        caller_frame = sys._getframe(1)
-        logger = logging.getLogger(inspect.getmodule(caller_frame).__name__)
-        message = " ".join([str(m) for m in message])
-        logger.warning(message)
+        self.get_logger().warning(self.build_msg(message))
 
     def error(self, *message):
-        caller_frame = sys._getframe(1)
-        logger = logging.getLogger(inspect.getmodule(caller_frame).__name__)
-        message = " ".join([str(m) for m in message])
-        logger.error(message)
+        self.get_logger().error(self.build_msg(message))
 
     def critical(self, *message):
-        caller_frame = sys._getframe(1)
-        logger = logging.getLogger(inspect.getmodule(caller_frame).__name__)
-        message = " ".join([str(m) for m in message])
-        logger.critical(message)
+        self.get_logger().critical(self.build_msg(message))
 
     @staticmethod
     def f_traceback(e: BaseException):

@@ -35,4 +35,5 @@ class CustomFormatter(logging.Formatter):
 
         prefix = "".join(level["styles"])
         record.msg = prefix + record.msg + Style.RESET_ALL
+        record.levelname = prefix + record.levelname + Style.RESET_ALL
         return super().format(record)

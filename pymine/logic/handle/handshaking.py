@@ -14,9 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from pymine.types.packet import Packet
 from pymine.types.stream import Stream
-
+from pymine.types.packet import Packet
 from pymine.server import server
 
 

@@ -17,6 +17,7 @@
 """Contains packets related to bosses."""
 
 from __future__ import annotations
+
 import uuid
 
 from pymine.types.packet import Packet

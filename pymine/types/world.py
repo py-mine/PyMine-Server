@@ -19,11 +19,10 @@ import aiofile
 import time
 import os
 
+from pymine.data.default_nbt.level import new_level_nbt
 from pymine.types.buffer import Buffer
 from pymine.types.chunk import Chunk
 import pymine.types.nbt as nbt
-
-from pymine.data.default_nbt.level import new_level_nbt
 
 
 class World:

@@ -15,8 +15,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import json
-import os
 import sys
+import os
 
 from pymine.util.immutable import make_immutable
 from pymine.types.registry import Registry

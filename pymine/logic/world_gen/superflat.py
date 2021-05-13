@@ -17,12 +17,10 @@
 import numpy
 import time
 
-from pymine.types.chunk import Chunk, ChunkSection
-
 from pymine.types.block_palette import DirectPalette
 from pymine.types.abc import AbstractWorldGenerator
+from pymine.types.chunk import ChunkSection, Chunk
 from pymine.data.registries import BLOCK_REGISTRY
-
 from pymine.server import server
 
 

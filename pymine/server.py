@@ -14,27 +14,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from prompt_toolkit.enums import EditingMode
 import asyncio
 import aiohttp
-import random
-import socket
 import struct
+import socket
+import random
 
-from prompt_toolkit.enums import EditingMode
-
-from pymine.types.buffer import Buffer
+from pymine.api.errors import ServerBindingError, InvalidPacketID, StopHandling
+from pymine.logic.config import load_favicon, load_config
+from pymine.logic.worldio import load_worlds, ChunkIO
+from pymine.util.encryption import gen_rsa_keys
+from pymine.logic.playerio import PlayerDataIO
+from pymine.net.packet_map import PACKET_MAP
+from pymine.logic.query import QueryServer
 from pymine.types.stream import Stream
 from pymine.types.packet import Packet
-
-from pymine.util.encryption import gen_rsa_keys
-
-from pymine.logic.config import load_config, load_favicon
-from pymine.logic.worldio import load_worlds, ChunkIO
-from pymine.logic.playerio import PlayerDataIO
-from pymine.logic.query import QueryServer
-
-from pymine.api.errors import StopHandling, InvalidPacketID, ServerBindingError
-from pymine.net.packet_map import PACKET_MAP
+from pymine.types.buffer import Buffer
 from pymine.api import PyMineAPI
 
 # Used for parts of PyMine that utilize the server instance without being a plugin themselves

@@ -1,5 +1,5 @@
-import gzip
 import math
+import gzip
 import sys
 import os
 

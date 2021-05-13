@@ -17,6 +17,7 @@
 """Contains packets related to the chat."""
 
 from __future__ import annotations
+
 import uuid
 
 from pymine.types.packet import Packet

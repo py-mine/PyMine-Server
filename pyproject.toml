@@ -3,6 +3,17 @@ line-length = 127
 target-version = ['py37', 'py38']
 include = '\.pyi?$'
 
+[tool.isort]
+profile = "black"
+line_length = 127
+no_lines_before=["LOCALFOLDER"]
+sections=["FUTURE","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
+default_section="THIRDPARTY"
+known_first_party="pymine"
+length_sort = true
+reverse_sort = true
+force_sort_within_sections = true
+
 [tool.pytest.ini_options]
 addopts = "--full-trace -v"
 testpaths = ["tests"]
@@ -48,6 +59,11 @@ flake8 = "^3.8.4"
 pytest = "^6.2.2"
 sphinx-material = {git = "https://github.com/bashtage/sphinx-material.git"}
 sphinx-tabs = "^2.1.0"
+bandit = "^1.7.0"
+pydocstyle = "^6.0.0"
+flake8-bugbear = "^21.4.3"
+flake8-comprehensions = "^3.5.0"
+isort = {git = "https://github.com/PyCQA/isort.git", rev = "289476826d407737bfe41a0131b34f3dea3fb861"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

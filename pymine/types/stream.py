@@ -15,7 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from cryptography.hazmat.primitives.ciphers import Cipher
-from asyncio import StreamReader, StreamWriter
+from asyncio import StreamWriter, StreamReader
 
 
 class Stream(StreamWriter):

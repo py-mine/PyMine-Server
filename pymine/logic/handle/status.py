@@ -14,14 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import pymine.net.packets.status.status as status_packets
+from pymine.api.errors import StopHandling
+from pymine.types.stream import Stream
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
-from pymine.types.stream import Stream
 from pymine.types.chat import Chat
-
-import pymine.net.packets.status.status as status_packets
-
-from pymine.api.errors import StopHandling
 from pymine.server import server
 
 

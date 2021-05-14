@@ -20,14 +20,13 @@ import numpy
 import zlib
 import os
 
+from pymine.types.block_palette import DirectPalette
+from pymine.types.abc import AbstractChunkIO
 from pymine.types.buffer import Buffer
-from pymine.types.chunk import Chunk
 from pymine.types.world import World
+from pymine.types.chunk import Chunk
 import pymine.types.nbt as nbt
 
-from pymine.types.block_palette import DirectPalette
-
-from pymine.types.abc import AbstractChunkIO
 
 # Setup world dict and load basic level data for each world
 async def load_worlds(server, level_name: str, chunk_cache_max_per: int) -> dict:

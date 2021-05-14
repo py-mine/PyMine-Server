@@ -15,25 +15,24 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from __future__ import annotations
+
 import immutables
 import struct
-import json
-import uuid
 import zlib
+import uuid
+import json
 
 from pymine.types.block_palette import DirectPalette
-from pymine.types.chunk import Chunk, ChunkSection
+from pymine.types.chunk import ChunkSection, Chunk
+from pymine.data.registries import ITEM_REGISTRY
+from pymine.api.errors import InvalidPacketID
+from pymine.types.abc import AbstractPalette
 from pymine.types.bitfield import BitField
 from pymine.types.packet import Packet
 from pymine.types.chat import Chat
-import pymine.types.nbt as nbt
-
-from pymine.data.registries import ITEM_REGISTRY
 import pymine.data.misc as misc_data
 from pymine.data.tags import TAGS
-
-from pymine.api.errors import InvalidPacketID
-from pymine.types.abc import AbstractPalette
+import pymine.types.nbt as nbt
 
 
 class Buffer:

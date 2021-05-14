@@ -17,11 +17,12 @@
 """Contains packets related to players."""
 
 from __future__ import annotations
+
 import uuid
 
+from pymine.types.player import Player
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
-from pymine.types.player import Player
 from pymine.types.chat import Chat
 import pymine.types.nbt as nbt
 

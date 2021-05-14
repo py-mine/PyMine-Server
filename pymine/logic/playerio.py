@@ -16,12 +16,12 @@
 
 import aiofile
 import struct
-import time
 import uuid
+import time
 import os
 
-from pymine.types.buffer import Buffer
 from pymine.types.player import Player
+from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
 
 

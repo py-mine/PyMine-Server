@@ -20,16 +20,13 @@ from cryptography.hazmat.primitives import serialization
 import aiohttp
 import uuid
 
+from pymine.net.packets.login.set_comp import LoginSetCompression
+from pymine.types.stream import EncryptedStream, Stream
+import pymine.net.packets.login.login as login_packets
+from pymine.api.errors import StopHandling
 import pymine.util.encryption as encryption
-
-from pymine.types.stream import Stream, EncryptedStream
 from pymine.types.packet import Packet
 from pymine.types.buffer import Buffer
-
-from pymine.net.packets.login.set_comp import LoginSetCompression
-import pymine.net.packets.login.login as login_packets
-
-from pymine.api.errors import StopHandling
 from pymine.logic.join import join
 from pymine.server import server
 

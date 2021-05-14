@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from prompt_toolkit import PromptSession, ANSI, print_formatted_text
+from prompt_toolkit import print_formatted_text, PromptSession, ANSI
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.patch_stdout import StdoutProxy
@@ -23,14 +23,15 @@ from prompt_toolkit.output import create_output
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.enums import EditingMode
 import traceback
-import asyncio
 import logging
 import inspect
+import asyncio
 import time
 import sys
 import os
-import pymine.api.console_log_formatter
 import io
+
+import pymine.api.console_log_formatter
 
 if os.name == "nt":
     import colorama

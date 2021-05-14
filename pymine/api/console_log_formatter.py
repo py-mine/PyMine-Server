@@ -1,7 +1,7 @@
-import logging
+from colorama import Style, Fore, Back
 from typing import Optional
-from colorama import Fore, Back, Style
 import colorama
+import logging
 
 
 class CustomFormatter(logging.Formatter):

@@ -15,10 +15,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from pymine.logic.parsers.brigadier import *
-
 from pymine.util.chunk import dump_to_obj
 from pymine.util.misc import nice_eval
-
 from pymine.server import server
 
 

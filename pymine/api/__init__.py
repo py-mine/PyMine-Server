@@ -15,15 +15,15 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import importlib
-import asyncio
 import zipfile
-import time
+import asyncio
 import yaml
-import git
+import time
 import sys
+import git
 import os
 
-from pymine.api.events import PacketEvent, ServerStartEvent, ServerStopEvent
+from pymine.api.events import ServerStartEvent, ServerStopEvent, PacketEvent
 from pymine.types.abc import AbstractPlugin, AbstractEvent
 from pymine.api.commands import CommandHandler
 from pymine.api.register import Register

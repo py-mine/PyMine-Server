@@ -19,7 +19,7 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-from pymine.net.packet_map import PACKET_MAP, PACKET_MAP_CLIENTBOUND
+from pymine.net.packet_map import PACKET_MAP_CLIENTBOUND, PACKET_MAP
 from pymine.data.states import STATES
 
 if "--packets" in sys.argv or "-P" in sys.argv:

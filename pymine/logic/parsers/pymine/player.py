@@ -17,11 +17,9 @@
 import random
 import uuid
 
-from pymine.api.errors import ParsingError
 from pymine.types.abc import AbstractParser
-
+from pymine.api.errors import ParsingError
 from pymine.util.misc import DualMethod
-
 from pymine.server import server
 
 

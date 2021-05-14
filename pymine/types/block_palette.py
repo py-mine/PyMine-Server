@@ -19,12 +19,10 @@ from __future__ import annotations
 import immutables
 import math
 
+from pymine.data.block_states import BLOCK_STATES
+from pymine.types.abc import AbstractPalette
 from pymine.types.registry import Registry
 import pymine.types.nbt as nbt
-
-from pymine.data.block_states import BLOCK_STATES
-
-from pymine.types.abc import AbstractPalette
 
 
 class DirectPalette(AbstractPalette):

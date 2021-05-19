@@ -6,7 +6,7 @@
 
 # -- Path setup --------------------------------------------------------------
 
-import sphinx_material
+import sphinx_material  # noqa:F401
 import sys
 import os
 

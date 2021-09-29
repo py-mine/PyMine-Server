@@ -1,11 +1,11 @@
 [tool.black]
-line-length = 127
+line-length = 100
 target-version = ['py37', 'py38']
 include = '\.pyi?$'
 
 [tool.isort]
 profile = "black"
-line_length = 127
+line_length = 100
 no_lines_before=["LOCALFOLDER"]
 sections=["FUTURE","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
 default_section="THIRDPARTY"

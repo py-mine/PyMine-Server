@@ -20,7 +20,7 @@ Note: For vanilla server features (as PyMine plans to support all of them), don'
 - Use concatenation instead of f-strings where possible, as concatenation is faster
 - Use `snake_case` for variables
 - Constants should either be loaded from a config file or be in `UPPER_SNAKE_CASE`
-- Lines shouldn't be longer than 88 characters.
+- Lines shouldn't be longer than 100 characters.
 
 ### Imports
 

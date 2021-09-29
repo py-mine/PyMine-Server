@@ -18,7 +18,7 @@ jobs:
       - name: autoblack_check
         id: black-check
         continue-on-error: true
-        run: black --check -l 127 .
+        run: black --check -l 100 .
 
       - name: autoblack
         if: steps.black-check.outcome != 'success'

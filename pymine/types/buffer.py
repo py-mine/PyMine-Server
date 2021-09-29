@@ -636,34 +636,34 @@ class Buffer:
     def pack_chunk_section_blocks(cls, section: ChunkSection) -> bytes:
         if section.block_states is None:
             return cls.pack_varint(0)  # length is 0
-        else:
-            palette = section.palette
-            bits_per_block = palette.get_bits_per_block()
 
-            # pack bits per block and palette
-            out = cls.pack("b", bits_per_block) + cls.pack_block_palette(palette)
+        palette = section.palette
+        bits_per_block = palette.get_bits_per_block()
 
-            data = [0] * int((16 * 16 * 16) * bits_per_block / 64)
-            individual_value_mask = (1 << bits_per_block) - 1
+        # pack bits per block and palette
+        out = cls.pack("b", bits_per_block) + cls.pack_block_palette(palette)
 
-            # create the long array from the block states
-            for y in range(16):
-                for z in range(16):
-                    for x in range(16):
-                        block_num = (((y * 16) + z) * 16) + x
-                        start_long = (block_num * bits_per_block) // 64
-                        start_offset = (block_num * bits_per_block) % 64
-                        end_long = ((block_num + 1) * bits_per_block - 1) // 64
+        data = [0] * int((16 * 16 * 16) * bits_per_block / 64)
+        individual_value_mask = (1 << bits_per_block) - 1
 
-                        value = section.block_states[y][z][x] & individual_value_mask
+        # create the long array from the block states
+        for y in range(16):
+            for z in range(16):
+                for x in range(16):
+                    block_num = (((y * 16) + z) * 16) + x
+                    start_long = (block_num * bits_per_block) // 64
+                    start_offset = (block_num * bits_per_block) % 64
+                    end_long = ((block_num + 1) * bits_per_block - 1) // 64
 
-                        data[start_long] |= value << start_offset
+                    value = section.block_states[y][z][x] & individual_value_mask
 
-                        if start_long != end_long:
-                            data[end_long] = value >> (64 - start_offset)
+                    data[start_long] |= value << start_offset
 
-            # pack and return the block state long array
-            return cls.pack_varint(len(data)) + b"".join([cls.pack("q", q) for q in data])
+                    if start_long != end_long:
+                        data[end_long] = value >> (64 - start_offset)
+
+        # pack and return the block state long array
+        return cls.pack_varint(len(data)) + b"".join([cls.pack("q", q) for q in data])
 
     @classmethod
     def pack_chunk_light(cls, chunk: Chunk) -> bytes:

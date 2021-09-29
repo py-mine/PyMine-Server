@@ -15,12 +15,12 @@ Note: For vanilla server features (as PyMine plans to support all of them), don'
 
 ### General Guidelines
 
+- Formatting is enforced with the [black formatter](https://black.readthedocs.io/en/stable/index.html) as defined [here](https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html)
 - Use f-strings (`f"{thing}"`) instead of `.format()` where possible
 - Use concatenation instead of f-strings where possible, as concatenation is faster
 - Use `snake_case` for variables
 - Constants should either be loaded from a config file or be in `UPPER_SNAKE_CASE`
-- Lines shouldn't be longer than 127 characters.
-- `black` formatting is required, however github actions takes care of it so you don't need to run it yourself..
+- Lines shouldn't be longer than 88 characters.
 
 ### Imports
 

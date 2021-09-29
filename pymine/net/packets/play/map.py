@@ -66,7 +66,11 @@ class PlayMapData(Packet):
         )
 
         for icon in self.icons:
-            out += Buffer.pack_varint(icon["type"]) + Buffer.pack("b", icon["x"]) + Buffer.pack("b", icon["z"])
+            out += (
+                Buffer.pack_varint(icon["type"])
+                + Buffer.pack("b", icon["x"])
+                + Buffer.pack("b", icon["z"])
+            )
 
             display_name = icon.get("display_name")
 
@@ -83,7 +87,12 @@ class PlayMapData(Packet):
         )
 
         if self.data is not None:
-            out += Buffer.pack("?", True) + Buffer.pack_varint(len(self.data)) + Buffer.pack("?", True) + self.data
+            out += (
+                Buffer.pack("?", True)
+                + Buffer.pack_varint(len(self.data))
+                + Buffer.pack("?", True)
+                + self.data
+            )
         else:
             out += Buffer.pack("?", False) + Buffer.pack("?", False)
 

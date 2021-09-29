@@ -48,7 +48,9 @@ class PlayUpdateSign(Packet):
     id = 0x2B
     to = 0
 
-    def __init__(self, x: int, y: int, z: int, line_1: str, line_2: str, line_3: str, line_4: str) -> None:
+    def __init__(
+        self, x: int, y: int, z: int, line_1: str, line_2: str, line_3: str, line_4: str
+    ) -> None:
         super().__init__()
 
         self.x, self.y, self.z = x, y, z
@@ -59,4 +61,10 @@ class PlayUpdateSign(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayUpdateSign:
-        return cls(*buf.unpack_position(), buf.unpack_string(), buf.unpack_string(), buf.unpack_string(), buf.unpack_string())
+        return cls(
+            *buf.unpack_position(),
+            buf.unpack_string(),
+            buf.unpack_string(),
+            buf.unpack_string(),
+            buf.unpack_string(),
+        )

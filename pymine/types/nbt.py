@@ -360,7 +360,11 @@ class TAG_List(TAG, list):
 
     def pack_data(self) -> bytes:
         if len(self) > 0:
-            return BufferUtil.pack("b", self[0].id) + BufferUtil.pack("i", len(self)) + b"".join([t.pack_data() for t in self])
+            return (
+                BufferUtil.pack("b", self[0].id)
+                + BufferUtil.pack("i", len(self))
+                + b"".join([t.pack_data() for t in self])
+            )
 
         return BufferUtil.pack("b", 0) + BufferUtil.pack("i", 0)
 
@@ -450,14 +454,18 @@ class TAG_Int_Array(TAG, list):
         list.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return BufferUtil.pack("i", len(self)) + b"".join([BufferUtil.pack("i", num) for num in self])
+        return BufferUtil.pack("i", len(self)) + b"".join(
+            [BufferUtil.pack("i", num) for num in self]
+        )
 
     @staticmethod
     def unpack_data(buf) -> list:
         return [buf.unpack("i") for _ in range(buf.unpack("i"))]
 
     def pretty(self, indent: int = 0) -> str:
-        return f'{" " * 4 * indent}TAG_Int_Array("{self.name}"): [{", ".join([str(v) for v in self])}]'
+        return (
+            f'{" " * 4 * indent}TAG_Int_Array("{self.name}"): [{", ".join([str(v) for v in self])}]'
+        )
 
 
 class TAG_Long_Array(TAG, list):
@@ -475,7 +483,9 @@ class TAG_Long_Array(TAG, list):
         list.__init__(self, data)
 
     def pack_data(self) -> bytes:
-        return BufferUtil.pack("i", len(self)) + b"".join([BufferUtil.pack("q", num) for num in self])
+        return BufferUtil.pack("i", len(self)) + b"".join(
+            [BufferUtil.pack("q", num) for num in self]
+        )
 
     @staticmethod
     def unpack_data(buf) -> list:

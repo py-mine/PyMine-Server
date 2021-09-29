@@ -94,4 +94,8 @@ def dump_to_obj(file, pymine_chunk: Chunk):
                 append_face(f"usemtl {block}\nf {i2} {i5} {i8} {i7}")
                 append_face(f"usemtl {block}\nf {i3} {i5} {i8} {i6}")
 
-    file.write("\n".join([f"v {p[0]} {p[1]} {p[2]}" for p in points.values()]) + "\n" + "\n".join(faces.values()))
+    file.write(
+        "\n".join([f"v {p[0]} {p[1]} {p[2]}" for p in points.values()])
+        + "\n"
+        + "\n".join(faces.values())
+    )

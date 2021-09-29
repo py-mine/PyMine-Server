@@ -222,7 +222,9 @@ class PlayUnlockRecipes(Packet):
         )
 
         if self.recipe_ids_2:
-            out += Buffer.pack("?", True) + b"".join([Buffer.pack_string(rid) for rid in self.recipe_ids_2])
+            out += Buffer.pack("?", True) + b"".join(
+                [Buffer.pack_string(rid) for rid in self.recipe_ids_2]
+            )
         else:
             out += Buffer.pack("?", False)
 

@@ -71,7 +71,11 @@ class PlayBlockEntityData(Packet):
         self.nbt_data = nbt_data
 
     def encode(self) -> bytes:
-        return Buffer.pack_position(self.x, self.y, self.z) + Buffer.pack("B", self.action) + Buffer.pack_nbt(self.nbt_data)
+        return (
+            Buffer.pack_position(self.x, self.y, self.z)
+            + Buffer.pack("B", self.action)
+            + Buffer.pack_nbt(self.nbt_data)
+        )
 
 
 class PlayQueryEntityNBT(Packet):
@@ -124,7 +128,14 @@ class PlayInteractEntity(Packet):
     to = 0
 
     def __init__(
-        self, entity_id: int, type_: int, target_x: int, target_y: int, target_z: int, hand: int, sneaking: bool
+        self,
+        entity_id: int,
+        type_: int,
+        target_x: int,
+        target_y: int,
+        target_z: int,
+        hand: int,
+        sneaking: bool,
     ) -> None:
         super().__init__()
 
@@ -263,7 +274,9 @@ class PlayEntityPositionAndRotation(Packet):
     id = 0x28
     to = 1
 
-    def __init__(self, entity_id: int, dx: int, dy: int, dz: int, yaw: float, pitch: float, on_ground: bool) -> None:
+    def __init__(
+        self, entity_id: int, dx: int, dy: int, dz: int, yaw: float, pitch: float, on_ground: bool
+    ) -> None:
         super().__init__()
 
         self.entity_id = entity_id
@@ -410,7 +423,9 @@ class PlayEntityTeleport(Packet):
     id = 0x56
     to = 1
 
-    def __init__(self, eid: int, x: int, y: int, z: int, yaw: int, pitch: int, on_ground: bool) -> None:
+    def __init__(
+        self, eid: int, x: int, y: int, z: int, yaw: int, pitch: int, on_ground: bool
+    ) -> None:
         super().__init__()
 
         self.eid = eid
@@ -445,7 +460,9 @@ class PlayDestroyEntities(Packet):
         self.entity_ids = entity_ids
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(len(self.entity_ids)) + b"".join([Buffer.pack_varint(eid) for eid in self.entity_ids])
+        return Buffer.pack_varint(len(self.entity_ids)) + b"".join(
+            [Buffer.pack_varint(eid) for eid in self.entity_ids]
+        )
 
 
 class PlayEntityMetadata(Packet):

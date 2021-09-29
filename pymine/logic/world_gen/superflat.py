@@ -37,7 +37,9 @@ class SuperFlatWorldGenerator(AbstractWorldGenerator):
         if dimension == "minecraft:overworld":
             chunk.sections[0].block_states[0] = palette.encode("minecraft:bedrock")
             chunk.sections[0].block_states[1:3] = palette.encode("minecraft:dirt")
-            chunk.sections[0].block_states[3] = palette.encode("minecraft:grass_block", {"snowy": "false"})
+            chunk.sections[0].block_states[3] = palette.encode(
+                "minecraft:grass_block", {"snowy": "false"}
+            )
 
             chunk.sections[0].block_light[0:4] = 0
 

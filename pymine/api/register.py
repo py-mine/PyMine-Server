@@ -57,9 +57,13 @@ class Register:
 
             # If we're here, this is probably a packet handler under logic/handle, so we need to account for that
             try:
-                self._on_packet[state_id][packet_id][f"{func.__module__}.{func.__qualname__}"] = func
+                self._on_packet[state_id][packet_id][
+                    f"{func.__module__}.{func.__qualname__}"
+                ] = func
             except KeyError:
-                self._on_packet[state_id][packet_id] = {f"{func.__module__}.{func.__qualname__}": func}
+                self._on_packet[state_id][packet_id] = {
+                    f"{func.__module__}.{func.__qualname__}": func
+                }
 
             return func
 

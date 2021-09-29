@@ -53,7 +53,9 @@ class CommandHandler:
 
             # checks to see if there are enough typehints for the number of args
             if not len(func.__annotations__) >= func.__code__.co_argcount - 1:
-                raise ValueError(f"Missing required argument typehints/annotations for {func.__module__}.{func.__qualname__}.")
+                raise ValueError(
+                    f"Missing required argument typehints/annotations for {func.__module__}.{func.__qualname__}."
+                )
 
             self._commands[name] = func, node
             return func
@@ -63,7 +65,9 @@ class CommandHandler:
     async def handle_command(self, uuid_: uuid.UUID, full: str):
         split = full.strip(" ").replace("  ", " ").replace("  ", " ").split(" ")
         command = self._commands.get(split[0])
-        args_text = " ".join(split[1:])  # basically the text excluding the actual command name and the space following it
+        args_text = " ".join(
+            split[1:]
+        )  # basically the text excluding the actual command name and the space following it
 
         if command is None:  # user error
             if self.server.conf["debug"]:  # eval input if debug mode is on
@@ -88,7 +92,9 @@ class CommandHandler:
         for i, arg in enumerate(command.__code__.co_varnames[1 : command.__code__.co_argcount]):
             if parsed_to > len(args_text):
                 missing = command.__code__.co_varnames[i + 1 : command.__code__.co_argcount]
-                self.console.warn(f"Missing parameter(s) for command {split[0]}: {', '.join(missing)}")
+                self.console.warn(
+                    f"Missing parameter(s) for command {split[0]}: {', '.join(missing)}"
+                )
                 return
 
             parser = command.__annotations__.get(arg)  # get parser from annotations
@@ -101,7 +107,9 @@ class CommandHandler:
                 parser = self._parsers.Integer(None)
             elif parser is str:  # allow for primitive str type to be used as a typehint
                 parser = self._parsers.String(0)  # a single word
-            elif not (isinstance(parser, AbstractParser) or issubclass(parser, AbstractParser)):  # dev error
+            elif not (
+                isinstance(parser, AbstractParser) or issubclass(parser, AbstractParser)
+            ):  # dev error
                 raise ValueError(
                     f"{parser} is not an AbstractParser, an instance of AbstractParser or a compatible primitive type."
                 )
@@ -112,18 +120,24 @@ class CommandHandler:
                 try:
                     self.console.warn(f"Invalid input for command {split[0]}: {e.msg}")
                 except AttributeError:
-                    self.console.warn(f"Invalid input for command {split[0]}: {repr(args_text[parsed_to:])}")
+                    self.console.warn(
+                        f"Invalid input for command {split[0]}: {repr(args_text[parsed_to:])}"
+                    )
 
                 return
 
-            parsed_to += just_parsed_to + 1  # +1 to account for space which differentiates arguments
+            parsed_to += (
+                just_parsed_to + 1
+            )  # +1 to account for space which differentiates arguments
 
             args.append(parsed)
 
         try:
             await command(uuid_, *args)
         except BaseException as e:  # dev error
-            self.console.error(f"Error while executing command {split[0]}: {self.console.f_traceback(e)}")
+            self.console.error(
+                f"Error while executing command {split[0]}: {self.console.f_traceback(e)}"
+            )
 
     async def handle_console_commands(self):
         await asyncio.sleep(1)
@@ -137,7 +151,9 @@ class CommandHandler:
             try:
                 await self.handle_command("server", in_)
             except BaseException as e:  # pymine devs did an oopsie?
-                self.console.error(f"Error while handling command {repr(in_)}: {self.console.f_traceback(e)}")
+                self.console.error(
+                    f"Error while handling command {repr(in_)}: {self.console.f_traceback(e)}"
+                )
 
             if in_.startswith("stop"):
                 break

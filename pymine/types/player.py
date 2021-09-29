@@ -85,8 +85,14 @@ class Player:
         return nbt.TAG_Compound(
             "",
             [
-                nbt.TAG_List("Pos", [nbt.TAG_Double(None, 0), nbt.TAG_Double(None, 0), nbt.TAG_Double(None, 0)]),
-                nbt.TAG_List("Motion", [nbt.TAG_Double(None, 0), nbt.TAG_Double(None, 0), nbt.TAG_Double(None, 0)]),
+                nbt.TAG_List(
+                    "Pos",
+                    [nbt.TAG_Double(None, 0), nbt.TAG_Double(None, 0), nbt.TAG_Double(None, 0)],
+                ),
+                nbt.TAG_List(
+                    "Motion",
+                    [nbt.TAG_Double(None, 0), nbt.TAG_Double(None, 0), nbt.TAG_Double(None, 0)],
+                ),
                 nbt.TAG_List("Rotation", [nbt.TAG_Float(None, 0), nbt.TAG_Float(None, 0)]),
                 nbt.TAG_Float("FallDistance", 0),
                 nbt.TAG_Short("Fire", -20),
@@ -189,7 +195,11 @@ class Player:
                         ),
                         nbt.TAG_Compound(
                             None,
-                            [nbt.TAG_String("Name", "generic.luck"), nbt.TAG_Double("Base", 0), nbt.TAG_List("Modifiers", [])],
+                            [
+                                nbt.TAG_String("Name", "generic.luck"),
+                                nbt.TAG_Double("Base", 0),
+                                nbt.TAG_List("Modifiers", []),
+                            ],
                         ),
                     ],
                 ),
@@ -202,7 +212,11 @@ class Player:
                 nbt.TAG_Int("SelectedItemSlot", 0),
                 nbt.TAG_Compound(
                     "SelectedItem",
-                    [nbt.TAG_Byte("Count", 1), nbt.TAG_String("id", "minecraft:air"), nbt.TAG_Compound("tag", [])],
+                    [
+                        nbt.TAG_Byte("Count", 1),
+                        nbt.TAG_String("id", "minecraft:air"),
+                        nbt.TAG_Compound("tag", []),
+                    ],
                 ),
                 nbt.TAG_String("SpawnDimension", "overworld"),
                 nbt.TAG_Int("SpawnX", spawn[0]),

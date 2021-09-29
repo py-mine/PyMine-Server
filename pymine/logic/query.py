@@ -159,14 +159,18 @@ class QueryServer:
         except asyncio.CancelledError:
             pass
         except BaseException as e:
-            self.console.error(f"Error occurred while handling query packets: {self.console.f_traceback(e)}")
+            self.console.error(
+                f"Error occurred while handling query packets: {self.console.f_traceback(e)}"
+            )
 
     async def handle_packet(self, remote: tuple, buf: QueryBuffer) -> None:
         try:
             try:
                 buf.unpack_magic()
             except ValueError:
-                self.console.debug("Invalid value for magic recieved, continuing like nothing happened.")
+                self.console.debug(
+                    "Invalid value for magic recieved, continuing like nothing happened."
+                )
                 return
 
             packet_type = buf.unpack_byte()  # should be 9 (handshake) or 0 (stat)
@@ -181,12 +185,18 @@ class QueryServer:
                 self.challenge_cache[remote] = challenge_token
 
                 await self._server.send(
-                    (QueryBuffer.pack_byte(9) + QueryBuffer.pack_int32(session_id) + QueryBuffer.pack_string(challenge_token)),
+                    (
+                        QueryBuffer.pack_byte(9)
+                        + QueryBuffer.pack_int32(session_id)
+                        + QueryBuffer.pack_string(challenge_token)
+                    ),
                     remote,
                 )
             elif packet_type == 0:  # respond with a stat packet
                 if self.challenge_cache.get(remote) != challenge_token:
-                    self.console.warn(f"Invalid challenge token {challenge_token} received for remote {remote}")
+                    self.console.warn(
+                        f"Invalid challenge token {challenge_token} received for remote {remote}"
+                    )
                     return
 
                 if buf.buf[buf.pos : buf.pos + 4] == b"\x00\x00\x00\x00":  # full stat

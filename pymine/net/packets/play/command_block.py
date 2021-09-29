@@ -59,7 +59,9 @@ class PlayUpdateCommandBlock(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayUpdateCommandBlock:
-        return cls(*buf.unpack_position(), buf.unpack_string(), buf.unpack_varint(), buf.unpack("b"))
+        return cls(
+            *buf.unpack_position(), buf.unpack_string(), buf.unpack_varint(), buf.unpack("b")
+        )
 
 
 class PlayUpdateCommandBlockMinecart(Packet):

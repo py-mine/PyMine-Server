@@ -87,7 +87,9 @@ class PlayScoreboardObjective(Packet):
     id = 0x4A
     to = 1
 
-    def __init__(self, objective_name: str, mode: int, value: str = None, type_: int = None) -> None:
+    def __init__(
+        self, objective_name: str, mode: int, value: str = None, type_: int = None
+    ) -> None:
         super().__init__()
 
         self.objective_name = objective_name

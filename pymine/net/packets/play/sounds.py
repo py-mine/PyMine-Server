@@ -35,7 +35,14 @@ class PlayNamedSoundEffect(Packet):
     to = 1
 
     def __init__(
-        self, name: str, category: int, effect_pos_x: int, effect_pos_y: int, effect_pos_z: int, volume: int, pitch: int
+        self,
+        name: str,
+        category: int,
+        effect_pos_x: int,
+        effect_pos_y: int,
+        effect_pos_z: int,
+        volume: int,
+        pitch: int,
     ) -> None:
         super().__init__()
 

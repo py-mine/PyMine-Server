@@ -38,7 +38,8 @@ async def login_start(stream: Stream, packet: Packet) -> None:
 
         packet = login_packets.LoginEncryptionRequest(
             server.secrets.rsa_public.public_bytes(
-                encoding=serialization.Encoding.DER, format=serialization.PublicFormat.SubjectPublicKeyInfo
+                encoding=serialization.Encoding.DER,
+                format=serialization.PublicFormat.SubjectPublicKeyInfo,
             )
         )
 
@@ -60,12 +61,16 @@ async def login_start(stream: Stream, packet: Packet) -> None:
 
 @server.api.register.on_packet("login", 0x01)
 async def encrypted_login(stream: Stream, packet: Packet) -> Stream:
-    shared_key, auth, props = await server_auth(packet, stream.remote, server.cache.login[stream.remote])
+    shared_key, auth, props = await server_auth(
+        packet, stream.remote, server.cache.login[stream.remote]
+    )
 
     del server.cache.login[stream.remote]  # No longer needed
 
     if not auth:  # If authentication failed, disconnect client
-        await server.send_packet(stream, login_packets.LoginDisconnect("Failed to authenticate your connection."))
+        await server.send_packet(
+            stream, login_packets.LoginDisconnect("Failed to authenticate your connection.")
+        )
         raise StopHandling
 
     # Generate a cipher for that client using the shared key from the client
@@ -88,7 +93,9 @@ async def encrypted_login(stream: Stream, packet: Packet) -> Stream:
 
 # Verifies that the shared key and token are the same, and does other authentication methods
 # Returns the decrypted shared key and the client's username and uuid
-async def server_auth(packet: login_packets.LoginEncryptionResponse, remote: tuple, cache: dict) -> tuple:
+async def server_auth(
+    packet: login_packets.LoginEncryptionResponse, remote: tuple, cache: dict
+) -> tuple:
     if server.secrets.rsa_private.decrypt(packet.verify_token, PKCS1v15()) == cache["verify"]:
         decrypted_shared_key = server.secrets.rsa_private.decrypt(packet.shared_key, PKCS1v15())
 
@@ -99,7 +106,8 @@ async def server_auth(packet: login_packets.LoginEncryptionResponse, remote: tup
                 "serverId": encryption.gen_verify_hash(
                     decrypted_shared_key,
                     server.secrets.rsa_public.public_bytes(
-                        encoding=serialization.Encoding.DER, format=serialization.PublicFormat.SubjectPublicKeyInfo
+                        encoding=serialization.Encoding.DER,
+                        format=serialization.PublicFormat.SubjectPublicKeyInfo,
                     ),
                 ),
             },

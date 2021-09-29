@@ -71,7 +71,15 @@ class PlayTradeList(Packet):
     id = 0x26
     to = 1
 
-    def __init__(self, window_id: int, trades: list, villager_lvl: int, xp: int, is_regular: bool, can_restock: bool) -> None:
+    def __init__(
+        self,
+        window_id: int,
+        trades: list,
+        villager_lvl: int,
+        xp: int,
+        is_regular: bool,
+        can_restock: bool,
+    ) -> None:
         super().__init__()
 
         self.window_id = window_id

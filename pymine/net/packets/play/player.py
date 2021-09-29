@@ -167,7 +167,11 @@ class PlayPlayerAbilitiesClientBound(Packet):
         self.fov_modifier = fov_modifier
 
     def encode(self) -> bytes:
-        return Buffer.pack("b", self.flags) + Buffer.pack("f", self.flying_speed) + Buffer.pack("f", self.fov_modifier)
+        return (
+            Buffer.pack("b", self.flags)
+            + Buffer.pack("f", self.flying_speed)
+            + Buffer.pack("f", self.fov_modifier)
+        )
 
 
 class PlayPlayerAbilitiesServerBound(Packet):
@@ -342,7 +346,9 @@ class PlayPlayerPositionAndRotationServerBound(Packet):
     id = 0x13
     to = 0
 
-    def __init__(self, x: float, feet_y: float, z: float, yaw: float, pitch: float, on_ground: bool) -> None:
+    def __init__(
+        self, x: float, feet_y: float, z: float, yaw: float, pitch: float, on_ground: bool
+    ) -> None:
         super().__init__()
 
         self.x = x
@@ -354,7 +360,14 @@ class PlayPlayerPositionAndRotationServerBound(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayPlayerPositionAndRotationServerBound:
-        return cls(buf.unpack("d"), buf.unpack("d"), buf.unpack("d"), buf.unpack("d"), buf.unpack("d"), buf.unpack("?"))
+        return cls(
+            buf.unpack("d"),
+            buf.unpack("d"),
+            buf.unpack("d"),
+            buf.unpack("d"),
+            buf.unpack("d"),
+            buf.unpack("?"),
+        )
 
 
 class PlayPlayerPositionAndLookClientBound(Packet):
@@ -498,7 +511,13 @@ class PlayClientSettings(Packet):
     to = 0
 
     def __init__(
-        self, locale: str, view_distance: int, chat_mode: int, chat_colors: bool, displayed_skin_parts: int, main_hand: int
+        self,
+        locale: str,
+        view_distance: int,
+        chat_mode: int,
+        chat_colors: bool,
+        displayed_skin_parts: int,
+        main_hand: int,
     ) -> None:
         super().__init__()
 
@@ -512,7 +531,12 @@ class PlayClientSettings(Packet):
     @classmethod
     def decode(cls, buf: Buffer) -> PlayClientSettings:
         return cls(
-            buf.unpack_string(), buf.unpack("b"), buf.unpack_varint(), buf.unpack("?"), buf.unpack("B"), buf.unpack_varint()
+            buf.unpack_string(),
+            buf.unpack("b"),
+            buf.unpack_varint(),
+            buf.unpack("?"),
+            buf.unpack("B"),
+            buf.unpack_varint(),
         )
 
 
@@ -623,7 +647,11 @@ class PlaySetExperience(Packet):
         self.total_xp = total_xp
 
     def encode(self) -> bytes:
-        return Buffer.pack("f", self.xp_bar) + Buffer.pack_varint(self.lvl) + Buffer.pack_varint(self.total_xp)
+        return (
+            Buffer.pack("f", self.xp_bar)
+            + Buffer.pack_varint(self.lvl)
+            + Buffer.pack_varint(self.total_xp)
+        )
 
 
 class PlayUpdateHealth(Packet):
@@ -640,7 +668,11 @@ class PlayUpdateHealth(Packet):
         self.saturation = saturation
 
     def encode(self) -> bytes:
-        return Buffer.pack("f", self.health) + Buffer.pack_varint(self.food) + Buffer.pack("f", self.saturation)
+        return (
+            Buffer.pack("f", self.health)
+            + Buffer.pack_varint(self.food)
+            + Buffer.pack("f", self.saturation)
+        )
 
 
 class PlayCombatEvent(Packet):
@@ -724,11 +756,23 @@ class PlayPlayerInfo(Packet):
                     + Buffer.pack_optional(Buffer.pack_chat, player["display_name"])
                 )
         elif self.action == 1:  # update gamemode
-            out += b"".join([Buffer.pack_uuid(p["uuid"]) + Buffer.pack_varint(p["gamemode"]) for p in self.players])
+            out += b"".join(
+                [
+                    Buffer.pack_uuid(p["uuid"]) + Buffer.pack_varint(p["gamemode"])
+                    for p in self.players
+                ]
+            )
         elif self.action == 2:  # update latency
-            out += b"".join([Buffer.pack_uuid(p["uuid"]) + Buffer.pack_varint(p["ping"]) for p in self.players])
+            out += b"".join(
+                [Buffer.pack_uuid(p["uuid"]) + Buffer.pack_varint(p["ping"]) for p in self.players]
+            )
         elif self.action == 3:  # update display name
-            out += b"".join([Buffer.pack_uuid(p["uuid"]) + Buffer.pack_optional(p.get("display_name")) for p in self.players])
+            out += b"".join(
+                [
+                    Buffer.pack_uuid(p["uuid"]) + Buffer.pack_optional(p.get("display_name"))
+                    for p in self.players
+                ]
+            )
         elif self.action == 4:
             out += b"".join([Buffer.pack_uuid(p["uuid"]) for p in self.players])
 

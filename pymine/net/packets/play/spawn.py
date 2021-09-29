@@ -89,7 +89,9 @@ class PlaySpawnExperienceOrb(Packet):
     id = 0x01
     to = 1
 
-    def __init__(self, entity_id: int, x: int = 0, y: int = 0, z: int = 0, count: int = 1237) -> None:
+    def __init__(
+        self, entity_id: int, x: int = 0, y: int = 0, z: int = 0, count: int = 1237
+    ) -> None:
         super().__init__()
 
         self.entity_id = entity_id
@@ -163,7 +165,9 @@ class PlayPaintingSpawn(Packet):
     id = 0x03
     to = 1
 
-    def __init__(self, entity_id: int, entity_uuid: uuid.UUID, motive: int, location: int, direction: int) -> None:
+    def __init__(
+        self, entity_id: int, entity_uuid: uuid.UUID, motive: int, location: int, direction: int
+    ) -> None:
         super().__init__()
 
         self.entity_id = entity_id
@@ -189,7 +193,9 @@ class PlaySpawnPlayer(Packet):
     id = 0x04
     to = 1
 
-    def __init__(self, entity_id: int, player_uuid: uuid.UUID, x: int, y: int, z: int, pitch: int, yaw: int) -> None:
+    def __init__(
+        self, entity_id: int, player_uuid: uuid.UUID, x: int, y: int, z: int, pitch: int, yaw: int
+    ) -> None:
         super.__init__()
 
         self.entity_id = entity_id

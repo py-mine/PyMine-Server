@@ -40,7 +40,9 @@ def new_level_nbt(version: tuple, level_name: str, spawn: tuple, seed: int) -> n
                     nbt.TAG_Double("BorderWarningTime", 15),
                     nbt.TAG_Double("clearWeatherTime", 0),
                     nbt.TAG_Compound("CustomBossEvents", []),
-                    nbt.TAG_Compound("DataPacks", [nbt.TAG_List("Disabled", []), nbt.TAG_List("Enabled", [])]),
+                    nbt.TAG_Compound(
+                        "DataPacks", [nbt.TAG_List("Disabled", []), nbt.TAG_List("Enabled", [])]
+                    ),
                     nbt.TAG_Int("DataVersion", version[0]),
                     nbt.TAG_Long("DayTime", 0),
                     nbt.TAG_Byte("Difficulty", 2),
@@ -62,7 +64,10 @@ def new_level_nbt(version: tuple, level_name: str, spawn: tuple, seed: int) -> n
                                                     nbt.TAG_Byte("Z", 0),
                                                 ],
                                             ),
-                                            nbt.TAG_List("Gateways", [nbt.TAG_Int(None, i) for i in range(19)]),
+                                            nbt.TAG_List(
+                                                "Gateways",
+                                                [nbt.TAG_Int(None, i) for i in range(19)],
+                                            ),
                                             nbt.TAG_Byte("DragonKilled", 0),
                                             nbt.TAG_Long("DragonUUIDLeast", 0),
                                             nbt.TAG_Long("DragonKilledUUIDMost", 0),
@@ -139,7 +144,11 @@ def new_level_nbt(version: tuple, level_name: str, spawn: tuple, seed: int) -> n
                     nbt.TAG_Int("version", version[2]),
                     nbt.TAG_Compound(
                         "Version",
-                        [nbt.TAG_Int("Id", version[0]), nbt.TAG_String("Name", version[1]), nbt.TAG_Byte("Snapshot", 0)],
+                        [
+                            nbt.TAG_Int("Id", version[0]),
+                            nbt.TAG_String("Name", version[1]),
+                            nbt.TAG_Byte("Snapshot", 0),
+                        ],
                     ),
                     nbt.TAG_Int_Array("WanderingTraderId", [0, 0, 0, 0]),
                     nbt.TAG_Int("WanderingTraderSpawnChance", 50),

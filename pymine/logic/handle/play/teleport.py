@@ -29,4 +29,6 @@ async def on_teleport_confirm(stream: Stream, packet: Packet) -> None:
         #     stream, PlayDisconnect(f"Invalid teleport ID ({repr(player.teleport_id)} != {repr(packet.teleport_id)}).")
         # )
 
-        server.console.debug(f"Warning, invalid teleport ID. ({repr(player.teleport_id)} != {repr(packet.teleport_id)})")
+        server.console.debug(
+            f"Warning, invalid teleport ID. ({repr(player.teleport_id)} != {repr(packet.teleport_id)})"
+        )

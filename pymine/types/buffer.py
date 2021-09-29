@@ -274,7 +274,14 @@ class Buffer:
             return num + (1 << bits) if num < 0 else num
 
         return struct.pack(
-            ">Q", sum((to_twos_complement(x, 26) << 38, to_twos_complement(z, 26) << 12, to_twos_complement(y, 12)))
+            ">Q",
+            sum(
+                (
+                    to_twos_complement(x, 26) << 38,
+                    to_twos_complement(z, 26) << 12,
+                    to_twos_complement(y, 12),
+                )
+            ),
         )
 
     def unpack_position(self) -> tuple:
@@ -303,7 +310,12 @@ class Buffer:
         if item_id is None:
             return cls.pack("?", False)
 
-        return cls.pack("?", True) + cls.pack_varint(item_id) + cls.pack("b", count) + cls.pack_nbt(tag)
+        return (
+            cls.pack("?", True)
+            + cls.pack_varint(item_id)
+            + cls.pack("b", count)
+            + cls.pack_nbt(tag)
+        )
 
     def unpack_slot(self) -> dict:
         """Unpacks an inventory/container slot from the buffer."""
@@ -313,7 +325,11 @@ class Buffer:
         if not has_item_id:
             return {"item": None}
 
-        return {"item": ITEM_REGISTRY.decode(self.unpack_varint()), "count": self.unpack("b"), "tag": self.unpack_nbt()}
+        return {
+            "item": ITEM_REGISTRY.decode(self.unpack_varint()),
+            "count": self.unpack("b"),
+            "tag": self.unpack_nbt(),
+        }
 
     @classmethod
     def pack_rotation(cls, x: float, y: float, z: float) -> bytes:
@@ -362,11 +378,15 @@ class Buffer:
     def pack_ingredient(cls, ingredient: dict) -> bytes:
         """Packs a recipe ingredient into bytes."""
 
-        return cls.pack_varint(len(ingredient)) + b"".join([cls.pack_recipe_item(slot) for slot in ingredient.values()])
+        return cls.pack_varint(len(ingredient)) + b"".join(
+            [cls.pack_recipe_item(slot) for slot in ingredient.values()]
+        )
 
     @classmethod  # Note, recipes are sent as an array and actually require a varint length of recipe array before recipe array
     # recipe_id is the actual name of the recipe i.e. jungle_planks, oak_door, furnace, etc...
-    def pack_recipe(cls, recipe_id: str, recipe: dict) -> bytes:  # https://wiki.vg/Protocol#Declare_Recipes
+    def pack_recipe(
+        cls, recipe_id: str, recipe: dict
+    ) -> bytes:  # https://wiki.vg/Protocol#Declare_Recipes
         """Packs a recipe into bytes."""
 
         type_ = recipe["type"]
@@ -380,7 +400,12 @@ class Buffer:
             out += (
                 cls.pack_string(recipe["group"])
                 + cls.pack_varint(len(recipe["ingredients"]))
-                + b"".join([cls.pack_ingredient(ingredient) for ingredient in recipe.get("ingredients", [])])
+                + b"".join(
+                    [
+                        cls.pack_ingredient(ingredient)
+                        for ingredient in recipe.get("ingredients", [])
+                    ]
+                )
                 + cls.pack_recipe_item(recipe["result"])
             )
         elif type_ == "minecraft:crafting_shaped":
@@ -388,7 +413,12 @@ class Buffer:
                 cls.pack_varint(len(recipe["pattern"][0]))
                 + cls.pack_varint(len(recipe["pattern"]))
                 + cls.pack_string(recipe["group"])
-                + b"".join([cls.pack_ingredient(ingredient) for ingredient in recipe.get("ingredients", [])])
+                + b"".join(
+                    [
+                        cls.pack_ingredient(ingredient)
+                        for ingredient in recipe.get("ingredients", [])
+                    ]
+                )
                 + cls.pack_recipe_item(recipe["result"])
             )
         elif type_[10:] in ("smelting", "blasting", "campfire_cooking"):
@@ -425,7 +455,11 @@ class Buffer:
     def unpack_villager(self) -> dict:
         """Unpacks villager data from the buffer."""
 
-        return {"kind": self.unpack_varint(), "profession": self.unpack_varint(), "level": self.unpack_varint()}
+        return {
+            "kind": self.unpack_varint(),
+            "profession": self.unpack_varint(),
+            "level": self.unpack_varint(),
+        }
 
     @classmethod
     def pack_trade(
@@ -470,7 +504,9 @@ class Buffer:
         ):
             out += cls.pack_varint(particle["block_state"])
         elif particle_id == 14:
-            out += cls.pack("ffff", particle["red"], particle["green"], particle["blue"], particle["scale"])
+            out += cls.pack(
+                "ffff", particle["red"], particle["green"], particle["blue"], particle["scale"]
+            )
         elif particle_id == 32:
             out += cls.pack_slot(**particle["item"])
 
@@ -587,8 +623,13 @@ class Buffer:
         if palette is DirectPalette:
             return b""
 
-        return cls.pack_varint(len(palette.registry.data)) + b"".join(  # map indirect ids to the global palette
-            [cls.pack_varint(DirectPalette.encode(palette.decode(state_id))) for state_id in range(len(palette.registry.data))]
+        return cls.pack_varint(
+            len(palette.registry.data)
+        ) + b"".join(  # map indirect ids to the global palette
+            [
+                cls.pack_varint(DirectPalette.encode(palette.decode(state_id)))
+                for state_id in range(len(palette.registry.data))
+            ]
         )
 
     @classmethod
@@ -653,7 +694,9 @@ class Buffer:
                     for z in range(16):
                         for x in range(0, 16, 2):
                             sky_light_array += cls.pack(
-                                "B", (section.sky_light[y][z][x] << 4) | (section.sky_light[y][z][x + 1])
+                                "B",
+                                (section.sky_light[y][z][x] << 4)
+                                | (section.sky_light[y][z][x + 1]),
                             )
 
                 print("Sky light array length:", len(sky_light_array))
@@ -669,12 +712,16 @@ class Buffer:
                     for z in range(16):
                         for x in range(0, 16, 2):
                             block_light_array += cls.pack(
-                                "B", (section.block_light[y][z][x] << 4) | (section.block_light[y][z][x + 1])
+                                "B",
+                                (section.block_light[y][z][x] << 4)
+                                | (section.block_light[y][z][x + 1]),
                             )
 
                 print("Block light array length:", len(block_light_array))
 
-                block_light_arrays.append(cls.pack_varint(len(block_light_array)) + block_light_array)
+                block_light_arrays.append(
+                    cls.pack_varint(len(block_light_array)) + block_light_array
+                )
 
         print("Sky light mask:", sky_light_mask)
         print("Block light mask:", block_light_mask)

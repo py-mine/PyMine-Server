@@ -4,8 +4,14 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+import pytest
 from pymine.types.buffer import Buffer
 import pymine.types.nbt as nbt
+
+
+VAR_INT_ERR_MSG = "num doesn't fit in given range"
+VAR_INT_MAX = (1 << 31) - 1
+VAR_INT_MIN = -(1 << 31)
 
 
 def test_io():
@@ -37,16 +43,33 @@ def test_basic():
     assert buf.unpack("q") == 1234567890456
 
 
-def test_varint():
+@pytest.mark.parametrize(
+    "var_int, error_msg",
+    (
+        [0, None],
+        [1, None],
+        [2, None],
+        [3749146, None],
+        [-1, None],
+        [-2, None],
+        [-3, None],
+        [-3749146, None],
+        [VAR_INT_MAX, None],
+        [VAR_INT_MAX + 1, VAR_INT_ERR_MSG],
+        [VAR_INT_MIN, None],
+        [VAR_INT_MIN - 1, VAR_INT_ERR_MSG],
+    ),
+)
+def test_varint(var_int, error_msg):
     buf = Buffer()
+    if error_msg:
+        with pytest.raises(ValueError) as err:
 
-    buf.write(Buffer.pack_varint(0))
-    buf.write(Buffer.pack_varint(1))
-    buf.write(Buffer.pack_varint(3749146))
-
-    assert buf.unpack_varint() == 0
-    assert buf.unpack_varint() == 1
-    assert buf.unpack_varint() == 3749146
+            buf.write(Buffer.pack_varint(var_int))
+            assert error_msg in str(err)
+    else:
+        buf.write(Buffer.pack_varint(var_int))
+        assert buf.unpack_varint() == var_int
 
 
 def test_optional_varint():

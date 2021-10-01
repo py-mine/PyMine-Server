@@ -51,13 +51,18 @@ async def join(stream: Stream, uuid_: uuid.UUID, username: str, props: list) -> 
 
     # send server brand via plugin channels
     await server.send_packet(
-        stream, packets.play.plugin_msg.PlayPluginMessageClientBound("minecraft:brand", Buffer.pack_string(server.meta.pymine))
+        stream,
+        packets.play.plugin_msg.PlayPluginMessageClientBound(
+            "minecraft:brand", Buffer.pack_string(server.meta.pymine)
+        ),
     )
 
     # sends info about the server difficulty
     await server.send_packet(
         stream,
-        packets.play.difficulty.PlayServerDifficulty(world["Difficulty"].data, world["DifficultyLocked"].data),
+        packets.play.difficulty.PlayServerDifficulty(
+            world["Difficulty"].data, world["DifficultyLocked"].data
+        ),
     )
 
     await send_player_abilities(stream, player)
@@ -69,7 +74,9 @@ async def join_2(stream: Stream, player: Player) -> None:
     world = server.worlds[player["Dimension"].data]  # the world player *should* be spawning into
 
     # change held item to saved last held item
-    await server.send_packet(stream, packets.play.item.PlayHeldItemChangeClientBound(player["SelectedItemSlot"].data))
+    await server.send_packet(
+        stream, packets.play.item.PlayHeldItemChangeClientBound(player["SelectedItemSlot"].data)
+    )
 
     # send/declare recipes
     # await server.send_packet(stream, packets.play.crafting.PlayDeclareRecipes(RECIPES))
@@ -93,7 +100,9 @@ async def join_2(stream: Stream, player: Player) -> None:
     await broadcast_player_info(player)
 
     # see here: https://wiki.vg/Protocol#Update_View_Position
-    await server.send_packet(stream, packets.play.player.PlayUpdateViewPosition(player.x // 32, player.z // 32))
+    await server.send_packet(
+        stream, packets.play.player.PlayUpdateViewPosition(player.x // 32, player.z // 32)
+    )
 
     await send_world_info(stream, world, player)
 
@@ -114,13 +123,17 @@ async def send_join_game_packet(stream: Stream, world: World, player: Player) ->
             [level_name, f"{level_name}_nether", f"{level_name}_the_end"],  # world names
             new_dim_codec_nbt(),  # Shouldn't change unless CUSTOM DIMENSIONS are added fml
             # This is like the the dimension data for the dim the player is currently spawning into
-            get_dimension_data(player["Dimension"].data),  # player['Dimension'] should be like minecraft:overworld
+            get_dimension_data(
+                player["Dimension"].data
+            ),  # player['Dimension'] should be like minecraft:overworld
             server.conf["level_name"],  # level name of the world the player is spawning into
             seed_hash(server.conf["seed"]),
             server.conf["max_players"],
             server.conf["view_distance"],
             (not server.conf["debug"]),
-            (world["GameRules"]["doImmediateRespawn"].data != "true"),  # (not doImmediateRespawn gamerule)
+            (
+                world["GameRules"]["doImmediateRespawn"].data != "true"
+            ),  # (not doImmediateRespawn gamerule)
             False,  # If world is a debug world iirc
             False,  # ShouFld be true if world is superflat
         ),
@@ -156,7 +169,9 @@ async def send_command_nodes(stream: Stream) -> None:
     flags.set(0x08, False)
     flags.set(0x10, False)
 
-    await server.send_packet(stream, packets.play.command.PlayDeclareCommands([{"flags": flags.field, "children": []}]))
+    await server.send_packet(
+        stream, packets.play.command.PlayDeclareCommands([{"flags": flags.field, "children": []}])
+    )
 
 
 # sends the previously unlocked + unviewed unlocked recipies to the client
@@ -166,7 +181,9 @@ async def send_unlocked_recipes(stream: Stream, player: Player) -> None:
         packets.play.crafting.PlayUnlockRecipes(
             0,  # init
             player["recipeBook"]["isGuiOpen"].data,  # refers to the regular crafting bench/table
-            player["recipeBook"]["isFilteringCraftable"].data,  # refers to the regular crafting bench/table
+            player["recipeBook"][
+                "isFilteringCraftable"
+            ].data,  # refers to the regular crafting bench/table
             player["recipeBook"]["isFurnaceGuiOpen"].data,
             player["recipeBook"]["isFurnaceFilteringCraftable"].data,
             player["recipeBook"]["isBlastingFurnaceGuiOpen"].data,
@@ -227,7 +244,9 @@ async def send_update_view_distance(stream: Stream, player: Player) -> None:
 # sends information about the world to the client, like chunk data and other stuff
 async def send_world_info(stream: Stream, world: World, player: Player) -> None:
     view_distance = server.conf["view_distance"] + 1
-    chunks = {}  # cache chunks here because they're used multiple times and shouldn't be garbage collected
+    chunks = (
+        {}
+    )  # cache chunks here because they're used multiple times and shouldn't be garbage collected
 
     for x in range(-view_distance, view_distance):
         for z in range(-view_distance, view_distance):
@@ -238,8 +257,12 @@ async def send_world_info(stream: Stream, world: World, player: Player) -> None:
 
     loop = asyncio.get_event_loop()
 
-    for chunk in chunks.values():  # send chunk data packet for every chunk in server render distance
-        packet = await loop.run_in_executor(server.thread_executor, packets.play.chunk.PlayChunkData, chunk, True)
+    for (
+        chunk
+    ) in chunks.values():  # send chunk data packet for every chunk in server render distance
+        packet = await loop.run_in_executor(
+            server.thread_executor, packets.play.chunk.PlayChunkData, chunk, True
+        )
         asyncio.create_task(server.send_packet(stream, packet))
 
     del chunks  # no longer needed so free the memoryyyy
@@ -264,13 +287,20 @@ async def send_world_info(stream: Stream, world: World, player: Player) -> None:
 
 
 # update the player's position and rotation, as well as the world spawn
-async def send_positional_data(stream: Stream, world: World, player: Player, only_ppos: bool = False) -> None:
+async def send_positional_data(
+    stream: Stream, world: World, player: Player, only_ppos: bool = False
+) -> None:
     if not only_ppos:
         await server.send_packet(
-            stream, packets.play.spawn.PlaySpawnPosition(world["SpawnX"].data, world["SpawnY"].data, world["SpawnZ"].data)
+            stream,
+            packets.play.spawn.PlaySpawnPosition(
+                world["SpawnX"].data, world["SpawnY"].data, world["SpawnZ"].data
+            ),
         )
 
-    flags = BitField.new(5, (0x01, False), (0x02, False), (0x04, False), (0x08, False), (0x10, False))
+    flags = BitField.new(
+        5, (0x01, False), (0x02, False), (0x04, False), (0x08, False), (0x10, False)
+    )
 
     player.teleport_id = random.randint(0, 999999)
 

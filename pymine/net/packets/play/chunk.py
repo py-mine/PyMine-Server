@@ -66,18 +66,31 @@ class PlayChunkData(Packet):
         self.full = full
 
     def encode(self) -> bytes:
-        out = Buffer.pack("i", self.chunk.x) + Buffer.pack("i", self.chunk.z) + Buffer.pack("?", self.full)
+        out = (
+            Buffer.pack("i", self.chunk.x)
+            + Buffer.pack("i", self.chunk.z)
+            + Buffer.pack("?", self.full)
+        )
 
         mask = 0
         chunk_sections_buffer = Buffer()
 
-        for y, section in self.chunk.sections.items():  # pack chunk columns into buffer and generate a bitmask
+        for (
+            y,
+            section,
+        ) in self.chunk.sections.items():  # pack chunk columns into buffer and generate a bitmask
             if y >= 0:
                 mask |= 1 << y
                 chunk_sections_buffer.write(Buffer.pack_chunk_section_blocks(section))
 
         out += Buffer.pack_varint(mask) + Buffer.pack_nbt(
-            nbt.TAG_Compound("", [self.chunk["Heightmaps"]["MOTION_BLOCKING"], self.chunk["Heightmaps"]["WORLD_SURFACE"]])
+            nbt.TAG_Compound(
+                "",
+                [
+                    self.chunk["Heightmaps"]["MOTION_BLOCKING"],
+                    self.chunk["Heightmaps"]["WORLD_SURFACE"],
+                ],
+            )
         )
 
         if self.full:

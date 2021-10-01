@@ -54,7 +54,9 @@ class PlayBlockAction(Packet):
     id = 0x0A
     to = 1
 
-    def __init__(self, x: int, y: int, z: int, action_id: int, action_param: int, block_type: int) -> None:
+    def __init__(
+        self, x: int, y: int, z: int, action_id: int, action_param: int, block_type: int
+    ) -> None:
         super().__init__()
 
         self.x, self.y, self.z = x, y, z
@@ -226,7 +228,14 @@ class PlayMultiBlockChange(Packet):
     id = 0x3B
     to = 1
 
-    def __init__(self, chunk_sect_x: int, chunk_sect_y: int, chunk_sect_z: int, trust_edges: bool, blocks: list) -> None:
+    def __init__(
+        self,
+        chunk_sect_x: int,
+        chunk_sect_y: int,
+        chunk_sect_z: int,
+        trust_edges: bool,
+        blocks: list,
+    ) -> None:
         super().__init__()
 
         self.chunk_sect_x = chunk_sect_x
@@ -238,7 +247,9 @@ class PlayMultiBlockChange(Packet):
     def encode(self) -> bytes:
         out = (
             Buffer.pack_varint(
-                ((self.chunk_sect_x & 0x3FFFFF) << 42) | (self.chunk_sect_y & 0xFFFFF) | ((self.chunk_sect_z & 0x3FFFFF) << 20)
+                ((self.chunk_sect_x & 0x3FFFFF) << 42)
+                | (self.chunk_sect_y & 0xFFFFF)
+                | ((self.chunk_sect_z & 0x3FFFFF) << 20)
             )
             + Buffer.pack("?", self.trust_edges)
             + Buffer.pack_varint(len(self.blocks))

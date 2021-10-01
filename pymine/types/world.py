@@ -54,7 +54,9 @@ class World:
     @property
     def cached_name(self):
         if self._cached_name is None:
-            self._cached_name = list(self.server.worlds.keys())[list(self.server.worlds.values()).index(self)]
+            self._cached_name = list(self.server.worlds.keys())[
+                list(self.server.worlds.values()).index(self)
+            ]
 
         return self._cached_name
 
@@ -70,7 +72,12 @@ class World:
             async with aiofile.async_open(file, "rb") as level_data_file:
                 return nbt.TAG_Compound.unpack(Buffer(await level_data_file.read()))
 
-        return new_level_nbt((2586, self.server.meta.version, 19133), self.name, (0, 100, 0), self.server.conf["seed"])["Data"]
+        return new_level_nbt(
+            (2586, self.server.meta.version, 19133),
+            self.name,
+            (0, 100, 0),
+            self.server.conf["seed"],
+        )["Data"]
 
     # caches a chunk and returns sed chunk
     def cache_chunk(self, chunk: Chunk, key: tuple) -> Chunk:
@@ -90,10 +97,15 @@ class World:
             pass
 
         try:  # try to fetch from disk
-            return self.cache_chunk(await self.server.chunkio.fetch_chunk_async(self.path, *key), key)
+            return self.cache_chunk(
+                await self.server.chunkio.fetch_chunk_async(self.path, *key), key
+            )
         except FileNotFoundError:  # fall back to generate chunk
             return self.cache_chunk(
-                self.server.generator.generate_chunk(self.data["RandomSeed"].data, self.cached_name, chunk_x, chunk_z), key
+                self.server.generator.generate_chunk(
+                    self.data["RandomSeed"].data, self.cached_name, chunk_x, chunk_z
+                ),
+                key,
             )
 
     async def fetch_chunks(self, chunk_coords: list) -> list:

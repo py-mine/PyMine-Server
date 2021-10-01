@@ -39,7 +39,9 @@ def load_packets():
         packet_map[state] = {}
         packet_map_clientbound[state] = {}
 
-        for file in filter((lambda f: f.endswith(".py")), os.listdir(os.path.join(packet_path, state_name))):
+        for file in filter(
+            (lambda f: f.endswith(".py")), os.listdir(os.path.join(packet_path, state_name))
+        ):
             module = importlib.import_module(f"{packet_dot_path}.{state_name}.{file[:-3]}")
 
             for name in module.__all__:

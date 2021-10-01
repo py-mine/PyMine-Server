@@ -32,7 +32,9 @@ class Registry:
             self.data_reversed = data
             self.data = make_immutable({v: i for i, v in enumerate(self.data_reversed)})
         else:
-            raise TypeError("Creating a registry from something other than a dict, Map, tuple, or list isn't supported")
+            raise TypeError(
+                "Creating a registry from something other than a dict, Map, tuple, or list isn't supported"
+            )
 
     def encode(self, key: object) -> object:  # most likely an identifier to an int
         return self.data[key]

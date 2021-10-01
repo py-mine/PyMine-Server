@@ -55,7 +55,9 @@ class PlayerDataIO:
                 return player
 
             async with aiofile.async_open(file, "rb") as player_file:  # load preexisting
-                player = Player(self.server.eid(), nbt.TAG_Compound.unpack(Buffer(await player_file.read())))
+                player = Player(
+                    self.server.eid(), nbt.TAG_Compound.unpack(Buffer(await player_file.read()))
+                )
                 self.cache[player.uuid] = player
 
                 return player

@@ -28,7 +28,12 @@ def test_io():
 def test_basic():
     buf = Buffer()
 
-    buf.write(Buffer.pack("i", 123) + Buffer.pack("b", 1) + Buffer.pack("?", True) + Buffer.pack("q", 1234567890456))
+    buf.write(
+        Buffer.pack("i", 123)
+        + Buffer.pack("b", 1)
+        + Buffer.pack("?", True)
+        + Buffer.pack("q", 1234567890456)
+    )
     assert buf.buf == b"\x00\x00\x00{\x01\x01\x00\x00\x01\x1fq\xfb\x06\x18"
 
     assert buf.unpack("i") == 123

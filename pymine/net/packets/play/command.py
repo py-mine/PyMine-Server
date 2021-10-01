@@ -36,7 +36,9 @@ class PlayDeclareCommands(Packet):
     id = 0x10
     to = 1
 
-    def __init__(self, nodes: list) -> None:  # nodes is a list of dicts, assumes first node is the root node
+    def __init__(
+        self, nodes: list
+    ) -> None:  # nodes is a list of dicts, assumes first node is the root node
         super().__init__()
 
         self.nodes = nodes

@@ -103,6 +103,8 @@ class ChunkIO(AbstractChunkIO):
             timestamp = struct.unpack(">i", await region_file.read(4))
 
             region_file.seek(offset + 5)
-            tag = nbt.TAG_Compound.unpack(Buffer(zlib.decompress(await region_file.read(length - 5))))
+            tag = nbt.TAG_Compound.unpack(
+                Buffer(zlib.decompress(await region_file.read(length - 5)))
+            )
 
         return Chunk(tag, timestamp)

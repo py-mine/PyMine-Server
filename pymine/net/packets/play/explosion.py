@@ -31,7 +31,16 @@ class PlayExplosion(Packet):
     to = 1
 
     def __init__(
-        self, x: int, y: int, z: int, strength: int, record_count: int, records: list, pmx: int, pmy: int, pmz: int
+        self,
+        x: int,
+        y: int,
+        z: int,
+        strength: int,
+        record_count: int,
+        records: list,
+        pmx: int,
+        pmy: int,
+        pmz: int,
     ) -> None:
         super().__init__()
 

@@ -53,7 +53,9 @@ class Float(AbstractParser):
         if self.min_value is None or self.max_value > num > self.min_value:
             return len(section), num
 
-        raise ParsingError(f"provided value is not within allowed range ({self.min_value} < value < {self.max_value}).")
+        raise ParsingError(
+            f"provided value is not within allowed range ({self.min_value} < value < {self.max_value})."
+        )
 
 
 class Double(AbstractParser):
@@ -76,7 +78,9 @@ class Double(AbstractParser):
         if self.min_value is None or self.max_value > num > self.min_value:
             return len(section), num
 
-        raise ParsingError(f"provided value is not within allowed range ({self.min_value} < value < {self.max_value}).")
+        raise ParsingError(
+            f"provided value is not within allowed range ({self.min_value} < value < {self.max_value})."
+        )
 
 
 class Integer(AbstractParser):
@@ -99,7 +103,9 @@ class Integer(AbstractParser):
         if self.min_value is None or self.max_value > num >= self.min_value:
             return len(section), num
 
-        raise ParsingError(f"provided value is not within allowed range ({self.min_value} < value < {self.max_value}).")
+        raise ParsingError(
+            f"provided value is not within allowed range ({self.min_value} < value < {self.max_value})."
+        )
 
 
 class String(AbstractParser):

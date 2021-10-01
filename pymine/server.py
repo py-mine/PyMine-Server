@@ -66,8 +66,12 @@ class Server:
         self.secrets = self.Secrets(*gen_rsa_keys())
 
         self.conf = load_config()  # contents of server.yml in the root dir
-        self.favicon = load_favicon()  # server-icon.png in the root dir, displayed in clients' server lists
-        self.comp_thresh = self.conf["comp_thresh"]  # shortcut for compression threshold since it's used so much
+        self.favicon = (
+            load_favicon()
+        )  # server-icon.png in the root dir, displayed in clients' server lists
+        self.comp_thresh = self.conf[
+            "comp_thresh"
+        ]  # shortcut for compression threshold since it's used so much
 
         self.console.ses.vi_mode = self.conf["vi_mode"]
         self.console.set_prompt(self.conf["prompt"])
@@ -97,7 +101,9 @@ class Server:
         self.console.out.set_title(self.meta.pymine)
 
         try:
-            self.server = await asyncio.start_server(self.handle_connection, host=self.addr, port=self.port)
+            self.server = await asyncio.start_server(
+                self.handle_connection, host=self.addr, port=self.port
+            )
         except OSError as e:
             if e.errno == 98:
                 raise ServerBindingError("PyMine", self.addr, self.port)
@@ -116,7 +122,9 @@ class Server:
         # 24 / the second arg (the max chunk cache size per world instance), should be dynamically changed based on the
         # amount of players online on each world, probably something like (len(players)*24)
         self.worlds = await load_worlds(self, self.conf["level_name"], 1000)
-        self.playerio = PlayerDataIO(self, self.conf["level_name"])  # Player data IO, used to load/dump player info
+        self.playerio = PlayerDataIO(
+            self, self.conf["level_name"]
+        )  # Player data IO, used to load/dump player info
 
         try:
             self.generator = self.api.register._generators[self.conf["generator"]]
@@ -199,7 +207,9 @@ class Server:
         stream.write(Buffer.pack_packet(packet, comp_thresh))
         await stream.drain()
 
-    async def broadcast_packet(self, packet: Packet):  # should broadcast a packet to all connected clients in the play state
+    async def broadcast_packet(
+        self, packet: Packet
+    ):  # should broadcast a packet to all connected clients in the play state
         self.console.debug(f"BROADCAST:      id:0x{packet.id:02X} | packet:{type(packet).__name__}")
 
         senders = []
@@ -210,7 +220,9 @@ class Server:
 
         await asyncio.gather(*senders)
 
-    async def handle_packet(self, stream: Stream):  # Handle / respond to packets, this is called in a loop
+    async def handle_packet(
+        self, stream: Stream
+    ):  # Handle / respond to packets, this is called in a loop
         packet_length = 0
 
         # Basically an implementation of Buffer.unpack_varint()
@@ -250,10 +262,14 @@ class Server:
             self.console.warn("Invalid packet ID received.")
             return stream
 
-        self.console.debug(f"IN : state: {state} | id:0x{packet.id:02X} | packet:{type(packet).__name__}")
+        self.console.debug(
+            f"IN : state: {state} | id:0x{packet.id:02X} | packet:{type(packet).__name__}"
+        )
 
         if self.api.register._on_packet[state].get(packet.id) is None:
-            self.console.warn(f"No packet handler found for packet: 0x{packet.id:02X} {type(packet).__name__}")
+            self.console.warn(
+                f"No packet handler found for packet: 0x{packet.id:02X} {type(packet).__name__}"
+            )
             return stream
 
         for handler in self.api.register._on_packet[state][packet.id].values():

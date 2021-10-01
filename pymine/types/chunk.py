@@ -102,7 +102,9 @@ class ChunkSection:
                         if start_long == end_long:
                             data = state_bytes[start_long] >> start_offset
                         else:
-                            data = state_bytes[start_long] >> start_offset | state_bytes[end_long] << (64 - start_offset)
+                            data = state_bytes[start_long] >> start_offset | state_bytes[
+                                end_long
+                            ] << (64 - start_offset)
 
                         section.block_states[y, z, x] = data & individual_value_mask
         else:
@@ -185,7 +187,10 @@ class Chunk:
                     "Level",
                     [
                         nbt.TAG_Int_Array("Biomes", [127] * 1024),
-                        nbt.TAG_Compound("CarvingMasks", [nbt.TAG_Byte_Array("AIR", []), nbt.TAG_Byte_Array("LIQUID", [])]),
+                        nbt.TAG_Compound(
+                            "CarvingMasks",
+                            [nbt.TAG_Byte_Array("AIR", []), nbt.TAG_Byte_Array("LIQUID", [])],
+                        ),
                         nbt.TAG_List("Entities", []),
                         nbt.TAG_Compound(
                             "Heightmaps",
@@ -200,7 +205,9 @@ class Chunk:
                         ),
                         nbt.TAG_Long("LastUpdate", 0),
                         nbt.TAG_List("Lights", [nbt.TAG_List(None, []) for _ in range(16)]),
-                        nbt.TAG_List("LiquidsToBeTicked", [nbt.TAG_List(None, []) for _ in range(16)]),
+                        nbt.TAG_List(
+                            "LiquidsToBeTicked", [nbt.TAG_List(None, []) for _ in range(16)]
+                        ),
                         nbt.TAG_List("LiquidTicks", []),
                         nbt.TAG_Long("InhabitedTime", 0),
                         nbt.TAG_List("PostProcessing", [nbt.TAG_List(None, []) for _ in range(16)]),
@@ -209,7 +216,10 @@ class Chunk:
                         nbt.TAG_List("TileEntities", []),
                         nbt.TAG_List("TileTicks", []),
                         nbt.TAG_List("ToBeTicked", [nbt.TAG_List(None, []) for _ in range(16)]),
-                        nbt.TAG_Compound("Structures", [nbt.TAG_Compound("References", []), nbt.TAG_Compound("Starts", [])]),
+                        nbt.TAG_Compound(
+                            "Structures",
+                            [nbt.TAG_Compound("References", []), nbt.TAG_Compound("Starts", [])],
+                        ),
                         nbt.TAG_Int("xPos", chunk_x),
                         nbt.TAG_Int("zPos", chunk_z),
                     ],

@@ -50,7 +50,9 @@ class PlayEffect(Packet):
     id = 0x21
     to = 1
 
-    def __init__(self, effect_id: int, x: int, y: int, z: int, data: int, disable_relative_volume: bool) -> None:
+    def __init__(
+        self, effect_id: int, x: int, y: int, z: int, data: int, disable_relative_volume: bool
+    ) -> None:
         super().__init__()
 
         self.effect_id = effect_id
@@ -83,7 +85,13 @@ class PlayEntityEffect(Packet):
         self.flags = flags
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.eid) + self.effect_id + self.amp + Buffer.pack_varint(self.duration) + self.flags
+        return (
+            Buffer.pack_varint(self.eid)
+            + self.effect_id
+            + self.amp
+            + Buffer.pack_varint(self.duration)
+            + self.flags
+        )
 
 
 class PlaySoundEffect(Packet):
@@ -110,7 +118,9 @@ class PlaySoundEffect(Packet):
     id = 0x51
     to = 1
 
-    def __init__(self, sound_id: int, category: int, x: int, y: int, z: int, volume: float, pitch: float) -> None:
+    def __init__(
+        self, sound_id: int, category: int, x: int, y: int, z: int, volume: float, pitch: float
+    ) -> None:
         super().__init__()
 
         self.sound_id = sound_id

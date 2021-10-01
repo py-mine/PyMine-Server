@@ -52,7 +52,9 @@ class PyMineAPI:
                     f"Failed to call handler {handler.__module__}.{handler.__qualname__} due to: {self.console.f_traceback(e)}"
                 )
 
-    async def call_async(self, func, *args, **kwargs):  # used to run a blocking function in a process pool
+    async def call_async(
+        self, func, *args, **kwargs
+    ):  # used to run a blocking function in a process pool
         await asyncio.get_event_loop().run_in_executor(self.executor, func, *args, **kwargs)
 
     def eid(self):  # used to generate entity ids
@@ -62,7 +64,9 @@ class PyMineAPI:
     def update_repo(self, git_dir, git_url, root, plugin_name, do_clone=False):
         if do_clone:
             try:
-                os.rename(root, os.path.join("plugins", f".{plugin_name}_backup_{int(time.time())}"))
+                os.rename(
+                    root, os.path.join("plugins", f".{plugin_name}_backup_{int(time.time())}")
+                )
                 self.console.warn(f"Backing up and resetting {plugin_name}...")
             except FileNotFoundError as e:
                 pass
@@ -152,7 +156,9 @@ class PyMineAPI:
 
                     self.plugins[plugin_path] = plugin_module
                 except BaseException as e:
-                    self.console.error(f"Error while loading {plugin_name}: {self.console.f_traceback(e)}")
+                    self.console.error(
+                        f"Error while loading {plugin_name}: {self.console.f_traceback(e)}"
+                    )
 
             return
 
@@ -183,7 +189,9 @@ class PyMineAPI:
             try:
                 self.update_repo(git_dir, conf["git_url"], root, plugin_name)
             except BaseException as e:
-                self.console.error(f"Error while updating {plugin_name}: {self.console.f_traceback(e)}")
+                self.console.error(
+                    f"Error while updating {plugin_name}: {self.console.f_traceback(e)}"
+                )
 
         plugin_path = root
 
@@ -201,7 +209,9 @@ class PyMineAPI:
         try:
             await plugin_module.setup(conf)
         except BaseException as e:
-            self.console.error(f"Error while setting up {plugin_name}: {self.console.f_traceback(e)}")
+            self.console.error(
+                f"Error while setting up {plugin_name}: {self.console.f_traceback(e)}"
+            )
 
     def add_plugin(self, plugin: AbstractPlugin) -> None:
         """Actually registers the plugin cog and all of its events / registered things."""
@@ -221,15 +231,21 @@ class PyMineAPI:
             if isinstance(thing, AbstractEvent):
                 if isinstance(thing, PacketEvent):
                     try:
-                        self.register._on_packet[thing.state_id][thing.packet_id][plugin_quali_name] = thing
+                        self.register._on_packet[thing.state_id][thing.packet_id][
+                            plugin_quali_name
+                        ] = thing
                     except KeyError:
-                        self.register._on_packet[thing.state_id][thing.packet_id] = {plugin_quali_name: thing}
+                        self.register._on_packet[thing.state_id][thing.packet_id] = {
+                            plugin_quali_name: thing
+                        }
                 elif isinstance(thing, ServerStartEvent):
                     self.register._on_server_start[plugin_quali_name] = thing
                 elif isinstance(thing, ServerStopEvent):
                     self.register._on_server_stop[plugin_quali_name] = thing
                 else:
-                    self.console.warn(f"Unsupported event type: {thing.__module__}.{thing.__class__.__qualname__}")
+                    self.console.warn(
+                        f"Unsupported event type: {thing.__module__}.{thing.__class__.__qualname__}"
+                    )
 
     async def init(self):  # called when server starts up
         self.commands.load_commands()
@@ -237,12 +253,16 @@ class PyMineAPI:
         # Load packet handlers / packet logic handlers under pymine/logic/handle
         for root, dirs, files in os.walk(os.path.join("pymine", "logic", "handle")):
             for file in filter((lambda f: f.endswith(".py")), files):
-                importlib.import_module(os.path.join(root, file)[:-3].replace("\\", "/").replace("/", "."))
+                importlib.import_module(
+                    os.path.join(root, file)[:-3].replace("\\", "/").replace("/", ".")
+                )
 
         # Load world generators from pymine/logic/world_gen
         for root, dirs, files in os.walk(os.path.join("pymine", "logic", "world_gen")):
             for file in filter((lambda f: f.endswith(".py")), files):
-                importlib.import_module(os.path.join(root, file)[:-3].replace("\\", "/").replace("/", "."))
+                importlib.import_module(
+                    os.path.join(root, file)[:-3].replace("\\", "/").replace("/", ".")
+                )
 
         try:
             os.mkdir("plugins")
@@ -252,11 +272,15 @@ class PyMineAPI:
         plugins_dir = os.listdir("plugins")
         git_dir = git.Git("plugins")
 
-        results = await asyncio.gather(*[self.load_plugin(git_dir, plugin) for plugin in plugins_dir], return_exceptions=True)
+        results = await asyncio.gather(
+            *[self.load_plugin(git_dir, plugin) for plugin in plugins_dir], return_exceptions=True
+        )
 
         for plugin, result in zip(plugins_dir, results):
             if isinstance(result, BaseException):
-                self.console.error(f"Error while loading {plugin}: {self.console.f_traceback(result)}")
+                self.console.error(
+                    f"Error while loading {plugin}: {self.console.f_traceback(result)}"
+                )
 
         # start console command handler task
         self.console_task = asyncio.create_task(self.commands.handle_console_commands())
@@ -276,4 +300,6 @@ class PyMineAPI:
             try:
                 await plugin_cog.teardown()
             except BaseException as e:
-                self.console.error(f"Error while tearing down {plugin_name}: {self.console.f_traceback(e)}")
+                self.console.error(
+                    f"Error while tearing down {plugin_name}: {self.console.f_traceback(e)}"
+                )

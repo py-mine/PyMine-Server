@@ -62,7 +62,11 @@ class PlayOpenWindow(Packet):
         self.title = title
 
     def encode(self) -> bytes:
-        return Buffer.pack_varint(self.window_id) + Buffer.pack_varint(self.window_type) + Buffer.pack_chat(self.title)
+        return (
+            Buffer.pack_varint(self.window_id)
+            + Buffer.pack_varint(self.window_type)
+            + Buffer.pack_chat(self.title)
+        )
 
 
 class PlayWindowConfirmationClientBound(Packet):
@@ -80,7 +84,11 @@ class PlayWindowConfirmationClientBound(Packet):
         self.accepted = accepted
 
     def encode(self) -> bytes:
-        return Buffer.pack("b", self.window_id) + Buffer.pack("h", self.action_number) + Buffer.pack("?", self.accepted)
+        return (
+            Buffer.pack("b", self.window_id)
+            + Buffer.pack("h", self.action_number)
+            + Buffer.pack("?", self.accepted)
+        )
 
 
 class PlayWindowConfirmationServerBound(Packet):
@@ -133,7 +141,15 @@ class PlayClickWindow(Packet):
     id = 0x09
     to = 0
 
-    def __init__(self, window_id: int, slot_number: int, button: int, action_number: int, mode: int, slot: dict) -> None:
+    def __init__(
+        self,
+        window_id: int,
+        slot_number: int,
+        button: int,
+        action_number: int,
+        mode: int,
+        slot: dict,
+    ) -> None:
         super().__init__()
 
         self.window_id = window_id
@@ -145,7 +161,14 @@ class PlayClickWindow(Packet):
 
     @classmethod
     def decode(cls, buf: Buffer) -> PlayClickWindow:
-        return cls(buf.unpack("B"), buf.unpack("h"), buf.unpack("b"), buf.unpack("h"), buf.unpack_varint(), buf.unpack_slot())
+        return cls(
+            buf.unpack("B"),
+            buf.unpack("h"),
+            buf.unpack("b"),
+            buf.unpack("h"),
+            buf.unpack_varint(),
+            buf.unpack_slot(),
+        )
 
 
 class PlayCloseWindowButton(Packet):
@@ -228,7 +251,9 @@ class PlayWindowItems(Packet):
         self.slots = slots
 
     def encode(self) -> bytes:
-        return Buffer.pack("h", len(self.slots)) + b"".join([Buffer.pack_slot(s) for s in self.slots])
+        return Buffer.pack("h", len(self.slots)) + b"".join(
+            [Buffer.pack_slot(s) for s in self.slots]
+        )
 
 
 class PlayWindowProperty(Packet):
@@ -252,7 +277,11 @@ class PlayWindowProperty(Packet):
         self.value = value
 
     def encode(self) -> bytes:
-        return Buffer.pack("B", self.window_id) + Buffer.pack("h", self.prop) + Buffer.pack("h", self.value)
+        return (
+            Buffer.pack("B", self.window_id)
+            + Buffer.pack("h", self.prop)
+            + Buffer.pack("h", self.value)
+        )
 
 
 class PlaySetSlot(Packet):
@@ -269,7 +298,11 @@ class PlaySetSlot(Packet):
         self.slot_data = slot_data
 
     def encode(self) -> bytes:
-        return Buffer.pack("b", self.window_id) + Buffer.pack("h", self.slot) + Buffer.pack_slot(**self.slot_data)
+        return (
+            Buffer.pack("b", self.window_id)
+            + Buffer.pack("h", self.slot)
+            + Buffer.pack_slot(**self.slot_data)
+        )
 
 
 class PlayOpenHorseWindow(Packet):
@@ -296,7 +329,11 @@ class PlayOpenHorseWindow(Packet):
         self.entity_id = entity_id
 
     def encode(self) -> bytes:
-        return Buffer.pack("b", self.window_id) + Buffer.pack_varint(self.num_slots) + Buffer.pack("i", self.entity_id)
+        return (
+            Buffer.pack("b", self.window_id)
+            + Buffer.pack_varint(self.num_slots)
+            + Buffer.pack("i", self.entity_id)
+        )
 
 
 class PlayOpenSignEditor(Packet):

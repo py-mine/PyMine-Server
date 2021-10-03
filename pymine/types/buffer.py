@@ -155,7 +155,7 @@ class Buffer:
             raise ValueError(f"num doesn't fit in given range: {num_min} <= {num} < {num_max}")
 
         if num < 0:
-            num = num + (1 << 32)
+            num += 1 << 32
 
         out = b""
 
@@ -183,7 +183,7 @@ class Buffer:
                 break
 
         if num & (1 << 31):
-            num = num - (1 << 32)
+            num -= 1 << 32
 
         num_max = (1 << (max_bits - 1)) - 1
         num_min = -1 << (max_bits - 1)

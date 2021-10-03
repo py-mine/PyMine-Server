@@ -148,13 +148,14 @@ class Buffer:
     def pack_varint(cls, num: int, max_bits: int = 32) -> bytes:
         """Packs a varint (Varying Integer) into bytes."""
 
-        num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
+        num_max = (1 << (max_bits - 1)) - 1
+        num_min = -1 << (max_bits - 1)
 
-        if not (num_min <= num < num_max):
+        if not (num_min <= num <= num_max):
             raise ValueError(f"num doesn't fit in given range: {num_min} <= {num} < {num_max}")
 
         if num < 0:
-            num += 1 + 1 << 32
+            num += 1 << 32
 
         out = b""
 
@@ -184,9 +185,10 @@ class Buffer:
         if num & (1 << 31):
             num -= 1 << 32
 
-        num_min, num_max = (-1 << (max_bits - 1)), (+1 << (max_bits - 1))
+        num_max = (1 << (max_bits - 1)) - 1
+        num_min = -1 << (max_bits - 1)
 
-        if not (num_min <= num < num_max):
+        if not (num_min <= num <= num_max):
             raise ValueError(f"num doesn't fit in given range: {num_min} <= {num} < {num_max}")
 
         return num

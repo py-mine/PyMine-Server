@@ -126,6 +126,17 @@
         "bug",
         "infra"
       ]
+    },
+    {
+      "login": "jpotyka",
+      "name": "Jendrik A. Potyka",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21240743?v=4",
+      "profile": "https://github.com/DigonIO",
+      "contributions": [
+        "ideas",
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,

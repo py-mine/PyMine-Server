@@ -1,5 +1,5 @@
 # <img src="https://i.imgur.com/hXiemtm.png" height=25> PyMine
-[![discord](https://img.shields.io/discord/789623993547227147.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/eeyEcwR9EM)
+[![discord](https://img.shields.io/discord/789623993547227147.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qcyufdMVQP)
 ![views](https://api.ghprofile.me/view?username=py-mine/PyMine&color=0FAE6E&style=flat&label=views)
 ![quality](https://www.codefactor.io/repository/github/py-mine/pymine/badge)
 ![contributors](https://img.shields.io/badge/dynamic/json?color=0FAE6E&label=contributors&query=contributors.length&url=https%3A%2F%2Fraw.githubusercontent.com%2Fpy-mine%2FPyMine%2Fmain%2F.all-contributorsrc)

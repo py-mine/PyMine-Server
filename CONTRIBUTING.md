@@ -9,7 +9,7 @@ _Want to help out? This is how! P.S. You get a shiny contributor role in the Dis
 3. Make your changes, with descriptive commit names.
 4. [Create a pull request](https://github.com/py-mine/PyMine/pulls) with a detailed description of the issue resolved, link the issue you created, and request a reviewer.
 5. One of the main devs will review it and request changes if needed!
-6. _You should probably also [join our Discord server](https://discord.gg/dHjv7DJgb2), for news on the status and direction of the project_
+6. _You should probably also [join our Discord server](https://discord.gg/qcyufdMVQP), for news on the status and direction of the project_
 
 Note: For vanilla server features (as PyMine plans to support all of them), don't create an issue without an attached pull request to add it.
 

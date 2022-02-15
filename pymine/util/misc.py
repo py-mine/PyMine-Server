@@ -29,7 +29,7 @@ def java_string_hash(s: str) -> int:
 
 
 def gen_seed() -> int:  # generates a random seed as an int
-    return randint(0, (2 ** 64) - 1)
+    return randint(0, (2**64) - 1)
 
 
 # May not be correct, but it doesn't matter because it's used for "biome noise" client-side

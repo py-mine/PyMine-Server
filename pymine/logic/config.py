@@ -69,7 +69,7 @@ def load_config():  # FIXME Write directly to file with yaml lib instead of like
     if isinstance(conf["seed"], str):  # seed is str, we need int
         conf["seed"] = java_string_hash(conf["seed"][:20])
 
-    if conf["seed"] > 2 ** 64:  # seed is too big
+    if conf["seed"] > 2**64:  # seed is too big
         conf["seed"] = gen_seed()
 
         with open("server.yml", "w") as f:

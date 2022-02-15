@@ -44,7 +44,7 @@ class BitField:
 
     def set(self, flag: int, state: bool = True) -> None:
         if state:
-            self.field |= 2 ** flag
+            self.field |= 2**flag
         else:
             self.field &= ~flag
 

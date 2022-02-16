@@ -4,18 +4,23 @@
 
 _Want to help out? This is how! P.S. You get a shiny contributor role in the Discord server too!_
 
-1. [Create a bug report, feature request, or other issue](https://github.com/py-mine/PyMine/issues), and assign yourself.
+1. [Create a bug report, feature request, or other issue](https://github.com/py-mine/PyMine/issues),
+and assign yourself.
 2. Fork the repository, or create a new branch.
 3. Make your changes, with descriptive commit names.
-4. [Create a pull request](https://github.com/py-mine/PyMine/pulls) with a detailed description of the issue resolved, link the issue you created, and request a reviewer.
+4. [Create a pull request](https://github.com/py-mine/PyMine/pulls) with a detailed description
+of the issue resolved, link the issue you created, and request a reviewer.
 5. One of the main devs will review it and request changes if needed!
-6. _You should probably also [join our Discord server](https://discord.gg/qcyufdMVQP), for news on the status and direction of the project_
+6. _You should probably also [join our Discord server](https://discord.gg/qcyufdMVQP),
+for news on the status and direction of the project_
 
-Note: For vanilla server features (as PyMine plans to support all of them), don't create an issue without an attached pull request to add it.
+Note: For vanilla server features (as PyMine plans to support all of them),
+don't create an issue without an attached pull request to add it.
 
 ### General Guidelines
 
-- Formatting is enforced with the [black formatter](https://black.readthedocs.io/en/stable/index.html) as defined [here](https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html)
+- Formatting is enforced with the [black formatter](https://black.readthedocs.io/en/stable/index.html)
+as defined [here](https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html)
 - Use f-strings (`f"{thing}"`) instead of `.format()` where possible
 - Use concatenation instead of f-strings where possible, as concatenation is faster
 - Use `snake_case` for variables
@@ -32,4 +37,5 @@ Note: For vanilla server features (as PyMine plans to support all of them), don'
 
 #### VSCode
 
-[@The456gamer](https://github.com/the456gamer) Has made a VSCode config to put in `.vscode/settings.json` [here](https://gist.github.com/the456gamer/cc3f6472391a8ae359be06547b07cdb2)
+[@The456gamer](https://github.com/the456gamer) Has made a VSCode config to put in `.vscode/settings.json`
+[here](https://gist.github.com/the456gamer/cc3f6472391a8ae359be06547b07cdb2)

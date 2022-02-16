@@ -1,0 +1,14 @@
+{
+    "default": true,
+    "MD013": {
+        "line_length": 100,
+        "heading_line_length": 100,
+        "code_block_line_length": 100
+    },
+    "MD033": {
+
+        "allowed_elements": [
+            "img"
+        ]
+      }
+}

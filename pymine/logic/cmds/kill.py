@@ -14,10 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import pymine.net.packets as packets
 from pymine.server import server
 
 
-@server.api.commands.on_command(name="kill", node="minecraft.cmd.kill")
+@server.api.commands.on_command(name="kill", node="pymine.cmds.kill")
 async def kill(uuid, name: str):
     """Kills a player."""
 
@@ -25,13 +26,23 @@ async def kill(uuid, name: str):
     server.console.info(f"{server.playerio.cache=}")
 
     player = None
-    
+
     for i in server.playerio.cache.values():
         if i.username == name:
             player = i
             break
     else:
-        server.console.error("No player with username \"" + name + "\" found.")
+        server.console.error('No player with username "' + name + '" found.')
         return
 
     server.console.info(player.stream)
+    #server.console.info(player.data)
+
+    await server.send_packet(
+        player.stream,
+        packets.play.player.PlayUpdateHealth(
+            0,
+            20,
+            0.5
+        )
+    )

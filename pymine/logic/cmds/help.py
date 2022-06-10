@@ -44,6 +44,7 @@ async def help(uuid: str):
             server.console.info(" Arguments:")
             argspec = inspect.getfullargspec(func)
 
+            # XXX: Causes errors / incorrect behaviour if you introduce other mandatory arguments
             for arg in argspec.args[1:]:  # Skipping the first 'uuid'
                 # look at this mess
                 ann = (

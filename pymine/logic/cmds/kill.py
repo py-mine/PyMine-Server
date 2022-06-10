@@ -37,8 +37,6 @@ async def kill(uuid, name: str):
     await server.send_packet(
         player.stream,
         packets.play.player.PlayUpdateHealth(
-            0,
-            20,
-            0.5
-        )
+            0, player.data["foodLevel"].data, player.data["foodSaturationLevel"].data
+        ),
     )

@@ -22,9 +22,6 @@ from pymine.server import server
 async def kill(uuid, name: str):
     """Kills a player."""
 
-    server.console.info(f"Kill was executed. {uuid=}, {name=}")
-    server.console.info(f"{server.playerio.cache=}")
-
     player = None
 
     for i in server.playerio.cache.values():
@@ -35,8 +32,7 @@ async def kill(uuid, name: str):
         server.console.error('No player with username "' + name + '" found.')
         return
 
-    server.console.info(player.stream)
-    #server.console.info(player.data)
+    server.console.info("Killing player " + player.username + "...")
 
     await server.send_packet(
         player.stream,

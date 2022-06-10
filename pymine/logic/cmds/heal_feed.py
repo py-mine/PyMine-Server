@@ -39,3 +39,26 @@ async def heal(uuid, name: str, new_health: int):
             new_health, player.data["foodLevel"].data, player.data["foodSaturationLevel"].data
         ),
     )
+
+@server.api.commands.on_command(name="feed", node="pymine.cmds.feed")
+async def feed(uuid, name: str, new_food: int):
+    """Feed a player."""
+
+    player = None
+
+    for i in server.playerio.cache.values():
+        if i.username == name:
+            player = i
+            break
+    else:
+        server.console.error('No player with username "' + name + '" found.')
+        return
+
+    server.console.info("Feeding player " + player.username + "...")
+
+    await server.send_packet(
+        player.stream,
+        packets.play.player.PlayUpdateHealth(
+            player.data["Health"].data, new_food, player.data["foodSaturationLevel"].data
+        ),
+    )

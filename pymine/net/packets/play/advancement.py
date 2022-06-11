@@ -53,7 +53,18 @@ class PlayAdvancementTab(Packet):
 
 
 class PlaySelectAdvancementTab(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Sent to indicate that the client should switch advancement tab. (Server -> Client)
+
+    :param str identifier: The Identifier can be one of the following:
+     - minecraft:story/root
+     - minecraft:nether/root
+     - minecraft:end/root
+     - minecraft:adventure/root
+     - minecraft:husbandry/root
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar identifier:
+    """
 
     id = 0x3C
     to = 1

@@ -31,7 +31,19 @@ __all__ = (
 
 
 class PlayDisplayScoreboard(Packet):
-    """Insert fancy doscstring here (server -> client)"""
+    """Ssent to the client when it should display a scoreboard. (Server -> Client)
+
+    :param int position: The position of the scoreboard.
+     - 0: list
+     - 1: sidebar
+     - 2: below name
+     - 3-18: team specific sidebar, indexed as 3 + team color.
+    :param str score_name: The unique name for the scoreboard to be displayed.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar position:
+    :ivar score_name:
+    """
 
     id = 0x43
     to = 1
@@ -47,7 +59,21 @@ class PlayDisplayScoreboard(Packet):
 
 
 class PlayUpdateScore(Packet):
-    """Insert fancy doscstring here (server -> client)"""
+    """Sent to the client when it should update a scoreboard item. (Server -> Client)
+
+    :param str entity_name: The entity whose score this is.
+     - For players, this is their username
+     - For other entities, it is their UUID.
+    :param bytes action: 0 to create/update an item. 1 to remove an item.
+    :param str objective_name: The name of the objective the score belongs to.
+    :param int value: The score to be displayed next to the entry. Only sent when action == 0.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_name:
+    :ivar action:
+    :ivar objective_name:
+    :ivar value:
+    """
 
     id = 0x4D
     to = 1
@@ -70,7 +96,7 @@ class PlayUpdateScore(Packet):
 
 
 class PlayScoreboardObjective(Packet):
-    """Sent to the client when it should create a new scoreboard objective or remove one. (Server -> Client)
+    """Sent when it should create a new scoreboard objective or remove one. (Server -> Client)
 
     :param str objective_name: The unique objective name.
     :param int mode: Either create (0), remove (1), or edit (2)

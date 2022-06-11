@@ -26,7 +26,37 @@ __all__ = ("PlayMapData",)
 
 
 class PlayMapData(Packet):
-    """Insert fancy shmancy docstring"""
+    """Updates a rectangular area on a map item. (Server -> Client)
+
+    :param int map_id: Map ID of the map being modified.
+    :param int scale: Value from 0 (1x1 blocks per pixel) to 4 (16x16 blocks per pixel).
+    :param bool tracking_pos: Specifies whether player and item frame icons are shown.
+    :param bool locked: True if the map has been locked in a cartography table.
+    :param list icons: List. Elements (in order):
+     - Type (int): Type of icon.
+     - X (int): Map coordinates: -128 for furthest left, +127 for furthest right.
+     - Z (int): Map coordinates: -128 for highest, +127 for lowest.
+     - Direction (int): 0-15. 0 is a vertical icon and increments by 22.5° (360/16).
+     - HasDisplayName (bool): Does the icon have a display name?
+     - DisplayName (optional, Chat): Only present if previous bool is True. Icon's display name.
+    :param int cols: Number of columns updated.
+    :param int rows: Only if Columns is more than 0; number of rows updated.
+    :param int x: Only if Columns is more than 0; x offset of the westernmost column.
+    :param int z: Only if Columns is more than 0; z offset of the northernmost row.
+    :param bytes data: Only if Columns is more than 0; map item data.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar map_id:
+    :ivar scale:
+    :ivar tracking_pos:
+    :ivar locked:
+    :ivar icons:
+    :ivar cols:
+    :ivar rows:
+    :ivar x:
+    :ivar z:
+    :ivar data:
+    """
 
     id = 0x25
     to = 1

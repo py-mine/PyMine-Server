@@ -332,7 +332,13 @@ class PlayEntityRotation(Packet):
 
 
 class PlayEntityMovement(Packet):
-    """insert fancy doscstring here (server -> client)"""
+    """Initialize entity / entity did not move/look since the last such packet (Server -> Client)
+
+    :param int entity_id: The Entity ID.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    """
 
     id = 0x2A
     to = 1
@@ -347,7 +353,15 @@ class PlayEntityMovement(Packet):
 
 
 class PlayRemoveEntityEffect(Packet):
-    """insert fancy doscstring here (server -> client)"""
+    """Remove an effect from an entity (Server -> Client)
+
+    :param int entity_id: The Entity ID.
+    :param int effect_id: The Effect ID.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar effect_id:
+    """
 
     id = 0x37
     to = 1
@@ -363,7 +377,15 @@ class PlayRemoveEntityEffect(Packet):
 
 
 class PlayEntityHeadLook(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Changes the direction an entity's head is facing. (Server -> Client)
+
+    :param int entity_id: Entity ID.
+    :param int head_yaw: New angle, not a delta.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar head_yaw:
+    """
 
     id = 0x3A
     to = 1
@@ -379,7 +401,15 @@ class PlayEntityHeadLook(Packet):
 
 
 class PlayAttachEntity(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Sent when an entity has been leashed to another entity. (Server -> Client)
+
+    :param int attached_eid: The Entity ID of the attached entity.
+    :param int holding_eid: The Entity ID of the holding entity.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar attached_eid:
+    :ivar holding_eid:
+    """
 
     id = 0x45
     to = 1
@@ -395,7 +425,13 @@ class PlayAttachEntity(Packet):
 
 
 class PlayEntityVelocity(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Sets the velocity of an entity. (Server -> Client)
+
+    :param int eid: The Entity ID.
+    :param int velocity_x: Velocity on the X axis. (Measured in 1/8000 of a block per tick (50ms))
+    :param int velocity_y: Velocity on the Y axis.
+    :param int velocity_z: Velocity on the Z axis.
+    """
 
     id = 0x46
     to = 1
@@ -418,7 +454,25 @@ class PlayEntityVelocity(Packet):
 
 
 class PlayEntityTeleport(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Sent when an entity moves more than 8 blocks. (Server -> Client)
+
+    :param int eid: The Entity ID.
+    :param int x: New X coordinate.
+    :param int y: New Y coordinate.
+    :param int z: New Z coordinate.
+    :param int yaw: New yaw angle, not a delta.
+    :param int pitch: New pitch angle, not a delta.
+    :param bool on_ground: Is entity on ground?
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar eid:
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar yaw:
+    :ivar pitch:
+    :ivar on_ground:
+    """
 
     id = 0x56
     to = 1
@@ -449,7 +503,13 @@ class PlayEntityTeleport(Packet):
 
 
 class PlayDestroyEntities(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Sent when a list of entities is to be destroyed on the client. (Server -> Client)
+
+    :param list entity_ids: A list of Entity IDs to be destroyed.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_ids:
+    """
 
     id = 0x36
     to = 1
@@ -518,7 +578,18 @@ class PlayEntityEquipment(Packet):
 
 
 class PlayEntityProperties(Packet):
-    """Sends information about certain attributes on an entity. (Server -> Client)"""
+    """Sends information about certain attributes on an entity. (Server -> Client)
+
+    :param int entity_id: The Entity ID.
+    :param list properties: List. Items (in order):
+     - Property identifier (Key)
+     - New property value
+     - List of modifiers.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar properties:
+    """
 
     id = 0x58
     to = 1

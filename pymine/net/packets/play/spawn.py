@@ -34,7 +34,35 @@ __all__ = (
 
 
 class PlayEntitySpawn(Packet):
-    """Sent by the server when a vehicle or other non-living entity is created. Client bound(Server -> Client)."""
+    """Sent by the server when a vehicle or other non-living entity is created. (Server -> Client).
+
+    :param int entity_id: The Entity ID.
+    :param uuid.UUID object_uuid: Object UUID.
+    :param int type_: The type of entity.
+    :param int x: X coordinate.
+    :param int y: Y coordinate.
+    :param int z: Z coordinate.
+    :param int pitch: Entity pitch.
+    :param int yaw: Entity yaw.
+    :param int data: Meaning dependent on the value of the type_ field.
+    :param int vloc_x: Entity X velocity.
+    :param int vloc_y: Entity Y velocity.
+    :param int vloc_z: Entity Z velocity.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar object_uuid:
+    :ivar type_:
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar pitch:
+    :ivar yaw:
+    :ivar data:
+    :ivar vloc_x:
+    :ivar vloc_y:
+    :ivar vloc_z:
+    """
 
     id = 0x00
     to = 1
@@ -84,7 +112,21 @@ class PlayEntitySpawn(Packet):
 
 
 class PlaySpawnExperienceOrb(Packet):
-    """Spawns one or more experience orbs. Client bound(Server -> Client)."""
+    """Spawns one or more experience orbs. (Server -> Client)
+
+    :param int entity_id: The Entity ID.
+    :param int x: X coordinate of the experience orb.
+    :param int y: Y coordinate of the experience orb.
+    :param int z: Z coordinate of the experience orb.
+    :param int count: The amount of experience this orb will reward once collected.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar count:
+    """
 
     id = 0x01
     to = 1
@@ -109,7 +151,35 @@ class PlaySpawnExperienceOrb(Packet):
 
 
 class PlayLivingEntitySpawn(Packet):
-    """Sent by the server when a living entity is spawned.  Client bound(Server -> Client)."""
+    """Sent by the server when a living entity is spawned. (Server -> Client)
+
+    :param int entity_id: The Entity ID.
+    :param uuid.UUID object_uuid: Object UUID.
+    :param int type_: The type of entity.
+    :param int x: X coordinate.
+    :param int y: Y coordinate.
+    :param int z: Z coordinate.
+    :param int pitch: Entity pitch.
+    :param int head_pitch: Entity head pitch.
+    :param int yaw: Entity yaw.
+    :param int vloc_x: Entity X velocity.
+    :param int vloc_y: Entity Y velocity.
+    :param int vloc_z: Entity Z velocity.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar object_uuid:
+    :ivar type_:
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar pitch:
+    :ivar yaw:
+    :ivar head_pitch:
+    :ivar vloc_x:
+    :ivar vloc_y:
+    :ivar vloc_z:
+    """
 
     id = 0x02
     to = 1
@@ -160,7 +230,21 @@ class PlayLivingEntitySpawn(Packet):
 
 
 class PlayPaintingSpawn(Packet):
-    """This packet shows location, name, and type of painting.  Client bound(Server -> Client)."""
+    """This packet shows location, name, and type of painting. (Server -> Client)
+
+    :param int entity_id: The Entity ID.
+    :param uuid.UUID entity_uuid: Entity UUID.
+    :param int motive: Painting's ID, see below.
+    :param int location: Center coordinates (see below).
+    :param int direction: Direction the painting faces (South = 0, West = 1, North = 2, East = 3).
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar entity_uuid:
+    :ivar motive:
+    :ivar location:
+    :ivar direction:
+    """
 
     id = 0x03
     to = 1
@@ -187,8 +271,25 @@ class PlayPaintingSpawn(Packet):
 
 
 class PlaySpawnPlayer(Packet):
-    """This packet is sent by the server when a player comes into visible range, not when a player joins.
-    Clientbound(Server -> Client)"""
+    """Sent by the server when a player comes into visible range. (Server -> Client)
+
+    :param int entity_id: Player's Entity ID.
+    :param uuid.UUID player_uuid: Player UUID.
+    :param int x: Player X coordinate.
+    :param int y: Player Y coordinate.
+    :param int z: Player Z coordinate.
+    :param int pitch: Player pitch.
+    :param int yaw: Player yaw.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar entity_id:
+    :ivar player_uuid:
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar pitch:
+    :ivar yaw:
+    """
 
     id = 0x04
     to = 1
@@ -216,7 +317,17 @@ class PlaySpawnPlayer(Packet):
 
 
 class PlaySpawnPosition(Packet):
-    """insert fancy docstring here (server -> client)"""
+    """Sent after login to specify the coordinates of the spawn point. (Server -> Client)
+
+    :param int x: Spawn point X coordinate.
+    :param int y: Spawn point Y coordinate.
+    :param int z: Spawn point Z coordinate.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    """
 
     id = 0x42
     to = 1

@@ -68,7 +68,21 @@ class PlayNamedSoundEffect(Packet):
 
 
 class PlayEntitySoundEffect(Packet):
-    """Insert fancy Docstring here (server -> client)"""
+    """Plays a sound effect from an entity. (Server -> Client)
+
+    :param int sound_id: ID of hardcoded sound event.
+    :param int category: The category that this sound will be played from.
+    :param int eid: The Entity ID.
+    :param float volume: 1.0 is 100%, capped between 0.0 and 1.0 by Notchian clients.
+    :param float pitch: Float between 0.5 and 2.0 by Notchian clients.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar sound_id:
+    :ivar category:
+    :ivar eid:
+    :ivar volume:
+    :ivar pitch:
+    """
 
     id = 0x50
     to = 1

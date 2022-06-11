@@ -25,7 +25,29 @@ __all__ = ("PlayExplosion",)
 
 
 class PlayExplosion(Packet):
-    """Sent when an explosion occurs (creepers, TNT, and ghast fireballs).                          Each block in Records is set to air. Coordinates for each axis in record is int(X) + record."""
+    """Sent when an explosion occurs (creepers, TNT, and ghast fireballs). (Server -> Client)
+
+    :param int x: Explosion X coordinate
+    :param int y: Explosion Y coordinate
+    :param int z: Explosion Z coordinate
+    :param int strength: Explosion strength.
+    :param int record_count: Number of elements in the following array. FIXME: This is not needed.
+    :param list records: Affected blocks.
+    :param int pmx: X velocity of the player being pushed by the explosion.
+    :param int pmy: Y velocity of the player being pushed by the explosion.
+    :param int pmz: Z velocity of the player being pushed by the explosion.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar x:
+    :ivar y:
+    :ivar z:
+    :ivar strength:
+    :ivar record_count:
+    :ivar records:
+    :ivar pmx:
+    :ivar pmy:
+    :ivar pmz:
+    """
 
     id = 0x1B
     to = 1

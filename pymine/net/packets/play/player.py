@@ -372,7 +372,7 @@ class PlayPlayerPositionAndRotationServerBound(Packet):
 
 class PlayPlayerPositionAndLookClientBound(Packet):
     """Updates the player's position on the server. (Server -> Client)
-    
+
     :param Player player: Player instance. All position and rotation data is pulled from here.
     :param int flags: Bit-field (X/Y/Z/YRot/XRot). Decides whether value is relative or absolute.
     :param int teleport_id: Client must reply with Teleport Confirm containing the same Teleport ID.
@@ -620,7 +620,7 @@ class PlayCamera(Packet):
 
 class PlayUpdateViewPosition(Packet):
     """Updates the client's location. (Server -> Client)
-    
+
     :param int chunk_x: Chunk X coordinate of the player's position.
     :param int chunk_z: Chunk Z coordinate of the player's position.
     :ivar int id: Unique packet ID.
@@ -644,7 +644,7 @@ class PlayUpdateViewPosition(Packet):
 
 class PlayUpdateViewDistance(Packet):
     """Sent by the internal singleplayer server when changing render distance. (Server -> Client)
-    
+
     :param int view_distance: Render distance (2-32).
     :ivar int id: Unique packet ID.
     :ivar int to: Packet direction.

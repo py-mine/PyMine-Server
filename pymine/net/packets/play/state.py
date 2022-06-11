@@ -25,7 +25,15 @@ __all__ = ("PlayChangeGameState",)
 
 
 class PlayChangeGameState(Packet):
-    """insert fancy doscstring here (server -> client)"""
+    """Used for weather, bed use, gamemode and demo messages. (Server -> Client)
+
+    :param int reason: Reason code.
+    :param float value: Reason value. Depends on reason.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar reason:
+    :ivar value:
+    """
 
     id = 0x1D
     to = 1

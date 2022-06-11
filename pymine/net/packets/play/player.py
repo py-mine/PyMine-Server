@@ -371,7 +371,17 @@ class PlayPlayerPositionAndRotationServerBound(Packet):
 
 
 class PlayPlayerPositionAndLookClientBound(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Updates the player's position on the server. (Server -> Client)
+    
+    :param Player player: Player instance. All position and rotation data is pulled from here.
+    :param int flags: Bit-field (X/Y/Z/YRot/XRot). Decides whether value is relative or absolute.
+    :param int teleport_id: Client must reply with Teleport Confirm containing the same Teleport ID.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar player:
+    :ivar flags:
+    :ivar teleport_id:
+    """
 
     id = 0x34
     to = 1
@@ -588,7 +598,13 @@ class PlaySpectate(Packet):
 
 
 class PlayCamera(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Sets the entity that the player renders from (server -> client)
+
+    :param int camera_id: ID of the entity to set the client's camera to.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar camera_id:
+    """
 
     id = 0x3E
     to = 1
@@ -603,7 +619,15 @@ class PlayCamera(Packet):
 
 
 class PlayUpdateViewPosition(Packet):
-    """insert fancy docstring here (server -> client)"""
+    """Updates the client's location. (Server -> Client)
+    
+    :param int chunk_x: Chunk X coordinate of the player's position.
+    :param int chunk_z: Chunk Z coordinate of the player's position.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar chunk_x:
+    :ivar chunk_z:
+    """
 
     id = 0x40
     to = 1
@@ -619,7 +643,13 @@ class PlayUpdateViewPosition(Packet):
 
 
 class PlayUpdateViewDistance(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Sent by the internal singleplayer server when changing render distance. (Server -> Client)
+    
+    :param int view_distance: Render distance (2-32).
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar view_distance:
+    """
 
     id = 0x41
     to = 1
@@ -634,7 +664,17 @@ class PlayUpdateViewDistance(Packet):
 
 
 class PlaySetExperience(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Sent by the server when the client should change experience levels. (Server -> Client)
+
+    :param float xp_bar: Experience bar. Between 0 and 1.
+    :param int lvl: The level.
+    :param int total_xp: Total experience.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar xp_bar:
+    :ivar lvl:
+    :ivar total_xp:
+    """
 
     id = 0x48
     to = 1
@@ -655,7 +695,17 @@ class PlaySetExperience(Packet):
 
 
 class PlayUpdateHealth(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Sent by the server to update/set the health of the player it is sent to. (Server -> Client)
+
+    :param int health: New health. 0 or less = dead, 20 = full HP.
+    :param int food: New food. 0–20.
+    :param int saturation: New saturation. Seems to vary from 0.0 to 5.0 in integer increments.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar health:
+    :ivar food:
+    :ivar saturation:
+    """
 
     id = 0x49
     to = 1

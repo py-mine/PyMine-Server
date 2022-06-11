@@ -193,7 +193,15 @@ class PlayBlockPlacement(Packet):
 
 
 class PlayNBTQueryResponse(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Sent in response to Query Block NBT or Query Entity NBT. (Server -> Client)
+
+    :param int transaction_id: Can be compared to the one sent in the original query packet.
+    :param nbt.TAG nbt: The NBT of the block or entity. May be TAG_END if no NBT is present.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar transaction_id:
+    :ivar nbt:
+    """
 
     id = 0x54
     to = 1

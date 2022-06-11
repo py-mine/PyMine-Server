@@ -110,7 +110,15 @@ class PlaySetRecipeBookState(Packet):
 
 
 class PlayCraftRecipeResponse(Packet):
-    """insert fancy docstring here (server -> client)"""
+    """Response to serverbound packet PlayCraftRecipeRequest with same recipe ID. (Server -> Client)
+
+    :param int window_id: Window ID.
+    :param str recipe_identifier: The recipe ID.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar window_id:
+    :ivar recipe_identifier:
+    """
 
     id = 0x2F
     to = 1

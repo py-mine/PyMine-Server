@@ -149,7 +149,13 @@ class PlayHeldItemChangeServerBound(Packet):
 
 
 class PlayHeldItemChangeClientBound(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Sent to change the player's slot selection. (Server -> Client)
+
+    :param int slot: The slot which the player has selected (0–8).
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar slot:
+    """
 
     id = 0x3F
     to = 1
@@ -164,7 +170,17 @@ class PlayHeldItemChangeClientBound(Packet):
 
 
 class PlayCollectItem(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Sent by the server when someone picks up an item lying on the ground. (Server -> Client)
+
+    :param int collected_eid: The Entity ID of the entity that gets collected.
+    :param int collector_eid: The Entity ID of the entity that collects.
+    :param int item_count: 1 for XP orbs, otherwise the number of items in the stack.
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar collected_eid:
+    :ivar collector_eid:
+    :ivar item_count:
+    """
 
     id = 0x55
     to = 1

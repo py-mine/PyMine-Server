@@ -70,7 +70,21 @@ class PlayEffect(Packet):
 
 
 class PlayEntityEffect(Packet):
-    """Insert fancy docstring here (server -> client)"""
+    """Gives an effect to an entity. (Server -> Client)
+
+    :param int eid: Entity ID.
+    :param bytes effect_id: Effect ID.
+    :param bytes amp: Amplifier. Notchian client displays effect level as Amplifier + 1.
+    :param int duration: Duration in ticks.
+    :param bytes flags: Bit-field. (isAmbient/showParticles/showIcon)
+    :ivar int id: Unique packet ID.
+    :ivar int to: Packet direction.
+    :ivar eid:
+    :ivar effect_id:
+    :ivar amp:
+    :ivar duration:
+    :ivar flags:
+    """
 
     id = 0x59
     to = 1

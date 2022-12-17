@@ -1,15 +1,15 @@
 name: Auto Black
 
-on: [push]
+on: [ push ]
 
 jobs:
   autoblack:
-
+    if: ${{ github.actor != 'all-contributors[bot]' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
-            ref: ${{ github.head_ref }}
+          ref: ${{ github.head_ref }}
 
       - uses: actions/setup-python@v1
 

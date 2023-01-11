@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import inspect
 import os
 
 from pymine.server import server
@@ -37,4 +38,26 @@ async def help(uuid: str):
     for name, command in server.api.commands._commands.items():
         func, node = command
         doc = getattr(func, "__doc__")
-        server.console.info(f"{name}: {'A command.' if doc is None else doc}")
+        server.console.info(f"{name}: {'Documentation missing.' if doc is None else doc}")
+
+        if func.__code__.co_argcount > 1:
+            server.console.info(" Arguments:")
+            argspec = inspect.getfullargspec(func)
+
+            # XXX: Causes errors / incorrect behaviour if you introduce other mandatory arguments
+            for arg in argspec.args[1:]:  # Skipping the first 'uuid'
+                # look at this mess
+                ann = (
+                    (
+                        ": "
+                        + (
+                            argspec.annotations[arg].__name__
+                            if hasattr(argspec.annotations[arg], "__name__")
+                            else argspec.annotations[arg].__class__.__name__
+                        )
+                    )
+                    if arg in argspec.annotations.keys()
+                    else ""
+                )
+
+                server.console.info(" - " + arg + ann)
